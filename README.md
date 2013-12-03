@@ -27,7 +27,7 @@ Getting Started
 
 Clone this project onto your local machine
 ```
-git clone https://github.com/usgs/earthquake-wwdesign
+git clone https://github.com/usgs/earthquake-usdesign
 ```
 
 Run Bower and NPM installations
@@ -53,7 +53,7 @@ chops, fork the repository and send us pull requests. Be sure to follow our
 your pull requests without any additional modification.
 
 If you have ideas but no real coding skill, you can always [file a bug report or
-feature request](https://github.com/usgs/earthquake-wwdesign/issues) and
+feature request](https://github.com/usgs/earthquake-usdesign/issues) and
 somebody else might do it for you!
 
 
