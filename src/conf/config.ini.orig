@@ -1,2 +1,7 @@
-MOUNT_PATH='/absolute/url/path';
-MOUNT_DIR='/absolute/file_system/path';
+APP_DIR = /absolute/usdesign
+DATA_DIR = /absolute/usdesign
+MOUNT_PATH = /usdesign
+DB_HOST = hosturl
+DB_NAME = dbname
+DB_USER = user
+DB_PASSWORD = pwd
