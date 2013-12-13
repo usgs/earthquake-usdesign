@@ -16,22 +16,25 @@ date_default_timezone_set('UTC');
 
 $DEFAULTS = array(
 	'APP_DIR' => $APP_DIR,
-	'DATA_DIR' => str_replace('/apps/', '/data/', $APP_DIR),
+	'DATA_DIR' => str_replace('/apps/','/data/',
+			str_replace('src', 'data', $APP_DIR)),
 	'MOUNT_PATH' => '/usdesign',
+	'DB_DRIVER' => 'pgsql',
 	'DB_HOST' => '',
 	'DB_NAME' => '',
-	'DB_USER' => '',
-	'DB_PASSWORD' => ''
+	'DB_READ_USER' => '',
+	'DB_READ_PASSWORD' => ''
 );
 
 $HELP_TEXT = array(
 	'APP_DIR' => 'Absolute path to application root directory',
 	'DATA_DIR' => 'Absolute path to application data directory',
 	'MOUNT_PATH' => 'Url path to application',
+	'DB_DRIVER' => 'Database driver',
 	'DB_HOST' => 'Database host',
 	'DB_NAME' => 'Database name',
-	'DB_USER' => 'Database user',
-	'DB_PASSWORD' => 'Database password'
+	'DB_READ_USER' => 'Database reader user',
+	'DB_READ_PASSWORD' => 'Database reader password'
 );
 
 
