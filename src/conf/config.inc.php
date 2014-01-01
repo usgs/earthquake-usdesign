@@ -10,8 +10,8 @@ $APP_DIR = $CONFIG['APP_DIR'];
 $DATA_DIR = $CONFIG['DATA_DIR'];
 $MOUNT_PATH = $CONFIG['MOUNT_PATH'];
 
-// include_once $APP_DIR . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR .
-//		'lib.inc.php';
+include_once $APP_DIR . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR .
+		'lib.inc.php';
 
 // connect to database
 $DB = null;
@@ -26,5 +26,7 @@ try {
 	trigger_error("Problem connecting to the database: " . $e->getMessage());
 }
 
-// $OBSERVATORY_FACTORY = new ObservatoryFactory($DB);
+$LOOKUP_FACTORY = new LookupFactory($DB);
+// $DATA_FACTORY = new DataFactory($DB);
+// $TABLE_FACTORY = new TableFactory($DB);
 ?>

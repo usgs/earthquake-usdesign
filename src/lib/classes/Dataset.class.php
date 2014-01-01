@@ -22,15 +22,13 @@ class Dataset {
 
 	//multi valued attributes
 	public $data_recs;
-	public $tsubl_recs;
 
 	public function __construct ($id=null, $edition_id=null, $region_id=null,
 				$fa_table_id=null, $fv_table_id=null, $fpga_table_id=null,
 				$grid_spacing=null, $ss_max_direction_factor=null,
 				$s1_max_direction_factor=null, $factor_84_percent=null,
 				$sec_0_0_det_floor=null, $sec_0_2_det_floor=null,
-				$sec_1_0_det_floor=null, $data_recs=array(),
-				$tsubl_recs=array()) {
+				$sec_1_0_det_floor=null, $data_recs=array()) {
 		$this->id = $id;
 		$this->edition_id = $edition_id;
 		$this->region_id = $region_id;
@@ -45,7 +43,6 @@ class Dataset {
 		$this->sec_0_2_det_floor = $sec_0_2_det_floor;
 		$this->sec_1_0_det_floor = $sec_1_0_det_floor;
 		$this->data_recs = $data_recs;
-		$this->tsubl_recs = $tsubl_recs;
 	}
 
 	public static function fromArray (&$p) {
@@ -55,19 +52,13 @@ class Dataset {
 				$data_recs[] = Data::fromArray($data);
 			}
 		}
-		$tsubl_recs = array();
-		if (isset($p['tsubl_recs'])) {
-			foreach ($p['tsubl_recs'] as $tsubl) {
-				$tsubl_recs[] = Tsubl::fromArray($tsubl);
-			}
-		}
 		return new Dataset($p['id'], $p['edition_id'], $p['region_id'],
 					$p['fa_table_id'], $p['fv_table_id'], $p['fpga_table_id'],
 					$p['grid_spacing'], $p['ss_max_direction_factor'],
 					$p['ss_max_direction_factor'],
 					$p['s1_max_direction_factor'], $p['factor_84_percent'],
 					$p['sec_0_0_det_floor'], $p['sec_0_2_det_floor'],
-					$p['sec_1_0_det_floor'], $data_recs, $tsubl_recs);
+					$p['sec_1_0_det_floor'], $data_recs);
 	}
 
 	public function toArray () {
@@ -84,8 +75,7 @@ class Dataset {
 					'sec_0_0_det_floor' => $this->sec_0_0_det_floor,
 					'sec_0_2_det_floor' => $this->sec_0_2_det_floor,
 					'sec_1_0_det_floor' => $this->sec_1_0_det_floor,
-					'data_recs' => $this->data_recs,
-					'tsubl_recs' => $this->tsubl_recs);
+					'data_recs' => $this->data_recs);
 	}
 
 }

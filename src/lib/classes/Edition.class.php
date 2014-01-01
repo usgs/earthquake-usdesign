@@ -14,35 +14,26 @@ class Edition {
 	public $risk_category_label;
 
 	//multi valued attributes
-	public $datasets;
 	public $design_code_variants;
 	public $risk_categories;
 	public $site_soil_classes;
 
 	public function __construct ($id=null, $code=null, $title=null,
 				$data_source_id=null, $display_order=null,
-				$risk_category_label=null, $datasets=array(),
-				$design_code_variants=array(), $risk_categories=array(),
-				$site_soil_classes=array()) {
+				$risk_category_label=null, $design_code_variants=array(),
+				$risk_categories=array(), $site_soil_classes=array()) {
 		$this->id = $id;
 		$this->code = $code;
 		$this->title = $title;
 		$this->data_source_id = $data_source_id;
 		$this->display_order = $display_order;
 		$this->risk_category_label = $risk_category_label;
-		$this->datasets = $datasets;
 		$this->design_code_variants = $design_code_variants;
 		$this->risk_categories = $risk_categories;
 		$this->site_soil_classes = $site_soil_classes;
 	}
 
 	public static function fromArray (&$p) {
-		$datasets = array();
-		if (isset($p['datasets'])) {
-			foreach ($p['datasets'] as $dataset) {
-				$datasets[] = Dataset::fromArray($dataset);
-			}
-		}
 		$design_code_variants = array();
 		if (isset($p['design_code_variants'])) {
 			foreach ($p['design_code_variants'] as $design_code_variant) {
@@ -65,9 +56,8 @@ class Edition {
 		}
 		return new Edition($p['id'], $p['code'], $p['title'],
 					$p['data_source_id'], $p['display_order'],
-					$p['risk_category_label'], $datasets,
-					$design_code_variants, $risk_categories,
-					$site_soil_classes);
+					$p['risk_category_label'], $design_code_variants,
+					$risk_categories, $site_soil_classes);
 	}
 
 	public function toArray () {
@@ -77,7 +67,6 @@ class Edition {
 					'data_source_id' => $this->data_source_id,
 					'display_order' => $this->display_order,
 					'risk_category_label' => $this->risk_category_label,
-					'datasets' => $this->datasets,
 					'design_code_variants' => $this->design_code_variants,
 					'risk_categories' => $this->risk_categories,
 					'site_soil_classes' => $this->site_soil_classes);

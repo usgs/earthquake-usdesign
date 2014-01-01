@@ -10,6 +10,7 @@ include_once $classDir . 'DataSource.class.php';
 include_once $classDir . 'DesignCodeVariant.class.php';
 include_once $classDir . 'Edition.class.php';
 include_once $classDir . 'FTable.class.php';
+include_once $classDir . 'LookupFactory.class.php';
 include_once $classDir . 'Region.class.php';
 include_once $classDir . 'RiskCategory.class.php';
 include_once $classDir . 'RiskTable.class.php';
