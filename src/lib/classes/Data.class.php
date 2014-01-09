@@ -36,7 +36,7 @@ class Data {
 		$this->sec_0_2_cr = $sec_0_2_cr;
 		$this->sec_1_0_cr = $sec_1_0_cr;
 		$this->sec_0_0_det = $sec_0_0_det;
-		$this->sec_0_2_det = $sec_0_2_cr;
+		$this->sec_0_2_det = $sec_0_2_det;
 		$this->sec_1_0_det = $sec_1_0_det;
 		$this->ss = $ss;
 		$this->s1 = $s1;

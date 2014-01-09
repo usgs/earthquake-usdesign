@@ -15,7 +15,7 @@ class LookupFactory {
 	 * @param db {PDO}
 	 *      The PDO database connection for this factory.
 	 */
-	public function __construct ($db){
+	public function __construct ($db) {
 		$this->db = $db;	
 	}
 

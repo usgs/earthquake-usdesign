@@ -19,6 +19,7 @@ class Dataset {
 	public $sec_0_0_det_floor;
 	public $sec_0_2_det_floor;
 	public $sec_1_0_det_floor;
+	public $design_code_variant_id;
 
 	//multi valued attributes
 	public $data_recs;
@@ -28,7 +29,8 @@ class Dataset {
 				$grid_spacing=null, $ss_max_direction_factor=null,
 				$s1_max_direction_factor=null, $factor_84_percent=null,
 				$sec_0_0_det_floor=null, $sec_0_2_det_floor=null,
-				$sec_1_0_det_floor=null, $data_recs=array()) {
+				$sec_1_0_det_floor=null, $design_code_variant_id=null,
+				$data_recs=array()) {
 		$this->id = $id;
 		$this->edition_id = $edition_id;
 		$this->region_id = $region_id;
@@ -42,6 +44,7 @@ class Dataset {
 		$this->sec_0_0_det_floor = $sec_0_0_det_floor;
 		$this->sec_0_2_det_floor = $sec_0_2_det_floor;
 		$this->sec_1_0_det_floor = $sec_1_0_det_floor;
+		$this->design_code_variant_id = $design_code_variant_id;
 		$this->data_recs = $data_recs;
 	}
 
@@ -58,7 +61,8 @@ class Dataset {
 					$p['ss_max_direction_factor'],
 					$p['s1_max_direction_factor'], $p['factor_84_percent'],
 					$p['sec_0_0_det_floor'], $p['sec_0_2_det_floor'],
-					$p['sec_1_0_det_floor'], $data_recs);
+					$p['sec_1_0_det_floor'], $p['design_code_variant_id'],
+					$data_recs);
 	}
 
 	public function toArray () {
@@ -75,6 +79,7 @@ class Dataset {
 					'sec_0_0_det_floor' => $this->sec_0_0_det_floor,
 					'sec_0_2_det_floor' => $this->sec_0_2_det_floor,
 					'sec_1_0_det_floor' => $this->sec_1_0_det_floor,
+					'design_code_variant_id' => $this->design_code_variant_id,
 					'data_recs' => $this->data_recs);
 	}
 
