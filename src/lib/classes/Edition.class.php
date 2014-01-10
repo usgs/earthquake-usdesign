@@ -14,50 +14,48 @@ class Edition {
 	public $risk_category_label;
 
 	//multi valued attributes
-	public $design_code_variants;
-	public $risk_categories;
-	public $site_soil_classes;
+	public $design_code_variant_ids;
+	public $risk_category_ids;
+	public $site_soil_class_ids;
 
 	public function __construct ($id=null, $code=null, $title=null,
 				$data_source_id=null, $display_order=null,
-				$risk_category_label=null, $design_code_variants=array(),
-				$risk_categories=array(), $site_soil_classes=array()) {
+				$risk_category_label=null, $design_code_variant_ids=array(),
+				$risk_category_ids=array(), $site_soil_class_ids=array()) {
 		$this->id = $id;
 		$this->code = $code;
 		$this->title = $title;
 		$this->data_source_id = $data_source_id;
 		$this->display_order = $display_order;
 		$this->risk_category_label = $risk_category_label;
-		$this->design_code_variants = $design_code_variants;
-		$this->risk_categories = $risk_categories;
-		$this->site_soil_classes = $site_soil_classes;
+		$this->design_code_variant_ids = $design_code_variant_ids;
+		$this->risk_category_ids = $risk_category_ids;
+		$this->site_soil_class_ids = $site_soil_class_ids;
 	}
 
 	public static function fromArray (&$p) {
-		$design_code_variants = array();
-		if (isset($p['design_code_variants'])) {
-			foreach ($p['design_code_variants'] as $design_code_variant) {
-				$design_code_variants[] =
-						DesignCodeVariant::fromArray($design_code_variant);
+		$design_code_variant_ids = array();
+		if (isset($p['design_code_variant_ids'])) {
+			foreach ($p['design_code_variant_ids'] as $design_code_variant_id) {
+				$design_code_variant_ids[] = $design_code_variant_id;
 			}
 		}
-		$risk_categories = array();
-		if (isset($p['risk_categories'])) {
-			foreach ($p['risk_categories'] as $risk_category) {
-				$risk_categories[] = RiskCategory::fromArray($risk_category);
+		$risk_category_ids = array();
+		if (isset($p['risk_category_ids'])) {
+			foreach ($p['risk_category_ids'] as $risk_category_id) {
+				$risk_category_ids[] = $risk_category_id;
 			}
 		}
-		$site_soil_classes = array();
-		if (isset($p['site_soil_classes'])) {
-			foreach ($p['site_soil_classes'] as $site_soil_class) {
-				$site_soil_classes[] =
-						SiteSoilClass::fromArray($site_soil_class);
+		$site_soil_class_ids = array();
+		if (isset($p['site_soil_class_ids'])) {
+			foreach ($p['site_soil_class_ids'] as $site_soil_class_id) {
+				$site_soil_class_ids[] = $site_soil_class_id;
 			}
 		}
 		return new Edition($p['id'], $p['code'], $p['title'],
 					$p['data_source_id'], $p['display_order'],
-					$p['risk_category_label'], $design_code_variants,
-					$risk_categories, $site_soil_classes);
+					$p['risk_category_label'], $design_code_variant_ids,
+					$risk_category_ids, $site_soil_class_ids);
 	}
 
 	public function toArray () {

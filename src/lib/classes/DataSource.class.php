@@ -11,32 +11,32 @@ class DataSource {
 	public $display_order;
 
 	//multi valued attributes
-	public $editions;
+	public $edition_ids;
 
 	public function __construct ($id=null, $title=null, $display_order=null,
-				$editions=array()) {
+				$edition_ids=array()) {
 		$this->id = $id;
 		$this->title = $title;
 		$this->display_order = $display_order;
-		$this->editions = $editions;
+		$this->edition_ids = $edition_ids;
 	}
 
 	public static function fromArray (&$p) {
-		$editions = array();
-		if (isset($p['editions'])) {
-			foreach ($p['editions'] as $edition) {
-				$editions[] = Edition::fromArray($edition);
+		$edition_ids = array();
+		if (isset($p['edition_ids'])) {
+			foreach ($p['edition_ids'] as $edition_id) {
+				$edition_ids[] = $edition_id;
 			}
 		}
 		return new DataSource($p['id'], $p['title'], $p['display_order'],
-					$editions);
+					$edition_ids);
 	}
 
 	public function toArray () {
 		return array('id' => $this->id,
 					'title' => $this->title,
 					'display_order' => $this->display_order,
-					'editions' => $this->editions);
+					'edition_ids' => $this->edition_ids);
 	}
 
 }

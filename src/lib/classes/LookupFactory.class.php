@@ -35,9 +35,9 @@ class LookupFactory {
 		if ($statement->execute()) {
 			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
 				$id = intval($row['id']);
-				$editions = $this->getEditionsByDataSource($id);
+				$edition_ids = $this->getEditionIdsByDataSource($id);
 				$data_source = new DataSource($id, $row['title'],
-						intval($row['display_order']), $editions);
+						intval($row['display_order']), $edition_ids);
 				$data_sources[] = $data_source;
 			}
 		} else {
@@ -50,21 +50,17 @@ class LookupFactory {
 	}
 
 	/**
-	 * Returns the design code variants for a single edition.
-	 *
-	 * @param edition_id {Integer}
+	 * Returns all the design code variants.
 	 *
 	 * @return {Array{Object}}
 	 *
 	 * @throws {Exception}
 	 *      Can throw an exception if an SQL error occurs. See "triggerError"
 	 */
-	public function getDesignCodeVariantsByEdition ($edition_id) {
+	public function getDesignCodeVariants () {
 		$design_code_variants = array();
 		$statement = $this->db->prepare('SELECT * FROM ' . self::SCHEMA .
-				'.design_code_variant WHERE edition_id = :id ORDER BY ' .
-				'display_order');
-		$statement->bindParam(':id', $edition_id, PDO::PARAM_INT);
+				'.design_code_variant ORDER BY display_order');
 
 		if ($statement->execute()) {
 			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
@@ -84,34 +80,60 @@ class LookupFactory {
 	}
 
 	/**
-	 * Returns the editions for a single data source.
+	 * Returns the design code variant ids for a single edition.
 	 *
-	 * @param data_source_id {Integer}
+	 * @param edition_id {Integer}
+	 *
+	 * @return {Array{Integer}}
+	 *
+	 * @throws {Exception}
+	 *      Can throw an exception if an SQL error occurs. See "triggerError"
+	 */
+	public function getDesignCodeVariantIdsByEdition ($edition_id) {
+		$design_code_variant_ids = array();
+		$statement = $this->db->prepare('SELECT id FROM ' . self::SCHEMA .
+				'.design_code_variant WHERE edition_id = :id ORDER BY ' .
+				'display_order');
+		$statement->bindParam(':id', $edition_id, PDO::PARAM_INT);
+
+		if ($statement->execute()) {
+			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+				$design_code_variant_ids[] = intval($row['id']);
+			}
+		} else {
+			$this->triggerError($statement);
+		}
+
+		$statement->closeCursor();
+
+		return $design_code_variant_ids;
+	}
+
+	/**
+	 * Returns all the editions.
 	 *
 	 * @return {Array{Object}}
 	 *
 	 * @throws {Exception}
 	 *      Can throw an exception if an SQL error occurs. See "triggerError"
 	 */
-	public function getEditionsByDataSource ($data_source_id) {
-		$editions = array();
+	public function getEditions () {
+		$edition_ids = array();
 		$statement = $this->db->prepare('SELECT * FROM '. self::SCHEMA .
-				'.edition where data_source_id = :id ORDER BY display_order');
-		$statement->bindParam(':id', $data_source_id, PDO::PARAM_INT);
+				'.edition ORDER BY display_order');
 
 		if ($statement->execute()) {
 			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
 				$id = intval($row['id']);
-				$design_code_variants = $this->
-						getDesignCodeVariantsByEdition($id);
-//				$risk_categories = $this->getRiskCategoriesByEdition($id);
-				$risk_categories = array();
-				$site_soil_classes = $this->getSiteSoilClassesByEdition($id);
+				$design_code_variant_ids = $this->
+						getDesignCodeVariantIdsByEdition($id);
+				$risk_category_ids = $this->getRiskCategoryIdsByEdition($id);
+				$site_soil_class_ids = $this->getSiteSoilClassIdsByEdition($id);
 				$edition = new Edition($id, $row['code'], $row['title'],
 						intval($row['data_source_id']),
 						intval($row['display_order']),
-						$row['risk_category_label'], $design_code_variants,
-						$risk_categories, $site_soil_classes);
+						$row['risk_category_label'], $design_code_variant_ids,
+						$risk_category_ids, $site_soil_class_ids);
 				$editions[] = $edition;
 			}
 		} else {
@@ -124,20 +146,46 @@ class LookupFactory {
 	}
 
 	/**
-	 * Returns the risk categories for a single edition.
+	 * Returns the edition ids for a single data source.
 	 *
-	 * @param edition_id {Integer}
+	 * @param data_source_id {Integer}
+	 *
+	 * @return {Array{Integer}}
+	 *
+	 * @throws {Exception}
+	 *      Can throw an exception if an SQL error occurs. See "triggerError"
+	 */
+	public function getEditionIdsByDataSource ($data_source_id) {
+		$edition_ids = array();
+		$statement = $this->db->prepare('SELECT id FROM '. self::SCHEMA .
+				'.edition where data_source_id = :id ORDER BY display_order');
+		$statement->bindParam(':id', $data_source_id, PDO::PARAM_INT);
+
+		if ($statement->execute()) {
+			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+				$edition_ids[] = intval($row['id']);
+			}
+		} else {
+			$this->triggerError($statement);
+		}
+
+		$statement->closeCursor();
+
+		return $edition_ids;
+	}
+
+	/**
+	 * Returns all the risk categories.
 	 *
 	 * @return {Array{Object}}
 	 *
 	 * @throws {Exception}
 	 *      Can throw an exception if an SQL error occurs. See "triggerError"
 	 */
-	public function getRiskCategoriesByEdition ($edition_id) {
+	public function getRiskCategories () {
 		$risk_categories = array();
-		$statement = $this->db->prepare('SELECT * FROM '. self::SCHEMA .
-				'.risk_category WHERE edition_id = :id ORDER BY display_order');
-		$statement->bindParam(':id', $edition_id, PDO::PARAM_INT);
+		$statement = $this->db->prepare('SELECT id FROM '. self::SCHEMA .
+				'.risk_category ORDER BY display_order');
 
 		if ($statement->execute()) {
 			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
@@ -156,23 +204,47 @@ class LookupFactory {
 	}
 
 	/**
-	 * Returns the site soil classes for a single edition.
+	 * Returns the risk category ids for a single edition.
 	 *
 	 * @param edition_id {Integer}
+	 *
+	 * @return {Array{Integer}}
+	 *
+	 * @throws {Exception}
+	 *      Can throw an exception if an SQL error occurs. See "triggerError"
+	 */
+	public function getRiskCategoryIdsByEdition ($edition_id) {
+		$risk_category_ids = array();
+		$statement = $this->db->prepare('SELECT id FROM '. self::SCHEMA .
+				'.risk_category WHERE edition_id = :id ORDER BY display_order');
+		$statement->bindParam(':id', $edition_id, PDO::PARAM_INT);
+
+		if ($statement->execute()) {
+			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+				$risk_category_ids[] = intval($row['id']);
+			}
+		} else {
+			$this->triggerError($statement);
+		}
+
+		$statement->closeCursor();
+
+		return $risk_category_ids;
+	}
+
+	/**
+	 * Returns all the site soil classes.
 	 *
 	 * @return {Array{Object}}
 	 *
 	 * @throws {Exception}
 	 *      Can throw an exception if an SQL error occurs. See "triggerError"
 	 */
-	public function getSiteSoilClassesByEdition ($edition_id) {
+	public function getSiteSoilClasses () {
 		$site_soil_classes = array();
-		$statement = $this->db->prepare('SELECT A.id, A.code, A.title, ' .
-				'A.display_order FROM '. self::SCHEMA . '.site_soil_class A '.
-				'INNER JOIN '. self::SCHEMA . '.edition_site_soil_class B ON ' .
-				'(A.id = B.site_soil_class_id) WHERE B.edition_id = :id ' .
-				'ORDER BY A.display_order');
-		$statement->bindParam(':id', $edition_id, PDO::PARAM_INT);
+		$statement = $this->db->prepare('SELECT id, code, title, ' .
+				'display_order FROM '. self::SCHEMA . '.site_soil_class '.
+				'ORDER BY display_order');
 
 		if ($statement->execute()) {
 			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
@@ -188,6 +260,37 @@ class LookupFactory {
 		$statement->closeCursor();
 
 		return $site_soil_classes;
+	}
+
+	/**
+	 * Returns the site soil class ids for a single edition.
+	 *
+	 * @param edition_id {Integer}
+	 *
+	 * @return {Array{Object}}
+	 *
+	 * @throws {Exception}
+	 *      Can throw an exception if an SQL error occurs. See "triggerError"
+	 */
+	public function getSiteSoilClassIdsByEdition ($edition_id) {
+		$site_soil_classes = array();
+		$statement = $this->db->prepare('SELECT A.id "id" FROM '. self::SCHEMA . 
+				'.site_soil_class A INNER JOIN '. self::SCHEMA . 
+				'.edition_site_soil_class B ON (A.id = B.site_soil_class_id) ' .
+				'WHERE B.edition_id = :id');
+		$statement->bindParam(':id', $edition_id, PDO::PARAM_INT);
+
+		if ($statement->execute()) {
+			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+				$site_soil_class_ids[] = intval($row['id']);
+			}
+		} else {
+			$this->triggerError($statement);
+		}
+
+		$statement->closeCursor();
+
+		return $site_soil_class_ids;
 	}
 
 	private function triggerError (&$statement) {

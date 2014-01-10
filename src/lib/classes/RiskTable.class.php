@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Data class representing a risk category table. Note: Header value and data
- * row arrays store actual values rather than classes.
+ * Data class representing a risk category/edition table. Note: Header value
+ * and data row arrays store actual values rather than classes.
  */
 class RiskTable {
 
@@ -16,11 +16,11 @@ class RiskTable {
 	public $data_rows;
 
 	public function __construct ($id=null, $edition_id=null, $table_type=null,
-				$headers=array(), $data_rows=array()) {
+				$header_values=array(), $data_rows=array()) {
 		$this->id = $id;
 		$this->edition_id = $edition_id;
 		$this->table_type = $table_type;
-		$this->headers = $headers;
+		$this->header_values = $header_values;
 		$this->data_rows = $data_rows;
 	}
 
@@ -33,7 +33,7 @@ class RiskTable {
 		return array('id' => $this->id,
 					'edition_id' => $this->edition_id,
 					'table_type' => $this->table_type,
-					'headers' => $this->headers,
+					'header_values' => $this->header_values,
 					'data_rows' => $this->data_rows);
 	}
 

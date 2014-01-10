@@ -27,6 +27,6 @@ try {
 }
 
 $LOOKUP_FACTORY = new LookupFactory($DB);
-// $DATA_FACTORY = new DataFactory($DB);
-// $TABLE_FACTORY = new TableFactory($DB);
+$DATA_FACTORY = new DataFactory($DB);
+$TABLE_FACTORY = new TableFactory($DB);
 ?>

@@ -3,7 +3,7 @@
 /**
  * Factory for loading seismic design data from the database.
 **/
-class LookupFactory {
+class DataFactory {
 
 	private $db;
 
@@ -54,18 +54,18 @@ class LookupFactory {
 		if ($statement->execute()) {
 			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
 				$data = new Data(intval($row['id']),
-					intval($row['dataset_id']),
-					doubleval($row['longitude']),
-					doubleval($row['latitude']),
-					doubleval($row['sec_0_0_uh']),
-					doubleval($row['sec_0_2_uh']),
-					doubleval($row['sec_1_0_uh']),
-					doubleval($row['sec_0_2_cr']),
-					doubleval($row['sec_1_0_cr']),
-					doubleval($row['sec_0_0_det']),
-					doubleval($row['sec_0_2_det']),
-					doubleval($row['sec_1_0_det']),
-					doubleval($row['ss']), doubleval($row['s1']));
+						intval($row['dataset_id']),
+						doubleval($row['longitude']),
+						doubleval($row['latitude']),
+						doubleval($row['sec_0_0_uh']),
+						doubleval($row['sec_0_2_uh']),
+						doubleval($row['sec_1_0_uh']),
+						doubleval($row['sec_0_2_cr']),
+						doubleval($row['sec_1_0_cr']),
+						doubleval($row['sec_0_0_det']),
+						doubleval($row['sec_0_2_det']),
+						doubleval($row['sec_1_0_det']),
+						doubleval($row['ss']), doubleval($row['s1']));
 				$data_recs[] = $data;
 			}
 		} else {
@@ -191,17 +191,21 @@ class LookupFactory {
 	 * @throws {Exception}
 	 *      Can throw an exception if an SQL error occurs. See "triggerError"
 	 */
-	public function getTsublValueForPoint ($longitude, $latitude) { 
-		$statement = $this->db->prepare('SELECT TSUBL_VALUE(:longitude, ' .
-				':latitude) "VALUE"');
-		$statement->bindParam(':longitude', strval($longitude));
-		$statement->bindParam(':latitude', strval($latitude));
+	public function getTsublValueForPoint ($longitude, $latitude) {
+		$tsubl_value = null;
+		$statement = $this->db->prepare('SELECT TSUBL_VALUE(CAST(:lon ' .
+				'AS DOUBLE PRECISION), CAST(:lat AS DOUBLE PRECISION)) ' .
+				'"value"');
+		$slon = strval($longitude);
+		$slat = strval($latitude);
+		$statement->bindParam(':lon', $slon);
+		$statement->bindParam(':lat', $slat);
 
 		if ($statement->execute()) {
 			$row = $statement->fetch(PDO::FETCH_ASSOC);
 			if ($row) {
-				$tsubl_value = new TsublValue(intval($row['value']),
-						$longitude, $latitude);
+				$tsubl_value = new TsublValue($longitude, $latitude,
+					intval($row['value']));
 			}
 		} else {
 			$this->triggerError($statement);
@@ -209,7 +213,7 @@ class LookupFactory {
 
 		$statement->closeCursor();
 
-		return $region;
+		return $tsubl_value;
 	}
 
 	private function triggerError (&$statement) {
