@@ -36,7 +36,7 @@ class LookupFactory {
 			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
 				$id = intval($row['id']);
 				$edition_ids = $this->getEditionIdsByDataSource($id);
-				$data_source = new DataSource($id, $row['title'],
+				$data_source = new DataSource(intval($row['id']), $row['title'],
 						intval($row['display_order']), $edition_ids);
 				$data_sources[] = $data_source;
 			}
@@ -127,13 +127,14 @@ class LookupFactory {
 				$id = intval($row['id']);
 				$design_code_variant_ids = $this->
 						getDesignCodeVariantIdsByEdition($id);
+				$region_ids = $this->getRegionIdsByEdition($id);
 				$risk_category_ids = $this->getRiskCategoryIdsByEdition($id);
 				$site_soil_class_ids = $this->getSiteSoilClassIdsByEdition($id);
-				$edition = new Edition($id, $row['code'], $row['title'],
-						intval($row['data_source_id']),
+				$edition = new Edition(intval($row['id']), $row['code'],
+						$row['title'], intval($row['data_source_id']),
 						intval($row['display_order']),
 						$row['risk_category_label'], $design_code_variant_ids,
-						$risk_category_ids, $site_soil_class_ids);
+						$region_ids, $risk_category_ids, $site_soil_class_ids);
 				$editions[] = $edition;
 			}
 		} else {
@@ -172,6 +173,35 @@ class LookupFactory {
 		$statement->closeCursor();
 
 		return $edition_ids;
+	}
+
+	/**
+	 * Returns the ids of valid regions for a single edition.
+	 *
+	 * @param edition_id {Integer}
+	 *
+	 * @return {Array{Object}}
+	 *
+	 * @throws {Exception}
+	 *      Can throw an exception if an SQL error occurs. See "triggerError"
+	 */
+	public function getRegionIdsByEdition ($edition_id) {
+		$region_ids = array();
+		$statement = $this->db->prepare('SELECT distinct region_id "id" FROM ' .
+		 		self::SCHEMA . '.dataset WHERE edition_id = :id');
+		$statement->bindParam(':id', $edition_id, PDO::PARAM_INT);
+
+		if ($statement->execute()) {
+			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+				$region_ids[] = intval($row['id']);
+			}
+		} else {
+			$this->triggerError($statement);
+		}
+
+		$statement->closeCursor();
+
+		return $region_ids;
 	}
 
 	/**
@@ -273,7 +303,7 @@ class LookupFactory {
 	 *      Can throw an exception if an SQL error occurs. See "triggerError"
 	 */
 	public function getSiteSoilClassIdsByEdition ($edition_id) {
-		$site_soil_classes = array();
+		$site_soil_class_ids = array();
 		$statement = $this->db->prepare('SELECT A.id "id" FROM '. self::SCHEMA . 
 				'.site_soil_class A INNER JOIN '. self::SCHEMA . 
 				'.edition_site_soil_class B ON (A.id = B.site_soil_class_id) ' .

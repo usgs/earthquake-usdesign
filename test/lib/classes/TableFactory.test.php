@@ -40,7 +40,7 @@
 			$last_value = $value;
 		}
 		notify('Check that header values are increasing', $increasing, true);
-
+				
 		$risk_tables = $TABLE_FACTORY->getRiskTables();
 		notify('Get risk tables', 11, count($risk_tables));
 		$risk_table = $risk_tables[0];
@@ -60,6 +60,9 @@
 				3, count($data_row));
 		notify('Check first category value for first data row of first ' .
 				'risk table', 'A', $data_row[0]);
+
+//		print json_encode($f_table) . "\n";
+//		print json_encode($risk_table) . "\n";
 	} catch (Exception $e) {
 		print $e->getMessage() . "\n";
 	}

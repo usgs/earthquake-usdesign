@@ -24,12 +24,14 @@
 	try {
 		// ----- Tests ----- //
 
-		$tsubl_value = $DATA_FACTORY->getTsublValueForPoint(-103.0,40.5);
-		notify('Get defined tsubl value', 4, $tsubl_value->value);
 		$tsubl_value = $DATA_FACTORY->getTsublValueForPoint(-103.0,-40.5);
 		notify('Get undefined tsubl value', -1, $tsubl_value->value);
+		$tsubl_value = $DATA_FACTORY->getTsublValueForPoint(-103.0,40.5);
+		notify('Get defined tsubl value', 4, $tsubl_value->value);
 
 		// TODO: Dataset and data tests when these tables are populated.
+
+//		print json_encode($tsubl_value) . "\n";
 	} catch (Exception $e) {
 		print $e->getMessage() . "\n";
 	}

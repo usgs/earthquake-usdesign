@@ -73,14 +73,14 @@ class TableFactory {
 						}
 						$last_code = $code;
 						if ($first_group) {
-							$header_values[] = $row2[$header_field];
+							$header_values[] = doubleval($row2[$header_field]);
 						}
-						$data_row[] = $row2[$data_field];
+						$data_row[] = doubleval($row2[$data_field]);
 					}
 					// dump final data row
 					$data_rows[$last_code] = $data_row;
-					$f_table = new FTable($id, $type, $header_values,
-							$data_rows);
+					$f_table = new FTable(intval($row['id']), $row['type'],
+							$header_values, $data_rows);
 					$f_tables[] = $f_table;
 				} else {
 					$this->triggerError($statement2);
@@ -136,8 +136,8 @@ class TableFactory {
 						$first = false;
 					}
 					$risk_table = new RiskTable(intval($row['id']),
-							$edition_id, $table_type, $header_values,
-							$data_rows);
+							intval($row['edition_id']), $row['table_type'],
+							$header_values, $data_rows);
 					$risk_tables[] = $risk_table;
 				} else {
 					$this->triggerError($statement2);

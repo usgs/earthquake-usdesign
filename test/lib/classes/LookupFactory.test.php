@@ -44,12 +44,16 @@
 				$edition->risk_category_label);
 		notify('Count risk categories for ibc-2012', 5,
 				count($edition->risk_category_ids));
+		notify('Count regions for ibc-2012', 4,
+				count($edition->region_ids));
 		notify('Count site soil classes for ibc-2012', 5,
 				count($edition->site_soil_class_ids));
 		$edition = $editions[0];
+		notify('Count regions for nehrp-2015', 6,
+				count($edition->region_ids));
 		notify('Count site soil classes for nehrp-2015', 6,
 				count($edition->site_soil_class_ids));
-
+	
 		$design_code_variants = $LOOKUP_FACTORY->getDesignCodeVariants();
 		notify('Get design code variants', 8, count($design_code_variants));
 		notify('Get requires exceedence prob. for asce-41-2013/custom', 1,
@@ -64,6 +68,12 @@
 		notify('Get site soil classes', 6, count($site_soil_classes));
 		notify('Check code for first site soil class', 'A', 
 				$site_soil_classes[0]->code);
+
+//		print json_encode($data_source) . "\n";
+//		print json_encode($editions[1]) . "\n";
+//		print json_encode($design_code_variants[0]) . "\n";
+//		print json_encode($risk_categories[0]) . "\n";
+//		print json_encode($site_soil_classes[0]) . "\n";
 	} catch (Exception $e) {
 		print $e->getMessage() . "\n";
 	}

@@ -46,10 +46,13 @@ class DataFactory {
 				'DOUBLE PRECSION) + CAST(:gs AS DOUBLE PRECISION) AND ' .
 				'latitude > CAST(:lat AS DOUBLE PRECISION) - CAST(:gs AS ' .
 				'DOUBLE PRECISION) ORDER BY latitude DESC, longitude ASC');
-		$statement->bindParam(':did', $dataset_id, PDO::PARAM_INT);
-		$statement->bindParam(':lon', strval($longitude));
-		$statement->bindParam(':lat', strval($latitude));
-		$statement->bindParam(':gs', strval($grid_spacing));
+		$statement->bindValue(':did', $dataset_id, PDO::PARAM_INT);
+		$slon = strval($longitude);
+		$slat = strval($latitude);
+		$sgs = strval($grid_spacing);
+		$statement->bindValue(':lon', $slon);
+		$statement->bindValue(':lat', $slat);
+		$statement->bindValue(':gs', $sgs);
 
 		if ($statement->execute()) {
 			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
@@ -101,7 +104,8 @@ class DataFactory {
 				$sql = $sql + ' AND design_code_variant_id = :did';
 			}
 			$statement = $this->db->prepare($sql);
-			$statement->bindParam(':rid', $region->id, PDO::PARAM_INT);
+			$region_id = $region->id;
+			$statement->bindParam(':rid', $region_id, PDO::PARAM_INT);
 			$statement->bindParam(':eid', $edition_id, PDO::PARAM_INT);
 			if (!is_null($design_code_variant_id)) {
 				$statement->bindParam(':did', $design_code_variant_id,
@@ -115,7 +119,7 @@ class DataFactory {
 					$grid_spacing_id = doubleval($row['grid_spacing']);
 					$data_recs = $this->getDataByPointAndDatasetAndGridSpacing(
 							$longitude, $latitude, $dataset_id, $grid_spacing);
-					$dataset = new Dataset(intval($dataset_id),
+					$dataset = new Dataset(intval($row['dataset_id']),
 							intval($row['edition_id']),
 							intval($row['region_id']),
 							intval($row['fa_table_id']),
@@ -158,8 +162,10 @@ class DataFactory {
 				'max_longitude AND CAST(:lat AS DOUBLE PRECISION) >= ' .
 				'min_latitude AND CAST(:lat AS DOUBLE PRECISION) <= ' .
 				'max_latitude ORDER by priority asc');
-		$statement->bindParam(':lon', strval($longitude));
-		$statement->bindParam(':lat', strval($latitude));
+		$slon = strval($longitude);
+		$slat = strval($latitude);
+		$statement->bindParam(':lon', $slon);
+		$statement->bindParam(':lat', $slat);
 
 		if ($statement->execute()) {
 			$row = $statement->fetch(PDO::FETCH_ASSOC);
