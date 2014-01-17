@@ -126,18 +126,6 @@ CREATE INDEX data_latitude_idx ON us_design.data
 	  latitude ASC NULLS LAST
 	);
 
-REM TODO: Figure out how to deal with embedded ; in stored function defs.
-REM CREATE OR REPLACE FUNCTION US_DESIGN.TSUBL_VALUE (LONGITUDE IN NUMERIC, LATITUDE IN NUMERIC) 
-	RETURNS INTEGER AS $$;
-	DECLARE RETURN_VAL INTEGER;
-	BEGIN
-		SELECT value INTO RETURN_VAL FROM US_DESIGN.TSUBL WHERE
-			SDE.ST_DISJOINT(SHAPE, SDE.ST_POINT($1, $2, 4326))=false
-			ORDER BY VALUE DESC;
-		RETURN COALESCE(RETURN_VAL,-1);
-	END;
-REM $$ LANGUAGE PLPGSQL;
-
 CREATE TABLE us_design.risk_header(
 	id bigserial,
 	risk_table_id bigint NOT NULL,

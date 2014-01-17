@@ -68,5 +68,17 @@ while ($tok !== false) {
 	}
 	$tok = strtok(";");
 }
+
+// Each PL/SQL function must be in it's own file because of embedded semicolons.
+$sql = file_get_contents($DATA_DIR . '/tsubl_value.sql');
+try {
+	$DB->exec($sql);
+}
+catch (PDOException $e) {
+	if (!$drop_flag) {
+		trigger_error("DDL error: " . $e->getMessage());
+	}
+}
+
 $DB = null;
 ?>
