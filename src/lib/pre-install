@@ -22,6 +22,7 @@ $DEFAULTS = array(
 	'DB_DRIVER' => 'pgsql',
 	'DB_HOST' => '',
 	'DB_NAME' => '',
+	'DB_SCHEMA' => 'us_design',
 	'DB_READ_USER' => '',
 	'DB_READ_PASSWORD' => ''
 );
@@ -33,6 +34,7 @@ $HELP_TEXT = array(
 	'DB_DRIVER' => 'Database driver',
 	'DB_HOST' => 'Database host',
 	'DB_NAME' => 'Database name',
+	'DB_SCHEMA' => 'Database schema',
 	'DB_READ_USER' => 'Database reader user',
 	'DB_READ_PASSWORD' => 'Database reader password'
 );

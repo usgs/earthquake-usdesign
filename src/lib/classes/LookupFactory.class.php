@@ -6,17 +6,19 @@
 class LookupFactory {
 
 	private $db;
-
-	const SCHEMA = 'US_DESIGN';
+	private $schema;
 
 	/**
 	 * Creates a new factory object.
 	 *
 	 * @param db {PDO}
 	 *      The PDO database connection for this factory.
+	 * @param schema {String}
+	 *      The schema that owns the database objects.
 	 */
-	public function __construct ($db) {
-		$this->db = $db;	
+	public function __construct ($db, $schema) {
+		$this->db = $db;
+		$this->schema = $schema;
 	}
 
 	/**
@@ -29,7 +31,7 @@ class LookupFactory {
 	 */
 	public function getDataSources () {
 		$data_sources = array();
-		$statement = $this->db->prepare('SELECT * FROM ' . self::SCHEMA .
+		$statement = $this->db->prepare('SELECT * FROM ' . $this->schema .
 				'.data_source ORDER BY display_order');
 
 		if ($statement->execute()) {
@@ -59,7 +61,7 @@ class LookupFactory {
 	 */
 	public function getDesignCodeVariants () {
 		$design_code_variants = array();
-		$statement = $this->db->prepare('SELECT * FROM ' . self::SCHEMA .
+		$statement = $this->db->prepare('SELECT * FROM ' . $this->schema .
 				'.design_code_variant ORDER BY display_order');
 
 		if ($statement->execute()) {
@@ -91,7 +93,7 @@ class LookupFactory {
 	 */
 	public function getDesignCodeVariantIdsByEdition ($edition_id) {
 		$design_code_variant_ids = array();
-		$statement = $this->db->prepare('SELECT id FROM ' . self::SCHEMA .
+		$statement = $this->db->prepare('SELECT id FROM ' . $this->schema .
 				'.design_code_variant WHERE edition_id = :id ORDER BY ' .
 				'display_order');
 		$statement->bindParam(':id', $edition_id, PDO::PARAM_INT);
@@ -119,7 +121,7 @@ class LookupFactory {
 	 */
 	public function getEditions () {
 		$edition_ids = array();
-		$statement = $this->db->prepare('SELECT * FROM '. self::SCHEMA .
+		$statement = $this->db->prepare('SELECT * FROM '. $this->schema .
 				'.edition ORDER BY display_order');
 
 		if ($statement->execute()) {
@@ -158,7 +160,7 @@ class LookupFactory {
 	 */
 	public function getEditionIdsByDataSource ($data_source_id) {
 		$edition_ids = array();
-		$statement = $this->db->prepare('SELECT id FROM '. self::SCHEMA .
+		$statement = $this->db->prepare('SELECT id FROM '. $this->schema .
 				'.edition where data_source_id = :id ORDER BY display_order');
 		$statement->bindParam(':id', $data_source_id, PDO::PARAM_INT);
 
@@ -188,7 +190,7 @@ class LookupFactory {
 	public function getRegionIdsByEdition ($edition_id) {
 		$region_ids = array();
 		$statement = $this->db->prepare('SELECT distinct region_id "id" FROM ' .
-		 		self::SCHEMA . '.dataset WHERE edition_id = :id');
+		 		$this->schema . '.dataset WHERE edition_id = :id');
 		$statement->bindParam(':id', $edition_id, PDO::PARAM_INT);
 
 		if ($statement->execute()) {
@@ -214,7 +216,7 @@ class LookupFactory {
 	 */
 	public function getRiskCategories () {
 		$risk_categories = array();
-		$statement = $this->db->prepare('SELECT id FROM '. self::SCHEMA .
+		$statement = $this->db->prepare('SELECT id FROM '. $this->schema .
 				'.risk_category ORDER BY display_order');
 
 		if ($statement->execute()) {
@@ -245,7 +247,7 @@ class LookupFactory {
 	 */
 	public function getRiskCategoryIdsByEdition ($edition_id) {
 		$risk_category_ids = array();
-		$statement = $this->db->prepare('SELECT id FROM '. self::SCHEMA .
+		$statement = $this->db->prepare('SELECT id FROM '. $this->schema .
 				'.risk_category WHERE edition_id = :id ORDER BY display_order');
 		$statement->bindParam(':id', $edition_id, PDO::PARAM_INT);
 
@@ -273,7 +275,7 @@ class LookupFactory {
 	public function getSiteSoilClasses () {
 		$site_soil_classes = array();
 		$statement = $this->db->prepare('SELECT id, code, title, ' .
-				'display_order FROM '. self::SCHEMA . '.site_soil_class '.
+				'display_order FROM '. $this->schema . '.site_soil_class '.
 				'ORDER BY display_order');
 
 		if ($statement->execute()) {
@@ -304,8 +306,8 @@ class LookupFactory {
 	 */
 	public function getSiteSoilClassIdsByEdition ($edition_id) {
 		$site_soil_class_ids = array();
-		$statement = $this->db->prepare('SELECT A.id "id" FROM '. self::SCHEMA . 
-				'.site_soil_class A INNER JOIN '. self::SCHEMA . 
+		$statement = $this->db->prepare('SELECT A.id "id" FROM '. $this->schema .
+				'.site_soil_class A INNER JOIN '. $this->schema .
 				'.edition_site_soil_class B ON (A.id = B.site_soil_class_id) ' .
 				'WHERE B.edition_id = :id');
 		$statement->bindParam(':id', $edition_id, PDO::PARAM_INT);

@@ -6,17 +6,19 @@
 class DataFactory {
 
 	private $db;
-
-	const SCHEMA = 'US_DESIGN';
+	private $schema;
 
 	/**
 	 * Creates a new factory object.
 	 *
 	 * @param db {PDO}
 	 *      The PDO database connection for this factory.
+	 * @param schema {String}
+	 *      The schema that owns the database objects.
 	 */
-	public function __construct ($db) {
-		$this->db = $db;	
+	public function __construct ($db, $schema) {
+		$this->db = $db;
+		$this->schema = $schema;
 	}
 
 	/**
@@ -38,21 +40,21 @@ class DataFactory {
 		if (!is_null($design_code_variant_id)) {
 			$sql = $sql + ' AND design_code_variant_id = :did';
 		}
-		$statement = $this->db->prepare('SELECT * FROM ' . self::SCHEMA .
+		$statement = $this->db->prepare('SELECT * FROM ' . $this->schema .
 				'.data WHERE dataset_id = :did AND longitude < CAST(' .
-				':lon AS DOUBLE PRECISION) + CAST(:gs AS DOUBLE PRECSION) ' .
-				'AND longitude > CAST(:lon AS DOUBLE PRECISION) - ' .
-				'CAST(:gs AS DOUBLE PRECSION) AND latitude < CAST(:lat AS ' .
-				'DOUBLE PRECSION) + CAST(:gs AS DOUBLE PRECISION) AND ' .
-				'latitude > CAST(:lat AS DOUBLE PRECISION) - CAST(:gs AS ' .
+				':lon AS NUMERIC) + CAST(:gs AS DOUBLE PRECISION) ' .
+				'AND longitude > CAST(:lon AS NUMERIC) - ' .
+				'CAST(:gs AS DOUBLE PRECISION) AND latitude < CAST(:lat AS ' .
+				'NUMERIC) + CAST(:gs AS DOUBLE PRECISION) AND ' .
+				'latitude > CAST(:lat AS NUMERIC) - CAST(:gs AS ' .
 				'DOUBLE PRECISION) ORDER BY latitude DESC, longitude ASC');
-		$statement->bindValue(':did', $dataset_id, PDO::PARAM_INT);
+		$statement->bindParam(':did', $dataset_id, PDO::PARAM_INT);
 		$slon = strval($longitude);
 		$slat = strval($latitude);
 		$sgs = strval($grid_spacing);
-		$statement->bindValue(':lon', $slon);
-		$statement->bindValue(':lat', $slat);
-		$statement->bindValue(':gs', $sgs);
+		$statement->bindParam(':lon', $slon);
+		$statement->bindParam(':lat', $slat);
+		$statement->bindParam(':gs', $sgs);
 
 		if ($statement->execute()) {
 			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
@@ -98,7 +100,7 @@ class DataFactory {
 		$dataset = null;
 		$region = getRegionFromPoint($longitude, $latitude);
 		if (!is_null($region)) {
-			$sql = 'SELECT * FROM ' . self::SCHEMA .
+			$sql = 'SELECT * FROM ' . $this->schema .
 				'.dataset WHERE region_id = :rid AND edition_id = :eid';
 			if (!is_null($design_code_variant_id)) {
 				$sql = $sql + ' AND design_code_variant_id = :did';
@@ -156,11 +158,11 @@ class DataFactory {
 	 */
 	public function getRegionFromPoint ($longitude, $latitude) { 
 		$region = null;
-		$statement = $this->db->prepare('SELECT * FROM ' . self::SCHEMA .
-				'.region WHERE CAST(:lon AS DOUBLE PRECISION) >= ' .
-				'min_longitude AND CAST(:lon AS DOUBLE PRECISION) <= ' .
-				'max_longitude AND CAST(:lat AS DOUBLE PRECISION) >= ' .
-				'min_latitude AND CAST(:lat AS DOUBLE PRECISION) <= ' .
+		$statement = $this->db->prepare('SELECT * FROM ' . $this->schema .
+				'.region WHERE CAST(:lon AS NUMERIC) >= ' .
+				'min_longitude AND CAST(:lon AS NUMERIC) <= ' .
+				'max_longitude AND CAST(:lat AS NUMERIC) >= ' .
+				'min_latitude AND CAST(:lat AS NUMERIC) <= ' .
 				'max_latitude ORDER by priority asc');
 		$slon = strval($longitude);
 		$slat = strval($latitude);
@@ -199,9 +201,9 @@ class DataFactory {
 	 */
 	public function getTsublValueForPoint ($longitude, $latitude) {
 		$tsubl_value = null;
-		$statement = $this->db->prepare('SELECT TSUBL_VALUE(CAST(:lon ' .
-				'AS DOUBLE PRECISION), CAST(:lat AS DOUBLE PRECISION)) ' .
-				'"value"');
+		$statement = $this->db->prepare('SELECT ' . $this->schema .
+				'.TSUBL_VALUE(CAST(:lon AS NUMERIC), ' .
+				'CAST(:lat AS NUMERIC)) "value"');
 		$slon = strval($longitude);
 		$slat = strval($latitude);
 		$statement->bindParam(':lon', $slon);

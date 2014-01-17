@@ -6,17 +6,19 @@
 class TableFactory {
 
 	private $db;
-
-	const SCHEMA = 'US_DESIGN';
+	private $schema;
 
 	/**
 	 * Creates a new factory object.
 	 *
 	 * @param db {PDO}
 	 *      The PDO database connection for this factory.
-	 */
-	public function __construct ($db) {
-		$this->db = $db;	
+	 * @param schema {String}
+	 *      The schema that owns the database objects.
+	*/
+	public function __construct ($db, $schema) {
+		$this->db = $db;
+		$this->schema = $schema;
 	}
 
 	/**
@@ -29,9 +31,9 @@ class TableFactory {
 	 */
 	public function getFTables () {
 		$f_tables = array();		
-		$statement = $this->db->prepare('SELECT * FROM ' . self::SCHEMA .
+		$statement = $this->db->prepare('SELECT * FROM ' . $this->schema .
 				'.f_table');
-		$statement2 = $this->db->prepare('SELECT * FROM ' . self::SCHEMA .
+		$statement2 = $this->db->prepare('SELECT * FROM ' . $this->schema .
 				'.f_data_vw WHERE f_table_id=:fid');
 
 		if ($statement->execute()) {
@@ -106,9 +108,9 @@ class TableFactory {
 	 */
 	public function getRiskTables () {
 		$risk_tables = array();
-		$statement = $this->db->prepare('SELECT * FROM ' . self::SCHEMA .
+		$statement = $this->db->prepare('SELECT * FROM ' . $this->schema .
 				'.risk_table ORDER BY table_type DESC');
-		$statement2 = $this->db->prepare('SELECT * FROM ' . self::SCHEMA .
+		$statement2 = $this->db->prepare('SELECT * FROM ' . $this->schema .
 				'.risk_table_vw WHERE edition_id=:eid AND table_type=:tt');
 
 		if ($statement->execute()) {

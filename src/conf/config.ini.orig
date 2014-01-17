@@ -4,5 +4,6 @@ MOUNT_PATH = /usdesign
 DB_DRIVER = driver
 DB_HOST = hosturl
 DB_NAME = dbname
+DB_NAME = schema
 DB_READ_USER = user
 DB_READ_PASSWORD = pwd

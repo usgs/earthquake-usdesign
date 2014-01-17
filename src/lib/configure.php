@@ -132,4 +132,12 @@
 		// write config file
 		file_put_contents($CONFIG_FILE, $ini);
 	}
+
+	print "\nDo you want to build the application data objects?\n";
+	print 'Enter "Yes" or "No" [No]: ';
+	$rebuild = trim(fgets(STDIN));
+	print "\n";
+	if (strtoupper($rebuild) == 'YES') {
+		include 'rebuild.php';
+	}
 ?>

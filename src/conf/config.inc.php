@@ -26,7 +26,8 @@ try {
 	trigger_error("Problem connecting to the database: " . $e->getMessage());
 }
 
-$LOOKUP_FACTORY = new LookupFactory($DB);
-$DATA_FACTORY = new DataFactory($DB);
-$TABLE_FACTORY = new TableFactory($DB);
+$SCHEMA = $CONFIG['DB_SCHEMA'];
+$LOOKUP_FACTORY = new LookupFactory($DB, $SCHEMA);
+$DATA_FACTORY = new DataFactory($DB, $SCHEMA);
+$TABLE_FACTORY = new TableFactory($DB, $SCHEMA);
 ?>
