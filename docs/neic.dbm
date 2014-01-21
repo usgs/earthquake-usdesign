@@ -80,7 +80,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="code" not-null="true">
 		<type name="varchar" length="20"/>
 	</column>
-	<column name="requires_exceedence_probablilty" not-null="true">
+	<column name="requires_exceedence_probability" not-null="true">
 		<type name="boolean"/>
 	</column>
 	<column name="display_order" not-null="true">
