@@ -2,6 +2,7 @@ DROP TABLE us_design.edition CASCADE;
 DROP TABLE us_design.site_soil_class CASCADE;
 DROP TABLE us_design.design_code_variant CASCADE;
 DROP TABLE us_design.region CASCADE;
+DROP TABLE us_design.data_group CASCADE;
 DROP TABLE us_design.dataset CASCADE;
 DROP TABLE us_design.data CASCADE;
 DROP TABLE us_design.risk_header CASCADE;
@@ -39,7 +40,7 @@ CREATE TABLE us_design.design_code_variant(
 	id bigserial,
 	edition_id bigint NOT NULL,
 	code varchar(20) NOT NULL,
-	requires_exceedence_probablilty boolean NOT NULL,
+	requires_exceedence_probability boolean NOT NULL,
 	display_order smallint NOT NULL,
 	CONSTRAINT design_code_variant_pk PRIMARY KEY (id)
 
@@ -73,6 +74,7 @@ CREATE TABLE us_design.dataset(
 	sec_0_2_det_floor double precision,
 	sec_1_0_det_floor double precision,
 	design_code_variant_id bigint,
+	data_group_id bigint NOT NULL,
 	CONSTRAINT dataset_pk PRIMARY KEY (id)
 
 );
@@ -89,9 +91,15 @@ CREATE INDEX dataset_region_id_idx ON us_design.dataset
 	  region_id ASC NULLS LAST
 	);
 
+CREATE INDEX dataset_data_group_id_idx ON us_design.dataset
+	USING btree
+	(
+	  data_group_id ASC NULLS LAST
+	);
+
 CREATE TABLE us_design.data(
 	id bigserial,
-	dataset_id bigint NOT NULL,
+	data_group_id bigint NOT NULL,
 	longitude numeric(7,4) NOT NULL,
 	latitude numeric(7,4) NOT NULL,
 	sec_0_0_uh double precision,
@@ -108,10 +116,10 @@ CREATE TABLE us_design.data(
 
 );
 
-CREATE INDEX data_dataset_id_idx ON us_design.data
+CREATE INDEX data_data_group_id_idx ON us_design.data
 	USING btree
 	(
-	  dataset_id ASC NULLS LAST
+	  data_group_id ASC NULLS LAST
 	);
 
 CREATE INDEX data_longitude_idx ON us_design.data
@@ -281,6 +289,12 @@ CREATE TABLE us_design.risk_category(
 
 );
 
+CREATE TABLE us_design.data_group(
+	id bigserial NOT NULL,
+	CONSTRAINT data_group_pk PRIMARY KEY (id)
+
+);
+
 ALTER TABLE us_design.edition ADD CONSTRAINT edition_data_source_id_fk FOREIGN KEY (data_source_id)
 REFERENCES us_design.data_source (id) MATCH FULL
 ON DELETE NO ACTION ON UPDATE NO ACTION NOT DEFERRABLE;
@@ -313,8 +327,12 @@ ALTER TABLE us_design.dataset ADD CONSTRAINT dataset_design_code_variant_fk FORE
 REFERENCES us_design.design_code_variant (id) MATCH FULL
 ON DELETE NO ACTION ON UPDATE NO ACTION NOT DEFERRABLE;
 
-ALTER TABLE us_design.data ADD CONSTRAINT data_dataset_id_fk FOREIGN KEY (dataset_id)
-REFERENCES us_design.dataset (id) MATCH FULL
+ALTER TABLE us_design.dataset ADD CONSTRAINT dataset_data_group_id FOREIGN KEY (data_group_id)
+REFERENCES us_design.data_group (id) MATCH FULL
+ON DELETE NO ACTION ON UPDATE NO ACTION NOT DEFERRABLE;
+
+ALTER TABLE us_design.data ADD CONSTRAINT data_data_group_id_fk FOREIGN KEY (data_group_id)
+REFERENCES us_design.data_group (id) MATCH FULL
 ON DELETE NO ACTION ON UPDATE NO ACTION NOT DEFERRABLE;
 
 ALTER TABLE us_design.risk_header ADD CONSTRAINT risk_header_risk_table_id FOREIGN KEY (risk_table_id)
