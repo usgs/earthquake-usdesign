@@ -80,5 +80,30 @@ catch (PDOException $e) {
 	}
 }
 
+// DML commands (convert to upper case for ease of comparisons below)
+$sql = strtoupper(file_get_contents($DATA_DIR . '/data.sql'));
+
+// If schema is not the default, modify it in the commands.
+if ($SCHEMA !== 'US_DESIGN') {
+	$sql = str_replace('US_DESIGN', $SCHEMA, $sql);
+}
+
+$tok = strtok($sql, ";");
+while ($tok !== false) {
+	$command = strtoupper(trim($tok));
+	if (strpos($command, "INSERT ") === 0 ||
+		strpos($command, "DELETE ") === 0) {
+		try {
+			$DB->exec($command);
+		}
+		catch (PDOException $e) {
+			if (!$drop_flag) {
+				trigger_error("DML error: " . $e->getMessage());
+			}
+		}
+	}
+	$tok = strtok(";");
+}
+
 $DB = null;
 ?>
