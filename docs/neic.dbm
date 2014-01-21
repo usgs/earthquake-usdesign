@@ -1,0 +1,960 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel>
+<schema name="public" protected="true" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<schema name="us_design" fill-color="#e1e1e1">
+</schema>
+
+<schema name="us_design_cp1" fill-color="#e1e1e1">
+</schema>
+
+<schema name="us_design_cp2" fill-color="#e1e1e1">
+</schema>
+
+<schema name="us_design_cp3" fill-color="#e1e1e1">
+</schema>
+
+<database name="neic">
+</database>
+
+<table name="edition">
+	<schema name="us_design"/>
+	<position x="359" y="193"/>
+	<column name="id">
+		<type name="bigserial"/>
+	</column>
+	<column name="code" not-null="true">
+		<type name="varchar" length="20"/>
+	</column>
+	<column name="title" not-null="true">
+		<type name="varchar" length="100"/>
+	</column>
+	<column name="data_source_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="display_order" not-null="true">
+		<type name="smallint"/>
+	</column>
+	<column name="risk_category_label">
+		<type name="varchar" length="100"/>
+	</column>
+	<constraint name="edition_pk" type="pk-constr" factor="10" table="us_design.edition">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="site_soil_class">
+	<schema name="us_design"/>
+	<position x="1024" y="383"/>
+	<column name="id">
+		<type name="bigserial"/>
+	</column>
+	<column name="code">
+		<type name="varchar"/>
+	</column>
+	<column name="title" not-null="true">
+		<type name="varchar" length="100"/>
+	</column>
+	<column name="display_order" not-null="true">
+		<type name="smallint"/>
+	</column>
+	<constraint name="site_soil_class_pk" type="pk-constr" factor="10" table="us_design.site_soil_class">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="design_code_variant">
+	<schema name="us_design"/>
+	<position x="3" y="5"/>
+	<column name="id">
+		<type name="bigserial"/>
+	</column>
+	<column name="edition_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="code" not-null="true">
+		<type name="varchar" length="20"/>
+	</column>
+	<column name="requires_exceedence_probablilty" not-null="true">
+		<type name="boolean"/>
+	</column>
+	<column name="display_order" not-null="true">
+		<type name="smallint"/>
+	</column>
+	<constraint name="design_code_variant_pk" type="pk-constr" factor="10" table="us_design.design_code_variant">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="region">
+	<schema name="us_design"/>
+	<position x="4" y="295"/>
+	<column name="id">
+		<type name="bigserial"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="varchar" length="100"/>
+	</column>
+	<column name="min_longitude" not-null="true">
+		<type name="numeric" length="7" precision="4"/>
+	</column>
+	<column name="max_longitude" not-null="true">
+		<type name="numeric" length="7" precision="4"/>
+	</column>
+	<column name="min_latitude" not-null="true">
+		<type name="numeric" length="7" precision="4"/>
+	</column>
+	<column name="max_latitude" not-null="true">
+		<type name="numeric" length="7" precision="4"/>
+	</column>
+	<column name="priority" not-null="true">
+		<type name="smallint"/>
+	</column>
+	<constraint name="region_pk" type="pk-constr" factor="10" table="us_design.region">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="region_priority_unique" type="uq-constr" factor="10" table="us_design.region">
+		<columns names="priority" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="dataset">
+	<schema name="us_design"/>
+	<position x="412" y="376"/>
+	<column name="id">
+		<type name="bigserial"/>
+	</column>
+	<column name="edition_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="region_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="fa_table_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="fv_table_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="fpga_table_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="grid_spacing" not-null="true">
+		<type name="double precision"/>
+	</column>
+	<column name="ss_max_direction_factor">
+		<type name="double precision"/>
+	</column>
+	<column name="s1_max_direction_factor">
+		<type name="double precision"/>
+	</column>
+	<column name="factor_84_percent">
+		<type name="double precision"/>
+	</column>
+	<column name="sec_0_0_det_floor">
+		<type name="double precision"/>
+	</column>
+	<column name="sec_0_2_det_floor">
+		<type name="double precision"/>
+	</column>
+	<column name="sec_1_0_det_floor">
+		<type name="double precision"/>
+	</column>
+	<column name="design_code_variant_id">
+		<type name="bigint"/>
+	</column>
+	<column name="data_group_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<constraint name="dataset_pk" type="pk-constr" factor="10" table="us_design.dataset">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<index name="dataset_edition_id_idx" table="us_design.dataset"
+		 concurrent="false" unique="false" fast-update="false"
+		 index-type="btree" factor="0">
+		<idxelement use-sorting="true" nulls-first="false" asc-order="true">
+			<column name="edition_id"/>
+		</idxelement>
+	</index>
+	<index name="dataset_region_id_idx" table="us_design.dataset"
+		 concurrent="false" unique="false" fast-update="false"
+		 index-type="btree" factor="0">
+		<idxelement use-sorting="true" nulls-first="false" asc-order="true">
+			<column name="region_id"/>
+		</idxelement>
+	</index>
+	<index name="dataset_data_group_id_idx" table="us_design.dataset"
+		 concurrent="false" unique="false" fast-update="false"
+		 index-type="btree" factor="0">
+		<idxelement use-sorting="true" nulls-first="false" asc-order="true">
+			<column name="data_group_id"/>
+		</idxelement>
+	</index>
+</table>
+
+<table name="data">
+	<schema name="us_design"/>
+	<position x="5" y="441"/>
+	<column name="id">
+		<type name="bigserial"/>
+	</column>
+	<column name="data_group_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="longitude" not-null="true">
+		<type name="numeric" length="7" precision="4"/>
+	</column>
+	<column name="latitude" not-null="true">
+		<type name="numeric" length="7" precision="4"/>
+	</column>
+	<column name="sec_0_0_uh">
+		<type name="double precision"/>
+	</column>
+	<column name="sec_0_2_uh">
+		<type name="double precision"/>
+	</column>
+	<column name="sec_1_0_uh">
+		<type name="double precision"/>
+	</column>
+	<column name="sec_0_2_cr">
+		<type name="double precision"/>
+	</column>
+	<column name="sec_1_0_cr">
+		<type name="double precision"/>
+	</column>
+	<column name="sec_0_0_det">
+		<type name="double precision"/>
+	</column>
+	<column name="sec_0_2_det">
+		<type name="double precision"/>
+	</column>
+	<column name="sec_1_0_det">
+		<type name="double precision"/>
+	</column>
+	<column name="ss">
+		<type name="double precision"/>
+	</column>
+	<column name="s1">
+		<type name="double precision"/>
+	</column>
+	<constraint name="data_pk" type="pk-constr" factor="10" table="us_design.data">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<index name="data_data_group_id_idx" table="us_design.data"
+		 concurrent="false" unique="false" fast-update="false"
+		 index-type="btree" factor="0">
+		<idxelement use-sorting="true" nulls-first="false" asc-order="true">
+			<column name="data_group_id"/>
+		</idxelement>
+	</index>
+	<index name="data_longitude_idx" table="us_design.data"
+		 concurrent="false" unique="false" fast-update="false"
+		 index-type="btree" factor="0">
+		<idxelement use-sorting="true" nulls-first="false" asc-order="true">
+			<column name="longitude"/>
+		</idxelement>
+	</index>
+	<index name="data_latitude_idx" table="us_design.data"
+		 concurrent="false" unique="false" fast-update="false"
+		 index-type="btree" factor="0">
+		<idxelement use-sorting="true" nulls-first="false" asc-order="true">
+			<column name="latitude"/>
+		</idxelement>
+	</index>
+</table>
+
+<table name="tsubl">
+	<schema name="us_design"/>
+	<comment><![CDATA[ESRI SDE table]]></comment>
+	<appended-sql><![CDATA[/*
+ * RETURN THE VALUE OF THE POLYGON THE POINT IS IN, THE LARGEST VALUE OF ANY BORDERING POLYGONS
+ * (IF POINT IS ON A BOUNDARY), OR -1 IF THE POINT IS DISJOINT FROM ALL POLYGONS. 
+*/
+CREATE OR REPLACE FUNCTION US_DESIGN.TSUBL_VALUE (LONGITUDE IN NUMERIC, LATITUDE IN NUMERIC) 
+	RETURNS INTEGER AS $$
+	DECLARE RETURN_VAL INTEGER;
+	BEGIN
+		SELECT value INTO RETURN_VAL FROM US_DESIGN.TSUBL WHERE
+			SDE.ST_DISJOINT(SHAPE, SDE.ST_POINT($1, $2, 4326))=false
+			ORDER BY VALUE DESC;
+		RETURN COALESCE(RETURN_VAL,-1);
+	END;
+$$ LANGUAGE PLPGSQL;
+]]></appended-sql>
+	<position x="4" y="191"/>
+	<column name="objectid">
+		<type name="integer"/>
+	</column>
+	<column name="value">
+		<type name="numeric" length="10" precision="0"/>
+	</column>
+	<column name="shape">
+		<type name="geometry" spatial-type="MULTIPOLYGON" variation="0" srid="0"/>
+		<comment><![CDATA[st_geometry]]></comment>
+	</column>
+	<constraint name="tsubl_pk" type="pk-constr" factor="10" table="us_design.tsubl">
+		<columns names="objectid" ref-type="src-columns"/>
+	</constraint>
+	<index name="tsubl_shape_idx" table="us_design.tsubl"
+		 concurrent="false" unique="false" fast-update="false"
+		 index-type="gist" factor="0">
+		<idxelement use-sorting="true" nulls-first="false" asc-order="true">
+			<column name="shape"/>
+		</idxelement>
+	</index>
+</table>
+
+<table name="risk_header">
+	<schema name="us_design"/>
+	<position x="649" y="142"/>
+	<column name="id">
+		<type name="bigserial"/>
+	</column>
+	<column name="risk_table_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="category_title" not-null="true">
+		<type name="varchar" length="100"/>
+	</column>
+	<column name="display_order" not-null="true">
+		<type name="smallint"/>
+	</column>
+	<constraint name="risk_header_pk" type="pk-constr" factor="10" table="us_design.risk_header">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<index name="risk_header_risk_table_id_idx" table="us_design.risk_header"
+		 concurrent="false" unique="false" fast-update="false"
+		 index-type="btree" factor="0">
+		<idxelement use-sorting="true" nulls-first="false" asc-order="true">
+			<column name="risk_table_id"/>
+		</idxelement>
+	</index>
+</table>
+
+<table name="data_source">
+	<schema name="us_design"/>
+	<position x="379" y="4"/>
+	<column name="id">
+		<type name="bigserial"/>
+	</column>
+	<column name="title" not-null="true">
+		<type name="varchar" length="100"/>
+	</column>
+	<column name="display_order" not-null="true">
+		<type name="smallint"/>
+	</column>
+	<constraint name="data_source_pk" type="pk-constr" factor="10" table="us_design.data_source">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="edition_site_soil_class">
+	<schema name="us_design"/>
+	<position x="731" y="384"/>
+	<column name="id">
+		<type name="bigserial"/>
+	</column>
+	<column name="edition_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="site_soil_class_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<constraint name="edition_site_soil_class_pk" type="pk-constr" factor="10" table="us_design.edition_site_soil_class">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="risk_table">
+	<schema name="us_design"/>
+	<position x="653" y="4"/>
+	<column name="id">
+		<type name="bigserial"/>
+	</column>
+	<column name="edition_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="table_type" not-null="true">
+		<type name="varchar" length="5"/>
+	</column>
+	<constraint name="risk_table_pk" type="pk-constr" factor="10" table="us_design.risk_table">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="risk_table_type_ck" type="ck-constr" table="us_design.risk_table">
+			<expression><![CDATA[table_type in ('SDS', 'SD1')]]></expression>
+	</constraint>
+</table>
+
+<table name="f_data">
+	<schema name="us_design"/>
+	<position x="743" y="520"/>
+	<column name="id">
+		<type name="bigserial"/>
+	</column>
+	<column name="site_soil_class_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="f_header_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="value" not-null="true">
+		<type name="double precision"/>
+	</column>
+	<constraint name="f_data_pk" type="pk-constr" factor="10" table="us_design.f_data">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<index name="f_data_f_header_id_idx" table="us_design.f_data"
+		 concurrent="false" unique="false" fast-update="false"
+		 index-type="btree" factor="0">
+		<idxelement use-sorting="true" nulls-first="false" asc-order="true">
+			<column name="f_header_id"/>
+		</idxelement>
+	</index>
+</table>
+
+<table name="f_header">
+	<schema name="us_design"/>
+	<position x="726" y="695"/>
+	<column name="id">
+		<type name="bigserial"/>
+	</column>
+	<column name="f_table_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="value" not-null="true">
+		<type name="double precision"/>
+	</column>
+	<constraint name="f_header_pk" type="pk-constr" factor="10" table="us_design.f_header">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<index name="f_header_f_table_id_idx" table="us_design.f_header"
+		 concurrent="false" unique="false" fast-update="false"
+		 index-type="btree" factor="0">
+		<idxelement use-sorting="true" nulls-first="false" asc-order="true">
+			<column name="f_table_id"/>
+		</idxelement>
+	</index>
+</table>
+
+<table name="f_table">
+	<schema name="us_design"/>
+	<position x="461" y="729"/>
+	<column name="id">
+		<type name="bigserial"/>
+	</column>
+	<column name="type" not-null="true">
+		<type name="varchar" length="4"/>
+	</column>
+	<constraint name="f_table_pk" type="pk-constr" factor="10" table="us_design.f_table">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="f_table_type_ck" type="ck-constr" table="us_design.f_table">
+			<expression><![CDATA[type in ('fa','fv','fpga')]]></expression>
+	</constraint>
+</table>
+
+<table name="f_data_vw">
+	<schema name="us_design"/>
+	<appended-sql><![CDATA[CREATE OR REPLACE VIEW us_design.f_data_vw AS 
+        (         SELECT a.id AS f_table_id, d.code AS site_soil_class_code, b.value AS ss_val, NULL::double precision AS s1_val, NULL::double precision AS pga_val, c.value AS fa, NULL::double precision AS fv, NULL::double precision AS fpga
+                   FROM us_design.f_table a, us_design.f_header b, us_design.f_data c, us_design.site_soil_class d
+                  WHERE b.f_table_id = a.id AND c.f_header_id = b.id AND a.type = 'fa' AND c.site_soil_class_id = d.id
+        UNION ALL 
+                 SELECT a.id AS f_table_id, d.code AS site_soil_class_code, NULL::double precision AS ss_val, b.value AS s1_val, NULL::double precision AS pga_val, NULL::double precision AS fa, c.value AS fv, NULL::double precision AS fpga
+                   FROM us_design.f_table a, us_design.f_header b, us_design.f_data c, us_design.site_soil_class d
+                  WHERE b.f_table_id = a.id AND c.f_header_id = b.id AND a.type = 'fv' AND c.site_soil_class_id = d.id)
+UNION ALL 
+         SELECT a.id AS f_table_id, d.code AS site_soil_class_code, NULL::double precision AS ss_val, NULL::double precision AS s1_val, b.value AS pga_val, NULL::double precision AS fa, NULL::double precision AS fv, c.value AS fpga
+           FROM us_design.f_table a, us_design.f_header b, us_design.f_data c, us_design.site_soil_class d
+          WHERE b.f_table_id = a.id AND c.f_header_id = b.id AND a.type = 'fpga' AND c.site_soil_class_id = d.id
+ORDER BY 1,2,3,4,5;
+]]></appended-sql>
+	<position x="966" y="640"/>
+	<column name="f_table_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="site_soil_class_code" not-null="true">
+		<type name="varchar"/>
+	</column>
+	<column name="ss_val">
+		<type name="double precision"/>
+	</column>
+	<column name="s1_val">
+		<type name="double precision"/>
+	</column>
+	<column name="pga_val">
+		<type name="double precision"/>
+	</column>
+	<column name="fa">
+		<type name="double precision"/>
+	</column>
+	<column name="fv">
+		<type name="double precision"/>
+	</column>
+	<column name="fpga">
+		<type name="double precision"/>
+	</column>
+</table>
+
+<table name="risk_interval">
+	<schema name="us_design"/>
+	<position x="994" y="4"/>
+	<column name="id">
+		<type name="bigserial"/>
+	</column>
+	<column name="risk_table_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="min_s_value">
+		<type name="double precision"/>
+	</column>
+	<column name="max_s_value">
+		<type name="double precision"/>
+	</column>
+	<constraint name="risk_interval_pk" type="pk-constr" factor="10" table="us_design.risk_interval">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<index name="risk_interval_risk_table_id_idx" table="us_design.risk_interval"
+		 concurrent="false" unique="false" fast-update="false"
+		 index-type="btree" factor="0">
+		<idxelement use-sorting="true" nulls-first="false" asc-order="true">
+			<column name="risk_table_id"/>
+		</idxelement>
+	</index>
+</table>
+
+<table name="risk_data">
+	<schema name="us_design"/>
+	<position x="1017" y="174"/>
+	<column name="id">
+		<type name="bigserial"/>
+	</column>
+	<column name="risk_header_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="risk_interval_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="design_category" not-null="true">
+		<type name="varchar"/>
+	</column>
+	<constraint name="risk_data_pk" type="pk-constr" factor="10" table="us_design.risk_data">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<index name="risk_data_risk_header_id_idx" table="us_design.risk_data"
+		 concurrent="false" unique="false" fast-update="false"
+		 index-type="btree" factor="0">
+		<idxelement use-sorting="true" nulls-first="false" asc-order="true">
+			<column name="risk_header_id"/>
+		</idxelement>
+	</index>
+	<index name="risk_data_risk_interval_id_idx" table="us_design.risk_data"
+		 concurrent="false" unique="false" fast-update="false"
+		 index-type="btree" factor="0">
+		<idxelement use-sorting="true" nulls-first="false" asc-order="true">
+			<column name="risk_interval_id"/>
+		</idxelement>
+	</index>
+</table>
+
+<table name="risk_table_vw">
+	<schema name="us_design"/>
+	<appended-sql><![CDATA[CREATE OR REPLACE VIEW us_design.risk_table_vw AS 
+ SELECT a.edition_id, a.table_type, 
+        CASE
+            WHEN a.min_s_value IS NULL AND a.max_s_value IS NULL THEN ''::text
+            WHEN a.min_s_value IS NULL THEN ('S_DS < '::text || a.max_s_value) || 'g'::text
+            WHEN a.max_s_value IS NULL THEN a.min_s_value || 'g <= S_DS'::text
+            ELSE ((a.min_s_value || 'g <= S_DS < '::text) || a.max_s_value) || 'g'::text
+        END AS s_value, a.design_categories[1] AS category1, a.design_categories[2] AS category2, a.design_categories[3] AS category3
+   FROM (         SELECT e.id AS edition_id, rt.table_type, NULL::double precision AS min_s_value, NULL::double precision AS max_s_value, array_agg(rh.category_title ORDER BY rh.display_order) AS design_categories
+                   FROM us_design.risk_header rh, us_design.risk_table rt, us_design.edition e
+                  WHERE rh.risk_table_id = rt.id AND rt.edition_id = e.id
+                  GROUP BY e.id, rt.table_type, rt.id
+        UNION 
+                 SELECT e.id AS edition_id, rt.table_type, ri.min_s_value, ri.max_s_value, array_agg(rd.design_category ORDER BY rh.display_order) AS array_agg
+                   FROM us_design.risk_data rd, us_design.risk_interval ri, us_design.risk_header rh, us_design.risk_table rt, us_design.edition e
+                  WHERE rd.risk_interval_id = ri.id AND rd.risk_header_id = rh.id AND rh.risk_table_id = rt.id AND ri.risk_table_id = rt.id AND rt.edition_id = e.id
+                  GROUP BY e.id, rt.table_type, ri.min_s_value, ri.max_s_value) a
+  ORDER BY a.edition_id, a.table_type, a.min_s_value NULLS FIRST, a.max_s_value NULLS FIRST;
+
+]]></appended-sql>
+	<position x="1041" y="509"/>
+	<column name="edition_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="table_type" not-null="true">
+		<type name="varchar" length="5"/>
+	</column>
+	<column name="s_value">
+		<type name="varchar" length="100"/>
+	</column>
+	<column name="category1" not-null="true">
+		<type name="varchar" length="100"/>
+	</column>
+	<column name="category2" not-null="true">
+		<type name="varchar" length="100"/>
+	</column>
+	<column name="category3" not-null="true">
+		<type name="varchar" length="100"/>
+	</column>
+</table>
+
+<table name="risk_category">
+	<schema name="us_design"/>
+	<position x="781" y="270"/>
+	<column name="id">
+		<type name="bigserial"/>
+	</column>
+	<column name="edition_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="category" not-null="true">
+		<type name="varchar" length="100"/>
+	</column>
+	<column name="display_order" not-null="true">
+		<type name="smallint"/>
+	</column>
+	<constraint name="risk_category_pk" type="pk-constr" factor="10" table="us_design.risk_category">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="data_group">
+	<schema name="us_design"/>
+	<position x="279" y="744"/>
+	<column name="id" not-null="true">
+		<type name="bigserial"/>
+	</column>
+	<constraint name="data_group_pk" type="pk-constr" factor="10" table="us_design.data_group">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<constraint name="edition_data_source_id_fk" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="us_design.data_source" table="us_design.edition">
+	<columns names="data_source_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+<constraint name="design_code_variant_edition_id_fk" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="us_design.edition" table="us_design.design_code_variant">
+	<columns names="edition_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+<constraint name="dataset_region_id_fk" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="us_design.region" table="us_design.dataset">
+	<columns names="region_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+<constraint name="dataset_edition_id" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="us_design.edition" table="us_design.dataset">
+	<columns names="edition_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+<constraint name="dataset_fa_table_id_fk" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="us_design.f_table" table="us_design.dataset">
+	<columns names="fa_table_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+<constraint name="dataset_fv_table_id_fk" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="us_design.f_table" table="us_design.dataset">
+	<columns names="fv_table_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+<constraint name="dataset_fpga_table_id_fk" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="us_design.f_table" table="us_design.dataset">
+	<columns names="fpga_table_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+<constraint name="dataset_design_code_variant_fk" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="us_design.design_code_variant" table="us_design.dataset">
+	<columns names="design_code_variant_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+<constraint name="dataset_data_group_id" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="us_design.data_group" table="us_design.dataset">
+	<columns names="data_group_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+<constraint name="data_data_group_id_fk" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="us_design.data_group" table="us_design.data">
+	<columns names="data_group_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+<constraint name="risk_header_risk_table_id" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="us_design.risk_table" table="us_design.risk_header">
+	<columns names="risk_table_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+<constraint name="edition_site_soil_class_edition_id_fk" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="us_design.edition" table="us_design.edition_site_soil_class">
+	<columns names="edition_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+<constraint name="edition_site_soil_class_site_soil_class_id_fk" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="us_design.site_soil_class" table="us_design.edition_site_soil_class">
+	<columns names="site_soil_class_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+<constraint name="risk_table_edition_id_fk" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="us_design.edition" table="us_design.risk_table">
+	<columns names="edition_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+<constraint name="f_data_site_soil_class_id_fk" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="us_design.site_soil_class" table="us_design.f_data">
+	<columns names="site_soil_class_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+<constraint name="f_data_f_header_id_fk" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="us_design.f_header" table="us_design.f_data">
+	<columns names="f_header_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+<constraint name="f_header_f_table_id_fk" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="us_design.f_table" table="us_design.f_header">
+	<columns names="f_table_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+<constraint name="risk_interval_risk_table_id_fk" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="us_design.risk_table" table="us_design.risk_interval">
+	<columns names="risk_table_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+<constraint name="risk_data_risk_header_id_fk" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="us_design.risk_header" table="us_design.risk_data">
+	<columns names="risk_header_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+<constraint name="risk_data_risk_interval_id_fk" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="us_design.risk_interval" table="us_design.risk_data">
+	<columns names="risk_interval_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+<constraint name="risk_category_edition_id_fk" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="us_design.edition" table="us_design.risk_category">
+	<columns names="edition_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+<relationship name="edition_data_source" type="relfk"
+	 src-table="us_design.edition"
+	 dst-table="us_design.data_source"
+	 src-required="true" dst-required="true">
+	<label ref-type="name-label">
+		<position x="35.4757" y="-62.7985"/>
+	</label>
+</relationship>
+
+<relationship name="dataset_region" type="relfk"
+	 src-table="us_design.dataset"
+	 dst-table="us_design.region"
+	 src-required="true" dst-required="true">
+	<label ref-type="dst-label">
+		<position x="-0.498764" y="1.60001"/>
+	</label>
+	<label ref-type="name-label">
+		<position x="-3.27426" y="-30.7485"/>
+	</label>
+</relationship>
+
+<relationship name="dataset_edition" type="relfk"
+	 src-table="us_design.dataset"
+	 dst-table="us_design.edition"
+	 src-required="true" dst-required="true">
+	<label ref-type="src-label">
+		<position x="5.92969" y="5.79999"/>
+	</label>
+	<label ref-type="name-label">
+		<position x="-12.0243" y="-62.9985"/>
+	</label>
+</relationship>
+
+<relationship name="edition_site_soil_class_edition" type="relfk"
+	 src-table="us_design.edition_site_soil_class"
+	 dst-table="us_design.edition"
+	 src-required="true" dst-required="true">
+	<label ref-type="name-label">
+		<position x="20.7257" y="-15.7986"/>
+	</label>
+</relationship>
+
+<relationship name="edition_site_soil_class_site_soil_class" type="relfk"
+	 src-table="us_design.edition_site_soil_class"
+	 dst-table="us_design.site_soil_class"
+	 src-required="true" dst-required="true">
+	<label ref-type="src-label">
+		<position x="-2.06677" y="3.79999"/>
+	</label>
+	<label ref-type="dst-label">
+		<position x="0.800024" y="-2.76141"/>
+	</label>
+	<label ref-type="name-label">
+		<position x="-11.7743" y="-76.7986"/>
+	</label>
+</relationship>
+
+<relationship name="design_code_variant_edition" type="relfk"
+	 src-table="us_design.design_code_variant"
+	 dst-table="us_design.edition"
+	 src-required="true" dst-required="true">
+	<label ref-type="src-label">
+		<position x="17.0966" y="-1.4"/>
+	</label>
+	<label ref-type="name-label">
+		<position x="33.9757" y="-46.7985"/>
+	</label>
+</relationship>
+
+<relationship name="dataset_f_table" type="relfk"
+	 src-table="us_design.dataset"
+	 dst-table="us_design.f_table"
+	 src-required="true" dst-required="true">
+	<label ref-type="src-label">
+		<position x="-4.56003" y="-3.20001"/>
+	</label>
+	<label ref-type="dst-label">
+		<position x="-4.53262" y="2.80005"/>
+	</label>
+	<label ref-type="name-label">
+		<position x="45.2257" y="36.7515"/>
+	</label>
+</relationship>
+
+<relationship name="f_header_f_table" type="relfk"
+	 src-table="us_design.f_header"
+	 dst-table="us_design.f_table"
+	 src-required="true" dst-required="true">
+	<label ref-type="name-label">
+		<position x="-20.0243" y="0.501465"/>
+	</label>
+</relationship>
+
+<relationship name="f_data_site_soil_class" type="relfk"
+	 src-table="us_design.f_data"
+	 dst-table="us_design.site_soil_class"
+	 src-required="true" dst-required="true">
+	<label ref-type="src-label">
+		<position x="-4.27039" y="2.79999"/>
+	</label>
+	<label ref-type="dst-label">
+		<position x="8.19495" y="-5.39999"/>
+	</label>
+	<label ref-type="name-label">
+		<position x="1.72571" y="-32.2485"/>
+	</label>
+</relationship>
+
+<relationship name="f_data_f_header" type="relfk"
+	 src-table="us_design.f_data"
+	 dst-table="us_design.f_header"
+	 src-required="true" dst-required="true">
+	<label ref-type="src-label">
+		<position x="5.50891" y="-4.20001"/>
+	</label>
+	<label ref-type="dst-label">
+		<position x="-0.966309" y="1.80005"/>
+	</label>
+	<label ref-type="name-label">
+		<position x="-31.0243" y="-26.6985"/>
+	</label>
+</relationship>
+
+<relationship name="risk_table_edition" type="relfk"
+	 src-table="us_design.risk_table"
+	 dst-table="us_design.edition"
+	 src-required="true" dst-required="true">
+	<label ref-type="name-label">
+		<position x="48.2257" y="-60.2985"/>
+	</label>
+</relationship>
+
+<relationship name="risk_header_risk_table" type="relfk"
+	 src-table="us_design.risk_header"
+	 dst-table="us_design.risk_table"
+	 src-required="true" dst-required="true">
+	<label ref-type="src-label">
+		<position x="-4.09235" y="4.8"/>
+	</label>
+	<label ref-type="name-label">
+		<position x="82.4757" y="-33.4985"/>
+	</label>
+</relationship>
+
+<relationship name="risk_interval_risk_table" type="relfk"
+	 src-table="us_design.risk_interval"
+	 dst-table="us_design.risk_table"
+	 src-required="true" dst-required="true">
+	<label ref-type="name-label">
+		<position x="-13.7743" y="-53.2985"/>
+	</label>
+</relationship>
+
+<relationship name="risk_data_risk_header" type="relfk"
+	 src-table="us_design.risk_data"
+	 dst-table="us_design.risk_header"
+	 src-required="true" dst-required="true">
+	<label ref-type="dst-label">
+		<position x="2.47955e-05" y="0.57222"/>
+	</label>
+	<label ref-type="name-label">
+		<position x="-0.215698" y="-51.6985"/>
+	</label>
+</relationship>
+
+<relationship name="risk_data_risk_interval" type="relfk"
+	 src-table="us_design.risk_data"
+	 dst-table="us_design.risk_interval"
+	 src-required="true" dst-required="true">
+	<label ref-type="src-label">
+		<position x="0" y="0"/>
+	</label>
+	<label ref-type="dst-label">
+		<position x="5.11951" y="-0.400002"/>
+	</label>
+	<label ref-type="name-label">
+		<position x="13.5343" y="-28.6985"/>
+	</label>
+</relationship>
+
+<relationship name="risk_category_edition" type="relfk"
+	 src-table="us_design.risk_category"
+	 dst-table="us_design.edition"
+	 src-required="true" dst-required="true">
+	<label ref-type="name-label">
+		<position x="12.7257" y="-45.5486"/>
+	</label>
+</relationship>
+
+<relationship name="dataset_design_code_variant" type="relfk"
+	 src-table="us_design.dataset"
+	 dst-table="us_design.design_code_variant"
+	 src-required="true" dst-required="true">
+	<label ref-type="name-label">
+		<position x="9.97574" y="16.2515"/>
+	</label>
+</relationship>
+
+<relationship name="data_data_group" type="relfk"
+	 src-table="us_design.data"
+	 dst-table="us_design.data_group"
+	 src-required="true" dst-required="true">
+	<label ref-type="name-label">
+		<position x="81.4757" y="2.50146"/>
+	</label>
+</relationship>
+
+<relationship name="dataset_data_group" type="relfk"
+	 src-table="us_design.dataset"
+	 dst-table="us_design.data_group"
+	 src-required="true" dst-required="true">
+	<label ref-type="name-label">
+		<position x="-16.5243" y="42.2515"/>
+	</label>
+</relationship>
+
+</dbmodel>
