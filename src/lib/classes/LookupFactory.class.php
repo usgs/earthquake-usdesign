@@ -216,7 +216,7 @@ class LookupFactory {
 	 */
 	public function getRiskCategories () {
 		$risk_categories = array();
-		$statement = $this->db->prepare('SELECT id FROM '. $this->schema .
+		$statement = $this->db->prepare('SELECT * FROM '. $this->schema .
 				'.risk_category ORDER BY display_order');
 
 		if ($statement->execute()) {

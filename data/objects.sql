@@ -61,7 +61,9 @@ CREATE TABLE us_design.region(
 
 CREATE TABLE us_design.dataset(
 	id bigserial,
+	data_group_id bigint NOT NULL,
 	edition_id bigint NOT NULL,
+	design_code_variant_id bigint,
 	region_id bigint NOT NULL,
 	fa_table_id bigint NOT NULL,
 	fv_table_id bigint NOT NULL,
@@ -73,8 +75,6 @@ CREATE TABLE us_design.dataset(
 	sec_0_0_det_floor double precision,
 	sec_0_2_det_floor double precision,
 	sec_1_0_det_floor double precision,
-	design_code_variant_id bigint,
-	data_group_id bigint NOT NULL,
 	CONSTRAINT dataset_pk PRIMARY KEY (id)
 
 );
