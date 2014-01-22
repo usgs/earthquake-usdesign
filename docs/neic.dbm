@@ -24,7 +24,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="edition">
 	<schema name="us_design"/>
-	<position x="359" y="193"/>
+	<position x="366" y="192"/>
 	<column name="id">
 		<type name="bigserial"/>
 	</column>
@@ -125,11 +125,17 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="dataset">
 	<schema name="us_design"/>
-	<position x="412" y="376"/>
+	<position x="365" y="364"/>
 	<column name="id">
 		<type name="bigserial"/>
 	</column>
+	<column name="data_group_id" not-null="true">
+		<type name="bigint"/>
+	</column>
 	<column name="edition_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="design_code_variant_id">
 		<type name="bigint"/>
 	</column>
 	<column name="region_id" not-null="true">
@@ -164,12 +170,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<column name="sec_1_0_det_floor">
 		<type name="double precision"/>
-	</column>
-	<column name="design_code_variant_id">
-		<type name="bigint"/>
-	</column>
-	<column name="data_group_id" not-null="true">
-		<type name="bigint"/>
 	</column>
 	<constraint name="dataset_pk" type="pk-constr" factor="10" table="us_design.dataset">
 		<columns names="id" ref-type="src-columns"/>
@@ -286,7 +286,7 @@ CREATE OR REPLACE FUNCTION US_DESIGN.TSUBL_VALUE (LONGITUDE IN NUMERIC, LATITUDE
 	END;
 $$ LANGUAGE PLPGSQL;
 ]]></appended-sql>
-	<position x="4" y="191"/>
+	<position x="4" y="192"/>
 	<column name="objectid">
 		<type name="integer"/>
 	</column>
@@ -758,7 +758,7 @@ ORDER BY 1,2,3,4,5;
 		<position x="-0.498764" y="1.60001"/>
 	</label>
 	<label ref-type="name-label">
-		<position x="-3.27426" y="-30.7485"/>
+		<position x="-12.2743" y="-34.2485"/>
 	</label>
 </relationship>
 
@@ -770,7 +770,7 @@ ORDER BY 1,2,3,4,5;
 		<position x="5.92969" y="5.79999"/>
 	</label>
 	<label ref-type="name-label">
-		<position x="-12.0243" y="-62.9985"/>
+		<position x="4.47574" y="-66.9985"/>
 	</label>
 </relationship>
 
@@ -926,7 +926,7 @@ ORDER BY 1,2,3,4,5;
 	 dst-table="us_design.edition"
 	 src-required="true" dst-required="true">
 	<label ref-type="name-label">
-		<position x="12.7257" y="-45.5486"/>
+		<position x="17.2257" y="-49.5486"/>
 	</label>
 </relationship>
 
@@ -953,7 +953,7 @@ ORDER BY 1,2,3,4,5;
 	 dst-table="us_design.data_group"
 	 src-required="true" dst-required="true">
 	<label ref-type="name-label">
-		<position x="-16.5243" y="42.2515"/>
+		<position x="0.975739" y="52.7515"/>
 	</label>
 </relationship>
 
