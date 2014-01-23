@@ -1,5 +1,6 @@
 DELETE FROM us_design.data;
 DELETE FROM us_design.dataset;
+DELETE FROM us_design.data_group;
 DELETE FROM us_design.region;
 DELETE FROM us_design.f_data;
 DELETE FROM us_design.f_header;
@@ -11,20 +12,22 @@ DELETE FROM us_design.risk_data;
 DELETE FROM us_design.risk_header;
 DELETE FROM us_design.risk_interval;
 DELETE FROM us_design.risk_table;
-DELETE FROM us_design.risk_category;
 DELETE FROM us_design.edition;
 DELETE FROM us_design.data_source;
 
 INSERT INTO
 	us_design.region
-	(id, name, min_longitude, max_longitude, min_latitude, max_latitude, priority)
+	(name, min_longitude, max_longitude, min_latitude, max_latitude, priority)
 VALUES
-	(1, 'Conterminous 48 States', -125, -65, 24.7, 50, 1),
-	(2, 'Hawaii', -161, -154, 18, 23, 2),
-	(3, 'Alaska', -200, -125, 48, 72, 3),
-	(4, 'Puerto Rico', -70, -62, 49.75, 71.5, 4),
-	(5, 'Guam', 139, 151, 9, 23, 5),
-	(6, 'American Samoa', -195, -165, -33, -11, 6);
+	('Alaska', -200, -125, 48, 72, 1),
+	('Conterminous 48 States', -125, -65, 24.6, 50, 2),
+	('Hawaii', -161, -154, 18, 23, 3),
+	('Puerto Rico', -70, -62, 16, 21, 4),
+	('Guam', 139, 151, 9, 23, 5),
+	('American Samoa', -195, -165, -33, -11, 6),
+	('US: California/Nevada', -125, -115, 32, 42, 7),
+	('US: Salt Lake City', -112, -110, 40, 45, 8),
+	('US: Pacific Northwest', -125, -123, 41, 49, 9);
 
 INSERT INTO
 	us_design.site_soil_class
@@ -131,21 +134,6 @@ INSERT INTO us_design.edition_site_soil_class (id, edition_id, site_soil_class_i
 	(49, 10, 3),
 	(50, 10, 4),
 	(51, 10, 5);
-
-INSERT INTO
-	us_design.risk_category
-	(id, edition_id, category, display_order)
-VALUES
-	(1, 3, 'I or II or III', 1),
-	(2, 3, 'IV (eg. essential facilities)', 2),
-	(3, 4, 'I or II or III', 3),
-	(4, 4, 'IV (eg. essential facilities)', 4),
-	(5, 7, 'I or II or III', 5),
-	(6, 7, 'IV (eg. essential facilities)', 6),
-	(7, 9, 'I or II or III', 7),
-	(8, 9, 'IV (eg. essential facilities)', 8),
-	(9, 10, 'I or II', 7),
-	(10, 10, 'III (eg. essential facilities)', 8);
 
 INSERT INTO us_design.f_table (id, type) VALUES
 	(1, 'fa'),
@@ -693,3 +681,17 @@ VALUES
 	(123, 30, 44, 'D'),
 	(124, 31, 44, 'D');
 	
+INSERT INTO
+	us_design.risk_category
+	(edition_id, category, display_order)
+VALUES
+	(3, 'I or II or III', 1),
+	(3, 'IV (eg. essential facilities)', 2),
+	(4, 'I or II or III', 3),
+	(4, 'IV (eg. essential facilities)', 4),
+	(7, 'I or II or III', 5),
+	(7, 'IV (eg. essential facilities)', 6),
+	(9, 'I or II or III', 7),
+	(9, 'IV (eg. essential facilities)', 8),
+	(10, 'I or II', 7),
+	(10, 'III (eg. essential facilities)', 8);

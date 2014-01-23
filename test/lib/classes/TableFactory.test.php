@@ -22,8 +22,6 @@
 	include_once '../../../src/conf/config.inc.php';
 
 	try {
-		// ----- Tests ----- //
-
 		$f_tables = $TABLE_FACTORY->getFTables();
 		notify('Get "F" tables', 6, count($f_tables));
 		$f_table = $f_tables[0];

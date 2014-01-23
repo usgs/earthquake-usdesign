@@ -22,8 +22,6 @@
 	include_once '../../../src/conf/config.inc.php';
 
 	try {
-		// ----- Tests ----- //
-
 		$data_sources = $LOOKUP_FACTORY->getDataSources();
 		notify('Get data sources', 3, count($data_sources));
 		$data_source = $data_sources[1];

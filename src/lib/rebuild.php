@@ -43,20 +43,21 @@ try {
 print "(Re)building application data objects ...\n";
 $DATA_DIR = $CONFIG['DATA_DIR'];
 
-// First the DDL commands (convert to upper case for ease of comparisons below)
-$sql = strtoupper(file_get_contents($DATA_DIR . '/objects.sql'));
+// First the DDL commands
+$sql = file_get_contents($DATA_DIR . '/objects.sql');
 
 // If schema is not the default, modify it in the commands.
 if ($SCHEMA !== 'US_DESIGN') {
-	$sql = str_replace('US_DESIGN', $SCHEMA, $sql);
+	$sql = str_ireplace('US_DESIGN', $SCHEMA, $sql);
 }
 
 $tok = strtok($sql, ";");
 while ($tok !== false) {
-	$command = strtoupper(trim($tok));
-	$drop_flag = strpos($command, "DROP ") === 0;
-	if (strpos($command, "CREATE ") === 0 || $drop_flag ||
-		strpos($command, "ALTER ") === 0) {
+	$command = trim($tok);
+	$drop_flag = stripos($command, "DROP ") === 0;
+	if (stripos($command, "CREATE ") === 0 || $drop_flag ||
+			stripos($command, "ALTER ") === 0 ||
+			stripos($command, "--") === 0) {
 		try {
 			$DB->exec($command);
 		}
@@ -80,19 +81,20 @@ catch (PDOException $e) {
 	}
 }
 
-// DML commands (convert to upper case for ease of comparisons below)
-$sql = strtoupper(file_get_contents($DATA_DIR . '/data.sql'));
+// DML commands
+$sql = file_get_contents($DATA_DIR . '/data.sql');
 
 // If schema is not the default, modify it in the commands.
 if ($SCHEMA !== 'US_DESIGN') {
-	$sql = str_replace('US_DESIGN', $SCHEMA, $sql);
+	$sql = str_ireplace('US_DESIGN', $SCHEMA, $sql);
 }
 
 $tok = strtok($sql, ";");
 while ($tok !== false) {
-	$command = strtoupper(trim($tok));
-	if (strpos($command, "INSERT ") === 0 ||
-		strpos($command, "DELETE ") === 0) {
+	$command = trim($tok);
+	if (stripos($command, "INSERT ") === 0 ||
+			stripos($command, "DELETE ") === 0 ||
+			stripos($command, "--") === 0) {
 		try {
 			$DB->exec($command);
 		}
