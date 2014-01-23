@@ -15,7 +15,8 @@ class Region {
 	public $priority;
 
 	public function __construct ($id=null, $name=null, $min_longitude=null,
-				$max_longitude=null, $min_latitude=null, $max_latitude=null) {
+				$max_longitude=null, $min_latitude=null, $max_latitude=null,
+				$priority=null) {
 		$this->id = $id;
 		$this->name = $name;
 		$this->min_longitude = $min_longitude;

@@ -34,21 +34,18 @@ class DataFactory {
 	 * @throws {Exception}
 	 *      Can throw an exception if an SQL error occurs. See "triggerError"
 	 */
-	public function getDataForPointAndDatasetAndGridSpacing ($longitude,
-				$latitude, $dataset_id, $grid_spacing) {
+	public function getDataForPointAndDataGroupAndGridSpacing ($longitude,
+				$latitude, $data_group_id, $grid_spacing) {
 		$data_recs = array();
-		if (!is_null($design_code_variant_id)) {
-			$sql = $sql + ' AND design_code_variant_id = :did';
-		}
 		$statement = $this->db->prepare('SELECT * FROM ' . $this->schema .
-				'.data WHERE dataset_id = :did AND longitude < CAST(' .
+				'.data WHERE data_group_id = :did AND longitude < CAST(' .
 				':lon AS NUMERIC) + CAST(:gs AS DOUBLE PRECISION) ' .
 				'AND longitude > CAST(:lon AS NUMERIC) - ' .
 				'CAST(:gs AS DOUBLE PRECISION) AND latitude < CAST(:lat AS ' .
 				'NUMERIC) + CAST(:gs AS DOUBLE PRECISION) AND ' .
 				'latitude > CAST(:lat AS NUMERIC) - CAST(:gs AS ' .
 				'DOUBLE PRECISION) ORDER BY latitude DESC, longitude ASC');
-		$statement->bindParam(':did', $dataset_id, PDO::PARAM_INT);
+		$statement->bindParam(':did', $data_group_id, PDO::PARAM_INT);
 		$slon = strval($longitude);
 		$slat = strval($latitude);
 		$sgs = strval($grid_spacing);
@@ -59,7 +56,7 @@ class DataFactory {
 		if ($statement->execute()) {
 			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
 				$data = new Data(intval($row['id']),
-						intval($row['dataset_id']),
+						intval($row['data_group_id']),
 						doubleval($row['longitude']),
 						doubleval($row['latitude']),
 						doubleval($row['sec_0_0_uh']),
@@ -98,12 +95,12 @@ class DataFactory {
 	public function getDatasetForRegionAndEdition ($longitude, $latitude, 
 				$edition_id, $design_code_variant_id) {
 		$dataset = null;
-		$region = getRegionFromPoint($longitude, $latitude);
+		$region = $this->getRegionFromPoint($longitude, $latitude);
 		if (!is_null($region)) {
 			$sql = 'SELECT * FROM ' . $this->schema .
 				'.dataset WHERE region_id = :rid AND edition_id = :eid';
 			if (!is_null($design_code_variant_id)) {
-				$sql = $sql + ' AND design_code_variant_id = :did';
+				$sql .= ' AND design_code_variant_id = :did';
 			}
 			$statement = $this->db->prepare($sql);
 			$region_id = $region->id;
@@ -117,12 +114,15 @@ class DataFactory {
 			if ($statement->execute()) {
 				$row = $statement->fetch(PDO::FETCH_ASSOC);
 				if ($row) {
-					$dataset_id = intval($row['id']);
-					$grid_spacing_id = doubleval($row['grid_spacing']);
-					$data_recs = $this->getDataByPointAndDatasetAndGridSpacing(
-							$longitude, $latitude, $dataset_id, $grid_spacing);
-					$dataset = new Dataset(intval($row['dataset_id']),
+					$data_group_id = intval($row['data_group_id']);
+					$grid_spacing = doubleval($row['grid_spacing']);
+					$data_recs = $this->getDataForPointAndDataGroupAndGridSpacing(
+							$longitude, $latitude, $data_group_id,
+							$grid_spacing);
+					$dataset = new Dataset(intval($row['id']),
+							intval($row['data_group_id']),
 							intval($row['edition_id']),
+							intval($row['design_code_variant_id']),
 							intval($row['region_id']),
 							intval($row['fa_table_id']),
 							intval($row['fv_table_id']),
@@ -132,15 +132,13 @@ class DataFactory {
 							doubleval($row['factor_84_percent']),
 							doubleval($row['sec_0_0_det_floor']),
 							doubleval($row['sec_0_2_det_floor']),
-							doubleval($row['sec_1_0_det_floor']),
-							intval($row['design_code_variant_id']), $data_recs);
+							doubleval($row['sec_1_0_det_floor']), $data_recs);
 				}
 			} else {
 				$this->triggerError($statement);
 			}
+			$statement->closeCursor();
 		}
-
-		$statement->closeCursor();
 
 		return $dataset;
 	}
@@ -163,7 +161,7 @@ class DataFactory {
 				'min_longitude AND CAST(:lon AS NUMERIC) <= ' .
 				'max_longitude AND CAST(:lat AS NUMERIC) >= ' .
 				'min_latitude AND CAST(:lat AS NUMERIC) <= ' .
-				'max_latitude ORDER by priority asc');
+				'max_latitude ORDER by priority desc');
 		$slon = strval($longitude);
 		$slat = strval($latitude);
 		$statement->bindParam(':lon', $slon);

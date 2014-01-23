@@ -37,22 +37,23 @@
 		notify('Get editions', 10, count($editions));
 		$edition = $editions[1];
 		notify('Check edition code', 'asce_41-2013', $edition->code);
-		notify('Count regions for asce-41-2013', 6,
-				count($edition->region_ids));
 		notify('Count design code variants for asce-41-2013', 5,
 				count($edition->design_code_variant_ids));
+		notify('Count regions for asce_41-2013', 6,
+				count($edition->region_ids));
 		$edition = $editions[2];
-		notify('Check risk category label', 'Risk Category',
+		notify('Check risk category label for ibc-2012', 'Risk Category',
 				$edition->risk_category_label);
-		notify('Count risk categories for ibc-2012', 5,
+		notify('Count risk categories for ibc-2012', 2,
 				count($edition->risk_category_ids));
-//		notify('Count regions for ibc-2012', 4,
-//				count($edition->region_ids));
 		notify('Count site soil classes for ibc-2012', 5,
 				count($edition->site_soil_class_ids));
 		$edition = $editions[0];
 		notify('Count site soil classes for nehrp-2015', 6,
 				count($edition->site_soil_class_ids));
+		$edition = $editions[5];
+		notify('Count regions for aashto-2009', 4,
+				count($edition->region_ids));
 	
 		$design_code_variants = $LOOKUP_FACTORY->getDesignCodeVariants();
 		notify('Get design code variants', 8, count($design_code_variants));
