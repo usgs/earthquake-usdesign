@@ -12,8 +12,8 @@ perl convert_nehrp_sql.perl 2003-PRVI-HAZ-R3aNL.5PC50.rnd asce_41-2013,2e 0.01
 perl convert_nehrp_sql.perl Alaska.Boyd_revFa.20PC50.rnd asce_41-2013,1e 0.05
 perl convert_nehrp_sql.perl Alaska.Boyd_revFa.5PC50.rnd asce_41-2013,2e 0.05
 
-perl convert_nehrp_sql.perl AmSam12.05grid.20PC50.rnd asce_41-2013,1e 0.1
-perl convert_nehrp_sql.perl AmSam12.05grid.5PC50.rnd asce_41-2013,2e 0.1
+perl convert_nehrp_sql.perl AmSam12.05grid.20PC50.rnd asce_41-2013,1e 0.05
+perl convert_nehrp_sql.perl AmSam12.05grid.5PC50.rnd asce_41-2013,2e 0.05
 
 perl convert_nehrp_sql.perl GuamNMI_hcsum.20PC50.rnd asce_41-2013,1e 0.1
 perl convert_nehrp_sql.perl GuamNMI_hcsum.5PC50.rnd asce_41-2013,2e 0.1

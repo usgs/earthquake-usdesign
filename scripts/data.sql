@@ -49,7 +49,7 @@ INSERT INTO
 	us_design.edition
 	(id, code, title, data_source_id, display_order, risk_category_label)
 VALUES
-	(1, 'nehrp-2015', 'Proposed for 2015 NEHRP (dev only)', 1, 1, 'Risk Category'),
+	(1, 'nehrp-2015', 'Proposed for 2015 NEHRP (dev only)', 1, 1, NULL),
 	(2, 'asce_41-2013', '2013 ASCE 41', 2, 2, NULL),
 	(3, 'ibc-2012', '2012 IBC', 2, 3, 'Risk Category'),
 	(4, 'asce-2010', '2010 ASCE 7 (w/July 2013 errata)', 2, 4, 'Risk Category'),
