@@ -72,6 +72,12 @@ while ($tok !== false) {
 
 // Each PL/SQL function must be in it's own file because of embedded semicolons.
 $sql = file_get_contents($DATA_DIR . '/tsubl_value.sql');
+
+// If schema is not the default, modify it in the commands.
+if ($SCHEMA !== 'US_DESIGN') {
+	$sql = str_ireplace('US_DESIGN', $SCHEMA, $sql);
+}
+
 try {
 	$DB->exec($sql);
 }
@@ -105,6 +111,17 @@ while ($tok !== false) {
 		}
 	}
 	$tok = strtok(";");
+}
+
+// Check for the TSUBL layer.
+try {
+	$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	$results = $DB->query('SELECT 1 FROM ' . $SCHEMA . '.tsubl LIMIT 1');
+} catch (PDOException $e) {
+	print "\nWarning: To complete the installation, you need to use ArcMap " .
+			"or a similar tool from ESRI to load the TsubL geodatabase (at " .
+			$DATA_DIR . "/TsubL1.gdb.zip) into an SDE layer named " .
+			$SCHEMA . ".TSUBL\n";
 }
 
 $DB = null;
