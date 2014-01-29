@@ -1,0 +1,130 @@
+get_lookup_data
+
+This service returns the data needed to build the UI for getting the Seismic Design UI parameters.
+The data needed to build the FaFvFpgaCalculator is also returned, as is the data needed to build the risk tables.
+
+Input: callback_name
+
+
+Output  JSONP format
+
+"callback_name ({
+	data_source: [
+	       {
+		id: Integer,
+		title: String,
+		display_order: Integer,
+		edition_ids: [
+			       Integer,
+			       ...
+		]
+	       },
+   ],
+
+   edition: {
+	  id: {
+		id: Integer,
+		code: String,
+		title:  String,
+		data_source_id: Integer,
+		display_order: Integer,
+		risk_category_label: String,
+		site_soil_class_ids: [
+				       Integer,
+				       ...
+		],
+		risk_category_ids: [
+				     Integer,
+				     ...
+		],
+		design_code_variant_ids: [
+					   Integer,
+					   ...
+		],
+		region_ids: [
+			      Integer,
+			      ...
+		]
+	  },
+	  ...
+   },
+
+   site_soil_class: {
+		  id: {
+			id: Integer,
+			code: String,
+			title: String,
+			display_order: Integer
+		  },
+		  ...
+   },
+
+   design_code_variant: {
+		      id: {
+			    id: Integer,
+			    code: String,
+			    requires_exceedence_probability: Boolean,
+			    display_order: Integer
+		      },
+		      ...
+   },
+
+   region: {
+	 id: {
+	       id: Integer,
+	       name:String,
+	       min_longitude:Double,
+	       max_longitude:Double,
+	       min_latitude:Double,
+	       max_latitude:Double,
+	       priority:Integer
+	 },
+	 ...
+   },
+
+   ftable: {
+	 id: {
+	       id: Integer,
+	       type: String,
+	       header_value: [
+			       Double
+			       ...
+	       ],
+	       data: {
+		     A: [
+			  Double,
+			  ...
+		     ],
+		     B: [
+			  Double,
+			  ...
+		     ],
+		     C: [
+			  Double,
+			  ...
+		     ],
+		     D: [
+			  Double,
+			  ...
+		     ],
+		     E: [
+			  Double,
+			  ...
+		     ]
+	       }
+	 }
+   }
+
+   risk_table: {
+	     id: {
+		   id: Integer,
+		   edition_id: Integer,
+		   table_type: String,
+		   header_values: [String, String, String],
+		   data: {
+			   String: [String, String, String]
+			   ...
+		   }
+	     }
+   }
+})"
