@@ -323,6 +323,7 @@ CREATE TABLE us_design.data
   sec_0_0_det double precision,
   sec_0_2_det double precision,
   sec_1_0_det double precision,
+  pga double precision,
   ss double precision,
   s1 double precision,
   CONSTRAINT data_pk PRIMARY KEY (id),

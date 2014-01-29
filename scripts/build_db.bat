@@ -27,3 +27,31 @@ psql -w -d neic -f 2003-PRVI-MCE-R1a.sql
 psql -w -d neic -f 2003-SLC-MCE-Ra.sql
 psql -w -d neic -f 2003-US-MCE-R1a.sql
 
+psql -w -d neic -f 2014-AS.sql
+psql -w -d neic -f 2014-HI.sql
+psql -w -d neic -f 2014-GM.sql
+psql -w -d neic -f 2014-PR.sql
+psql -w -d neic -f 2014-AK.sql
+psql -w -d neic -f 2014-US.sql
+
+psql -w -d neic -f 2008-AS.sql
+psql -w -d neic -f 2008-HI.sql
+psql -w -d neic -f 2008-GM.sql
+psql -w -d neic -f 2008-PR.sql
+psql -w -d neic -f 2008-AK.sql
+psql -w -d neic -f 2008-US-1.sql
+psql -w -d neic -f 2008-US-2.sql
+psql -w -d neic -f 2008-US-3.sql
+psql -w -d neic -f 2008-US-4.sql
+psql -w -d neic -f 2008-US-5.sql
+psql -w -d neic -f 2008-US-6.sql
+psql -w -d neic -f 2008-US-7.sql
+psql -w -d neic -f 2008-US-8.sql
+psql -w -d neic -f 2008-US-9.sql
+psql -w -d neic -f 2008-US-10.sql
+psql -w -d neic -f 2008-US-11.sql
+psql -w -d neic -f 2008-US-12.sql
+psql -w -d neic -f 2008-US-13.sql
+psql -w -d neic -f 2008-US-14.sql
+psql -w -d neic -f 2008-US-15.sql
+psql -w -d neic -f 2008-US-16.sql

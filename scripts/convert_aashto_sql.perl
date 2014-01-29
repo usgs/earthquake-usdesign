@@ -3,8 +3,7 @@
 use strict;
 use warnings;
 
-sub trim
-{
+sub trim {
 	my ($self, $text) = @_;
 	$text = $self
 		if ref(\$self) =~ m/^SCALAR/i;
@@ -17,8 +16,7 @@ sub trim
 
 my $record_length = 28;
 
-if (!$ARGV[0])
-{
+if (!$ARGV[0]) {
 	print "Usage: perl convert_aashto_sql.perl INPUT_FILE (OUT_FILE)\n";
 	exit;
 }
@@ -35,13 +33,15 @@ my $edition = "aashto-2009";
 # Open files.
 open(BFILE, $filename) or die "Cannot open binary file for reading.\n";
 my $bfile_size = -s $filename;
-open(OUTFILE, ">", $filename_out) or die "Cannot open output file for writing.\n";
+open(OUTFILE, ">", $filename_out)
+	or die "Cannot open output file for writing.\n";
 
 # Find grid spacing. Start by reading record #4 (the first data record).
 my $record_read_num = 4;
 seek(BFILE, ($record_read_num - 1) * $record_length, 0);
 read(BFILE, my $record, $record_length);
-my ($record_number, $lat, $lon, $num_vals, $v1, $v2, $v3) = unpack("i f f s f f f", $record);
+my ($record_number, $lat, $lon, $num_vals, $v1, $v2, $v3)
+	= unpack("i f f s f f f", $record);
 my $rec4_lon = sprintf("%.4f", $lon);
 my $rec4_lat = sprintf("%.4f", $lat);
 
@@ -49,7 +49,8 @@ my $rec4_lat = sprintf("%.4f", $lat);
 $record_read_num = 5;
 seek(BFILE, ($record_read_num - 1) * $record_length, 0);
 read(BFILE, $record, $record_length);
-($record_number, $lat, $lon, $num_vals, $v1, $v2, $v3) = unpack("i f f s f f f", $record);
+($record_number, $lat, $lon, $num_vals, $v1, $v2, $v3)
+	= unpack("i f f s f f f", $record);
 my $rec5_lon = sprintf("%.4f", $lon);
 
 # Calculate grid spacing.
@@ -62,19 +63,20 @@ my $fpga = 3;
 
 # Insert dataset record.
 print OUTFILE "DO \$\$
-DECLARE datagroup_rec_num INTEGER;
+DECLARE d INTEGER;
 BEGIN
 	-- Get the next IDs for the new dataset/data group records.
-	datagroup_rec_num := nextval('data_group_id_seq');
+	d := nextval('data_group_id_seq');
 
-	INSERT INTO us_design.data_group (id) VALUES (datagroup_rec_num);
+	INSERT INTO us_design.data_group (id) VALUES (d);
 	
 	INSERT INTO
 		us_design.dataset
-		(data_group_id, edition_id, region_id, fa_table_id, fv_table_id, fpga_table_id, grid_spacing)
+		(data_group_id, edition_id, region_id, fa_table_id, fv_table_id,
+		fpga_table_id, grid_spacing)
 		VALUES
 		(
-			datagroup_rec_num,
+			d,
 			(SELECT id FROM us_design.edition WHERE code = '$edition' LIMIT 1),
 			(SELECT id FROM us_design.region WHERE
 				min_longitude <= $rec4_lon AND
@@ -90,22 +92,25 @@ BEGIN
 		);\n\n";
 
 print OUTFILE "	INSERT INTO us_design.data
-		(data_group_id, latitude, longitude, ss, s1)
+		(data_group_id, latitude, longitude, pga, ss, s1)
 		VALUES ";
 		
 print "Converting $bfile_size bytes.\n";
-for ($record_read_num = 4; ($record_read_num - 1) * $record_length < $bfile_size; $record_read_num++)
-{
+for ($record_read_num = 4;
+	($record_read_num - 1) * $record_length < $bfile_size;
+	$record_read_num++) {
 	# Read binary record.
 	seek(BFILE, ($record_read_num - 1) * $record_length, 0);
 	
-	# This exception handles the weird, corrupt data in the files that's off by one byte for some reason.
+	# This exception handles the weird, corrupt data in the files that's
+	# off by one byte for some reason.
 	if ($record_read_num % 65536 == 2573)
 		{ seek(BFILE, ($record_read_num - 1) * $record_length - 1, 0); }
 	read(BFILE, $record, $record_length);
 
 	# Convert binary record to readable Perl variables.
-	($record_number, $lat, $lon, $num_vals, $v1, $v2, $v3) = unpack("i f f s f f f", $record);
+	($record_number, $lat, $lon, $num_vals, $v1, $v2, $v3)
+		= unpack("i f f s f f f", $record);
 	
 	# Format numbers, round to correct significance.
 	my $lat_str = sprintf("%.4f", $lat);
@@ -122,20 +127,16 @@ for ($record_read_num = 4; ($record_read_num - 1) * $record_length < $bfile_size
 	if ($record_number == 0) { next; }
 	
 	# Look for corrupt data.
-	if ($record_read_num != $record_number)
-	{
-		print "	Bad data, #$record_read_num: ($record_number, $lat_str, $lon_str, $v2_str, $v3_str)\n";
+	if ($record_read_num != $record_number) {
+		print "	Bad data, #$record_read_num: ($record_number, $lat_str, ".
+			"$lon_str, $v1_str, $v2_str, $v3_str)\n";
 	}
 	
 	# Write record to file.
-	if ($record_read_num > 4) { print OUTFILE ",\n		"; }
-	print OUTFILE "(datagroup_rec_num, $lat_str, $lon_str, $v2_str, $v3_str)";
+	if ($record_read_num > 4) { print OUTFILE ",\n"; }
+	print OUTFILE "(d,$lat_str,$lon_str,$v1_str,$v2_str,$v3_str)";
 }
 
 print OUTFILE ";\n";
 print OUTFILE "END \$\$;";
 close(OUTFILE);
-
-
-
-
