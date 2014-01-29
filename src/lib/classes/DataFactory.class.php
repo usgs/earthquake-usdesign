@@ -22,7 +22,7 @@ class DataFactory {
 	}
 
 	/**
-	 * Returns the data associated with a point, data set, and grid spacing.
+	 * Returns the data associated with a point, data group, and grid spacing.
 	 *
 	 * @param longitude {Double}
 	 * @param latitude {Double}
@@ -80,10 +80,30 @@ class DataFactory {
 	}
 
 	/**
-	 * Returns the data set associated with a region, edition, and optional 
+	 * Convenience method that extracts data group id and grid spacing from 
+	 * a dataset object and then retrieves the associated data.
+	 *
+	 * @param longitude {Double}
+	 * @param latitude {Double}
+	 * @param dataset {Object}
+	 *
+	 * @return {Array{Object}}
+	 *
+	 * @throws {Exception}
+	 *      Can throw an exception if an SQL error occurs. See "triggerError"
+	 */
+	public function getDataForPointAndDatasetObject ($longitude, $latitude,
+				$dataset) {
+		return $this->getDataForPointAndDataGroupAndGridSpacing($longitude,
+				$latitude, $dataset->data_group_id, $dataset->grid_spacing);
+	}
+
+	/**
+	 * Returns the data set associated with a point, edition, and optional 
 	 * design code variant (or null if there isn't one).
 	 *
-	 * @param region_id {Integer}
+	 * @param longitude {Double}
+	 * @param latitude {Double}
 	 * @param edition_id {Integer}
 	 * @param design_code_variant_id {Integer}
 	 *
@@ -92,7 +112,7 @@ class DataFactory {
 	 * @throws {Exception}
 	 *      Can throw an exception if an SQL error occurs. See "triggerError"
 	 */
-	public function getDatasetForRegionAndEdition ($longitude, $latitude, 
+	public function getDatasetForPointAndEdition ($longitude, $latitude, 
 				$edition_id, $design_code_variant_id) {
 		$dataset = null;
 		$region = $this->getRegionFromPoint($longitude, $latitude);
@@ -114,11 +134,6 @@ class DataFactory {
 			if ($statement->execute()) {
 				$row = $statement->fetch(PDO::FETCH_ASSOC);
 				if ($row) {
-					$data_group_id = intval($row['data_group_id']);
-					$grid_spacing = doubleval($row['grid_spacing']);
-					$data_recs = $this->getDataForPointAndDataGroupAndGridSpacing(
-							$longitude, $latitude, $data_group_id,
-							$grid_spacing);
 					$dataset = new Dataset(intval($row['id']),
 							intval($row['data_group_id']),
 							intval($row['edition_id']),
@@ -126,13 +141,14 @@ class DataFactory {
 							intval($row['region_id']),
 							intval($row['fa_table_id']),
 							intval($row['fv_table_id']),
-							intval($row['fpga_table_id']), $grid_spacing,
+							intval($row['fpga_table_id']),
+							doubleval($row['grid_spacing']),
 							doubleval($row['ss_max_direction_factor']),
 							doubleval($row['s1_max_direction_factor']),
 							doubleval($row['factor_84_percent']),
 							doubleval($row['sec_0_0_det_floor']),
 							doubleval($row['sec_0_2_det_floor']),
-							doubleval($row['sec_1_0_det_floor']), $data_recs);
+							doubleval($row['sec_1_0_det_floor']));
 				}
 			} else {
 				$this->triggerError($statement);

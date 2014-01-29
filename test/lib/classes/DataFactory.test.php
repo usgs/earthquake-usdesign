@@ -24,32 +24,38 @@
 	try {
 		$editions = $LOOKUP_FACTORY->getEditions();
 		$edition = $editions[9];
-		$dataset = $DATA_FACTORY->getDatasetForRegionAndEdition(144.75, 13.5, 
+		$dataset = $DATA_FACTORY->getDatasetForPointAndEdition(144.75, 13.5, 
 				$edition->id, null);
 		notify('Check Guam is not valid for nehrp-2003', is_null($dataset),
 				true);
-		$dataset = $DATA_FACTORY->getDatasetForRegionAndEdition(-103.0, 40.5,
+		$dataset = $DATA_FACTORY->getDatasetForPointAndEdition(-103.0, 40.5,
 				$edition->id, null);
 
 		$edition = $editions[1];
-		$dataset = $DATA_FACTORY->getDatasetForRegionAndEdition(144.75, 13.5,
+		$dataset = $DATA_FACTORY->getDatasetForPointAndEdition(144.75, 13.5,
 				$edition->id, $edition->design_code_variant_ids[2]);
+		$data = $DATA_FACTORY->getDataForPointAndDatasetObject(144.75, 13.5,
+				$dataset);
 		notify('Get 2 data points for Guam / asce_41-2013 / BSE-2E dataset', 2,
-				count($dataset->data_recs));
+				count($data));
 
 		$edition = $editions[5];
-		$dataset = $DATA_FACTORY->getDatasetForRegionAndEdition(-147.65, 64.75,
+		$dataset = $DATA_FACTORY->getDatasetForPointAndEdition(-147.65, 64.75,
 				$edition->id, null);
-		notify('Get 4 data points for Alaska / aashto-2009 dataset',
-				4, count($dataset->data_recs));
+		$data = $DATA_FACTORY->getDataForPointAndDatasetObject(-147.65, 64.75,
+				$dataset);
+		notify('Get 4 data points for Alaska / aashto-2009 dataset', 4,
+				count($data));
 
 		$edition = $editions[7];
-		$dataset = $DATA_FACTORY->getDatasetForRegionAndEdition(-111.0, 42.0,
+		$dataset = $DATA_FACTORY->getDatasetForPointAndEdition(-111.0, 42.0,
 				$edition->id, null);
 		notify('Check SLC subregion returned for asce-41-2006 dataset',
 				8, $dataset->region_id);
-		notify('Get 1 data point for SLC / asce-41-2006 dataset',
-				1, count($dataset->data_recs));
+		$data = $DATA_FACTORY->getDataForPointAndDatasetObject(-111.0, 42.0,
+				$dataset);
+		notify('Get 1 data point for SLC / asce-41-2006 dataset', 1,
+				count($data));
 
 /*		Note: These will not run after creation script.  An SDE-enabled tool
  *		is needed to create the TSUBL layer.
@@ -60,6 +66,7 @@
 		notify('Get defined tsubl value', 4, $tsubl_value);
 
 //		print json_encode($dataset) . "\n";
+//		print json_encode($data) . "\n";
 //		print json_encode($tsubl_value) . "\n";
 	} catch (Exception $e) {
 		print $e->getMessage() . "\n";

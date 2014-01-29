@@ -22,16 +22,12 @@ class Dataset {
 	public $sec_0_2_det_floor;
 	public $sec_1_0_det_floor;
 
-	//multi valued attributes
-	public $data_recs;
-
 	public function __construct ($id=null, $data_group_id, $edition_id=null,
 				$design_code_variant_id, $region_id=null, $fa_table_id=null,
 				$fv_table_id=null, $fpga_table_id=null, $grid_spacing=null,
 				$ss_max_direction_factor=null, $s1_max_direction_factor=null,
 				$factor_84_percent=null, $sec_0_0_det_floor=null,
-				$sec_0_2_det_floor=null, $sec_1_0_det_floor=null,
-				$data_recs=array()) {
+				$sec_0_2_det_floor=null, $sec_1_0_det_floor=null) {
 		$this->id = $id;
 		$this->data_group_id = $data_group_id;
 		$this->edition_id = $edition_id;
@@ -47,16 +43,9 @@ class Dataset {
 		$this->sec_0_0_det_floor = $sec_0_0_det_floor;
 		$this->sec_0_2_det_floor = $sec_0_2_det_floor;
 		$this->sec_1_0_det_floor = $sec_1_0_det_floor;
-		$this->data_recs = $data_recs;
 	}
 
 	public static function fromArray (&$p) {
-		$data_recs = array();
-		if (isset($p['data_recs'])) {
-			foreach ($p['data_recs'] as $data) {
-				$data_recs[] = Data::fromArray($data);
-			}
-		}
 		return new Dataset($p['id'], $p['data_group_id'], $p['edition_id'],
 					$p['design_code_variant_id'], $p['region_id'],
 					$p['fa_table_id'], $p['fv_table_id'], $p['fpga_table_id'],
@@ -64,7 +53,7 @@ class Dataset {
 					$p['ss_max_direction_factor'],
 					$p['s1_max_direction_factor'], $p['factor_84_percent'],
 					$p['sec_0_0_det_floor'], $p['sec_0_2_det_floor'],
-					$p['sec_1_0_det_floor'], $data_recs);
+					$p['sec_1_0_det_floor']);
 	}
 
 	public function toArray () {
@@ -82,8 +71,7 @@ class Dataset {
 					'factor_84_percent' => $this->factor_84_percent,
 					'sec_0_0_det_floor' => $this->sec_0_0_det_floor,
 					'sec_0_2_det_floor' => $this->sec_0_2_det_floor,
-					'sec_1_0_det_floor' => $this->sec_1_0_det_floor,
-					'data_recs' => $this->data_recs);
+					'sec_1_0_det_floor' => $this->sec_1_0_det_floor);
 	}
 
 }
