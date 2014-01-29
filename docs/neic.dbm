@@ -242,6 +242,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="s1">
 		<type name="double precision"/>
 	</column>
+	<column name="pga">
+		<type name="double precision"/>
+	</column>
 	<constraint name="data_pk" type="pk-constr" factor="10" table="us_design.data">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
