@@ -187,18 +187,18 @@ class DataFactory {
 	}
 
 	/**
-	 * Returns the T subl value for a point.
+	 * Returns the TsubL value for a point.
 	 *
 	 * @param longitude {Double}
 	 * @param latitude {Double}
 	 *
-	 * @return {TsublValue}
+	 * @return {Integer}
 	 *
 	 * @throws {Exception}
 	 *      Can throw an exception if an SQL error occurs. See "triggerError"
 	 */
-	public function getTsublValueForPoint ($longitude, $latitude) {
-		$tsubl_value = null;
+	public function getTsubLForPoint ($longitude, $latitude) {
+		$tsubl = null;
 		$statement = $this->db->prepare('SELECT ' . $this->schema .
 				'.TSUBL_VALUE(CAST(:lon AS NUMERIC), ' .
 				'CAST(:lat AS NUMERIC)) "value"');
@@ -210,8 +210,7 @@ class DataFactory {
 		if ($statement->execute()) {
 			$row = $statement->fetch(PDO::FETCH_ASSOC);
 			if ($row) {
-				$tsubl_value = new TsublValue($longitude, $latitude,
-					intval($row['value']));
+				$tsubl = intval($row['value']);
 			}
 		} else {
 			$this->triggerError($statement);
@@ -219,7 +218,7 @@ class DataFactory {
 
 		$statement->closeCursor();
 
-		return $tsubl_value;
+		return $tsubl;
 	}
 
 	private function triggerError (&$statement) {

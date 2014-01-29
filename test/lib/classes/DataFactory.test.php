@@ -54,10 +54,10 @@
 /*		Note: These will not run after creation script.  An SDE-enabled tool
  *		is needed to create the TSUBL layer.
  */
-		$tsubl_value = $DATA_FACTORY->getTsublValueForPoint(-103.0, -40.5);
-		notify('Get undefined tsubl value', -1, $tsubl_value->value);
-		$tsubl_value = $DATA_FACTORY->getTsublValueForPoint(-103.0, 40.5);
-		notify('Get defined tsubl value', 4, $tsubl_value->value);
+		$tsubl_value = $DATA_FACTORY->getTsubLForPoint(-103.0, -40.5);
+		notify('Get undefined tsubl value', -1, $tsubl_value);
+		$tsubl_value = $DATA_FACTORY->getTsubLForPoint(-103.0, 40.5);
+		notify('Get defined tsubl value', 4, $tsubl_value);
 
 //		print json_encode($dataset) . "\n";
 //		print json_encode($tsubl_value) . "\n";

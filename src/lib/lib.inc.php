@@ -17,5 +17,4 @@ include_once $classDir . 'RiskCategory.class.php';
 include_once $classDir . 'RiskTable.class.php';
 include_once $classDir . 'SiteSoilClass.class.php';
 include_once $classDir . 'TableFactory.class.php';
-include_once $classDir . 'TsublValue.class.php';
 
