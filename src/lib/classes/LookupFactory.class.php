@@ -70,7 +70,7 @@ class LookupFactory {
 						intval($row['edition_id']), $row['code'],
 						$row['requires_exceedence_probability'],
 						intval($row['display_order']));
-				$design_code_variants[] = $design_code_variant;
+				$design_code_variants[$row['id']] = $design_code_variant;
 			}
 		} else {
 			$this->triggerError($statement);
@@ -137,7 +137,7 @@ class LookupFactory {
 						intval($row['display_order']),
 						$row['risk_category_label'], $design_code_variant_ids,
 						$region_ids, $risk_category_ids, $site_soil_class_ids);
-				$editions[] = $edition;
+				$editions[$row['id']] = $edition;
 			}
 		} else {
 			$this->triggerError($statement);
@@ -224,7 +224,7 @@ class LookupFactory {
 				$risk_category = new RiskCategory(intval($row['id']),
 						intval($row['edition_id']), $row['category'],
 						intval($row['display_order']));
-				$risk_categories[] = $risk_category;
+				$risk_categories[$row['id']] = $risk_category;
 			}
 		} else {
 			$this->triggerError($statement);
@@ -283,7 +283,7 @@ class LookupFactory {
 				$site_soil_class = new SiteSoilClass(intval($row['id']),
 						$row['code'], $row['title'],
 						intval($row['display_order']));
-				$site_soil_classes[] = $site_soil_class;
+				$site_soil_classes[$row['id']] = $site_soil_class;
 			}
 		} else {
 			$this->triggerError($statement);

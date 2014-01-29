@@ -83,7 +83,7 @@ class TableFactory {
 					$data_rows[$last_code] = $data_row;
 					$f_table = new FTable(intval($row['id']), $row['type'],
 							$header_values, $data_rows);
-					$f_tables[] = $f_table;
+					$f_tables[$row['id']] = $f_table;
 				} else {
 					$this->triggerError($statement2);
 				}
@@ -140,7 +140,7 @@ class TableFactory {
 					$risk_table = new RiskTable(intval($row['id']),
 							intval($row['edition_id']), $row['table_type'],
 							$header_values, $data_rows);
-					$risk_tables[] = $risk_table;
+					$risk_tables[$row['id']] = $risk_table;
 				} else {
 					$this->triggerError($statement2);
 				}

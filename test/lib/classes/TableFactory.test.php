@@ -24,7 +24,7 @@
 	try {
 		$f_tables = $TABLE_FACTORY->getFTables();
 		notify('Get "F" tables', 6, count($f_tables));
-		$f_table = $f_tables[0];
+		$f_table = $f_tables["1"];
 		notify('Check that number of header values matches number of data ' .
 				'row items', count($f_table->header_values),
 				count($f_table->data_rows['A']));
@@ -37,11 +37,12 @@
 			}
 			$last_value = $value;
 		}
-		notify('Check that header values are increasing', $increasing, true);
+		notify('Check that header values are in ascending order', $increasing,
+				true);
 				
 		$risk_tables = $TABLE_FACTORY->getRiskTables();
 		notify('Get risk tables', 11, count($risk_tables));
-		$risk_table = $risk_tables[0];
+		$risk_table = $risk_tables["1"];
 		notify('Check table type for first risk table', 'SDS',
 				$risk_table->table_type);
 		$header_values = $risk_table->header_values;
@@ -59,8 +60,8 @@
 		notify('Check first category value for first data row of first ' .
 				'risk table', 'A', $data_row[0]);
 
-//		print json_encode($f_table) . "\n";
-//		print json_encode($risk_table) . "\n";
+//		print json_encode($f_tables) . "\n";
+//		print json_encode($risk_tables) . "\n";
 	} catch (Exception $e) {
 		print $e->getMessage() . "\n";
 	}

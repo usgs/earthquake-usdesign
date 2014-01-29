@@ -23,7 +23,7 @@
 
 	try {
 		$editions = $LOOKUP_FACTORY->getEditions();
-		$edition = $editions[9];
+		$edition = $editions["10"];
 		$dataset = $DATA_FACTORY->getDatasetForPointAndEdition(144.75, 13.5, 
 				$edition->id, null);
 		notify('Check Guam is not valid for nehrp-2003', is_null($dataset),
@@ -31,7 +31,7 @@
 		$dataset = $DATA_FACTORY->getDatasetForPointAndEdition(-103.0, 40.5,
 				$edition->id, null);
 
-		$edition = $editions[1];
+		$edition = $editions["2"];
 		$dataset = $DATA_FACTORY->getDatasetForPointAndEdition(144.75, 13.5,
 				$edition->id, $edition->design_code_variant_ids[2]);
 		$data = $DATA_FACTORY->getDataForPointAndDatasetObject(144.75, 13.5,
@@ -39,7 +39,7 @@
 		notify('Get 2 data points for Guam / asce_41-2013 / BSE-2E dataset', 2,
 				count($data));
 
-		$edition = $editions[5];
+		$edition = $editions["6"];
 		$dataset = $DATA_FACTORY->getDatasetForPointAndEdition(-147.65, 64.75,
 				$edition->id, null);
 		$data = $DATA_FACTORY->getDataForPointAndDatasetObject(-147.65, 64.75,
@@ -47,7 +47,7 @@
 		notify('Get 4 data points for Alaska / aashto-2009 dataset', 4,
 				count($data));
 
-		$edition = $editions[7];
+		$edition = $editions["8"];
 		$dataset = $DATA_FACTORY->getDatasetForPointAndEdition(-111.0, 42.0,
 				$edition->id, null);
 		notify('Check SLC subregion returned for asce-41-2006 dataset',
