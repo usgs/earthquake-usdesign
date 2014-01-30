@@ -39,7 +39,7 @@ class LookupFactory {
 				$id = intval($row['id']);
 				$edition_ids = $this->getEditionIdsByDataSource($id);
 				$data_source = new DataSource(intval($row['id']), $row['title'],
-						intval($row['display_order']), $edition_ids);
+						$edition_ids);
 				$data_sources[] = $data_source;
 			}
 		} else {
@@ -68,8 +68,7 @@ class LookupFactory {
 			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
 				$design_code_variant = new DesignCodeVariant(intval($row['id']),
 						intval($row['edition_id']), $row['code'],
-						$row['requires_exceedence_probability'],
-						intval($row['display_order']));
+						$row['requires_exceedence_probability']);
 				$design_code_variants[$row['id']] = $design_code_variant;
 			}
 		} else {
@@ -134,7 +133,6 @@ class LookupFactory {
 				$site_soil_class_ids = $this->getSiteSoilClassIdsByEdition($id);
 				$edition = new Edition(intval($row['id']), $row['code'],
 						$row['title'], intval($row['data_source_id']),
-						intval($row['display_order']),
 						$row['risk_category_label'], $design_code_variant_ids,
 						$region_ids, $risk_category_ids, $site_soil_class_ids);
 				$editions[$row['id']] = $edition;
@@ -222,8 +220,7 @@ class LookupFactory {
 		if ($statement->execute()) {
 			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
 				$risk_category = new RiskCategory(intval($row['id']),
-						intval($row['edition_id']), $row['category'],
-						intval($row['display_order']));
+						intval($row['edition_id']), $row['category']);
 				$risk_categories[$row['id']] = $risk_category;
 			}
 		} else {
@@ -274,15 +271,13 @@ class LookupFactory {
 	 */
 	public function getSiteSoilClasses () {
 		$site_soil_classes = array();
-		$statement = $this->db->prepare('SELECT id, code, title, ' .
-				'display_order FROM '. $this->schema . '.site_soil_class '.
-				'ORDER BY display_order');
+		$statement = $this->db->prepare('SELECT * FROM '. $this->schema .
+				'.site_soil_class ORDER BY display_order');
 
 		if ($statement->execute()) {
 			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
 				$site_soil_class = new SiteSoilClass(intval($row['id']),
-						$row['code'], $row['title'],
-						intval($row['display_order']));
+						$row['code'], $row['title']);
 				$site_soil_classes[$row['id']] = $site_soil_class;
 			}
 		} else {
