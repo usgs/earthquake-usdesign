@@ -13,7 +13,6 @@ Output  JSONP format
                {
                 id: Integer,
                 title: String,
-                display_order: Integer,
                 edition_ids: [ 
                                Integer,
                                ...
@@ -27,7 +26,6 @@ Output  JSONP format
                 code: String,
                 title:  String,
                 data_source_id: Integer,
-                display_order: Integer,
                 risk_category_label: String,
                 site_soil_class_ids: [
                                        Integer,
@@ -53,8 +51,7 @@ Output  JSONP format
                   id: {
                         id: Integer,
                         code: String,
-                        title: String,
-                        display_order: Integer
+                        title: String
                   },
                   ...
    },
@@ -63,8 +60,7 @@ Output  JSONP format
                       id: {
                             id: Integer,
                             code: String,
-                            requires_exceedence_probability: Boolean,
-                            display_order: Integer
+                            requires_exceedence_probability: Boolean
                       },
                       ...
    },
@@ -90,7 +86,7 @@ Output  JSONP format
                                Double
                                ...
                ],
-               data: {
+               data: [
                      A: [
                           Double,
                           ...  
@@ -111,7 +107,7 @@ Output  JSONP format
                           Double,
                           ...
                      ]
-               }
+               ]
          }
    }
 
@@ -121,10 +117,10 @@ Output  JSONP format
                    edition_id: Integer,
                    table_type: String,
                    header_values: [String, String, String],
-                   data: { 
+                   data: [
                            String: [String, String, String]
                            ...
-                   }
+                   ]
              }
    }
 })"
