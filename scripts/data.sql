@@ -27,10 +27,10 @@ VALUES
 	(6, 'American Samoa', -195, -165, -33, -11, 6),
 	(7, 'US: California/Nevada', -125, -115, 32, 42, 7),
 	(8, 'US: Salt Lake City', -112, -110, 40, 45, 8),
-	(9, 'US: Pacific Northwest', -125, -123, 41, 49, 9);
+	(9, 'US: Pacific Northwest', -125, -123, 41, 49, 9),
 	(10, 'US: Central US', -92, -88, 35, 38, 10);
 
-SELECT setval('region_id_seq', 9);
+SELECT setval('region_id_seq', 10);
 
 INSERT INTO
 	us_design.site_soil_class
