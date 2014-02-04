@@ -25,12 +25,12 @@ VALUES
 	(4, 'Puerto Rico', -70, -62, 16, 21, 4),
 	(5, 'Guam', 139, 151, 9, 23, 5),
 	(6, 'American Samoa', -195, -165, -33, -11, 6),
-	(7, 'US: California/Nevada', -125, -115, 32, 42, 7),
-	(8, 'US: Salt Lake City', -112, -110, 40, 45, 8),
-	(9, 'US: Pacific Northwest', -125, -123, 41, 49, 9),
+	(7, 'US: Salt Lake City', -112, -110, 40, 45, 7),
+	(8, 'US: Pacific Northwest', -125, -123, 41, 49, 8),
+	(9, 'US: California/Nevada', -125, -115, 32, 42, 9),
 	(10, 'US: Central US', -92, -88, 35, 38, 10);
 
-SELECT setval('region_id_seq', 10);
+SELECT setval('us_design.region_id_seq', 10);
 
 INSERT INTO
 	us_design.site_soil_class
@@ -43,14 +43,14 @@ VALUES
 	(5, 'E', 'Site Class E - "Soft Clay Soil"', 5),
 	(6, 'U', 'Undefined', 6);
 	
-SELECT setval('site_soil_class_id_seq', 6);
+SELECT setval('us_design.site_soil_class_id_seq', 6);
 
 INSERT INTO us_design.data_source (id, title, display_order) VALUES
 	(1, 'Derived from USGS Hazard Data available in 2014', 1),
 	(2, 'Derived from USGS Hazard Data available in 2008', 2),
 	(3, 'Derived from USGS Hazard Data available in 2002', 3);
 
-SELECT setval('data_source_id_seq', 3);
+SELECT setval('us_design.data_source_id_seq', 3);
 
 INSERT INTO
 	us_design.edition
@@ -67,7 +67,7 @@ VALUES
 	(9, 'asce-2005', '2005 ASCE 7', 3, 9, 'Occupancy Category'),
 	(10, 'nehrp-2003', '2003 NEHRP', 3, 10, 'Seismic Use Group');
 
-SELECT setval('edition_id_seq', 10);
+SELECT setval('us_design.edition_id_seq', 10);
 
 INSERT INTO
 	us_design.design_code_variant
@@ -82,7 +82,7 @@ VALUES
 	(7, 8, 'BSE-2', FALSE, 7),
 	(8, 8, 'Custom', TRUE, 8);
 
-SELECT setval('design_code_variant_id_seq', 8);
+SELECT setval('us_design.design_code_variant_id_seq', 8);
 
 INSERT INTO us_design.edition_site_soil_class (id, edition_id, site_soil_class_id) VALUES
 	(1, 1, 1),
@@ -146,7 +146,7 @@ INSERT INTO us_design.edition_site_soil_class (id, edition_id, site_soil_class_i
 	(50, 10, 4),
 	(51, 10, 5);
 
-SELECT setval('edition_site_soil_class_id_seq', 51);
+SELECT setval('us_design.edition_site_soil_class_id_seq', 51);
 
 INSERT INTO us_design.f_table (id, type) VALUES
 	(1, 'fa'),
@@ -156,7 +156,7 @@ INSERT INTO us_design.f_table (id, type) VALUES
 	(5, 'fv'),
 	(6, 'fpga');
 
-SELECT setval('f_table_id_seq', 6);
+SELECT setval('us_design.f_table_id_seq', 6);
 
 INSERT INTO us_design.f_header (id, f_table_id, value) VALUES
 	(1, 1, 0.25),
@@ -198,7 +198,7 @@ INSERT INTO us_design.f_header (id, f_table_id, value) VALUES
 	(32, 6, 0.50),
 	(33, 6, 0.60);
 
-SELECT setval('f_header_id_seq', 33);
+SELECT setval('us_design.f_header_id_seq', 33);
 
 -- Table 1 (FA)
 INSERT INTO us_design.f_data (id, site_soil_class_id, f_header_id, value) VALUES
@@ -428,7 +428,7 @@ INSERT INTO us_design.f_data (id, site_soil_class_id, f_header_id, value) VALUES
 	(209, 6, 32, 1.8),
 	(210, 6, 33, 1.7);
 
-SELECT setval('f_data_id_seq', 210);
+SELECT setval('us_design.f_data_id_seq', 210);
 
 INSERT INTO
 	us_design.risk_table
@@ -451,7 +451,7 @@ VALUES
 	(10, 10, 'SDS'),
 	(11, 10, 'SD1');
 
-SELECT setval('risk_table_id_seq', 11);
+SELECT setval('us_design.risk_table_id_seq', 11);
 
 INSERT INTO
 	us_design.risk_header
@@ -499,7 +499,7 @@ VALUES
 	(30, 11, 'II', 2),
 	(31, 11, 'III', 3);
 
-SELECT setval('risk_header_id_seq', 31);
+SELECT setval('us_design.risk_header_id_seq', 31);
 
 INSERT INTO
 	us_design.risk_interval
@@ -565,7 +565,7 @@ VALUES
 	(43, 11, 0.133, 0.20),
 	(44, 11, 0.20, NULL);
 
-SELECT setval('risk_interval_id_seq', 44);
+SELECT setval('us_design.risk_interval_id_seq', 44);
 
 INSERT INTO
 	us_design.risk_data
@@ -706,7 +706,7 @@ VALUES
 	(123, 30, 44, 'D'),
 	(124, 31, 44, 'D');
 
-SELECT setval('risk_data_id_seq', 124);
+SELECT setval('us_design.risk_data_id_seq', 124);
 
 INSERT INTO
 	us_design.risk_category
@@ -723,4 +723,4 @@ VALUES
 	(9, 10, 'I or II', 7),
 	(10, 10, 'III (eg. essential facilities)', 8);
 
-SELECT setval('risk_category_id_seq', 10);
+SELECT setval('us_design.risk_category_id_seq', 10);

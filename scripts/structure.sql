@@ -57,7 +57,7 @@ WITH (
   OIDS=TRUE
 );
 
-CREATE TABLE risk_category
+CREATE TABLE us_design.risk_category
 (
   id bigserial NOT NULL,
   edition_id bigint NOT NULL,
@@ -431,21 +431,3 @@ CREATE OR REPLACE VIEW us_design.risk_table_vw AS
 		table_type ASC,
 		min_s_value ASC NULLS FIRST,
 		max_s_value ASC NULLS FIRST;
-
-GRANT ALL ON TABLE us_design.data TO us_design;
-GRANT ALL ON TABLE us_design.dataset TO us_design;
-GRANT ALL ON TABLE us_design.data_group TO us_design;
-GRANT ALL ON TABLE us_design.region TO us_design;
-GRANT ALL ON TABLE us_design.f_data TO us_design;
-GRANT ALL ON TABLE us_design.f_header TO us_design;
-GRANT ALL ON TABLE us_design.f_table TO us_design;
-GRANT ALL ON TABLE us_design.edition_site_soil_class TO us_design;
-GRANT ALL ON TABLE us_design.site_soil_class TO us_design;
-GRANT ALL ON TABLE us_design.design_code_variant TO us_design;
-GRANT ALL ON TABLE us_design.risk_data TO us_design;
-GRANT ALL ON TABLE us_design.risk_header TO us_design;
-GRANT ALL ON TABLE us_design.risk_interval TO us_design;
-GRANT ALL ON TABLE us_design.risk_table TO us_design;
-GRANT ALL ON TABLE us_design.risk_category TO us_design;
-GRANT ALL ON TABLE us_design.edition TO us_design;
-GRANT ALL ON TABLE us_design.data_source TO us_design;

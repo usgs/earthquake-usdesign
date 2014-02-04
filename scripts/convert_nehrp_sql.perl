@@ -97,7 +97,7 @@ print OUTFILE "DO \$\$
 DECLARE datagroup_rec_num INTEGER;
 BEGIN
 	-- Get the next index for the new dataset record.
-	datagroup_rec_num := nextval('data_group_id_seq');
+	datagroup_rec_num := nextval('us_design.data_group_id_seq');
 
 	INSERT INTO us_design.data_group (id) VALUES (datagroup_rec_num);
 	

@@ -66,7 +66,7 @@ print OUTFILE "DO \$\$
 DECLARE d INTEGER;
 BEGIN
 	-- Get the next IDs for the new dataset/data group records.
-	d := nextval('data_group_id_seq');
+	d := nextval('us_design.data_group_id_seq');
 
 	INSERT INTO us_design.data_group (id) VALUES (d);
 	
