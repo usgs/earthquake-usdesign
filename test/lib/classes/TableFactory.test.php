@@ -27,7 +27,7 @@
 		$f_table = $f_tables["1"];
 		notify('Check that number of header values matches number of data ' .
 				'row items', count($f_table->header_values),
-				count($f_table->data_rows['A']));
+				count($f_table->data_rows[0]));
 		$last_value = -1;
 		$increasing = true;
 		foreach ($f_table->header_values as $value) {
@@ -54,11 +54,11 @@
 		notify('Count data rows for first risk table', 4,
 				count($data_rows));
 		$s_value = 'S_DS < 0.167g';
-		$data_row = $data_rows[$s_value];
+		$data_row = $data_rows[0];
 		notify('Count category values for first data row of first risk table',
-				3, count($data_row));
+				3, count($data_row[$s_value]));
 		notify('Check first category value for first data row of first ' .
-				'risk table', 'A', $data_row[0]);
+				'risk table', 'A', $data_row[$s_value][0]);
 
 //		print json_encode($f_tables) . "\n";
 //		print json_encode($risk_tables) . "\n";

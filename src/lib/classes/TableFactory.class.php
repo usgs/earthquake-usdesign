@@ -55,7 +55,7 @@ class TableFactory {
 				$statement2->bindParam(':fid', $id, PDO::PARAM_INT);
 				if ($statement2->execute()) {
 					$data_rows = array();
-					$data_row = null;
+					$data_values = null;
 					$header_values = null;
 					$first_group = true;
 					$last_code = '*';
@@ -63,10 +63,11 @@ class TableFactory {
 						$code = $row2['site_soil_class_code'];
 						if ($code !== $last_code) {
 							// new data row
-							if (!is_null($data_row)) { // dump last data row
-								$data_rows[$last_code] = $data_row;
+							if (!is_null($data_values)) { // dump last data row
+								// Assoc. array will be encoded as a json object
+								$data_rows[] = array($last_code => $data_values);
 							}
-							$data_row = array();
+							$data_values = array();
 							if (is_null($header_values)) {
 								$header_values = array();
 							} else {
@@ -77,10 +78,10 @@ class TableFactory {
 						if ($first_group) {
 							$header_values[] = doubleval($row2[$header_field]);
 						}
-						$data_row[] = doubleval($row2[$data_field]);
+						$data_values[] = doubleval($row2[$data_field]);
 					}
 					// dump final data row
-					$data_rows[$last_code] = $data_row;
+					$data_rows[] = array($last_code => $data_values);
 					$f_table = new FTable(intval($row['id']), $row['type'],
 							$header_values, $data_rows);
 					$f_tables[$row['id']] = $f_table;
@@ -133,7 +134,9 @@ class TableFactory {
 							$categories[] = $row2['category1'];
 							$categories[] = $row2['category2'];
 							$categories[] = $row2['category3'];
-							$data_rows[$row2['s_value']] = $categories;
+
+							// Assoc. array will be encoded as a json object
+							$data_rows[] = array($row2['s_value'] => $categories);
 						}
 						$first = false;
 					}
