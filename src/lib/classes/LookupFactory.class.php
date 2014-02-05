@@ -147,6 +147,37 @@ class LookupFactory {
 	}
 
 	/**
+	 * Returns all the regions.
+	 *
+	 * @return {Array{Object}}
+	 *
+	 * @throws {Exception}
+	 *      Can throw an exception if an SQL error occurs. See "triggerError"
+	 */
+	public function getRegions () {
+		$statement = $this->db->prepare('SELECT * FROM '. $this->schema .
+				'.region ORDER BY priority');
+
+		if ($statement->execute()) {
+			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+				$region = new Region(intval($row['id']),
+						$row['name'], doubleval($row['min_longitude']),
+						doubleval($row['max_longitude']),
+						doubleval($row['min_latitude']),
+						doubleval($row['max_latitude']),
+						doubleval($row['priority']));
+				$regions[$row['id']] = $region;
+			}
+		} else {
+			$this->triggerError($statement);
+		}
+
+		$statement->closeCursor();
+
+		return $regions;
+	}
+
+	/**
 	 * Returns the edition ids for a single data source.
 	 *
 	 * @param data_source_id {Integer}

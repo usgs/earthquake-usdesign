@@ -63,6 +63,11 @@
 		notify('Check category text for first risk category', 
 				'I or II or III', $risk_categories["1"]->category);
 
+		$regions = $LOOKUP_FACTORY->getRegions();
+		notify('Get regions', 10, count($regions));
+		notify('Check name for first region', 'Alaska', 
+				$regions["1"]->name);
+
 		$site_soil_classes = $LOOKUP_FACTORY->getSiteSoilClasses();
 		notify('Get site soil classes', 6, count($site_soil_classes));
 		notify('Check code for first site soil class', 'A', 
