@@ -218,8 +218,10 @@ class LookupFactory {
 	 */
 	public function getRegionIdsByEdition ($edition_id) {
 		$region_ids = array();
-		$statement = $this->db->prepare('SELECT distinct region_id "id" FROM ' .
-		 		$this->schema . '.dataset WHERE edition_id = :id');
+		$statement = $this->db->prepare('SELECT id FROM ' .
+		 		$this->schema . '.region A WHERE exists (select id from ' .
+		 		$this->schema . '.dataset where edition_id = :id and ' .
+		 		'region_id = A.id) order by priority');
 		$statement->bindParam(':id', $edition_id, PDO::PARAM_INT);
 
 		if ($statement->execute()) {
