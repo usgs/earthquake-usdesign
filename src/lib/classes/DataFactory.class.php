@@ -119,7 +119,10 @@ class DataFactory {
 		if (!is_null($region)) {
 			$sql = 'SELECT * FROM ' . $this->schema .
 				'.dataset WHERE region_id = :rid AND edition_id = :eid';
-			if (!is_null($design_code_variant_id)) {
+			if (is_null($design_code_variant_id)) {
+				// Return nothing if design_code_variance_id is required
+				$sql .= ' AND design_code_variant_id is null';
+			} else {
 				$sql .= ' AND design_code_variant_id = :did';
 			}
 			$statement = $this->db->prepare($sql);

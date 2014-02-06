@@ -49,13 +49,17 @@
 
 		$edition = $editions["8"];
 		$dataset = $DATA_FACTORY->getDatasetForPointAndEdition(-111.0, 42.0,
-				$edition->id, null);
-		notify('Check SLC subregion returned for asce-41-2006 dataset',
+				$edition->id, $edition->design_code_variant_ids[1]);
+		notify('Check SLC subregion returned for asce-41-2006 / BSE-2 dataset',
 				8, $dataset->region_id);
 		$data = $DATA_FACTORY->getDataForPointAndDatasetObject(-111.0, 42.0,
 				$dataset);
 		notify('Get 1 data point for SLC / asce-41-2006 dataset', 1,
 				count($data));
+		$dataset = $DATA_FACTORY->getDatasetForPointAndEdition(-111.0, 42.0,
+				$edition->id, null);
+		notify('Check no dataset returned for asce-41-2006 / without design ' .
+				'code variance', is_null($dataset), true);
 
 /*		Note: These will not run after creation script.  An SDE-enabled tool
  *		is needed to create the TSUBL layer.
