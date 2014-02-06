@@ -7,11 +7,12 @@ Input: callback_name,
        latitude,
        longitude,
        edition_id,
-       soil_class_id,
+       site_soil_class_id,
        risk_category_id,
        design_code_variant_id
 
-design_code_variant_id is optional, all other inputs are required. 
+risk_category_id and design_code_variant_id are optional,
+all other inputs are required. 
 
 Output Format: JSONP 
 
