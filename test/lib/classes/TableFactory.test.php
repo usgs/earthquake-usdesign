@@ -27,7 +27,7 @@
 		$f_table = $f_tables["1"];
 		notify('Check that number of header values matches number of data ' .
 				'row items', count($f_table->header_values),
-				count($f_table->data_rows[0]));
+				count($f_table->data_rows[0]['A']));
 		$last_value = -1;
 		$increasing = true;
 		foreach ($f_table->header_values as $value) {
