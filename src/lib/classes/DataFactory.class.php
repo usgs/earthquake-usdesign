@@ -94,8 +94,12 @@ class DataFactory {
 	 */
 	public function getDataForPointAndDatasetObject ($longitude, $latitude,
 				$dataset) {
-		return $this->getDataForPointAndDataGroupAndGridSpacing($longitude,
-				$latitude, $dataset->data_group_id, $dataset->grid_spacing);
+		if (is_null($dataset)) {
+			return null;
+		} else {
+			return $this->getDataForPointAndDataGroupAndGridSpacing($longitude,
+					$latitude, $dataset->data_group_id, $dataset->grid_spacing);
+		}
 	}
 
 	/**
