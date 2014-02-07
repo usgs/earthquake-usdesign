@@ -2,7 +2,24 @@
 
 $CONFIG = parse_ini_file('../conf/config.ini');
 $DATA_DIR = $CONFIG['DATA_DIR'];
+$SCRIPT_DIR = $CONFIG['SCRIPT_DIR'];
+$REMOTE_SCRIPT_URL = "https://geohazards.usgs.gov/trac/raw-attachment/wiki/NSHMP/design/RawData/";
 
+print "Note that the application data are loaded via SQL scripts stored on a " .
+		"remote server. Loading these data may take upwards of several hours.\n".
+		"Here are some problems (with suggested solutions) that you " .
+		"may run into when loading the application data:\n\n";
+
+print "1. Can't connect to the scripts over SSL -- uncomment " .
+		"'extension=php_openssl.dll' in php.ini.\n"; 
+print "2. PHP gives you an out of memory area -- " .
+		"set 'memory_limit=128' to a higher value in php.ini.\n"; 
+print "3. You get a 'DDL error: SQLSTATE[HY000]:  General error: 7 server " .
+		"closed the connection unexpectedly' message --\nincrease the " .
+		"timeout on your target database server.\n\n";
+print "Press return to continue ";
+fgets(STDIN);
+  
 print "Database writer user: ";
 $DB_WRITE_USER = trim(fgets(STDIN));
 print "Database writer password: ";
@@ -40,38 +57,22 @@ try {
 	}
 } catch (PDOException $e) {}
 
-print "(Re)building application data objects ...\n";
-$DATA_DIR = $CONFIG['DATA_DIR'];
-
-// First the DDL commands
-$sql = file_get_contents($DATA_DIR . '/objects.sql');
+print "Creating tables and views ...\n";
+$sql = file_get_contents($SCRIPT_DIR . '/structure.sql');
 
 // If schema is not the default, modify it in the commands.
 if ($SCHEMA !== 'US_DESIGN') {
 	$sql = str_ireplace('US_DESIGN', $SCHEMA, $sql);
 }
-
-$tok = strtok($sql, ";");
-while ($tok !== false) {
-	$command = trim($tok);
-	$drop_flag = stripos($command, "DROP ") === 0;
-	if (stripos($command, "CREATE ") === 0 || $drop_flag ||
-			stripos($command, "ALTER ") === 0 ||
-			stripos($command, "--") === 0) {
-		try {
-			$DB->exec($command);
-		}
-		catch (PDOException $e) {
-			if (!$drop_flag) {
-				trigger_error("DDL error: " . $e->getMessage());
-			}
-		}
-	}
-	$tok = strtok(";");
+try {
+	$DB->exec($sql);
+}
+catch (PDOException $e) {
+		trigger_error("DDL error: " . $e->getMessage());
 }
 
-// Each PL/SQL function must be in it's own file because of embedded semicolons.
-$sql = file_get_contents($DATA_DIR . '/tsubl_value.sql');
+print "Creating PL/SQL functions ...\n";
+$sql = file_get_contents($SCRIPT_DIR . '/tsubl_value.sql');
 
 // If schema is not the default, modify it in the commands.
 if ($SCHEMA !== 'US_DESIGN') {
@@ -82,35 +83,22 @@ try {
 	$DB->exec($sql);
 }
 catch (PDOException $e) {
-	if (!$drop_flag) {
-		trigger_error("DDL error: " . $e->getMessage());
-	}
+	trigger_error("DDL error: " . $e->getMessage());
 }
 
-// DML commands
-$sql = file_get_contents($DATA_DIR . '/data.sql');
+print "Loading lookup table data ...\n";
+$sql = file_get_contents($SCRIPT_DIR . '/data.sql');
 
 // If schema is not the default, modify it in the commands.
 if ($SCHEMA !== 'US_DESIGN') {
 	$sql = str_ireplace('US_DESIGN', $SCHEMA, $sql);
 }
 
-$tok = strtok($sql, ";");
-while ($tok !== false) {
-	$command = trim($tok);
-	if (stripos($command, "INSERT ") === 0 ||
-			stripos($command, "DELETE ") === 0 ||
-			stripos($command, "--") === 0) {
-		try {
-			$DB->exec($command);
-		}
-		catch (PDOException $e) {
-			if (!$drop_flag) {
-				trigger_error("DML error: " . $e->getMessage());
-			}
-		}
-	}
-	$tok = strtok(";");
+try {
+	$DB->exec($sql);
+}
+catch (PDOException $e) {
+	trigger_error("DDL error: " . $e->getMessage());
 }
 
 // Check for the TSUBL layer.
@@ -121,7 +109,29 @@ try {
 	print "\nWarning: To complete the installation, you need to use ArcMap " .
 			"or a similar tool from ESRI to load the TsubL geodatabase (at " .
 			$DATA_DIR . "/TsubL1.gdb.zip) into an SDE layer named " .
-			$SCHEMA . ".TSUBL\n";
+			$SCHEMA . ".TSUBL\n\n";
+}
+
+// Load the list of remote application data scripts and iterate through them
+$scripts = file($SCRIPT_DIR . '/remote_sql_scripts.txt', FILE_IGNORE_NEW_LINES);
+foreach ($scripts as $script) {
+	if (substr($script,0,2) === "//") {
+		continue;
+	}
+	$sql = file_get_contents($REMOTE_SCRIPT_URL . $script);
+	print $script . "\n";
+
+	// If schema is not the default, modify it in the commands.
+	if ($SCHEMA !== 'US_DESIGN') {
+		$sql = str_ireplace('US_DESIGN', $SCHEMA, $sql);
+	}
+
+	try {
+		$DB->exec($sql);
+	}
+	catch (PDOException $e) {
+		trigger_error("DDL error: " . $e->getMessage());
+	}
 }
 
 $DB = null;

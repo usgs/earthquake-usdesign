@@ -18,6 +18,8 @@ $DEFAULTS = array(
 	'APP_DIR' => $APP_DIR,
 	'DATA_DIR' => str_replace('/apps/','/data/',
 			str_replace('src', 'data', $APP_DIR)),
+	'SCRIPT_DIR' => str_replace('/apps/','/scripts/',
+			str_replace('src', 'scripts', $APP_DIR)),
 	'MOUNT_PATH' => '/usdesign',
 	'DB_DRIVER' => 'pgsql',
 	'DB_HOST' => '',
@@ -30,6 +32,7 @@ $DEFAULTS = array(
 $HELP_TEXT = array(
 	'APP_DIR' => 'Absolute path to application root directory',
 	'DATA_DIR' => 'Absolute path to application data directory',
+	'SCRIPT_DIR' => 'Absolute path to application script directory',
 	'MOUNT_PATH' => 'Url path to application',
 	'DB_DRIVER' => 'Database driver',
 	'DB_HOST' => 'Database host',
