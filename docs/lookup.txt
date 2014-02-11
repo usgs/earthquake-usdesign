@@ -10,133 +10,111 @@ Output  JSONP format
 
 "callback_name ({
 	data_source: [
-	       {
-		id: Integer,
-		title: String,
-		edition_ids: [
-			       Integer,
-			       ...
-		]
-	       },
-   ],
+		{
+			id: Integer,
+			title: String,
+			edition_ids: [
+				Integer,
+				...
+			]
+		},
+		...
+	],
 
-   edition: {
-	  id: {
-		id: Integer,
-		code: String,
-		title:  String,
-		data_source_id: Integer,
-		risk_category_label: String,
-		site_soil_class_ids: [
-				       Integer,
-				       ...
-		],
-		risk_category_ids: [
-				     Integer,
-				     ...
-		],
-		design_code_variant_ids: [
-					   Integer,
-					   ...
-		],
-		region_ids: [
-			      Integer,
-			      ...
-		]
-	  },
-	  ...
-   },
+	edition: {
+		id: {
+			id: Integer,
+			code: String,
+			title:  String,
+			data_source_id: Integer,
+			risk_category_label: String,
+			site_soil_class_ids: [
+				Integer,
+				...
+			],
+			risk_category_ids: [
+				Integer,
+				...
+			],
+			design_code_variant_ids: [
+				Integer,
+				...
+			],
+			region_ids: [
+				Integer,
+				...
+			]
+		},
+		...
+	},
 
-   site_soil_class: {
-		  id: {
+	site_soil_class: {
+		id: {
 			id: Integer,
 			code: String,
 			title: String
-		  },
-		  ...
-   },
+		},
+		...
+	},
 
-   design_code_variant: {
-		      id: {
-			    id: Integer,
-			    code: String,
-			    requires_exceedence_probability: Boolean
-		      },
-		      ...
-   },
+	design_code_variant: {
+		id: {
+			id: Integer,
+			code: String,
+			requires_exceedence_probability: Boolean
+		},
+		...
+	},
 
-   region: {
-	 id: {
-	       id: Integer,
-	       name:String,
-	       min_longitude:Double,
-	       max_longitude:Double,
-	       min_latitude:Double,
-	       max_latitude:Double,
-	       priority:Integer
-	 },
-	 ...
-   },
+	region: {
+		id: {
+			id: Integer,
+			name:String,
+			min_longitude:Double,
+			max_longitude:Double,
+			min_latitude:Double,
+			max_latitude:Double,
+			priority:Integer
+		},
+		...
+	},
 
-   ftable: {
-	 id: {
-	       id: Integer,
-	       type: String,
-	       header_value: [
-			       Double
-			       ...
-	       ],
-	       data_rows: [
-			{
-			  A: [
-			       Double,
-			       ...
-			  ]
-			},
-			{
-			  B: [
-			       Double,
-			       ...
-			  ]
-			},
-			{
-			  C: [
-			       Double,
-			       ...
-			  ]
-			},
-			{
-			  D: [
-			       Double,
-			       ...
-			  ]
-			},
-			{
-			  E: [
-			       Double,
-			       ...
-			  ]
-			}
-	       ]
-	 }
-   }
+	ftable: {
+		id: {
+			id: Integer,
+			type: String,
+			header_value: [
+				Double
+				...
+			],
+			data_rows: [
+				{A: [Double, ... ]},
+				{B: [Double, ... ]},
+				{C: [Double, ... ]},
+				{D: [Double, ... ]},
+				{E: [Double, ... ]}
+			]
+		},
+		...
+	}
 
-   risk_table: {
-	     id: {
-		   id: Integer,
-		   edition_id: Integer,
-		   table_type: String,
-		   header_values: [String, String, String],
-		   data_rows: [
-			    {
-				String: [
-					  String,
-					  String,
-					  String
-				]
-			     },
-			     ...
-		   ]
-	     }
-   }
+	risk_table: {
+		id: {
+			id: Integer,
+			edition_id: Integer,
+			table_type: String,
+			header_values: [String, String, String],
+			data_rows: [
+				{
+					String: [
+						String,
+						String,
+						String
+					]
+				},
+				...
+			]
+		},
+		...
+	}
 })"

@@ -18,52 +18,52 @@ Output Format: JSONP
 
 "callback_name(
 {
-   latitude: Decimal,
-   longitude: Decimal,
-   edition_id: Integer,
-   design_code_variant_id: Integer,
-   risk_category_id: Integer,
-   site_soil_class_id: Integer,
+	latitude: Decimal,
+	longitude: Decimal,
+	edition_id: Integer,
+	design_code_variant_id: Integer,
+	risk_category_id: Integer,
+	site_soil_class_id: Integer,
 
-   tsubl: Integer,
+	tsubl: Integer,
 
-   dataset: {
-	      id: Integer,
-	      data_group_id: Integer,
-	      edition_id: Integer,
-	      design_code_variant_id: Integer,
-	      region_id: Integer,
-	      fa_table_id: Integer,
-	      fv_table_id: Integer,
-	      fpga_table_id: Integer,
-	      grid_spacing: Decimal,
-	      ss_max_direction_factor: Decimal,
-	      s1_max_direction_factor: Decimal,
-	      factor_84_percent: Decimal,
-	      sec_0_0_det_floor: Decimal,
-	      sec_0_2_det_floor: Decimal,
-	      sec_1_0_det_floor: Decimal
-	    },
+	dataset: {
+		id: Integer,
+		data_group_id: Integer,
+		edition_id: Integer,
+		design_code_variant_id: Integer,
+		region_id: Integer,
+		fa_table_id: Integer,
+		fv_table_id: Integer,
+		fpga_table_id: Integer,
+		grid_spacing: Decimal,
+		ss_max_direction_factor: Decimal,
+		s1_max_direction_factor: Decimal,
+		factor_84_percent: Decimal,
+		sec_0_0_det_floor: Decimal,
+		sec_0_2_det_floor: Decimal,
+		sec_1_0_det_floor: Decimal
+	},
 
-   data: [
-	  {
-	    id: Integer,
-	    data_group_id: Integer,
-	    latitude:Decimal,
-	    longitude:Decimal,
-	    sec_0_0_uh:Decimal,
-	    sec_0_2_uh:Decimal,
-	    sec_1_0_uh:Decimal,
-	    sec_0_2_cr:Decimal,
-	    sec_1_0_cr:Decimal,
-	    sec_0_0_det:Decimal,
-	    sec_0_2_det:Decimal,
-	    sec_1_0_det:Decimal,
-	    ss:Decimal,
-	    s1:Decimal,
-	    pga:Decimal
-	  },
-	  ...
-   ]
+	data: [
+		{
+			id: Integer,
+			data_group_id: Integer,
+			latitude:Decimal,
+			longitude:Decimal,
+			sec_0_0_uh:Decimal,
+			sec_0_2_uh:Decimal,
+			sec_1_0_uh:Decimal,
+			sec_0_2_cr:Decimal,
+			sec_1_0_cr:Decimal,
+			sec_0_0_det:Decimal,
+			sec_0_2_det:Decimal,
+			sec_1_0_det:Decimal,
+			ss:Decimal,
+			s1:Decimal,
+			pga:Decimal
+		},
+		...
+	]
 }
 )"
