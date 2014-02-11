@@ -7,7 +7,7 @@ psql -w -d neic -f 2003-PRVI-AASHTO-05-050-R1.sql
 psql -w -d neic -f 2006-AK-AASHTO-05-050-R1.sql
 
 psql -w -d neic -f 1998-HI-HAZ-R3aNL.20PC50.sql
-psql -w -d neic -f 1998-HI-HAZ-R3aNL.5PC50.sql 
+psql -w -d neic -f 1998-HI-HAZ-R3aNL.5PC50.sql
 psql -w -d neic -f 2003-PRVI-HAZ-R3aNL.20PC50.sql
 psql -w -d neic -f 2003-PRVI-HAZ-R3aNL.5PC50.sql
 psql -w -d neic -f Alaska.Boyd_revFa.20PC50.sql

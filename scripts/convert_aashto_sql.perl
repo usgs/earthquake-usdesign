@@ -69,7 +69,7 @@ BEGIN
 	d := nextval('us_design.data_group_id_seq');
 
 	INSERT INTO us_design.data_group (id) VALUES (d);
-	
+
 	INSERT INTO
 		us_design.dataset
 		(data_group_id, edition_id, region_id, fa_table_id, fv_table_id,
@@ -94,14 +94,14 @@ BEGIN
 print OUTFILE "	INSERT INTO us_design.data
 		(data_group_id, latitude, longitude, pga, ss, s1)
 		VALUES ";
-		
+
 print "Converting $bfile_size bytes.\n";
 for ($record_read_num = 4;
 	($record_read_num - 1) * $record_length < $bfile_size;
 	$record_read_num++) {
 	# Read binary record.
 	seek(BFILE, ($record_read_num - 1) * $record_length, 0);
-	
+
 	# This exception handles the weird, corrupt data in the files that's
 	# off by one byte for some reason.
 	if ($record_read_num % 65536 == 2573)
@@ -111,7 +111,7 @@ for ($record_read_num = 4;
 	# Convert binary record to readable Perl variables.
 	($record_number, $lat, $lon, $num_vals, $v1, $v2, $v3)
 		= unpack("i f f s f f f", $record);
-	
+
 	# Format numbers, round to correct significance.
 	my $lat_str = sprintf("%.4f", $lat);
 	my $lon_str = sprintf("%.4f", $lon);
@@ -125,13 +125,13 @@ for ($record_read_num = 4;
 
 	# Don't print blank data.
 	if ($record_number == 0) { next; }
-	
+
 	# Look for corrupt data.
 	if ($record_read_num != $record_number) {
 		print "	Bad data, #$record_read_num: ($record_number, $lat_str, ".
 			"$lon_str, $v1_str, $v2_str, $v3_str)\n";
 	}
-	
+
 	# Write record to file.
 	if ($record_read_num > 4) { print OUTFILE ",\n"; }
 	print OUTFILE "(d,$lat_str,$lon_str,$v1_str,$v2_str,$v3_str)";

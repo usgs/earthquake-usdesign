@@ -308,7 +308,7 @@ CREATE INDEX dataset_data_group_id_idx
   (data_group_id);
 
 CREATE UNIQUE INDEX ON us_design.dataset (edition_id, region_id, coalesce(design_code_variant_id, 0));
-  
+
 CREATE TABLE us_design.data
 (
   id bigserial NOT NULL,
@@ -364,7 +364,7 @@ FROM us_design.f_table a, us_design.f_header b, us_design.f_data c, us_design.si
 WHERE b.f_table_id = a.id AND c.f_header_id = b.id AND a.type = 'fpga' AND c.site_soil_class_id = d.id
 ORDER BY 1,2,3,4,5;
 
-		  
+
 CREATE OR REPLACE VIEW us_design.risk_table_vw AS
 	SELECT
 		edition_id,
