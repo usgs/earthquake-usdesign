@@ -15,8 +15,8 @@ print "1. Can't connect to the scripts over SSL -- uncomment " .
 print "2. PHP gives you an out of memory area -- " .
 		"set 'memory_limit=128' to a higher value in php.ini.\n"; 
 print "3. You get a 'DDL error: SQLSTATE[HY000]:  General error: 7 server " .
-		"closed the connection unexpectedly' message --\nincrease the " .
-		"timeout on your target database server.\n\n";
+		"closed the connection unexpectedly' message --\nadjust the network " .
+		"and/or database timeout settings to allow for longer connections.\n\n";
 print "Press return to continue ";
 fgets(STDIN);
   
@@ -32,7 +32,9 @@ $dsn = sprintf("%s:host=%s;dbname=%s",
 		$CONFIG['DB_HOST'],
 		$CONFIG['DB_NAME']);
 try {
-	$DB = new PDO($dsn, $DB_WRITE_USER, $DB_WRITE_PASSWORD);
+	$DB = new PDO($dsn, $DB_WRITE_USER, $DB_WRITE_PASSWORD, array (
+			PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+	));
 } catch (PDOException $e) {
 	// Couldn't connect to database
 	trigger_error("Problem connecting to the database: " . $e->getMessage());
@@ -43,7 +45,6 @@ $SCHEMA = strtoupper($CONFIG['DB_SCHEMA']);
 
 // Quick check for existing tables (verify overwrite)
 try {
-	$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$results = $DB->query('SELECT 1 FROM ' . $SCHEMA . '.data LIMIT 1');
 	print "\nIt appears that the application data objects already exist.  Do " .
 			"you want to recreate all application objects (cannot be undone)?\n";
@@ -112,9 +113,13 @@ try {
 			$SCHEMA . ".TSUBL\n\n";
 }
 
-// Load the list of remote application data scripts and iterate through them
+/*
+ * Load the list of remote application data scripts and iterate through them.
+ * To minimize the risk of network/database timeouts, reconnect for each script.
+ */
 $scripts = file($SCRIPT_DIR . '/remote_sql_scripts.txt', FILE_IGNORE_NEW_LINES);
 foreach ($scripts as $script) {
+	$DB = null;
 	if (substr($script,0,2) === "//") {
 		continue;
 	}
@@ -127,6 +132,9 @@ foreach ($scripts as $script) {
 	}
 
 	try {
+		$DB = new PDO($dsn, $DB_WRITE_USER, $DB_WRITE_PASSWORD, array (
+			PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+		));
 		$DB->exec($sql);
 	}
 	catch (PDOException $e) {

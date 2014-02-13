@@ -1,5 +1,6 @@
-APP_DIR = /absolute/usdesign
-DATA_DIR = /absolute/usdesign
+APP_DIR = /absolute/usdesign/src
+DATA_DIR = /absolute/usdesign/data
+SCRIPT_DIR = /absolute/usdesign/scripts
 MOUNT_PATH = /usdesign
 DB_DRIVER = driver
 DB_HOST = hosturl

@@ -51,7 +51,7 @@
 		$dataset = $DATA_FACTORY->getDatasetForPointAndEdition(-111.0, 42.0,
 				$edition->id, $edition->design_code_variant_ids[1]);
 		notify('Check SLC subregion returned for asce-41-2006 / BSE-2 dataset',
-				8, $dataset->region_id);
+				7, $dataset->region_id);
 		$data = $DATA_FACTORY->getDataForPointAndDatasetObject(-111.0, 42.0,
 				$dataset);
 		notify('Get 1 data point for SLC / asce-41-2006 dataset', 1,
