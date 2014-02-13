@@ -1,2 +1,10 @@
-MOUNT_PATH='/absolute/url/path';
-MOUNT_DIR='/absolute/file_system/path';
+APP_DIR = /absolute/usdesign/src
+DATA_DIR = /absolute/usdesign/data
+SCRIPT_DIR = /absolute/usdesign/scripts
+MOUNT_PATH = /usdesign
+DB_DRIVER = driver
+DB_HOST = hosturl
+DB_NAME = dbname
+DB_NAME = schema
+DB_READ_USER = user
+DB_READ_PASSWORD = pwd
