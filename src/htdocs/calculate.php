@@ -8,7 +8,7 @@ if (!isset($_REQUEST['edition_id']) || !isset($_REQUEST['site_soil_class_id'])
 }
 
 $edition_id = intval($_REQUEST['edition_id']);
-$site_soil_class_id = $_REQUEST['site_soil_class_id'];
+$site_soil_class_id = intval($_REQUEST['site_soil_class_id']);
 if ($edition_id <= 0 || $site_soil_class_id <= 0) {
 	header('HTTP/1.1 400 Bad Request');
 	echo 'edition_id and site_soil_class_id must be positive integers';
