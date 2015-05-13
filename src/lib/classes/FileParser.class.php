@@ -8,7 +8,7 @@ class FileParser {
    * @Constructor
    */
   public function __construct () {
-
+    print "Remove - Constructor\n";
   }
 
 
@@ -25,32 +25,39 @@ class FileParser {
    *        If specified, parse warnings will be pushed onto this array.
    *
    * @return {Data}
-   *         The parsed observation suitable for adding to the database using
+   *         The parsed data suitable for adding to the database using
    *         a factory.
    */
   public function parse ($file, &$warnings = null) {
+    print "Remove - parse method\n";
     if (!file_exists($file)) {
       throw new Exception ("No such file: '$file'.");
     }
+    print("Remove - File exists: $file\n");
 
-    $dataFile = new FileFormat($this);
+    // $dataFile = new FileFormat($this);
     $lines = file($file);
     $i = 0; $numLines = count($lines);
     $line = null;
 
     for (; $i < $numLines; $i++) {
       $line = $lines[$i];
+      print "Remove - Line: $line\n";
 
       // Skip blank lines
       if ($line === '') { continue; }
 
-      $field = explode(',', $line);
-      $field = trim($field[0]);
+      // $field = explode(',', $line);
+      $field = preg_split('/\s+/', $line);
 
-      $dataFile->updateCurrentData($line);
+      $latitude = trim($field[0]);
+      $longitude = trim($field[1]);
+      $value = trim($field[2]);
+      print "Remove - Lat: $latitude, Lon: $longitude, Value: $value\n";
+      // $dataFile->updateCurrentData($line);
     }
 
-    return $dataFile->toOutput($warnings);
+    // return $dataFile->toOutput($warnings);
   }
 
 
