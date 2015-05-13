@@ -24,7 +24,7 @@ module.exports = function (grunt) {
     'jshint:test',
     'concurrent:test', // browserify:test, copy:test
     'connect:test',
-    'mocha_phantomjs'
+    'mocha_phantomjs',
 
     'configureProxies:dev',
     'connect:data',
