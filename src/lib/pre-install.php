@@ -91,3 +91,10 @@ file_put_contents($APACHE_CONFIG_FILE, '
     Allow from all
   </Location>
 ');
+
+
+// configure database
+echo "\n";
+if (promptYesNo('Would you like to setup the database or load data', true)) {
+  include_once 'setup_database.php';
+}
