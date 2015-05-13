@@ -27,17 +27,16 @@ if (!file_exists($dataDirectory)) {
 }
 
 include_once 'classes/FileParser.class.php';
-$parser = new FileParser($OBSERVATORY_FACTORY, $USER_FACTORY);
+$parser = new FileParser();
 
-$files = recursiveGlob($dataDirectory, '*.bns');
+$files = recursiveGlob($dataDirectory, '*.txt');
 $errorCount = 0;
 
 foreach ($files as $file) {
   $warnings = array();
 
   try {
-    $observation = $parser->parse($file, $warnings);
-    $OBSERVATION_FACTORY->createObservation($observation);
+    $regionData = $parser->parse($file, $warnings);
   } catch (Exception $e) {
     $warnings[] = $e->getMessage();
   }
