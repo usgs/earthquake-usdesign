@@ -13,6 +13,10 @@
  *  - data
  */
 
+/* Indexes */
+DROP INDEX data_location_index;
+
+/* Tables */
 DROP TABLE data;
 DROP TABLE region;
 DROP TABLE metadata;
