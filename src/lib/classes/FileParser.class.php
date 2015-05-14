@@ -10,9 +10,9 @@ class FileParser {
    */
   public function __construct ($file) {
     if (!file_exists($file)) {
-      throw new Exception ("No such file: '$file'.");
+      throw new Exception ("No such file: $file.");
     }
-    $this->handle = fopen($file, "r");
+    $this->handle = fopen($file, "r") or die("Couldn't get file handle: $file.");
     $this->lineCount = 0;
   }
 

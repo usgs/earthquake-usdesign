@@ -48,11 +48,11 @@ while($eof != 2) {
 
     try {
       $regionData[$fileCount] = $parser[$fileCount]->nextLine($warnings);
-      $latitude = $regionData['latitude'];
-      $longitude = $regionData['longitude'];
-      $value = $regionData['value'];
-      print "Lat: $latitude, Lon: $longitude, Value: $value\n";
-      // foreach ($regionData[$fileCount] as $data){ print "$data ";}
+      $latitude = $regionData[$fileCount]['latitude'];
+      $longitude = $regionData[$fileCount]['longitude'];
+      $value = $regionData[$fileCount]['value'];
+
+      print "Lat: $latitude, Lon: $longitude, Value: $value, $stuff\n";
     } catch (Exception $e) {
       $warnings[] = $e->getMessage();
     }
