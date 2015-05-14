@@ -1,15 +1,6 @@
 <?php
 
-include_once 'FileFormat.class.php';
-
 class FileParser {
-
-  /**
-   * @Constructor
-   */
-  public function __construct () {
-    print "Remove - Constructor\n";
-  }
 
 
   // ------------------------------------------------------------
@@ -29,35 +20,32 @@ class FileParser {
    *         a factory.
    */
   public function parse ($file, &$warnings = null) {
-    print "Remove - parse method\n";
+
     if (!file_exists($file)) {
       throw new Exception ("No such file: '$file'.");
     }
-    print("Remove - File exists: $file\n");
+    // print("Remove - File exists: $file\n");
 
-    // $dataFile = new FileFormat($this);
     $lines = file($file);
     $i = 0; $numLines = count($lines);
     $line = null;
 
     for (; $i < $numLines; $i++) {
       $line = $lines[$i];
-      print "Remove - Line: $line\n";
+      // print "Remove - Entire Line: $line\n";
 
       // Skip blank lines
       if ($line === '') { continue; }
 
-      // $field = explode(',', $line);
-      $field = preg_split('/\s+/', $line);
+      $entry = preg_split('/\s+/', $line);
 
-      $latitude = trim($field[0]);
-      $longitude = trim($field[1]);
-      $value = trim($field[2]);
-      print "Remove - Lat: $latitude, Lon: $longitude, Value: $value\n";
-      // $dataFile->updateCurrentData($line);
+      $latitude = trim($entry[0]);
+      $longitude = trim($entry[1]);
+      $value = trim($entry[2]);
+      // print "Remove - Latitude: $latitude, Lon: $longitude, Value: $value\n";
     }
 
-    // return $dataFile->toOutput($warnings);
+    return [$latitude, $longitude, $value];
   }
 
 

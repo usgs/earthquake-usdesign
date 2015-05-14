@@ -1,7 +1,6 @@
 <?php
 
 date_default_timezone_set('UTC');
-print "Remove - START\n";
 // work from lib directory
 chdir(dirname($argv[0]));
 
@@ -14,38 +13,29 @@ if (!file_exists($CONFIG_FILE)) {
       "done as part of the installation process.\n";
   exit(-1);
 }
-print "Remove - File Exists\n";
 
 include_once 'install-funcs.inc.php';
 include_once '../conf/config.inc.php';
-print "Remove - Includes OK\n";
 
 $dataDirectory = configure('DATA_DIR', $CONFIG['DATA_DIR'],
     'Enter directory where data files are located');
-print "Remove - Data Dir: $dataDirectory\n";
 
 if (!file_exists($dataDirectory)) {
   print "\tThe indicated directory does not exist. Please try again.\n";
   exit(-1);
 }
-print "Remove - Directory Exists\n";
 
 include_once 'classes/FileParser.class.php';
-print "Remove - Parser Included\n";
 $parser = new FileParser();
-print "Remove - Parser Created\n";
 
 $files = recursiveGlob($dataDirectory, '*.txt');
-// print("Files: $files");
 $errorCount = 0;
-
 foreach ($files as $file) {
   $warnings = array();
 
   try {
-    print "Remove - File: $file, Warnings: $warnings\n";
+    // print "Remove - File: $file, Warnings: $warnings\n";
     $regionData = $parser->parse($file, $warnings);
-    print "Remove - Region Data Set\n";
   } catch (Exception $e) {
     $warnings[] = $e->getMessage();
   }
