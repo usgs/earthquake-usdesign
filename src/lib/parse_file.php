@@ -26,25 +26,45 @@ if (!file_exists($dataDirectory)) {
 }
 
 include_once 'classes/FileParser.class.php';
-$parser = new FileParser();
+
+$parser = array();
+$regionData = array();
 
 $files = recursiveGlob($dataDirectory, '*.txt');
-$errorCount = 0;
+
 foreach ($files as $file) {
-  $warnings = array();
+  // Create a parser for each file
+  array_push($parser, new FileParser($file));
+  array_push($regionData, "");
+}
 
-  try {
-    // print "Remove - File: $file, Warnings: $warnings\n";
-    $regionData = $parser->nextLine($file, $warnings);
-  } catch (Exception $e) {
-    $warnings[] = $e->getMessage();
-  }
+$errorCount = 0;
+$eof = 0;
 
-  if (count($warnings) !== 0) {
-    $errorCount += 1;
-    print "The following warnings occurred while processing '${file}'\n  ";
-    print implode("\n  ", $warnings) . "\n";
+while($eof != 2) {
+  $fileCount = 0;
+  foreach ($files as $file) {
+    $warnings = array();
+
+    try {
+      $regionData[$fileCount] = $parser[$fileCount]->nextLine($warnings);
+      $latitude = $regionData['latitude'];
+      $longitude = $regionData['longitude'];
+      $value = $regionData['value'];
+      print "Lat: $latitude, Lon: $longitude, Value: $value\n";
+      // foreach ($regionData[$fileCount] as $data){ print "$data ";}
+    } catch (Exception $e) {
+      $warnings[] = $e->getMessage();
+    }
+
+    if (count($warnings) !== 0) {
+      $errorCount += 1;
+      print "The following warnings occurred while processing '${file}'\n  ";
+      print implode("\n  ", $warnings) . "\n";
+    }
+    $fileCount += 1;
   }
+  $eof += 1;
 }
 
 // Show an error summary in case user wasn't watching too closely.

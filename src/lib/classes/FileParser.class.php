@@ -2,6 +2,28 @@
 
 class FileParser {
 
+  /**
+   * @Constructor
+   *
+   * @param $file {String}
+   *        Name of file to parse
+   */
+  public function __construct ($file) {
+    if (!file_exists($file)) {
+      throw new Exception ("No such file: '$file'.");
+    }
+    $this->handle = fopen($file, "r");
+    $this->lineCount = 0;
+  }
+
+  /**
+   * @Destructor
+   *
+   */
+  public function __destruct () {
+    fclose($this->handle);
+  }
+
 
   // ------------------------------------------------------------
   // Public methods
@@ -19,31 +41,21 @@ class FileParser {
    *         The parsed data suitable for adding to the database using
    *         a factory.
    */
-  public function nextLine ($file, &$warnings = null) {
+  public function nextLine (&$warnings = null) {
 
-    if (!file_exists($file)) {
-      throw new Exception ("No such file: '$file'.");
+    $line = fgets($this->handle);
+    // Skip blank lines
+    if ($line === '') {
+      // Not sure if we need to check for this
     }
-    // print("Remove - File exists: $file\n");
 
-    $lines = file($file);
-    $i = 0; $numLines = count($lines);
-    $line = null;
+    $entry = preg_split('/\s+/', $line);
 
-    for (; $i < $numLines; $i++) {
-      $line = $lines[$i];
-      // print "Remove - Entire Line: $line\n";
+    $latitude = trim($entry[0]);
+    $longitude = trim($entry[1]);
+    $value = trim($entry[2]);
 
-      // Skip blank lines
-      if ($line === '') { continue; }
-
-      $entry = preg_split('/\s+/', $line);
-
-      $latitude = trim($entry[0]);
-      $longitude = trim($entry[1]);
-      $value = trim($entry[2]);
-      // print "Remove - Latitude: $latitude, Lon: $longitude, Value: $value\n";
-    }
+    $this->lineCount += 1;
 
     return array(
       'latitude' => $latitude,
