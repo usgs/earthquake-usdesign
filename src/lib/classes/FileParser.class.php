@@ -6,7 +6,7 @@ class FileParser {
    * @Constructor
    *
    * @param $file {String}
-   *        Name of file to parse
+   *        Name of file to parse.
    */
   public function __construct ($file) {
     if (!file_exists($file)) {
@@ -35,18 +35,15 @@ class FileParser {
   /**
    * @APIMethod
    *
-   * @param $file {String}
-   *        The name of the file to parse.
-   * @param $warnings {Array} Optional
-   *        If specified, parse warnings will be pushed onto this array.
-   *
    * @return {Data}
-   *         The parsed data suitable for adding to the database using
-   *         a factory.
+   *         Parsed data from a single line in the given data file.
    */
-  public function nextLine (&$warnings = null) {
-
+  public function nextLine () {
     $line = fgets($this->handle);
+
+    if (feof($this->handle)) {
+      return null;
+    }
 
     // Skip blank lines
     if ($line === '') {
@@ -66,28 +63,4 @@ class FileParser {
     );
   }
 
-
-  // ------------------------------------------------------------
-  // Private methods
-  // ------------------------------------------------------------
-
-  /**
-   * @PrivateMethod
-   *
-   * Logs the warning either into the given $warnings buffer (presumably for
-   * subsequent logging), or directly to STDERR if $warnings is not provided.
-   *
-   * @param $warning {String}
-   *        The warning message to log.
-   * @param $warnings {Array} By reference. Optional.
-   *        A buffer into which generated warnings will be logged. If not
-   *        specified, warnings are logged to STDERR.
-   */
-  private function __addWarning ($warning, &$warnings = null) {
-    if ($warnings !== null && is_array($warnings)) {
-      $warnings[] = $warning;
-    } else {
-      fwrite(STDERR, "${warning}\n");
-    }
-  }
 }
