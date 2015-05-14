@@ -107,9 +107,9 @@ class DataFactory {
       'crs' => safefloatval($row['crs']),
       'cr1' => safefloatval($row['cr1']),
 
-      'geomean_ss' => safefloatval($row['geomean_ss']),
-      'geomean_s1' => safefloatval($row['geomean_s1']),
-      'geomean_pga' => safefloatval($row['geomean_pga'])
+      'geomean_ssd' => safefloatval($row['geomean_ssd']),
+      'geomean_s1d' => safefloatval($row['geomean_s1d']),
+      'geomean_pgad' => safefloatval($row['geomean_pgad'])
     );
   }
 
