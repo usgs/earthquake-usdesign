@@ -12,8 +12,11 @@ class FileParser {
     if (!file_exists($file)) {
       throw new Exception ("No such file: $file.");
     }
-    $this->handle = fopen($file, "r") or die("Couldn't get file handle: $file.");
-    $this->lineCount = 0;
+
+    $this->handle = fopen($file, "r");
+    if (!$this->handle) {
+      throw new Exception ("File open failed: $file.");
+    }
   }
 
   /**
@@ -44,9 +47,10 @@ class FileParser {
   public function nextLine (&$warnings = null) {
 
     $line = fgets($this->handle);
+
     // Skip blank lines
     if ($line === '') {
-      // Not sure if we need to check for this
+      throw new Exception ("Blank line found.");
     }
 
     $entry = preg_split('/\s+/', $line);
@@ -55,12 +59,10 @@ class FileParser {
     $longitude = trim($entry[1]);
     $value = trim($entry[2]);
 
-    $this->lineCount += 1;
-
     return array(
-      'latitude' => $latitude,
-      'longitude' => $longitude,
-      'value' => $value
+      'latitude' => floatval($latitude),
+      'longitude' => floatval($longitude),
+      'value' => floatval($value)
     );
   }
 
