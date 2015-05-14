@@ -87,7 +87,7 @@ CREATE TABLE data (
   cr1 NUMERIC,
   geomean_ssd NUMERIC,
   geomean_s1d NUMERIC,
-  geomean_pga NUMERIC
+  geomean_pgad NUMERIC
 );
 
 CREATE INDEX data_location_index ON data (region_id, latitude, longitude);
