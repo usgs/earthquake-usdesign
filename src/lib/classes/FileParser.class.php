@@ -19,7 +19,7 @@ class FileParser {
    *         The parsed data suitable for adding to the database using
    *         a factory.
    */
-  public function parse ($file, &$warnings = null) {
+  public function nextLine ($file, &$warnings = null) {
 
     if (!file_exists($file)) {
       throw new Exception ("No such file: '$file'.");
@@ -45,7 +45,11 @@ class FileParser {
       // print "Remove - Latitude: $latitude, Lon: $longitude, Value: $value\n";
     }
 
-    return [$latitude, $longitude, $value];
+    return array(
+      'latitude' => $latitude,
+      'longitude' => $longitude,
+      'value' => $value
+    );
   }
 
 

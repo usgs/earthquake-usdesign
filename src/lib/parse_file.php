@@ -35,7 +35,7 @@ foreach ($files as $file) {
 
   try {
     // print "Remove - File: $file, Warnings: $warnings\n";
-    $regionData = $parser->parse($file, $warnings);
+    $regionData = $parser->nextLine($file, $warnings);
   } catch (Exception $e) {
     $warnings[] = $e->getMessage();
   }
