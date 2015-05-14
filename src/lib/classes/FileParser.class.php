@@ -41,7 +41,7 @@ class FileParser {
   public function nextLine () {
     $line = fgets($this->handle);
 
-    if (feof($this->handle)) {
+    if ($line === false) {
       return null;
     }
 
@@ -57,9 +57,9 @@ class FileParser {
     $value = trim($entry[2]);
 
     return array(
-      'latitude' => floatval($latitude),
-      'longitude' => floatval($longitude),
-      'value' => floatval($value)
+      'latitude' => safefloatval($latitude),
+      'longitude' => safefloatval($longitude),
+      'value' => safefloatval($value)
     );
   }
 
