@@ -21,7 +21,7 @@ CREATE TABLE hazard_basis (
 
 CREATE TABLE design_code (
   id INTEGER PRIMARY KEY,
-  hazard_basis INTEGER REFERENCES hazard_basis (id),
+  hazard_basis_id INTEGER REFERENCES hazard_basis (id),
   name VARCHAR(255),
   display_order INTEGER
 );
@@ -57,8 +57,10 @@ CREATE TABLE metadata (
   max_direction_s1 NUMERIC,
   percentile_ss NUMERIC,
   percentile_s1 NUMERIC,
+  percentile_pga NUMERIC,
   deterministic_floor_ss NUMERIC,
-  deterministic_floor_s1 NUMERIC
+  deterministic_floor_s1 NUMERIC,
+  deterministic_floor_pga NUMERIC
 );
 
 CREATE TABLE region (
@@ -80,8 +82,10 @@ CREATE TABLE data (
   longitude NUMERIC,
   mapped_ss NUMERIC,
   mapped_s1 NUMERIC,
+  mapped_pga NUMERIC,
   crs NUMERIC,
   cr1 NUMERIC,
   geomean_ssd NUMERIC,
-  geomean_s1d NUMERIC
+  geomean_s1d NUMERIC,
+  geomean_pga NUMERIC
 );
