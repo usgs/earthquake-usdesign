@@ -104,7 +104,21 @@ if ($answer) {
 // US Design data load
 // ----------------------------------------------------------------------
 
-  // TODO
+// Reference Data
+$answer = promptYesNo("Would you like to load the reference data into the database", true);
+
+if ($answer) {
+    // TODO, load data
+    // include_once('install/reference_data.php')
+}
+
+// Gridded Data
+$answer = promptYesNo("Would you like to load the gridded data into the database", true);
+
+if ($answer) {
+    // TODO, load data
+    // include_once('install/gridded_data.php')
+}
 
 
 // ----------------------------------------------------------------------
