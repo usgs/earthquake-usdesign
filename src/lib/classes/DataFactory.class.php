@@ -130,9 +130,9 @@ class DataFactory {
           mapped_pga,
           crs,
           cr1,
-          geomean_ss,
-          geomean_s1,
-          geomean_pga
+          geomean_ssd,
+          geomean_s1d,
+          geomean_pgad
         FROM
           data
         WHERE
