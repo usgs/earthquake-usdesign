@@ -70,15 +70,28 @@ if ($answer) {
     // Create Schema
     // ----------------------------------------------------------------------
 
-    echo 'Loading schema ... ';
+    print "Loading schema ... \n";
+
     // run create schema
     $dbInstaller->createSchema($CONFIG['DB_SCHEMA']);
     // drop tables
     $dbInstaller->runScript($dropTablesScript);
     // create tables
     $dbInstaller->runScript($createTablesScript);
-    // create read user
-    $dbInstaller->createUser(array('SELECT'), $CONFIG['DB_USER'], $CONFIG['DB_PASS']);
+
+    try {
+        $answer = promptYesNo("Would you like to create the read-only database user = '" . $CONFIG['DB_USER'] . "'", true);
+        if ($answer) {
+            // create read user
+            $dbInstaller->createUser(array('SELECT'), $CONFIG['DB_USER'], $CONFIG['DB_PASS']);
+        }
+    } catch (Exception $e) {
+        print $e->getMessage() . "\n";
+        print "Rolling back database transaction... \n";
+        $dbInstaller->rollBack();
+    }
+
+    $dbInstaller->commit();
 
     echo "SUCCESS!!\n";
 

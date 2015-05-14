@@ -39,8 +39,23 @@ class DatabaseInstaller {
     if ($this->dbh === null) {
       $this->dbh = new PDO($this->dsn, $this->user, $this->pass);
       $this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $this->dbh->beginTransaction();
     }
     return $this->dbh;
+  }
+
+  /**
+   * commits all commands executed during the current database transaction
+   */
+  public function commit () {
+    $this->dbh->commit();
+  }
+
+  /**
+   * rolls back all commands executed during the current database transaction
+   */
+  public function rollBack () {
+    $this->dbh->rollBack();
   }
 
   /**
@@ -60,7 +75,7 @@ class DatabaseInstaller {
    */
   public function run ($statements) {
     // make sure connected
-    $dbh = $this->connect();
+    $this->connect();
     $this->dbh->exec('SET search_path TO ' . $this->schema);
 
     // Remove /* */ comments
@@ -81,7 +96,6 @@ class DatabaseInstaller {
         }
       }
     }
-    $dbh = null;
   }
 
   /**
@@ -162,8 +176,10 @@ class DatabaseInstaller {
    * Create user with $roles
    */
   public function createUser ($roles, $user, $password) {
-    // drop user if it already exists
-    $this->dropUser($roles, $user);
+    if ($this->userExists($user)) {
+      throw new Exception('ERROR: The \'' . $user . '\' user already exists.');
+      return;
+    }
     // create read only user
     $this->run('CREATE USER ' . $user . ' WITH PASSWORD \'' .
         $password . '\'');
