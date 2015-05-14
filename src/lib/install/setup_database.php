@@ -8,7 +8,7 @@
 //           create a new schema using script.
 // (2) Load reference data into the database.
 // (3) [Only if script is run directly]
-//     Load observation data into database.
+//     Load data into database.
 //
 // Note: If the user declines any step along the way this script is complete.
 
@@ -71,10 +71,10 @@ if ($answer) {
     // ----------------------------------------------------------------------
 
     echo 'Loading schema ... ';
-    // run drop schema
-    $dbInstaller->dropSchema();
     // run create schema
-    $dbInstaller->createSchema();
+    $dbInstaller->createSchema($CONFIG['DB_SCHEMA']);
+    // drop tables
+    $dbInstaller->runScript($dropTablesScript);
     // create tables
     $dbInstaller->runScript($createTablesScript);
     // create read user

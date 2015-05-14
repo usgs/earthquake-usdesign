@@ -14,15 +14,15 @@
  */
 
 /* Indexes */
-DROP INDEX data_location_index;
+DROP INDEX IF EXISTS data_location_index;
 
 /* Tables */
-DROP TABLE data;
-DROP TABLE region;
-DROP TABLE metadata;
-DROP TABLE design_code_site_class;
-DROP TABLE site_class;
-DROP TABLE design_code_risk_category;
-DROP TABLE risk_category;
-DROP TABLE design_code;
-DROP TABLE hazard_basis;
+DROP TABLE IF EXISTS data;
+DROP TABLE IF EXISTS region;
+DROP TABLE IF EXISTS metadata;
+DROP TABLE IF EXISTS design_code_site_class;
+DROP TABLE IF EXISTS site_class;
+DROP TABLE IF EXISTS design_code_risk_category;
+DROP TABLE IF EXISTS risk_category;
+DROP TABLE IF EXISTS design_code;
+DROP TABLE IF EXISTS hazard_basis;

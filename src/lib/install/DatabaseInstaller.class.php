@@ -113,17 +113,21 @@ class DatabaseInstaller {
   }
 
   /**
-   * Create the schema referred to by $this->schema.
+   * Create $schema if it doesn't already exist.
    */
-  public function createSchema () {
-    $this->run('CREATE SCHEMA IF NOT EXISTS ' . $this->schema);
+  public function createSchema ($schema) {
+    if (!$this->schemaExists($schema)) {
+      $this->run('CREATE SCHEMA ' . $this->schema);
+    }
   }
 
   /**
-   * Create the schema referred to by $this->schema.
+   * Drop the $schema if it already exist.
    */
-  public function dropSchema () {
-    $this->run('DROP SCHEMA IF EXISTS ' . $this->schema . ' CASCADE');
+  public function dropSchema ($schema) {
+    if ($this->schemaExists($schema)) {
+      $this->run('DROP SCHEMA ' . $this->schema . ' CASCADE');
+    }
   }
 
   /**
@@ -173,7 +177,7 @@ class DatabaseInstaller {
    */
   public function userExists ($user) {
     $db = $this->connectWithoutDbname();
-    $sql = 'select usename from pg_catalog.pg_user where usename=\'' .
+    $sql = 'SELECT usename FROM pg_catalog.pg_user WHERE usename = \'' .
         $user . '\'';
     $result = $db->query($sql)->fetchColumn();
     $db = null;
@@ -184,6 +188,24 @@ class DatabaseInstaller {
 
     // $user exists
     return true;
+  }
+
+  /**
+   * Checks if $schema exists
+   */
+  public function schemaExists ($schema) {
+    $dbh = $this->connect();
+    $sql = 'SELECT schema_name FROM information_schema.schemata WHERE schema_name = \'' . $schema . '\'';
+    $results = $dbh->query($sql);
+    $result = $results->fetch();
+    $dbh = null;
+
+    // $schema exists
+    if ($result[0] === $schema) {
+      return true;
+    }
+
+    return false;
   }
 
   /**
