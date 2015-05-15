@@ -29,17 +29,14 @@ class SetParser {
    *
    */
   public function process () {
-    print "Processing\n";
     $eof = false;
     while(!$eof) {
       try {
         $geomeanSsdData = $this->geomeanSsdParser->nextLine();
-        // print "Line: $geomeanSsdData\n";
         if ($geomeanSsdData != null) {
           $geomeanSsdLatitude = $geomeanSsdData['latitude'];
           $geomeanSsdLongitude = $geomeanSsdData['longitude'];
           $geomeanSsdValue = $geomeanSsdData['value'];
-          // print "Lat: $latitude, Lon: $longitude, Value: $value\n";
         } else {
           $eof = true;
         }
@@ -133,5 +130,6 @@ class SetParser {
         print implode("\n  ", $warnings) . "\n";
       }
     }
+    return $errorCount;
   }
 }
