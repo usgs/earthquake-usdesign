@@ -4,9 +4,9 @@ include_once '../install-funcs.inc.php';
 
 class LookupDataFactory {
 
-  private $_db = null;
-  private $_queryAll = null;
-  private $_queryById = null;
+  protected $_db = null;
+  protected $_queryAll = null;
+  protected $_queryById = null;
 
   /**
    * @Constructor
@@ -106,20 +106,16 @@ class LookupDataFactory {
     );
   }
 
-  // ------------------------------------------------------------
-  // Private Methods
-  // ------------------------------------------------------------
-
   /**
-   * @PrivateMethod
+   * @ExtensionPoint
    *
-   * Initializes query statements to be used by this instances get methods.
+   * Initializes query statements to be used by this instance's get methods.
    * Each query is initialized with the fetch mode set to PDO::FETCH_ASSOC.
    *
    * @param table {String}
    *      The name of the table from which to fetch data.
    */
-  private function _initStatements ($table) {
+  protected function _initStatements ($table) {
     $this->_queryAll = $this->_db->prepare(sprintf(
       '
         SELECT
@@ -152,4 +148,8 @@ class LookupDataFactory {
     ));
     $this->_queryById->setFetchMode(PDO::FETCH_ASSOC);
   }
+
+  // ------------------------------------------------------------
+  // Private Methods
+  // ------------------------------------------------------------
 }
