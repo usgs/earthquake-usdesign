@@ -14,7 +14,7 @@ There are multiple dependencies that must be installed for this project:
 
 #### Install PHP
 ```bash
-$ brew install php55
+$ brew install php56 --with-pdo-pgsql
 ```
 
 #### Install PostgreSQL
