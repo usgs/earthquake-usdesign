@@ -164,4 +164,40 @@
     }
   }
 
+
+  // UTILITY FUNCTIONS
+  /**
+   * Prompt user with a yes or no question.
+   *
+   * @param $prompt {String}
+   *        yes or no question, should include question mark if desired.
+   * @param $default {Boolean}
+   *        default null (user must enter y or n).
+   *        true for yes to be default answer, false for no.
+   *        default answer is used when user presses enter with no other input.
+   * @return {Boolean} true if user entered yes, false if user entered no.
+   */
+  function promptYesNo ($prompt='Yes or no?', $default=null) {
+    $question = $prompt . ' [' .
+        ($default === true ? 'Y' : 'y') . '/' .
+        ($default === false ? 'N' : 'n') . ']: ';
+    $answer = null;
+    while ($answer === null) {
+      echo $question;
+      $answer = strtoupper(trim(fgets(STDIN)));
+      if ($answer === '') {
+        if ($default === true) {
+          $answer = 'Y';
+        } else if ($default === false) {
+          $answer = 'N';
+        }
+      }
+      if ($answer !== 'Y' && $answer !== 'N') {
+        $answer = null;
+        echo PHP_EOL;
+      }
+    }
+    return ($answer === 'Y');
+  }
+
 ?>
