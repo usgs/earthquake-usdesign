@@ -72,7 +72,7 @@ if ($answer) {
     // Create Schema
     // ----------------------------------------------------------------------
 
-    print "Loading schema ... \n";
+    print "Loading schema ... ";
 
     // run create schema
     $dbInstaller->createSchema($CONFIG['DB_SCHEMA']);
@@ -81,50 +81,66 @@ if ($answer) {
     // create tables
     $dbInstaller->runScript($createTablesScript);
 
+    print "success!\n";
+
     try {
-        $answer = promptYesNo("Would you like to create the read-only " .
-            "database user = '" . $CONFIG['DB_USER'] . "'", true);
-        if ($answer) {
-            // create read user
-            $dbInstaller->createUser(array('SELECT'), $CONFIG['DB_USER'],
-                $CONFIG['DB_PASS']);
-        }
+      $answer = promptYesNo("Would you like to create the read-only " .
+          "database user = '" . $CONFIG['DB_USER'] . "'", true);
+
+      if ($answer) {
+        print 'Creating read-only user ... ';
+
+        // create read user
+        $dbInstaller->createUser(array('SELECT'), $CONFIG['DB_USER'],
+            $CONFIG['DB_PASS']);
+
+        print "success!\n";
+      }
     } catch (Exception $e) {
         print $e->getMessage() . "\n";
         print "Rolling back database transaction... \n";
         $dbInstaller->rollBack();
+        exit(-1);
+    }
+
+    // ----------------------------------------------------------------------
+    // US Design data load
+    // ----------------------------------------------------------------------
+
+    // Reference Data
+    $answer = promptYesNo("Would you like to load the reference data into " .
+        "the database", true);
+
+    if ($answer) {
+      $referenceDataScript = configure('REFERENCE_SCRIPT',
+          $defaultScriptDir . DIRECTORY_SEPARATOR . 'reference_data.sql',
+          'SQL script containing reference data');
+      if (!file_exists($referenceDataScript)) {
+        print "The indicated script does not exist. Please try again.\n";
+        exit(-1);
+      }
+
+      print 'Loading reference data ... ';
+      $dbInstaller->runScript($referenceDataScript);
+      print "success!\n";
+    }
+
+    // Gridded Data
+    $answer = promptYesNo("Would you like to load the gridded data into the " .
+        "database", true);
+
+    if ($answer) {
+        // TODO, load data
+        // include_once('install/gridded_data.php')
     }
 
     $dbInstaller->commit();
-
     echo "SUCCESS!!\n";
-
   }
 
 }
 
 
-// ----------------------------------------------------------------------
-// US Design data load
-// ----------------------------------------------------------------------
-
-// Reference Data
-$answer = promptYesNo("Would you like to load the reference data into the " .
-    "database", true);
-
-if ($answer) {
-    // TODO, load data
-    // include_once('install/reference_data.php')
-}
-
-// Gridded Data
-$answer = promptYesNo("Would you like to load the gridded data into the " .
-    "database", true);
-
-if ($answer) {
-    // TODO, load data
-    // include_once('install/gridded_data.php')
-}
 
 
 // ----------------------------------------------------------------------
