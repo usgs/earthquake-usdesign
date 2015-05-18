@@ -83,6 +83,18 @@ var connect = {
     }
   },
 
+  example: {
+    options: {
+      base: [
+        config.example,
+        config.build + '/' + config.src + '/htdocs',
+        'node_modules/hazdev-template/dist/htdocs'
+      ],
+      open: 'http://localhost:' + config.examplePort + '/example.html',
+      port: config.examplePort
+    }
+  },
+
   test: {
     options: {
       base: [

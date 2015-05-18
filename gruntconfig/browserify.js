@@ -2,12 +2,13 @@
 
 var config = require('./config');
 
-var CWD = process.cwd();
+var CWD = process.cwd(),
+    JSDIR = CWD + '/' + config.src + '/htdocs/js';
 
 // List individual modules here. Each listed module will be aliased in the
 // "bundle", and will be set as an external in the "test".
 var EXPORTS = [
-  CWD + '/' + config.src + '/htdocs/js/ExampleModule.js:ExampleModule'
+  JSDIR + '/util/SiteAmplification.js:util/SiteAmplification'
 ];
 // Subsequent source files can then require "ExampleModule" with:
 // var ExampleModule = require('package/ExampleModule');
@@ -17,7 +18,8 @@ var browerify = {
     browserifyOptions: {
       debug: true,
       paths: [
-        process.cwd() + '/' + config.src + '/htdocs/js'
+        JSDIR,
+        CWD + '/node_modules/hazdev-webutils/src'
       ]
     }
   },
