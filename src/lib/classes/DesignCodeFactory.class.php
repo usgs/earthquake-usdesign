@@ -165,6 +165,7 @@ class DesignCodeFactory extends LookupDataFactory {
    *      An ordered array containing ids of regions supported by the input
    *      design code id.
    */
+
   private function _fetchSupportedRegions ($id) {
     $results = array();
 
@@ -174,6 +175,7 @@ class DesignCodeFactory extends LookupDataFactory {
 
       $this->_querySupportedRegions->execute();
       while (($result = $this->_querySupportedRegions->fetch())) {
+
         $results[] = safeintval($result['id']);
       }
     } finally {
