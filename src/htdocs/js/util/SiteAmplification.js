@@ -193,6 +193,8 @@ var SiteAmplification = function (params) {
         markup,
         values;
 
+    markup = [];
+
     for (label in data) {
       if (label === 'U') {
         // Skip undetermined site class for this table
@@ -235,18 +237,18 @@ var SiteAmplification = function (params) {
 
     markup = [
       '<tr>',
-        '<th scope="col" rowspan="2">Site class</th>',
+        '<th scope="col" rowspan="2">Site Class</th>',
         '<th colspan="', headers.length, '">', title, '</th>',
       '</tr>',
       '<tr>',
-        '<th scope="col">', type, ' &lte; ', headers[0], '</th>'
+        '<th scope="col">', type, ' &le; ', headers[0], '</th>'
     ];
 
     for (i = 1, len = headers.length - 1; i < len; i++) {
       markup.push('<th scope="col">' + type + ' = ' + headers[i] + '</th>');
     }
 
-    markup.push('<th scope="col">' + type + ' &gte; ' + headers[i] +
+    markup.push('<th scope="col">' + type + ' &ge; ' + headers[i] +
         '</th></tr>');
 
     return markup.join('');
@@ -285,7 +287,7 @@ var SiteAmplification = function (params) {
   };
 
   _this.getFvHtml = function (acceleration, siteClass) {
-    return _getTable(acceleration, siteClass, _ssInfo, _faTitle,
+    return _getTable(acceleration, siteClass, _s1Info, _fvTitle,
         'S<sub>1</sub>');
   };
 
@@ -295,7 +297,7 @@ var SiteAmplification = function (params) {
   };
 
   _this.getFpgaHtml = function (acceleration, siteClass) {
-    return _getTable(acceleration, siteClass, _ssInfo, _faTitle, 'PGA');
+    return _getTable(acceleration, siteClass, _pgaInfo, _fpgaTitle, 'PGA');
   };
 
   _this.getUndeterminedPgaTable = function (pga, siteClass) {
@@ -326,9 +328,9 @@ var SiteAmplification = function (params) {
       }
 
       if (i === 0) {
-        comparator = '&lte;';
+        comparator = '&le;';
       } else if (i === (len - 1)) {
-        comparator = '&gte;';
+        comparator = '&ge;';
       } else {
         comparator = '=';
       }
@@ -399,9 +401,9 @@ var SiteAmplification = function (params) {
       }
 
       if (i === 0) {
-        comparator = '&lte;';
+        comparator = '&le;';
       } else if (i === (len - 1)) {
-        comparator = '&gte;';
+        comparator = '&ge;';
       } else {
         comparator = '=';
       }
