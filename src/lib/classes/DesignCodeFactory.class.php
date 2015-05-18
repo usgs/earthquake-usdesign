@@ -1,5 +1,7 @@
 <?php
 
+include_once dirname(__FILE__) . '/../install-funcs.inc.php';
+
 include_once 'LookupDataFactory.class.php';
 
 class DesignCodeFactory extends LookupDataFactory {
@@ -20,8 +22,12 @@ class DesignCodeFactory extends LookupDataFactory {
    *      mode set to throw exceptions.
    */
   public function __construct ($db) {
-    super::__construct($db, 'design_code');
+    parent::__construct($db, 'design_code');
   }
+
+  // ------------------------------------------------------------
+  // Protected Methods
+  // ------------------------------------------------------------
 
   /**
    * Augments basic datase information such that the result can be used
@@ -37,13 +43,17 @@ class DesignCodeFactory extends LookupDataFactory {
    * @see LookupDataFactory#_augmentResult
    */
   protected function _augmentResult ($row) {
-    $row = super::_augmentResult($row);
+    if (is_array($row)) {
+      $row = parent::_augmentResult($row);
 
-    $row['site_classes'] = $this->_fetchSupportedSiteClasses($row['id']);
-    $row['risk_categories'] = $this->_fetchSupportedRiskCategories($row['id']);
-    $row['regions'] = $this->_fetchSupportedRegions($row['id']);
+      $row['site_classes'] = $this->_fetchSupportedSiteClasses($row['id']);
+      $row['risk_categories'] = $this->_fetchSupportedRiskCategories($row['id']);
+      $row['regions'] = $this->_fetchSupportedRegions($row['id']);
 
-    return $row;
+      return $row;
+    } else {
+      return null;
+    }
   }
 
   /**
@@ -110,7 +120,7 @@ class DesignCodeFactory extends LookupDataFactory {
       WHERE
         id IN (
           SELECT
-            id
+            risk_category_id
           FROM
             design_code_risk_category
           WHERE
@@ -129,7 +139,7 @@ class DesignCodeFactory extends LookupDataFactory {
       WHERE
         id IN (
           SELECT
-            id
+            site_class_id
           FROM
             design_code_site_class
           WHERE
@@ -145,6 +155,16 @@ class DesignCodeFactory extends LookupDataFactory {
   // Private Methods
   // ------------------------------------------------------------
 
+  /**
+   * @PrivateMethod
+   *
+   * @param id {Integer}
+   *      The design code id for which to fetch information.
+   *
+   * @return {Array}
+   *      An ordered array containing ids of regions supported by the input
+   *      design code id.
+   */
   private function _fetchSupportedRegions ($id) {
     $results = array();
 
@@ -152,7 +172,8 @@ class DesignCodeFactory extends LookupDataFactory {
       $this->_querySupportedRegions->bindValue(':design_code_id',
           safeintval($id), PDO::PARAM_INT);
 
-      while ($result = $this->_querySupportedRegions->fetch()) {
+      $this->_querySupportedRegions->execute();
+      while (($result = $this->_querySupportedRegions->fetch())) {
         $results[] = safeintval($result['id']);
       }
     } finally {
@@ -162,6 +183,16 @@ class DesignCodeFactory extends LookupDataFactory {
     return $results;
   }
 
+  /**
+   * @PrivateMethod
+   *
+   * @param id {Integer}
+   *      The design code id for which to fetch information.
+   *
+   * @return {Array}
+   *      An ordered array containing ids of risk categories supported by the
+   *      input design code id.
+   */
   private function _fetchSupportedRiskCategories ($id) {
     $results = array();
 
@@ -169,6 +200,7 @@ class DesignCodeFactory extends LookupDataFactory {
       $this->_querySupportedRiskCategories->bindValue(':design_code_id',
           safeintval($id), PDO::PARAM_INT);
 
+      $this->_querySupportedRiskCategories->execute();
       while ($result = $this->_querySupportedRiskCategories->fetch()) {
         $results[] = safeintval($result['id']);
       }
@@ -179,6 +211,16 @@ class DesignCodeFactory extends LookupDataFactory {
     return $results;
   }
 
+  /**
+   * @PrivateMethod
+   *
+   * @param id {Integer}
+   *      The design code id for which to fetch information.
+   *
+   * @return {Array}
+   *      An ordered array containing ids of site classes supported by the input
+   *      design code id.
+   */
   private function _fetchSupportedSiteClasses ($id) {
     $results = array();
 
@@ -186,6 +228,7 @@ class DesignCodeFactory extends LookupDataFactory {
       $this->_querySupportedSiteClasses->bindValue(':design_code_id',
           safeintval($id), PDO::PARAM_INT);
 
+      $this->_querySupportedSiteClasses->execute();
       while ($result = $this->_querySupportedSiteClasses->fetch()) {
         $results[] = safeintval($result['id']);
       }
