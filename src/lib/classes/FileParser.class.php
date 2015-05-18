@@ -1,5 +1,7 @@
 <?php
 
+include_once 'install-funcs.inc.php';
+
 class FileParser {
 
   /**
