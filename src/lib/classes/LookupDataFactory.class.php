@@ -1,6 +1,6 @@
 <?php
 
-include_once '../install-funcs.inc.php';
+include_once dirname(__FILE__) . '/../install-funcs.inc.php';
 
 class LookupDataFactory {
 
@@ -71,8 +71,9 @@ class LookupDataFactory {
     $result = null;
 
     try {
-      $this->_queryById->bindParam(':id', safeintval($id), PDO::PARAM_INT);
+      $this->_queryById->bindValue(':id', safeintval($id), PDO::PARAM_INT);
 
+      $this->_queryById->execute();
       $result = $this->_augmentResult($this->_queryById->fetch());
     } finally {
       $this->_queryById->closeCursor();
@@ -99,11 +100,15 @@ class LookupDataFactory {
    *      web service request.
    */
   protected function _augmentResult ($row) {
-    return array(
-      'id' => safeintval($row['id']),
-      'name' => $row['name'],
-      'display_order' => safeintval($row['display_order'])
-    );
+    if (is_array($row)) {
+      return array(
+        'id' => safeintval($row['id']),
+        'name' => $row['name'],
+        'display_order' => safeintval($row['display_order'])
+      );
+    } else {
+      return null;
+    }
   }
 
   /**
