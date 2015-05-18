@@ -211,7 +211,8 @@ class DatabaseInstaller {
    */
   public function schemaExists ($schema) {
     $dbh = $this->connect();
-    $sql = 'SELECT schema_name FROM information_schema.schemata WHERE schema_name = \'' . $schema . '\'';
+    $sql = 'SELECT schema_name FROM information_schema.schemata WHERE ' .
+        'schema_name = \'' . $schema . '\'';
     $results = $dbh->query($sql);
     $result = $results->fetch();
     $dbh = null;

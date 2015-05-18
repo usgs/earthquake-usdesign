@@ -21,7 +21,8 @@ include_once 'install/DatabaseInstaller.class.php';
 include_once '../conf/config.inc.php';
 
 
-$DB_DSN = configure('DB_ROOT_DSN', $CONFIG['DB_DSN'], 'Database administrator DSN');
+$DB_DSN = configure('DB_ROOT_DSN', $CONFIG['DB_DSN'],
+    'Database administrator DSN');
 $username = configure('DB_ROOT_USER', 'root', 'Database adminitrator user');
 $password = configure('DB_ROOT_PASS', '', 'Database administrator password',
     true);
@@ -34,7 +35,8 @@ $defaultScriptDir = implode(DIRECTORY_SEPARATOR, array(
 // ----------------------------------------------------------------------
 
 
-$dbInstaller = new DatabaseInstaller($DB_DSN, $username, $password, $CONFIG['DB_SCHEMA']);
+$dbInstaller = new DatabaseInstaller($DB_DSN, $username, $password,
+    $CONFIG['DB_SCHEMA']);
 
 $answer = promptYesNo("Would you like to create the database schema", true);
 
@@ -57,8 +59,8 @@ if ($answer) {
       exit(-1);
     }
 
-    $dropTablesScript = configure('SCHEMA_SCRIPT',
-        str_replace('create_tables.sql', 'drop_tables.sql', $createTablesScript),
+    $dropTablesScript = configure('SCHEMA_SCRIPT', str_replace(
+        'create_tables.sql', 'drop_tables.sql', $createTablesScript),
         "SQL script containing \"drop\" schema definition");
     if (!file_exists($dropTablesScript)) {
       print "The indicated script does not exist. Please try again.\n";
@@ -80,10 +82,12 @@ if ($answer) {
     $dbInstaller->runScript($createTablesScript);
 
     try {
-        $answer = promptYesNo("Would you like to create the read-only database user = '" . $CONFIG['DB_USER'] . "'", true);
+        $answer = promptYesNo("Would you like to create the read-only " .
+            "database user = '" . $CONFIG['DB_USER'] . "'", true);
         if ($answer) {
             // create read user
-            $dbInstaller->createUser(array('SELECT'), $CONFIG['DB_USER'], $CONFIG['DB_PASS']);
+            $dbInstaller->createUser(array('SELECT'), $CONFIG['DB_USER'],
+                $CONFIG['DB_PASS']);
         }
     } catch (Exception $e) {
         print $e->getMessage() . "\n";
@@ -105,7 +109,8 @@ if ($answer) {
 // ----------------------------------------------------------------------
 
 // Reference Data
-$answer = promptYesNo("Would you like to load the reference data into the database", true);
+$answer = promptYesNo("Would you like to load the reference data into the " .
+    "database", true);
 
 if ($answer) {
     // TODO, load data
@@ -113,7 +118,8 @@ if ($answer) {
 }
 
 // Gridded Data
-$answer = promptYesNo("Would you like to load the gridded data into the database", true);
+$answer = promptYesNo("Would you like to load the gridded data into the " .
+    "database", true);
 
 if ($answer) {
     // TODO, load data
