@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+
+  <title>Site Amplification</title>
+  <link rel="stylesheet" href="site/earthquake/index.css"/>
+  <style>
+  /* TODO :: This should be moved to _SiteAmplification.scss */
+  table {
+    max-width: 768px;
+  }
+  th {
+    text-align: center !important;
+  }
+  .site-class-F {
+    text-align: center;
+  }
+  </style>
+</head>
+<body>
+  <h1>Site Amplification</h1>
+
+  <h2>Mapped S<sub>S</sub> = 0.375, Site Class &ldquo;D&rdquo;</h2>
+  <div class="example-1-table"></div>
+  <label id="example-1-label">F<sub>a</sub> = </label>
+  <span aria-labeled-by="example-1-label" class="example-1-value"></span>
+
+  <h2>Mapped S<sub>1</sub> = 0.15, Site Class &ldquo;D&rdquo;</h2>
+  <div class="example-2-table"></div>
+  <label id="example-2-label">F<sub>a</sub> = </label>
+  <span aria-labeled-by="example-2-label" class="example-2-value"></span>
+
+  <h2>Mapped PGA = 0.15, Site Class &ldquo;D&rdquo;</h2>
+  <div class="example-3-table"></div>
+  <label id="example-3-label">F<sub>a</sub> = </label>
+  <span aria-labeled-by="example-3-label" class="example-3-value"></span>
+
+  <script src="js/bundle.js"></script>
+  <script>
+    var SiteAmplification = require('util/SiteAmplification');
+
+
+    var ampUtil = SiteAmplification();
+
+    document.querySelector('.example-1-table').innerHTML =
+        ampUtil.getFaHtml(0.375, 'D');
+    document.querySelector('.example-1-value').innerHTML =
+        ampUtil.getFa(0.375, 'D');
+
+    document.querySelector('.example-2-table').innerHTML =
+        ampUtil.getFvHtml(0.15, 'D');
+    document.querySelector('.example-2-value').innerHTML =
+        ampUtil.getFv(0.15, 'D');
+
+    document.querySelector('.example-3-table').innerHTML =
+        ampUtil.getFpgaHtml(0.15, 'D');
+    document.querySelector('.example-3-value').innerHTML =
+        ampUtil.getFpga(0.15, 'D');
+  </script>
+</body>
+</html>

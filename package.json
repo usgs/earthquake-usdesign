@@ -2,7 +2,10 @@
   "name": "earthquake-usdesign",
   "version": "0.0.0",
   "description": "Web application for computing seismic design values conforming to various design codes in the United States.",
-	"repository": {"type":"git","url":"https://github.com/usgs/earthquake-usdesign.git"},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/usgs/earthquake-usdesign.git"
+  },
   "keywords": [
     "usgs"
   ],
@@ -29,6 +32,7 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-mocha-phantomjs": "^0.6.0",
     "hazdev-template": "usgs/hazdev-template",
+    "hazdev-webutils": "git://github.com/usgs/hazdev-webutils.git",
     "http-rewrite-middleware": "^0.1.6",
     "ini": "^1.3.3",
     "mocha": "^2.1.0",

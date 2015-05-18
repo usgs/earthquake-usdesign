@@ -30,6 +30,7 @@ module.exports = function (grunt) {
     'connect:data',
     'connect:template',
     'connect:dev',
+    'connect:example',
 
     'watch'
   ]);
