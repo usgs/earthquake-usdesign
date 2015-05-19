@@ -79,3 +79,11 @@ PostgreSQL database locally.
 
   > Note: PostgreSQL will create the default database `postgres`, which  you
   > can access with the same user that you used to create the database.
+
+1. Database
+
+  The install process is assuming that an 'earthquake' database already exists.
+
+  ```
+  CREATE DATABASE earthquake;
+  ```
