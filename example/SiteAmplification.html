@@ -28,21 +28,21 @@
 
   <h2>F<sub>a</sub> Table for Site Class A &ndash; F</h2>
   <aside>
-    For S<sub>S</sub> = 0.375g and Site Class D, F<sub>a</sub> =
+    For S<sub>S</sub> = 0.25g and Site Class D, F<sub>a</sub> =
     <span class="example-1-value"></span>
   </aside>
   <div class="example-1-table"></div>
 
   <h2>F<sub>v</sub> Table for Site Class A &ndash; F</h2>
   <aside>
-    For S<sub>1</sub> = 0.15g and Site Class D, F<sub>v</sub> =
+    For S<sub>1</sub> = 0.60g and Site Class B, F<sub>v</sub> =
     <span class="example-2-value"></span>
   </aside>
   <div class="example-2-table"></div>
 
   <h2>F<sub>a</sub>F<sub>v</sub> Table for Undetermined Site Class</h2>
   <aside>
-    For S<sub>S</sub> = 0.375g and S<sub>1</sub> = 0.15g and Site Class U,
+    For S<sub>S</sub> = 0.20g and S<sub>1</sub> = 0.70g and Site Class U,
     F<sub>a</sub> = <span class="example-3a-value"></span> &amp;
     F<sub>v</sub> = <span class="example-3b-value"></span>
   </aside>
@@ -71,21 +71,21 @@
     var ampUtil = SiteAmplification();
 
     document.querySelector('.example-1-table').appendChild(
-        ampUtil.getFaTable(0.375, 'D'));
+        ampUtil.getFaTable(0.25, 'D'));
     document.querySelector('.example-1-value').innerHTML =
-        ampUtil.getFa(0.375, 'D').toFixed(1);
+        ampUtil.getFa(0.25, 'D').toFixed(1);
 
     document.querySelector('.example-2-table').appendChild(
-        ampUtil.getFvTable(0.15, 'D'));
+        ampUtil.getFvTable(0.60, 'B'));
     document.querySelector('.example-2-value').innerHTML =
-        ampUtil.getFv(0.15, 'D').toFixed(1);
+        ampUtil.getFv(0.60, 'B').toFixed(1);
 
     document.querySelector('.example-3-table').appendChild(
-        ampUtil.getUndeterminedSsS1Table(0.375, 0.15, 'U'));
+        ampUtil.getUndeterminedSsS1Table(0.20, 0.70, 'U'));
     document.querySelector('.example-3a-value').innerHTML =
-        ampUtil.getFa(0.375, 'U').toFixed(1);
+        ampUtil.getFa(0.20, 'U').toFixed(1);
     document.querySelector('.example-3b-value').innerHTML =
-        ampUtil.getFv(0.15, 'U').toFixed(1);
+        ampUtil.getFv(0.70, 'U').toFixed(1);
 
     document.querySelector('.example-4-table').appendChild(
         ampUtil.getFpgaTable(0.15, 'D'));
