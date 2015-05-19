@@ -69,11 +69,11 @@ class DataFactory {
       $this->_query->bindValue(':region_id', safeintval($regionId),
           PDO::PARAM_INT);
 
-      $this->query->bindParam(':max_latitude', $maxLatitude);
-      $this->query->bindParam(':min_latitude', $minLatitude);
+      $this->_query->bindParam(':max_latitude', $maxLatitude);
+      $this->_query->bindParam(':min_latitude', $minLatitude);
 
-      $this->query->bindParam(':max_longitude', $maxLongitude);
-      $this->query->bindParam(':min_longitude', $minLongitude);
+      $this->_query->bindParam(':max_longitude', $maxLongitude);
+      $this->_query->bindParam(':min_longitude', $minLongitude);
 
       $this->_query->execute();
 
