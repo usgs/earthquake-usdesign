@@ -181,10 +181,10 @@
           FROM
             region r JOIN metadata m ON (r.metatdata_id = m.id)
           WHERE r.design_code_id = :design_code_id
-          AND r.min_latitude > :latitude
-          AND r.max_latitude < :latitude
-          AND r.min_longitude > :longitude
-          AND r.max_longitude < :longitude
+          AND r.min_latitude < :latitude
+          AND r.max_latitude > :latitude
+          AND r.min_longitude < :longitude
+          AND r.max_longitude > :longitude
           ORDER BY
             r.id ASC
         '
