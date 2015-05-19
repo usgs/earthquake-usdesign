@@ -6,36 +6,62 @@
 
   <title>Site Amplification</title>
   <link rel="stylesheet" href="site/earthquake/index.css"/>
+  <link rel="stylesheet" href="css/index.css"/>
   <style>
-  /* TODO :: This should be moved to _SiteAmplification.scss */
-  table {
-    max-width: 768px;
-  }
-  th {
-    text-align: center !important;
-  }
-  .site-class-F {
-    text-align: center;
-  }
+    body {
+      padding: 1em;
+    }
+    aside {
+      display: block;
+      margin-bottom: 1em;
+      font-size: smaller;
+      font-style: italic;
+      color: #333;
+    }
+    table {
+      margin-bottom: 2em;
+    }
   </style>
 </head>
 <body>
   <h1>Site Amplification</h1>
 
-  <h2>Mapped S<sub>S</sub> = 0.375, Site Class &ldquo;D&rdquo;</h2>
+  <h2>F<sub>a</sub> Table for Site Class A &ndash; F</h2>
+  <aside>
+    For S<sub>S</sub> = 0.375g and Site Class D, F<sub>a</sub> =
+    <span class="example-1-value"></span>
+  </aside>
   <div class="example-1-table"></div>
-  <label id="example-1-label">F<sub>a</sub> = </label>
-  <span aria-labeled-by="example-1-label" class="example-1-value"></span>
 
-  <h2>Mapped S<sub>1</sub> = 0.15, Site Class &ldquo;D&rdquo;</h2>
+  <h2>F<sub>v</sub> Table for Site Class A &ndash; F</h2>
+  <aside>
+    For S<sub>1</sub> = 0.15g and Site Class D, F<sub>v</sub> =
+    <span class="example-2-value"></span>
+  </aside>
   <div class="example-2-table"></div>
-  <label id="example-2-label">F<sub>a</sub> = </label>
-  <span aria-labeled-by="example-2-label" class="example-2-value"></span>
 
-  <h2>Mapped PGA = 0.15, Site Class &ldquo;D&rdquo;</h2>
+  <h2>F<sub>a</sub>F<sub>v</sub> Table for Undetermined Site Class</h2>
+  <aside>
+    For S<sub>S</sub> = 0.375g and S<sub>1</sub> = 0.15g and Site Class U,
+    F<sub>a</sub> = <span class="example-3a-value"></span> &amp;
+    F<sub>v</sub> = <span class="example-3b-value"></span>
+  </aside>
   <div class="example-3-table"></div>
-  <label id="example-3-label">F<sub>a</sub> = </label>
-  <span aria-labeled-by="example-3-label" class="example-3-value"></span>
+
+  <h2>F<sub>PGA</sub> Table for Site Class A &ndash; F</h2>
+  <aside>
+    For PGA = 0.15g and Site Class D, F<sub>PGA</sub> =
+    <span class="example-4-value"></span>
+  </aside>
+  <div class="example-4-table"></div>
+
+  <h2>F<sub>PGA</sub> Table for Undetermined Site Class</h2>
+  <aside>
+    For PGA = 0.15 and Site Class U, F<sub>PGA</sub> =
+    <span class="example-5-value"></span>
+  </aside>
+  <div class="example-5-table"></div>
+
 
   <script src="js/bundle.js"></script>
   <script>
@@ -44,20 +70,32 @@
 
     var ampUtil = SiteAmplification();
 
-    document.querySelector('.example-1-table').innerHTML =
-        ampUtil.getFaHtml(0.375, 'D');
+    document.querySelector('.example-1-table').appendChild(
+        ampUtil.getFaTable(0.375, 'D'));
     document.querySelector('.example-1-value').innerHTML =
-        ampUtil.getFa(0.375, 'D');
+        ampUtil.getFa(0.375, 'D').toFixed(1);
 
-    document.querySelector('.example-2-table').innerHTML =
-        ampUtil.getFvHtml(0.15, 'D');
+    document.querySelector('.example-2-table').appendChild(
+        ampUtil.getFvTable(0.15, 'D'));
     document.querySelector('.example-2-value').innerHTML =
-        ampUtil.getFv(0.15, 'D');
+        ampUtil.getFv(0.15, 'D').toFixed(1);
 
-    document.querySelector('.example-3-table').innerHTML =
-        ampUtil.getFpgaHtml(0.15, 'D');
-    document.querySelector('.example-3-value').innerHTML =
-        ampUtil.getFpga(0.15, 'D');
+    document.querySelector('.example-3-table').appendChild(
+        ampUtil.getUndeterminedSsS1Table(0.375, 0.15, 'U'));
+    document.querySelector('.example-3a-value').innerHTML =
+        ampUtil.getFa(0.375, 'U').toFixed(1);
+    document.querySelector('.example-3b-value').innerHTML =
+        ampUtil.getFv(0.15, 'U').toFixed(1);
+
+    document.querySelector('.example-4-table').appendChild(
+        ampUtil.getFpgaTable(0.15, 'D'));
+    document.querySelector('.example-4-value').innerHTML =
+        ampUtil.getFpga(0.15, 'D').toFixed(1);
+
+    document.querySelector('.example-5-table').appendChild(
+        ampUtil.getUndeterminedPgaTable(0.15, 'U'));
+    document.querySelector('.example-5-value').innerHTML =
+        ampUtil.getFpga(0.15, 'U').toFixed(1);
   </script>
 </body>
 </html>
