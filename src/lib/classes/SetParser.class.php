@@ -1,6 +1,7 @@
 <?php
 
 include_once 'classes/FileParser.class.php';
+include_once 'install-funcs.inc.php';
 
 class SetParser {
 
