@@ -73,11 +73,11 @@ var SiteAmplification = function (params) {
 
   _this = {
     'getFa': null,
-    'getFaHtml': null,
+    'getFaTable': null,
     'getFpga': null,
-    'getFpgaHtml': null,
+    'getFpgaTable': null,
     'getFv': null,
-    'getFvHtml': null,
+    'getFvTable': null,
     'getUndeterminedPgaTable': null,
     'getUndeterminedSsS1Table': null,
 
@@ -109,21 +109,29 @@ var SiteAmplification = function (params) {
    */
   _getBounds = function (xvals, x) {
     var bounds,
-        i,
-        len;
+        current,
+        len,
+        previous;
 
     bounds = {lower: null, upper: null};
     len = xvals.length;
 
     if (x <= xvals[0]) {
+      bounds.lower = 0;
       bounds.upper = 0;
-    } else if (x >= xvals[len - 1].value) {
+    } else if (x >= xvals[len - 1]) {
       bounds.lower = len - 1;
+      bounds.upper = len - 1;
     } else {
-      for (i = 1; i < len; i++) {
-        if (x >= xvals[i - 1] && x <= xvals[i]) {
-          bounds.lower = i - 1;
-          bounds.upper = i;
+      for (current = 1; current < len; current++) {
+        previous = current - 1;
+
+        if (x === xvals[previous]) {
+          bounds.lower = previous;
+          bounds.upper = previous;
+        } else if (x > xvals[previous] && x < xvals[current]) {
+          bounds.lower = previous;
+          bounds.upper = current;
         }
       }
     }
@@ -156,13 +164,11 @@ var SiteAmplification = function (params) {
     lower = bounds.lower;
     upper = bounds.upper;
 
-    if (lower === null && upper === null) {
+    if (lower === null || upper === null) {
       // shouldn't happen, but in any case
       throw new Error('Failed to find acceleration bounds for input');
-    } else if (lower === null) {
+    } else if (lower === upper) {
       return yvals[upper];
-    } else if (upper === null) {
-      return yvals[lower];
     } else {
       return _interpolate(xvals[lower], xvals[upper], yvals[lower],
           yvals[upper], x);
@@ -222,14 +228,18 @@ var SiteAmplification = function (params) {
         classes = '';
 
         if (label === siteClass) {
+          if (i === bounds.lower || i === bounds.upper) {
+            classes += ' bound';
+          }
           if (i === bounds.lower) {
-            classes = ' class="lower bound"';
-          } else if (i === bounds.upper) {
-            classes = ' class="upper bound"';
+            classes += ' lower';
+          }
+          if (i === bounds.upper) {
+            classes += ' upper';
           }
         }
 
-        markup.push('<td' + classes + '>' +
+        markup.push('<td class="' + classes + '">' +
           Formatter.siteAmplificationValue(values[i]) +
         '</td>');
       }
@@ -344,11 +354,15 @@ var SiteAmplification = function (params) {
       classes = '';
 
       if (siteClass === 'U') {
-        if (i === bounds.lower) {
-          classes = 'lower bound';
-        }
-        if (i === bounds.upper) {
-          classes = 'upper bound';
+        if (i === bounds.lower || i === bounds.upper) {
+          classes = 'bound';
+
+          if (i === bounds.lower) {
+            classes += ' lower';
+          }
+          if (i === bounds.upper) {
+            classes += ' upper';
+          }
         }
       }
 
@@ -421,17 +435,26 @@ var SiteAmplification = function (params) {
       fvClasses = '';
 
       if (siteClass === 'U') {
-        if (i === faBounds.lower) {
-          faClasses = 'lower bound';
+        if (i === faBounds.lower || i === faBounds.upper) {
+          faClasses += 'bound';
+
+          if (i === faBounds.lower) {
+            faClasses += ' lower';
+          }
+          if (i === faBounds.upper) {
+            faClasses += ' upper';
+          }
         }
-        if (i === faBounds.upper) {
-          faClasses = 'upper bound';
-        }
-        if (i === fvBounds.lower) {
-          fvClasses = 'lower bound';
-        }
-        if (i === fvBounds.upper) {
-          fvClasses = 'upper bound';
+
+        if (i === fvBounds.lower || i === fvBounds.upper) {
+          fvClasses = 'bound';
+
+          if (i === fvBounds.lower) {
+            fvClasses += ' lower';
+          }
+          if (i === fvBounds.upper) {
+            fvClasses += ' upper';
+          }
         }
       }
 
