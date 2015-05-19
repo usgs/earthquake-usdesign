@@ -1,12 +1,12 @@
 <?php
 
-include_once '../install-funcs.inc.php';
+include_once dirname(__FILE__) . '/../install-funcs.inc.php';
 
 class LookupDataFactory {
 
-  private $_db = null;
-  private $_queryAll = null;
-  private $_queryById = null;
+  protected $_db = null;
+  protected $_queryAll = null;
+  protected $_queryById = null;
 
   /**
    * @Constructor
@@ -71,8 +71,9 @@ class LookupDataFactory {
     $result = null;
 
     try {
-      $this->_queryById->bindParam(':id', safeintval($id), PDO::PARAM_INT);
+      $this->_queryById->bindValue(':id', safeintval($id), PDO::PARAM_INT);
 
+      $this->_queryById->execute();
       $result = $this->_augmentResult($this->_queryById->fetch());
     } finally {
       $this->_queryById->closeCursor();
@@ -99,27 +100,27 @@ class LookupDataFactory {
    *      web service request.
    */
   protected function _augmentResult ($row) {
-    return array(
-      'id' => safeintval($row['id']),
-      'name' => $row['name'],
-      'display_order' => safeintval($row['display_order'])
-    );
+    if (is_array($row)) {
+      return array(
+        'id' => safeintval($row['id']),
+        'name' => $row['name'],
+        'display_order' => safeintval($row['display_order'])
+      );
+    } else {
+      return null;
+    }
   }
 
-  // ------------------------------------------------------------
-  // Private Methods
-  // ------------------------------------------------------------
-
   /**
-   * @PrivateMethod
+   * @ExtensionPoint
    *
-   * Initializes query statements to be used by this instances get methods.
+   * Initializes query statements to be used by this instance's get methods.
    * Each query is initialized with the fetch mode set to PDO::FETCH_ASSOC.
    *
    * @param table {String}
    *      The name of the table from which to fetch data.
    */
-  private function _initStatements ($table) {
+  protected function _initStatements ($table) {
     $this->_queryAll = $this->_db->prepare(sprintf(
       '
         SELECT
@@ -152,4 +153,8 @@ class LookupDataFactory {
     ));
     $this->_queryById->setFetchMode(PDO::FETCH_ASSOC);
   }
+
+  // ------------------------------------------------------------
+  // Private Methods
+  // ------------------------------------------------------------
 }
