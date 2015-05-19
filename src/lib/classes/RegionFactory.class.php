@@ -79,15 +79,19 @@
      *      An associative array containing appropriately augmented data.
      */
     protected function _augmentResult ($row) {
-      return array(
-        'id' => safeintval($row['id']),
-        'name' => $row['name'],
-        'min_latitude' => safefloatval($row['min_latitude']),
-        'max_latitude' => safefloatval($row['max_latitude']),
-        'min_longitude' => safefloatval($row['min_longitude']),
-        'max_longitude' => safefloatval($row['max_longitude']),
-        'grid_spacing' => safefloatval($row['grid_spacing'])
-      );
+      if (is_array($row)) {
+        return array(
+          'id' => safeintval($row['id']),
+          'name' => $row['name'],
+          'min_latitude' => safefloatval($row['min_latitude']),
+          'max_latitude' => safefloatval($row['max_latitude']),
+          'min_longitude' => safefloatval($row['min_longitude']),
+          'max_longitude' => safefloatval($row['max_longitude']),
+          'grid_spacing' => safefloatval($row['grid_spacing'])
+        );
+      } else {
+        return null;
+      }
     }
 
 
