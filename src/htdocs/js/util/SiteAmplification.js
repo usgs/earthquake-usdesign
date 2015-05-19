@@ -1,18 +1,19 @@
 'use strict';
 
-var Util = require('util/Util');
+var Formatter = require('util/Formatter'),
+    Util = require('util/Util');
 
 // Bins provided by defaults are valid for 2015 NEHRP
 var _DEFAULTS = {
   faTitle: 'Mapped Risk-Targeted Maximum Considered Earthquake ' +
-      '(MCE<sub>R</sub>) Spectral Response Acceleration Parameter at ' +
+      '(MCE<sub>R</sub>)<br/>Spectral Response Acceleration Parameter at ' +
       'Short Period',
 
   fpgaTitle: 'Mapped Maximum Considered Geometric Mean ' +
       '(MCE<sub>G</sub>) Peak Ground Acceleration, PGA',
 
   fvTitle: 'Mapped Risk-Targeted Maximum Considered Earthquake ' +
-      '(MCE<sub>R</sub>) Spectral Response Acceleration Parameter at ' +
+      '(MCE<sub>R</sub>)<br/>Spectral Response Acceleration Parameter at ' +
       '1-s Period',
 
   ssInfo: {
@@ -169,20 +170,31 @@ var SiteAmplification = function (params) {
   };
 
   _getTable = function (acceleration, siteClass, info, title, unit) {
-    var bounds;
+    var bounds,
+        table;
 
     bounds = _getBounds(info.bins, acceleration);
 
-    return [
-      '<table class="tabular">',
-        '<thead>',
-          _getTableHeader(title, unit, info.bins),
-        '</thead>',
-        '<tbody>',
-          _getTableBody(info.siteClasses, siteClass, bounds),
-        '</tbody>',
-      '<table>'
+    table = document.createElement('table');
+    table.classList.add('site-amplification-table');
+    table.innerHTML = [
+      '<thead>',
+        _getTableHeader(title, unit, info.bins),
+      '</thead>',
+      '<tbody>',
+        _getTableBody(info.siteClasses, siteClass, bounds),
+      '</tbody>',
+      '<tfoot>',
+        '<tr>',
+          '<td colspan="', (info.bins.length + 1), '">',
+            'Note: Use straight-line interpolation for intermediate values ',
+            'of ', unit,
+          '</td>',
+        '</tr>',
+      '</tfoot>'
     ].join('');
+
+    return table;
   };
 
   _getTableBody = function (data, siteClass, bounds) {
@@ -217,7 +229,9 @@ var SiteAmplification = function (params) {
           }
         }
 
-        markup.push('<td' + classes + '>' + values[i] + '</td>');
+        markup.push('<td' + classes + '>' +
+          Formatter.siteAmplificationValue(values[i]) +
+        '</td>');
       }
 
       markup.push('</tr>');
@@ -231,7 +245,8 @@ var SiteAmplification = function (params) {
   };
 
   _getTableHeader = function (title, type, headers) {
-    var i,
+    var comparator,
+        i,
         len,
         markup;
 
@@ -240,18 +255,24 @@ var SiteAmplification = function (params) {
         '<th scope="col" rowspan="2">Site Class</th>',
         '<th colspan="', headers.length, '">', title, '</th>',
       '</tr>',
-      '<tr>',
-        '<th scope="col">', type, ' &le; ', headers[0], '</th>'
+      '<tr>'
     ];
 
-    for (i = 1, len = headers.length - 1; i < len; i++) {
-      markup.push('<th scope="col">' + type + ' = ' + headers[i] + '</th>');
+    for (i = 0, len = headers.length; i < len; i++) {
+      if (i === 0) {
+        comparator = ' &le; ';
+      } else if (i === (len - 1)) {
+        comparator = ' &ge; ';
+      } else {
+        comparator = ' = ';
+      }
+
+      markup.push('<th scope="col">' +
+        type + comparator + Formatter.siteAmplificationHeader(headers[i]) +
+      '</th>');
     }
 
-    markup.push('<th scope="col">' + type + ' &ge; ' + headers[i] +
-        '</th></tr>');
-
-    return markup.join('');
+    return markup.join('') + '</tr>';
   };
 
   /**
@@ -276,7 +297,7 @@ var SiteAmplification = function (params) {
         acceleration);
   };
 
-  _this.getFaHtml = function (acceleration, siteClass) {
+  _this.getFaTable = function (acceleration, siteClass) {
     return _getTable(acceleration, siteClass, _ssInfo, _faTitle,
         'S<sub>S</sub>');
   };
@@ -286,7 +307,7 @@ var SiteAmplification = function (params) {
         acceleration);
   };
 
-  _this.getFvHtml = function (acceleration, siteClass) {
+  _this.getFvTable = function (acceleration, siteClass) {
     return _getTable(acceleration, siteClass, _s1Info, _fvTitle,
         'S<sub>1</sub>');
   };
@@ -296,7 +317,7 @@ var SiteAmplification = function (params) {
         acceleration);
   };
 
-  _this.getFpgaHtml = function (acceleration, siteClass) {
+  _this.getFpgaTable = function (acceleration, siteClass) {
     return _getTable(acceleration, siteClass, _pgaInfo, _fpgaTitle, 'PGA');
   };
 
@@ -309,7 +330,11 @@ var SiteAmplification = function (params) {
         vals,
 
         i,
-        len;
+        len,
+        table;
+
+    headers =[];
+    vals = [];
 
     len = _pgaInfo.bins.length;
 
@@ -341,23 +366,27 @@ var SiteAmplification = function (params) {
           _pgaInfo.siteClasses.U[i] + '</td>');
     }
 
-    return [
-      '<table class="tabular">',
-        '<thead>',
-          '<tr>',
-            '<th scope="col" rowspan="2">Site Coefficient</th>',
-            '<td colspan="', len, '">',
-              'Mapped Maximum Considered Geometric Mean ',
-              '(MCE<sub>G</sub>) Peak Ground Acceleration, PGA',
-            '</td>',
-          '</tr>',
-          '<tr>', headers.join(''), '</tr>',
-        '</thead>',
-        '<tbody>',
-          '<tr><th scope="row">F<sub>PGA</sub></th>', vals.join(''), '</tr>',
-        '</tbody>',
-      '</table>'
+    table = document.createElement('table');
+    table.classList.add('site-amplification-table');
+    table.classList.add('site-amplification-table-undetermined');
+
+    table.innerHTML = [
+      '<thead>',
+        '<tr>',
+          '<th scope="col" rowspan="2">Site Coefficient</th>',
+          '<th colspan="', len, '">',
+            'Mapped Maximum Considered Geometric Mean ',
+            '(MCE<sub>G</sub>) Peak Ground Acceleration, PGA',
+          '</th>',
+        '</tr>',
+        '<tr>', headers.join(''), '</tr>',
+      '</thead>',
+      '<tbody>',
+        '<tr><th scope="row">F<sub>PGA</sub></th>', vals.join(''), '</tr>',
+      '</tbody>'
     ].join('');
+
+    return table;
   };
 
   _this.getUndeterminedSsS1Table = function (ss, s1, siteClass) {
@@ -374,7 +403,13 @@ var SiteAmplification = function (params) {
         fvVals,
 
         i,
-        len;
+        len,
+        table;
+
+    faHeaders = [];
+    fvHeaders = [];
+    faVals = [];
+    fvVals = [];
 
     len = _ssInfo.bins.length;
 
@@ -419,25 +454,28 @@ var SiteAmplification = function (params) {
           _s1Info.siteClasses.U[i] + '</td>');
     }
 
-    return [
-      '<table class="tabular">',
+    table = document.createElement('table');
+    table.classList.add('site-amplification-table');
+    table.classList.add('site-amplification-table-undetermined');
+    table.innerHTML = [
         '<thead>',
           '<tr>',
             '<th scope="col" rowspan="2">Site Coefficient</th>',
-            '<td colspan="', len, '">',
+            '<th colspan="', len, '">',
               'Mapped Risk-Targeted Maximum Considered Earthquake ',
               '(MCE<sub>R</sub>) Spectral Response Acceleration Parameters',
-            '</td>',
+            '</th>',
           '</tr>',
           '<tr>', faHeaders.join(''), '</tr>',
         '</thead>',
         '<tbody>',
           '<tr><th scope="row">F<sub>a</sub></th>', faVals.join(''), '</tr>',
-          '<tr><th>&nbsp;</th>', fvHeaders.join(''), '</tr>',
+          '<tr class="header"><th>&nbsp;</th>', fvHeaders.join(''), '</tr>',
           '<tr><th scope="row">F<sub>v</sub></th>', fvVals.join(''), '</tr>',
-        '</tbody>',
-      '</table>'
+        '</tbody>'
     ].join('');
+
+    return table;
   };
 
   _this.destroy = function () {
