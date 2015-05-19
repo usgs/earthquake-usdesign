@@ -119,6 +119,8 @@
             m.deterministic_floor_pga
           FROM
             region r JOIN metadata m ON (r.metatdata_id = m.id)
+          ORDER BY
+            r.id ASC
         '
       );
       $this->_queryAll->setFetchMode(PDO::FETCH_ASSOC);
@@ -146,6 +148,8 @@
           FROM
             region r JOIN metadata m ON (r.metatdata_id = m.id)
           WHERE r.id = :id
+          ORDER BY
+            r.id ASC
         '
       );
       $this->_queryById->setFetchMode(PDO::FETCH_ASSOC);
@@ -177,6 +181,8 @@
           AND r.max_latitude < :latitude
           AND r.min_longitude > :longitude
           AND r.max_longitude < :longitude
+          ORDER BY
+            r.id ASC
         '
       );
       $this->_query->setFetchMode(PDO::FETCH_ASSOC);
