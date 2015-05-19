@@ -56,7 +56,7 @@
       try {
         $this->_query->bindParam(':longitude', $longitude);
         $this->_query->bindParam(':latitude', $latitude);
-        $this->_query->bindParam(':id', $design_code_id);
+        $this->_query->bindParam(':design_code_id', $design_code_id);
 
         $this->_query->execute();
 
@@ -172,7 +172,7 @@
             m.deterministic_floor_pga
           FROM
             region r JOIN metadata m ON (r.metatdata_id = m.id)
-          WHERE r.design_code_id = :id
+          WHERE r.design_code_id = :design_code_id
           AND r.min_latitude > :latitude
           AND r.max_latitude < :latitude
           AND r.min_longitude > :longitude
