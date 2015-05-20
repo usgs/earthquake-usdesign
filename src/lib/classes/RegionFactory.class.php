@@ -1,12 +1,14 @@
 <?php
 
-  include_once '../install-funcs.inc.php';
+  include_once dirname(__FILE__) . '/../install-funcs.inc.php';
+
+  include_once 'LookupDataFactory.class.php';
 
   class RegionFactory extends LookupDataFactory {
 
-    private $_query = null;
-    private $_queryAll = null;
-    private $_queryById = null;
+    protected $_query = null;
+    protected $_queryAll = null;
+    protected $_queryById = null;
 
     /**
      * @Constructor
@@ -18,7 +20,7 @@
      */
     public function __construct ($db) {
       $this->_db = $db;
-      $this->_initStatements();
+      $this->_initStatements('region');
     }
 
 
@@ -40,10 +42,11 @@
      *      the latitude/longitude point and the design_code_id
      */
     public function get ($latitude, $longitude, $design_code_id) {
-      $results = array();
+      $results = null;
 
       $latitude = safefloatval($latitude);
       $longitude = safefloatval($longitude);
+      $design_code_Id = safeintval($design_code_id);
 
       if ($latitude === null) {
         throw new Exception('Latitude may not be null.');
@@ -53,19 +56,24 @@
         throw new Exception('Longitude may not be null.');
       }
 
+      if ($design_code_id === null) {
+        throw new Exception('Design code may not be null.');
+      }
+
       try {
-        $this->_query->bindParam(':longitude', $longitude);
-        $this->_query->bindParam(':latitude', $latitude);
-        $this->_query->bindParam(':design_code_id', $design_code_id);
+        $this->_query->bindParam(':longitude', $longitude, PDO::PARAM_STR);
+        $this->_query->bindParam(':latitude', $latitude, PDO::PARAM_STR);
+        $this->_query->bindParam(':design_code_id', $design_code_id,
+            PDO::PARAM_INT);
 
         $this->_query->execute();
 
-        $results = $this->_augmentResult($this->_query->fetch());
+        $result = $this->_augmentResult($this->_query->fetch());
       } finally {
         $this->_query->closeCursor();
       }
 
-      return $results;
+      return $result;
     }
 
 
@@ -87,7 +95,21 @@
           'max_latitude' => safefloatval($row['max_latitude']),
           'min_longitude' => safefloatval($row['min_longitude']),
           'max_longitude' => safefloatval($row['max_longitude']),
-          'grid_spacing' => safefloatval($row['grid_spacing'])
+          'grid_spacing' => safefloatval($row['grid_spacing']),
+
+          'max_direction_ss' => safefloatval($row['max_direction_ss']),
+          'max_direction_s1' => safefloatval($row['max_direction_s1']),
+
+          'percentile_ss' => safefloatval($row['percentile_ss']),
+          'percentile_s1' => safefloatval($row['percentile_s1']),
+          'percentile_pga' => safefloatval($row['percentile_pga']),
+
+          'deterministic_floor_ss' =>
+              safefloatval($row['deterministic_floor_ss']),
+          'deterministic_floor_s1' =>
+              safefloatval($row['deterministic_floor_s1']),
+          'deterministic_floor_pga' =>
+              safefloatval($row['deterministic_floor_pga'])
         );
       } else {
         return null;
@@ -100,7 +122,7 @@
      *
      * Initializes database statements used by the class.
      */
-    protected function _initStatements () {
+    protected function _initStatements ($table) {
       $this->_queryAll = $this->_db->prepare(
         '
           SELECT
@@ -122,7 +144,7 @@
             m.deterministic_floor_s1,
             m.deterministic_floor_pga
           FROM
-            region r JOIN metadata m ON (r.metatdata_id = m.id)
+            region r JOIN metadata m ON (r.metadata_id = m.id)
           ORDER BY
             r.id ASC
         '
@@ -150,7 +172,7 @@
             m.deterministic_floor_s1,
             m.deterministic_floor_pga
           FROM
-            region r JOIN metadata m ON (r.metatdata_id = m.id)
+            region r JOIN metadata m ON (r.metadata_id = m.id)
           WHERE r.id = :id
           ORDER BY
             r.id ASC
@@ -179,7 +201,7 @@
             m.deterministic_floor_s1,
             m.deterministic_floor_pga
           FROM
-            region r JOIN metadata m ON (r.metatdata_id = m.id)
+            region r JOIN metadata m ON (r.metadata_id = m.id)
           WHERE r.design_code_id = :design_code_id
           AND r.min_latitude < :latitude
           AND r.max_latitude > :latitude
