@@ -1,0 +1,27 @@
+
+.SpectraGraphView {
+
+  .inner-frame,
+  .outer-frame {
+    fill: none;
+  }
+
+  .x,
+  .y {
+    fill: #000;
+
+    .domain,
+    .tick > line {
+      fill: none;
+      stroke: #000;
+      stroke-width: 1px;
+    }
+  }
+
+  .spectra {
+    fill: none;
+    stroke: #000;
+    stroke-width: 2px;
+  }
+
+}
