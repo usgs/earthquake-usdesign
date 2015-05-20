@@ -1,0 +1,52 @@
+.site-amplification-table {
+  max-width: 700px;
+  border-top: 3px double #333;
+  border-bottom: 1px solid #333;
+  border-collapse: collapse;
+
+  thead > tr > th {
+    border-bottom: 1px solid #333;
+    padding: 5px 3px;
+  }
+
+  > tbody > tr > th,
+  > tbody > tr > td {
+    color: #333;
+    text-align: center;
+    min-width: 100px;
+    padding: 3px;
+
+    &.bound {
+      background-color: yellow;
+      color: #000;
+    }
+    &.lower {
+      border-bottom: 2px solid #000;
+      border-left: 2px solid #000;
+      border-top: 2px solid #000;
+    }
+    &.upper {
+      border-bottom: 2px solid #000;
+      border-right: 2px solid #000;
+      border-top: 2px solid #000;
+    }
+  }
+
+  th {
+    font-weight: normal;
+    color: #000;
+  }
+
+  > tfoot > tr > td {
+    border-top: 3px double #333;
+  }
+}
+
+.site-amplification-table-undetermined {
+  border-bottom: 3px double #333;
+
+  tr.header > th {
+    border-top: 1px solid #333;
+    border-bottom: 1px solid #333;
+  }
+}
