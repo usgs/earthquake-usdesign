@@ -1,71 +1,81 @@
-U.S. DesignMaps Web Application
-===============================
+earthquake-usdesign
+==============
 
-[![Build Status](https://api.travis-ci.org/usgs/earthquake-usdesign.png?branch=master)](https://travis-ci.org/usgs/earthquake-usdesign)
+Web application for computing seismic design values conforming to various design codes in the United States.
 
-Web application for computing seismic design values conforming to various design
-codes in the United States.
+[License](License.md)
 
+### Dependencies
+There are multiple dependencies that must be installed for this project:
 
-Prerequisites
--------------
-
-In order to run this application your machine will need a few prerequisites
-already installed. The process of installing these can vary from
-system-to-system and is thus beyond the scope if this guide. These prerequisites
-include:
-
- - [Git](http://gitscm.com/)
- - [Node](http://nodejs.org/)
- - [Bower](http://bower.io/)
- - [PHP 5.4.x](http://www.php.net/) (or greater)
- - [Grunt](http://gruntjs.com/)
+1. PHP
+1. PostgreSQL
 
 
-Getting Started
----------------
-
-Clone this project onto your local machine
-```
-git clone https://github.com/usgs/earthquake-usdesign
+#### Install PHP
+```bash
+$ brew install php56 --with-pdo-pgsql
 ```
 
-Run Bower and NPM installations
-```
-bower install
-npm install
-```
+#### Install PostgreSQL
+This will take you through the process of installing, starting, and creating a
+PostgreSQL database locally.
 
-Run Grunt to start the web server and view the application
-```
-grunt
-```
+1. Install
 
-That's it!
+  ```bash
+  $ brew install postgresql
+  ```
+  After running `brew install postgresql`, the terminal will output directions
+  that you will use to get your installation up and running.
 
+1. Create/Upgrade a Database
 
-Getting Involved
-----------------
+  If this is your first install, create a database with:
+  ```bash
+  $ initdb \
+    --auth=md5 \
+    --auth-host=md5 \
+    --auth-local=md5 \
+    --pgdata=<db_directory> \
+    --encoding=UTF8 \
+    --locale=en_US.UTF-8 \
+    --username=<db_admin_username>
+    --pwprompt
+  ```
+  You will need to replace the `<db_directory>` and `<db_admin_username>` with
+  actual values that make sense for your environment. The `<db_directory>` is
+  a fully-qualified path name to a directory. This directory is where data
+  files for the database installation will be located. The
+  `<db_admin_username>` is the name of the administrator for the database
+  installation. This command will prompt you to enter a password for the
+  `<db_admin_username>`.
 
-So you want to help develop this application? That's awesome. If you've got the
-chops, fork the repository and send us pull requests. Be sure to follow our
-[coding standards](https://github.com/emartinez-usgs/styleguide) so we can merge
-your pull requests without any additional modification.
+  > Note: We suggest defining a `.data` directory at the root level of this
+  > application for the `<db_directory>`.
 
-If you have ideas but no real coding skill, you can always [file a bug report or
-feature request](https://github.com/usgs/earthquake-usdesign/issues) and
-somebody else might do it for you!
+1. Start/Stop PostgreSQL
 
+  After running the `initdb` command, you should see a success message. Use the
+  `pg_ctl` utility to start the database.
 
-License
--------
+  ```bash
+  $ pg_ctl -D <db_directory> start
+  ```
 
-Unless otherwise noted, this software is in the public domain because it
-contains materials that originally came from the United States Geological
-Survey, an agency of the United States Department of Interior. For more
-information, see the official USGS copyright policy at
-http://www.usgs.gov/visual-id/credit_usgs.html#copyright
+  You will need to replace the `<db_directory>` with the same value you used
+  when running the `initdb` command (above). Alternatively, you can set the
+  `PGDATA` environment variable to this value and you will not need to specify
+  the `-D <db_directory>` flag.
 
-Dependent libraries found are distributed under the open source (or open
-source-like) licenses/agreements. Appropriate license agreements for each
-library can be found with the library content.
+1. Login
+
+  Login to the default `postgres` database with the user that created the
+  database.
+
+  ```bash
+  $ psql postgres
+  ```
+
+  > Note: PostgreSQL will create the default database `postgres`, which  you
+  > can access with the same user that you used to create the database.
