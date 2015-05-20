@@ -6,6 +6,11 @@
     fill: none;
   }
 
+  .label,
+  .plot-title {
+    font-size: 1.5em;
+  }
+
   .x,
   .y {
     fill: #000;
@@ -24,4 +29,9 @@
     stroke-width: 2px;
   }
 
+  .annotations {
+    stroke: #000;
+    stroke-width: 1px;
+    stroke-dasharray: 10 10;
+  }
 }
