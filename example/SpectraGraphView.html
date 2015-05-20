@@ -17,11 +17,7 @@
   <a href="example.html">Examples</a>
   <h1>Spectra Graph View</h1>
 
-  <h2>Summary Graph</h2>
   <div class="example-summary"></div>
-
-  <h2>Detail Graph</h2>
-  <div class="example-detail"></div>
 
 
   <script src="js/bundle.js"></script>
@@ -52,8 +48,9 @@
 
     SpectraGraphView({
       el: document.querySelector('.example-summary'),
-      data: data
-    });
+      data: data,
+      title: 'Example Summary Graph'
+    }).render();
   </script>
 </body>
 </html>
