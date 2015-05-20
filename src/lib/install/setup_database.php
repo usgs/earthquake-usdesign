@@ -15,10 +15,8 @@
 date_default_timezone_set('UTC');
 
 // work from lib directory
-chdir(dirname($argv[0]));
 include_once 'install-funcs.inc.php';
 include_once 'install/DatabaseInstaller.class.php';
-include_once '../conf/config.inc.php';
 
 
 $DB_DSN = configure('DB_ROOT_DSN', $CONFIG['DB_DSN'],
