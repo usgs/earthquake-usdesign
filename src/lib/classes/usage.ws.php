@@ -21,7 +21,7 @@ $usageArray['url'] = $MOUNT_PATH . 'ws/{design_code_id}/{site_class_id}/' .
 if (isset($ERROR)) {
   $usageArray['error'] = $ERROR;
 }
-// $usageArray['hazard_basis'] = $HAZARDBASISFACTORY.getAll();
+$usageArray['hazard_basis'] = $HAZARDBASISFACTORY.getAll();
 $usageArray['design_code'] = $DESIGNCODEFACTORY->getAll();
 $usageArray['region'] = $REGIONFACTORY->getAll();
 $usageArray['site_class'] = $SITECLASSFACTORY->getAll();
