@@ -18,14 +18,29 @@ $usageArray = array();
 
 $usageArray['url'] = $MOUNT_PATH . 'ws/{design_code_id}/{site_class_id}/' .
     '{risk_category_id}/{longitude}/{latitude}/{title}';
-if (isset($ERROR)) {
-  $usageArray['error'] = $ERROR;
-}
+
+try {
 $usageArray['hazard_basis'] = $HAZARDBASISFACTORY.getAll();
 $usageArray['design_code'] = $DESIGNCODEFACTORY->getAll();
 $usageArray['region'] = $REGIONFACTORY->getAll();
 $usageArray['site_class'] = $SITECLASSFACTORY->getAll();
 $usageArray['risk_category'] = $RISKCATEGORYFACTORY->getAll();
+}
+catch (Exception $e) {
+  if (is_array($ERROR)) {
+    $ERROR['database_error'] = $e;
+  } else if (is_set($ERROR)) {
+    $ERROR = array(
+      'error' => $ERROR,
+      'database_error' => $e);
+  } else {
+    $ERROR = array('database_error' => $e);
+  }
+}
+
+if (isset($ERROR)) {
+  $usageArray['error'] = $ERROR;
+}
 
 $USAGE = str_replace('\/', '/', json_encode($usageArray));
 ?>
