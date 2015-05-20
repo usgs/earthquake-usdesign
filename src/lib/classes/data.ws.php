@@ -1,12 +1,29 @@
 <?php
 
-// TODO, remove, the following variables will be set in the service wrapper
+// TODO, remove, will be set from $_GET variables in service.php
 $title = 'My First Report';
 $latitude = 65;
 $longitude = -150;
 $design_code_id = 1;
 $risk_category = 1;
 $site_class = 1;
+
+/**
+ * data.ws.php queries the database for the corresponding
+ * grid points and data.
+ *
+ * Input:
+ *  - title
+ *  - latitude
+ *  - longitude
+ *  - design_code_id
+ *  - risk_category
+ *  - site_class
+ *
+ * Output:
+ *  - JSON input/output format
+ *
+ */
 
 // Required Factories
 include_once dirname(__FILE__) . '/DataFactory.class.php';
