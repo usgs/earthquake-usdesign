@@ -42,13 +42,14 @@ class SiteClassFactory extends LookupDataFactory {
    *      web service request.
    */
   protected function _augmentResult ($row) {
+    $returnRow = null;
+
     if (is_array($row)) {
       $returnRow = parent::_augmentResult($row);
-      $returnRow['value'] = safeintval($row(['value']));
-      return $returnRow;
-    } else {
-      return null;
+      $returnRow['value'] = $row['value'];
     }
+
+    return $returnRow;
   }
 
   /**

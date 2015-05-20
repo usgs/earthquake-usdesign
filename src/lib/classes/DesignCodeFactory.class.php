@@ -43,17 +43,19 @@ class DesignCodeFactory extends LookupDataFactory {
    * @see LookupDataFactory#_augmentResult
    */
   protected function _augmentResult ($row) {
+    $returnRow = null;
+
     if (is_array($row)) {
-      $row = parent::_augmentResult($row);
+      $returnRow = parent::_augmentResult($row);
 
-      $row['site_classes'] = $this->_fetchSupportedSiteClasses($row['id']);
-      $row['risk_categories'] = $this->_fetchSupportedRiskCategories($row['id']);
-      $row['regions'] = $this->_fetchSupportedRegions($row['id']);
-
-      return $row;
-    } else {
-      return null;
+      $returnRow['site_classes'] =
+          $this->_fetchSupportedSiteClasses($row['id']);
+      $returnRow['risk_categories'] =
+          $this->_fetchSupportedRiskCategories($row['id']);
+      $returnRow['regions'] = $this->_fetchSupportedRegions($row['id']);
     }
+
+    return $returnRow;
   }
 
   /**
