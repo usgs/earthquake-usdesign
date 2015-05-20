@@ -1,14 +1,29 @@
 <?php
 
 include_once dirname(__FILE__) . '/../install-funcs.inc.php';
-include_once 'LookupDataFactory.php';
+
+include_once 'LookupDataFactory.class.php';
 
 
 /**
  * SiteClassFactory extends LookupDataFactory.  It uses the parents,
  * constructor.
  */
-class SiteFactory extends LookupDataFactory {
+class SiteClassFactory extends LookupDataFactory {
+
+  /**
+   * @Constructor
+   *
+   * Creates a new SiteFactory instance. This class can get site_class data
+   * from the database. Results include id, name, display_order and, value.
+   *
+   * @param db {PDO}
+   *      The PDO connection to the database. This object should have its error
+   *      mode set to throw exceptions.
+   */
+  public function __construct ($db) {
+    parent::__construct($db, 'site_class');
+  }
 
 
   // ------------------------------------------------------------
@@ -16,8 +31,6 @@ class SiteFactory extends LookupDataFactory {
   // ------------------------------------------------------------
 
   /**
-   * @ExtensionPoint
-   *
    * Augments basic database information such that the result can be used
    * by the web service for output.
    *
@@ -30,25 +43,21 @@ class SiteFactory extends LookupDataFactory {
    */
   protected function _augmentResult ($row) {
     if (is_array($row)) {
-      return array(
-        'id' => safeintval($row['id']),
-        'name' => $row['name'],
-        'display_order' => safeintval($row['display_order']),
-        'value' => safeintval($row(['value']))
-      );
+      $returnRow = parent::_augmentResult($row);
+      $returnRow['value'] = safeintval($row(['value']));
+      return $returnRow;
     } else {
       return null;
     }
   }
 
   /**
-   * @ExtensionPoint
-   *
    * Initializes query statements to be used by this instance's get methods.
    * Each query is initialized with the fetch mode set to PDO::FETCH_ASSOC.
    *
    * @param table {String}
    *      The name of the table from which to fetch data.
+   * @see LookupDataFactory#_initStatements
    */
   protected function _initStatements ($table) {
     $this->_queryAll = $this->_db->prepare(sprintf(
