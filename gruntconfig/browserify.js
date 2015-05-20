@@ -8,7 +8,9 @@ var CWD = '.',
 // List individual modules here. Each listed module will be aliased in the
 // "bundle", and will be set as an external in the "test".
 var EXPORTS = [
+  JSDIR + '/Calculation.js:Calculation',
   JSDIR + '/SpectraGraphView.js:SpectraGraphView',
+
   JSDIR + '/util/D3GraphView.js:util/D3GraphView',
   JSDIR + '/util/SiteAmplification.js:util/SiteAmplification'
 ];
