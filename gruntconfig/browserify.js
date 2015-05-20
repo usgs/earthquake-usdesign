@@ -12,7 +12,11 @@ var EXPORTS = [
   JSDIR + '/SpectraGraphView.js:SpectraGraphView',
 
   JSDIR + '/util/D3GraphView.js:util/D3GraphView',
-  JSDIR + '/util/SiteAmplification.js:util/SiteAmplification'
+  JSDIR + '/util/LookupDataFactory.js:util/LookupDataFactory',
+  JSDIR + '/util/SiteAmplification.js:util/SiteAmplification',
+
+  // Dependencies that need to be exported so spies work in tests
+  CWD + '/node_modules/hazdev-webutils/src/util/Xhr.js:util/Xhr'
 ];
 // Subsequent source files can then require "ExampleModule" with:
 // var ExampleModule = require('package/ExampleModule');
