@@ -1,6 +1,6 @@
 <?php
 
-include_once 'install-funcs.inc.php';
+include_once dirname(__FILE__) . '/../install-funcs.inc.php';
 
 class FileParser {
 
