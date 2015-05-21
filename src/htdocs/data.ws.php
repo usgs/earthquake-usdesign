@@ -1,5 +1,4 @@
 <?php
-
 // TODO, remove, will be set from $_GET variables in service.php
 $title = 'My First Report';
 $latitude = 65;
@@ -25,19 +24,14 @@ $site_class = 1;
  *
  */
 
-// Required Factories
-include_once dirname(__FILE__) . '/DataFactory.class.php';
-include_once dirname(__FILE__) . '/RegionFactory.class.php';
+include_once '../conf/config.inc.php';
 
-// Factory variables
-$DataFactory = new DataFactory($DB);
-$RegionFactory = new RegionFactory($DB);
 
-$region = $RegionFactory->get($latitude, $longitude, $design_code_id);
-$data = $DataFactory->get($latitude, $longitude, $region);
+$region = $regionFactory->get($latitude, $longitude, $design_code_id);
+$data = $dataFactory->get($latitude, $longitude, $region);
 
 // object containing metadata from region factory
-$metadata = (object) array(
+$metadata = array(
   "max_direction_ss" => $region['max_direction_ss'],
   "max_direction_s1" => $region['max_direction_s1'],
   "percentile_ss" => $region['percentile_ss'],
@@ -48,14 +42,14 @@ $metadata = (object) array(
 );
 
 // object containing output from region and data factories
-$output = (object) array(
+$output = array(
   "data" => $data,
   "metadata" => $metadata,
   "tl" => $tl
 );
 
 // object with input parameters
-$input = (object) array(
+$input = array(
   "title" => $title,
   "latitude" => $latitude,
   "longitude" => $longitude,
@@ -65,7 +59,7 @@ $input = (object) array(
 );
 
 // wraps input/output objects
-$json = (object) array(
+print json_encode(array(
   "input" => $input,
   "output" => $output
-);
+));
