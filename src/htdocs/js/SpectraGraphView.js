@@ -8,8 +8,34 @@ var d3 = require('d3'),
 /**
  * Display a graph of x/y coordinates.
  *
- * @param options.data {Array<Array>}
- *        coordinates to display.
+ * @param options {Object}
+ *        all options are passed to D3GraphView.
+ * @param options.comment {Array<String>}
+ *        default null.
+ *        one item per line.
+ *        may include simple html (no nested elements).
+ * @param options.detailPaddingLeft {Number}
+ *        default 140.
+ *        left padding (room for axis labels) when in "detail" mode.
+ * @param options.s1 {Number}
+ *        default null.
+ *        value of s1.
+ *        when s1 and ss are specified, show "detail" mode.
+ * @param options.s1Label {String}
+ *        default 'S<sub>1</sub>'.
+ *        label for s1 value on y axis when in "detail" mode.
+ * @param options.ss {Number}
+ *        default null.
+ *        value of ss.
+ *        when s1 and ss are specified, show "detail" mode.
+ * @param options.ssLabel {String}
+ *        default 'S<sub>S</sub>'.
+ *        label for ss value on y axis when in "detail" mode.
+ * @param options.summaryPaddingLeft {Number}
+ *        default 75.
+ *        left padding when in "summary" mode.
+ *
+ * @see D3GraphView
  */
 var SpectraGraphView = function (options) {
   var _this,
@@ -175,7 +201,7 @@ var SpectraGraphView = function (options) {
 
       // use custom axis formats
       _this.model.set({
-        paddingLeft: 140,
+        paddingLeft: _this.model.get('detailPaddingLeft'),
         xAxisFormat: _formatXAxis,
         xAxisTicks: [_t0, _ts, 1],
         yAxisFormat: _formatYAxis,
@@ -184,7 +210,7 @@ var SpectraGraphView = function (options) {
     } else {
       // use default axis formats
       _this.model.set({
-        paddingLeft: 75,
+        paddingLeft: _this.model.get('summaryPaddingLeft'),
         xAxisFormat: null,
         xAxisTicks: null,
         yAxisFormat: null,
