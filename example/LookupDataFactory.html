@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+
+  <title>Lookup Data Factory</title>
+  <link rel="stylesheet" href="site/earthquake/index.css"/>
+  <link rel="stylesheet" href="css/index.css"/>
+  <style>
+    body {
+      padding: 0 1em 1em;
+    }
+  </style>
+</head>
+<body>
+  <h1>Lookup Data Factory</h1>
+
+  <h2>Hazard Bases</h2>
+  <pre class="hazard_bases"></pre>
+
+  <h2>Design Codes</h2>
+  <pre class="design_codes"></pre>
+
+  <h2>Regions</h2>
+  <pre class="regions"></pre>
+
+  <h2>Site Classes</h2>
+  <pre class="site_classes"></pre>
+
+  <h2>Risk Categories</h2>
+  <pre class="risk_categories"></pre>
+
+
+  <script src="js/bundle.js"></script>
+  <script>
+    var LookupDataFactory = require('util/LookupDataFactory');
+
+
+    var domDesignCodes,
+        domHazardBases,
+        domRegions,
+        domRiskCategories,
+        domSiteClasses,
+        factory;
+
+    factory = LookupDataFactory();
+    domHazardBases = document.querySelector('.hazard_bases');
+    domDesignCodes = document.querySelector('.design_codes');
+    domRegions = document.querySelector('.regions');
+    domSiteClasses = document.querySelector('.site_classes');
+    domRiskCategories = document.querySelector('.risk_categories');
+
+    factory.whenReady(function () {
+      domHazardBases.innerHTML = JSON.stringify(factory.getAllHazardBases(), null, 2);
+      domDesignCodes.innerHTML = JSON.stringify(factory.getAllDesignCodes(), null, 2);
+      domRegions.innerHTML = JSON.stringify(factory.getAllRegions(), null, 2);
+      domSiteClasses.innerHTML = JSON.stringify(factory.getAllSiteClasses(), null, 2);
+      domRiskCategories.innerHTML = JSON.stringify(factory.getAllRiskCategories(), null, 2);
+    });
+  </script>
+</body>
+</html>
