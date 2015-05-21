@@ -81,6 +81,18 @@ var connect = {
         config.build + '/' + config.src + '/htdocs',
         'node_modules/hazdev-template/dist/htdocs'
       ],
+      middleware: function (connect, options, middlewares) {
+        middlewares.unshift(require('gateway')(
+          config.build + '/' + config.src + '/htdocs', {
+            '.php': 'php-cgi',
+            'env': {
+              'PHPRC': 'node_modules/hazdev-template/dist/conf/php.ini'
+            }
+          })
+        );
+
+        return middlewares;
+      },
       open: 'http://localhost:' + config.examplePort + '/example.html',
       port: config.examplePort
     }
