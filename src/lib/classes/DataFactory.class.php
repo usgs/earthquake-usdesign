@@ -1,6 +1,6 @@
 <?php
 
-include_once '../install-funcs.inc.php';
+include_once dirname(__FILE__) . '/../install-funcs.inc.php';
 
 class DataFactory {
 
@@ -63,7 +63,7 @@ class DataFactory {
     $maxLatitude = $latitude + $gridSpacing;
     $minLatitude = $latitude - $gridSpacing;
     $maxLongitude = $longitude + $gridSpacing;
-    $minLongitude = $longitude - $gridSPacing;
+    $minLongitude = $longitude - $gridSpacing;
 
     try {
       $this->_query->bindValue(':region_id', safeintval($regionId),
@@ -137,9 +137,9 @@ class DataFactory {
           data
         WHERE
           region_id = :region_id
-          AND latitude < :max_latitude,
-          AND latitude > :min_latitude,
-          AND longitude < :max_longitude,
+          AND latitude < :max_latitude
+          AND latitude > :min_latitude
+          AND longitude < :max_longitude
           AND longitude > :min_longitude
         ORDER BY
           latitude DESC,
