@@ -17,4 +17,16 @@ if (!(isset($NO_DB) && $NO_DB)) {
   if (isset($CONFIG['DB_SCHEMA'])) {
     $DB->exec('SET search_path = ' . $CONFIG['DB_SCHEMA'] . ', public');
   }
+
+  include_once '../lib/classes/HazardBasisFactory.class.php';
+  include_once '../lib/classes/DesignCodeFactory.class.php';
+  include_once '../lib/classes/RegionFactory.class.php';
+  include_once '../lib/classes/SiteClassFactory.class.php';
+  include_once '../lib/classes/LookupDataFactory.class.php';
+
+  $hazardBasisFactory = new HazardBasisFactory($DB);
+  $designCodeFactory = new DesignCodeFactory($DB);
+  $regionFactory = new RegionFactory($DB);
+  $siteClassFactory = new SiteClassFactory($DB);
+  $riskCategoryFactory = new LookupDataFactory($DB, 'risk_category');
 }
