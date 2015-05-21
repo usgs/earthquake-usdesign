@@ -40,7 +40,7 @@ class DataFactory {
    *      Each grid point result contains a latitude and longitude key as
    *      well as keys for each mapped value. The order of these results are
    *      [TL, TR, BL, BR], or [T, B], or [L, R], or [P] depending on if
-   *      the requested location as inside a grid, on a grid edge, or on a grid
+   *      the requested location was inside a grid, on a grid edge, or on a grid
    *      vertex.
    */
   public function get ($latitude, $longitude, $region) {
