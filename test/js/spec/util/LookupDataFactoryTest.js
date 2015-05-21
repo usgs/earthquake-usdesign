@@ -1,4 +1,4 @@
-/* global chai, describe, it, sinon */
+/* global afterEach, beforeEach, chai, describe, it, sinon */
 'use strict';
 
 var LookupDataFactory = require('util/LookupDataFactory'),
@@ -9,6 +9,24 @@ var LookupDataFactory = require('util/LookupDataFactory'),
 var expect = chai.expect;
 
 describe('LookupDataFactory', function () {
+  var ajaxStub;
+
+  beforeEach(function () {
+    ajaxStub = sinon.stub(Xhr, 'ajax', function (options) {
+      options.success({
+        hazard_basis: [],
+        design_code: [],
+        region: [],
+        site_class: [],
+        risk_category: []
+      });
+    });
+  });
+
+  afterEach(function () {
+    ajaxStub.restore();
+  });
+
   describe('constructor', function () {
     it('can be required without blowing up', function () {
       /* jshint -W030 */
@@ -28,38 +46,21 @@ describe('LookupDataFactory', function () {
   describe('whenReady', function () {
     it('calls all callbacks', function (done) {
       var checkDone,
-          cleanup,
           f1,
           f2,
           f3,
-          factory,
-          stub;
+          factory;
 
 
       f1 = sinon.spy(function () {checkDone();});
       f2 = sinon.spy(function () {checkDone();});
       f3 = sinon.spy(function () {checkDone();});
 
-      cleanup = function () {
-        stub.restore();
-        done();
-      };
-
       checkDone = function () {
         if (f1.calledOnce && f2.calledOnce && f3.calledOnce) {
-          cleanup();
+          done();
         }
       };
-
-      stub = sinon.stub(Xhr, 'ajax', function (options) {
-        options.success({
-          hazard_basis: [],
-          design_code: [],
-          region: [],
-          site_class: [],
-          risk_category: []
-        });
-      });
 
       factory = LookupDataFactory();
 
