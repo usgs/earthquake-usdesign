@@ -48,6 +48,7 @@ class DesignCodeFactory extends LookupDataFactory {
     if (is_array($row)) {
       $returnRow = parent::_augmentResult($row);
 
+      $returnRow['hazard_basis'] = safeintval($row['hazard_basis_id']);
       $returnRow['site_classes'] =
           $this->_fetchSupportedSiteClasses($row['id']);
       $returnRow['risk_categories'] =
