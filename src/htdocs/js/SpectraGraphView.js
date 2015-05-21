@@ -43,6 +43,7 @@ var SpectraGraphView = function (options) {
       // variables
       _annotationLines,
       _annotations,
+      _comment,
       _data,
       _line,
       _s1,
@@ -54,6 +55,7 @@ var SpectraGraphView = function (options) {
       _y,
       // methods
       _convertHTML,
+      _formatComment,
       _formatSsS1Values,
       _formatXAxis,
       _formatYAxis,
@@ -83,6 +85,9 @@ var SpectraGraphView = function (options) {
     _annotations = el.append('g')
         .attr('class', 'annotations')
         .attr('clip-path', 'url(#plotAreaClip)');
+    _comment = el.append('g')
+        .attr('class', 'comment')
+        .attr('y', 0);
     _spectra = el.append('path')
         .attr('class', 'spectra')
         .attr('clip-path', 'url(#plotAreaClip)');
@@ -156,6 +161,35 @@ var SpectraGraphView = function (options) {
 
     node = null;
     div = null;
+  };
+
+  /**
+   * Format lines for SVG.
+   *
+   * @param el {D3 element}
+   *        container for text.
+   * @param lines {Array|null}
+   *        lines to render, or null for empty.
+   */
+   _formatComment = function (el, lines) {
+    var text,
+        y;
+
+    el.text('');
+    if (lines === null) {
+      return;
+    }
+
+    y = 0;
+    lines.forEach(function (line) {
+      var bbox;
+      text = el.append('text').text(line);
+      _convertHTML(text);
+      bbox = text.node().getBBox();
+      y += bbox.height;
+      text.attr('x', 0);
+      text.attr('y', y);
+    });
   };
 
   /**
@@ -339,6 +373,12 @@ var SpectraGraphView = function (options) {
           // convert d3 each "this" into parameter to _convertHTML.
           _convertHTML(d3.select(this));
         });
+
+    _formatComment(_comment, _this.model.get('comment'));
+    // position in top right corner
+    _comment.attr('transform', 'translate(' +
+        (_this.dataEl.getBBox().width - _comment.node().getBBox().width) +
+        ' 0)');
   };
 
   /**
