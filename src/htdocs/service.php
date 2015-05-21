@@ -24,8 +24,7 @@ if ($param_count > 0) {
 }
 
 
-//TODO uncomment when done testing.
-//header('Content-Type: application/json');
+header('Content-Type: application/json');
 
 if ($param_count === 0 || isset($ERROR)) {
   include_once dirname(__FILE__) . '/usage.ws.php';
