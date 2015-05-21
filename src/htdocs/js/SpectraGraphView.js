@@ -41,7 +41,6 @@ var SpectraGraphView = function (options) {
   var _this,
       _initialize,
       // variables
-      _annotationLines,
       _annotations,
       _comment,
       _data,
@@ -54,7 +53,6 @@ var SpectraGraphView = function (options) {
       _x,
       _y,
       // methods
-      _calculatePeriodValues,
       _convertHTML,
       _formatComment,
       _formatXAxis,
@@ -96,70 +94,6 @@ var SpectraGraphView = function (options) {
     _line = d3.svg.line()
         .x(_getX)
         .y(_getY);
-  };
-
-  /**
-   * Calculate T0 and Ts values from Ss and S1.
-   *
-   * Uses _ss and _s1 variables.
-   * Sets _t0, _ts variables.
-   */
-  _calculatePeriodValues = function () {
-    var d,
-        i,
-        x,
-        y;
-
-    _annotationLines = [];
-
-    if (_ss !== null && _s1 !== null) {
-      // find ss x extents
-      _t0 = null;
-      _ts = null;
-      for (i = 0; i < _data.length; i++) {
-        d = _data[i];
-        y = d[1];
-        if (y === _ss) {
-          x = d[0];
-          if (_t0 === null || x < _t0) {
-            // t0 is minimum x value where y === ss
-            _t0 = x;
-          }
-          if (_ts === null || x > _ts) {
-            // ts is maximum x value where y === ss
-            _ts = x;
-          }
-        }
-      }
-
-      // t0, ts lines parallel to y axis
-      _annotationLines.push([[_t0, 0], [_t0, _ss]]);
-      _annotationLines.push([[_ts, 0], [_ts, _ss]]);
-      // ss line parallel to x axis
-      _annotationLines.push([[0, _ss], [_ts, _ss]]);
-      // t1 line parallel to y axis
-      _annotationLines.push([[1, 0], [1, _s1]]);
-      // s1 line parllel to x axis
-      _annotationLines.push([[0, _s1], [1, _s1]]);
-
-      // use custom axis formats
-      _this.model.set({
-        paddingLeft: _this.model.get('detailPaddingLeft'),
-        xAxisFormat: _formatXAxis,
-        xAxisTicks: [_t0, _ts, 1],
-        yAxisFormat: _formatYAxis,
-        yAxisTicks: [_s1, _ss]
-      }, {silent: true});
-    } else {
-      // use default axis formats
-      _this.model.set({
-        paddingLeft: _this.model.get('summaryPaddingLeft'),
-        xAxisFormat: null,
-        xAxisTicks: null,
-        yAxisFormat: null,
-        yAxisTicks: null
-      }, {silent: true});
-    }
   };
 
   /**
@@ -323,7 +257,17 @@ var SpectraGraphView = function (options) {
    * Destroy view.
    */
   _this.destroy = Util.compose(function () {
+    _annotations = null;
+    _comment = null;
     _data = null;
+    _line = null;
+    _s1 = null;
+    _spectra = null;
+    _ss = null;
+    _t0 = null;
+    _ts = null;
+    _x = null;
+    _y = null;
   }, _this.destroy);
 
 
@@ -360,24 +304,41 @@ var SpectraGraphView = function (options) {
    * Plot spectra response and annotations.
    */
   _this.plot = function () {
-    var annotations;
+    var annotations,
+        lines;
 
+    // plot spectra
     _spectra.attr('d', _line(_data));
 
+    // annotation lines
+    lines = [];
+    if (_s1 !== null && _ss !== null) {
+      // t0, ts lines parallel to y axis
+      lines.push([[_t0, 0], [_t0, _ss]]);
+      lines.push([[_ts, 0], [_ts, _ss]]);
+      // ss line parallel to x axis
+      lines.push([[0, _ss], [_ts, _ss]]);
+      // t1 line parallel to y axis
+      lines.push([[1, 0], [1, _s1]]);
+      // s1 line parllel to x axis
+      lines.push([[0, _s1], [1, _s1]]);
+    }
+    // always do this, in case annotations are removed
     annotations = _annotations.selectAll('line')
-        .data(_annotationLines);
+        .data(lines);
     annotations.enter()
         .append('path');
     annotations.attr('d', _line);
     annotations.exit()
         .remove();
 
-    d3.select(_this.el).selectAll('.tick text')
-        .each(function () {
-          // convert d3 each "this" into parameter to _convertHTML.
-          _convertHTML(d3.select(this));
-        });
+    // convert tick label HTML to SVG
+    d3.select(_this.el).selectAll('.tick text').each(function () {
+      // convert d3 each "this" into parameter to _convertHTML.
+      _convertHTML(d3.select(this));
+    });
 
+    // show comment
     _formatComment(_comment, _this.model.get('comment'));
     // position in top right corner
     _comment.attr('transform', 'translate(' +
@@ -389,14 +350,58 @@ var SpectraGraphView = function (options) {
    * Prepare data to render before parent class updates axes.
    */
   _this.render = Util.compose(function (changed) {
-    var options = _this.model.get();
+    var d,
+        i,
+        options,
+        x,
+        y;
 
+    // update data, axis, ss, s1 values in case they changed
+    options = _this.model.get();
     _data = options.data;
     _x = options.xAxisScale;
     _y = options.yAxisScale;
     _ss = options.ss || null;
     _s1 = options.s1 || null;
-    _calculatePeriodValues();
+    _t0 = null;
+    _ts = null;
+
+    // calculate t0, ts, and update axis formatting before parent class render
+    if (_ss !== null && _s1 !== null) {
+      for (i = 0; i < _data.length; i++) {
+        d = _data[i];
+        y = d[1];
+        if (y === _ss) {
+          x = d[0];
+          if (_t0 === null || x < _t0) {
+            // t0 is minimum x value where y === ss
+            _t0 = x;
+          }
+          if (_ts === null || x > _ts) {
+            // ts is maximum x value where y === ss
+            _ts = x;
+          }
+        }
+      }
+
+      // use custom axis formats
+      _this.model.set({
+        paddingLeft: _this.model.get('detailPaddingLeft'),
+        xAxisFormat: _formatXAxis,
+        xAxisTicks: [_t0, _ts, 1],
+        yAxisFormat: _formatYAxis,
+        yAxisTicks: [_s1, _ss]
+      }, {silent: true});
+    } else {
+      // use default axis formats
+      _this.model.set({
+        paddingLeft: _this.model.get('summaryPaddingLeft'),
+        xAxisFormat: null,
+        xAxisTicks: null,
+        yAxisFormat: null,
+        yAxisTicks: null
+      }, {silent: true});
+    }
 
     // return value is passed to parent render
     return changed;
