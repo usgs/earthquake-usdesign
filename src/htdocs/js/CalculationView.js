@@ -17,15 +17,17 @@ var CalculationView = function (params) {
       _initialize,
 
       _collection,
+      _destroyCollection,
+      _destroyLookupFactory,
+      _destroyModel,
+      _lookupFactory,
       _model,
 
       _bindEventListeners,
-      _destroyCollection,
-      _destroyModel,
-      _metadata,
       _onDeleteClick,
       _onModelClick,
       _onViewClick,
+      _render,
       _unbindEventListeners;
 
 
@@ -34,7 +36,7 @@ var CalculationView = function (params) {
   _initialize = function (params) {
     _model = params.model;
     _collection = params.collection;
-    _metadata = params.metadata;
+    _lookupFactory = params.lookupFactory;
 
     if (!_model) {
       _model = Calculation();
@@ -46,8 +48,9 @@ var CalculationView = function (params) {
       _destroyCollection = true;
     }
 
-    if (!_metadata) {
-      _metadata = LookupDataFactory();
+    if (!_lookupFactory) {
+      _lookupFactory = LookupDataFactory();
+      _destroyLookupFactory = true;
     }
 
     _bindEventListeners();
@@ -79,16 +82,43 @@ var CalculationView = function (params) {
   };
 
   _render = function () {
+    var
+        title,
+        designCode,
+        input,
+        siteClass,
+        subtitle,
+        riskCategory;
+
+    input = _model.get('input');
+
+    title = input.get('title');
+    subtitle = Formatter.latitude(input.get('latitude')) + ', ' +
+        Formatter.longitude(input.get('longitude'));
+
+    designCode = _lookupFactory.getDesignCode(input.get('design_code'));
+    siteClass = _lookupFactory.getSiteClass(input.get('site_class'));
+    riskCategory = _lookupFactory.getRiskCategory(input.get('risk_category'));
+
+    designCode = Formatter.value(designCode.get('name'));
+    siteClass = Formatter.value(siteClass.get('value')) + ' - ' +
+        Formatter.value(siteClass.get('name'));
+    riskCategory = Formatter.value(riskCategory.get('name'));
+
     _this.el.innerHTML = [
       '<h3 class="calculation-title">',
-        Formatter.calculationTitle(_model),
+        title,
+        '<aside class="calculation-subtitle">', subtitle, '</aside>',
       '</h3>',
       '<dl>',
         '<dt class="calculation-design-code">Design Code</dt>',
-        '<dd class="calculation-design-code">',
-          _metadata.getDesignCode(_mode.get('input').design_code).get('name'),
-        '</dd>'
+        '<dd class="calculation-design-code">', designCode, '</dd>',
 
+        '<dt class="calculation-site-class">Site Class</dt>',
+        '<dd class="calculation-site-class">', siteClass, '</dd>',
+
+        '<dt class="calculation-risk-cateogry">Risk Category</dt>',
+        '<dd class="calculation-risk-category">', riskCategory, '</dd>',
       '</dl>',
       '<button class="calculation-delete">Delete</button>'
     ].join('');
@@ -110,15 +140,22 @@ var CalculationView = function (params) {
       _model.destroy();
     }
 
+    if (_destroyLookupFactory) {
+      _lookupFactory.destroy();
+    }
+
     _collection = null;
+    _destroyCollection = null;
+    _destroyLookupFactory = null;
+    _destroyModel = null;
+    _lookupFactory = null;
     _model = null;
 
     _bindEventListeners = null;
-    _destroyCollection = null;
-    _destroyModel = null;
     _onDeleteClick = null;
     _onModelClick = null;
     _onViewClick = null;
+    _render = null;
     _unbindEventListeners = null;
 
     _initialize = null;
@@ -126,7 +163,7 @@ var CalculationView = function (params) {
   });
 
   _this.render = function () {
-    _metadata.whenReady(_render);
+    _lookupFactory.whenReady(_render);
   };
 
 
