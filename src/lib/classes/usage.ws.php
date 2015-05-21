@@ -14,17 +14,17 @@
  *    $USAGE
  */
 
-$usageArray = array();
+$usage = array();
 
-$usageArray['url'] = $MOUNT_PATH . 'ws/{design_code_id}/{site_class_id}/' .
+$usage['url'] = $MOUNT_PATH . 'ws/{design_code_id}/{site_class_id}/' .
     '{risk_category_id}/{longitude}/{latitude}/{title}';
 
 try {
-$usageArray['hazard_basis'] = $HAZARDBASISFACTORY.getAll();
-$usageArray['design_code'] = $DESIGNCODEFACTORY->getAll();
-$usageArray['region'] = $REGIONFACTORY->getAll();
-$usageArray['site_class'] = $SITECLASSFACTORY->getAll();
-$usageArray['risk_category'] = $RISKCATEGORYFACTORY->getAll();
+$usage['hazard_basis'] = $HAZARDBASISFACTORY.getAll();
+$usage['design_code'] = $DESIGNCODEFACTORY->getAll();
+$usage['region'] = $REGIONFACTORY->getAll();
+$usage['site_class'] = $SITECLASSFACTORY->getAll();
+$usage['risk_category'] = $RISKCATEGORYFACTORY->getAll();
 }
 catch (Exception $e) {
   if (is_array($ERROR)) {
@@ -39,8 +39,8 @@ catch (Exception $e) {
 }
 
 if (isset($ERROR)) {
-  $usageArray['error'] = $ERROR;
+  $usage['error'] = $ERROR;
 }
 
-$USAGE = str_replace('\/', '/', json_encode($usageArray));
+$json = str_replace('\/', '/', json_encode($usage));
 ?>
