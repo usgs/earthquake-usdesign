@@ -4,27 +4,30 @@
  * Includes the url, and if $ERROR is set, an error message.
  *
  * Requires that 5 factories be instantiated in the global environment.
- *    $HAZARDBASISFACTORY
- *    $DESIGNCODEFACTORY
- *    $REGIONFACTORY
- *    $SITECLASSFACTORY
- *    $RISKCATEGORYFACTORY
+ *    $hazardBasisFactory
+ *    $designCodeFactory
+ *    $regionFactory
+ *    $siteClassFactory
+ *    $riskCategoryFactory
  *
  * Output:
  *    $USAGE
  */
 
+include_once '../conf/config.inc.php';
 $usage = array();
 
-$usage['url'] = $MOUNT_PATH . '/ws/{design_code_id}/{site_class_id}/' .
-    '{risk_category_id}/{longitude}/{latitude}/{title}';
+$usage['url'] = (($_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://') .
+    $_SERVER['HTTP_HOST'] . $MOUNT_PATH .
+    '/ws/{design_code_id}/{site_class_id}/{risk_category_id}/' .
+    '{longitude}/{latitude}/{title}';
 
 try {
-  $usage['hazard_basis'] = $HAZARDBASISFACTORY->getAll();
-  $usage['design_code'] = $DESIGNCODEFACTORY->getAll();
-  $usage['region'] = $REGIONFACTORY->getAll();
-  $usage['site_class'] = $SITECLASSFACTORY->getAll();
-  $usage['risk_category'] = $RISKCATEGORYFACTORY->getAll();
+  $usage['hazard_basis'] = $hazardBasisFactory->getAll();
+  $usage['design_code'] = $designCodeFactory->getAll();
+  $usage['region'] = $regionFactory->getAll();
+  $usage['site_class'] = $siteClassFactory->getAll();
+  $usage['risk_category'] = $riskCategoryFactory->getAll();
 } catch (Exception $e) {
   if (isset($ERROR)) {
     if (is_array($ERROR)) {
@@ -41,5 +44,4 @@ if (isset($ERROR)) {
   $usage['error'] = $ERROR;
 }
 
-$json = str_replace('\/', '/', json_encode($usage));
-?>
+print str_replace('\/', '/', json_encode($usage));
