@@ -9,6 +9,7 @@ var CWD = '.',
 // "bundle", and will be set as an external in the "test".
 var EXPORTS = [
   JSDIR + '/Calculation.js:Calculation',
+  JSDIR + '/CalculationView.js:CalculationView',
   JSDIR + '/SpectraGraphView.js:SpectraGraphView',
   JSDIR + '/WebServiceAccessor.js:WebServiceAccessor',
 
