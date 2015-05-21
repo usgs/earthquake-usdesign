@@ -1,6 +1,7 @@
 'use strict';
 
-var Model = require('mvc/Model'),
+var Collection = require('mvc/Collection'),
+    Model = require('mvc/Model'),
 
     Util = require('util/Util');
 
@@ -78,13 +79,35 @@ var Calculation = function (params) {
    * an id.
    */
   _initialize = function (/*params*/) {
-    var id = _this.get('id');
+    var attributes,
+        id,
+        input,
+        output;
+
+    id = _this.get('id');
+    attributes = _this.get();
+
+    input = Model(attributes.input);
+
+    output = Model({
+      metadata: Model(attributes.output.metadata),
+      tl: attributes.output.tl,
+      data: Collection(attributes.output.data.map(Model))
+    });
+
+    attributes = {
+      input: input,
+      output: output
+    };
+
 
     // Make sure each Calculation model has an id. This is important since they
     // will certainly be in a Collection
     if (typeof id === 'undefined' || id === null) {
-      _this.set({id: _generateId()}, {silent: true});
+      attributes.id = _generateId();
     }
+
+    _this.set(attributes, {silent: true});
   };
 
 
