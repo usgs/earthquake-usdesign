@@ -1,6 +1,7 @@
 'use strict';
 
 var Collection = require('mvc/Collection'),
+    Model = require('mvc/Model'),
 
     Util = require('util/Util'),
     Xhr = require('util/Xhr');
@@ -8,7 +9,7 @@ var Collection = require('mvc/Collection'),
 
 
 var _DEFAULTS = {
-  url: '/service.php',
+  url: 'usage.ws.php',
   fetchData: true
 };
 
@@ -26,6 +27,7 @@ var LookupDataFactory = function (params) {
       _siteClasses,
 
       _getAll,
+      _getSupported,
       _onMetadataError,
       _onMetadataSuccess;
 
@@ -75,7 +77,11 @@ var LookupDataFactory = function (params) {
   };
 
 
-  _getAll = function (collection, ids) {
+  _getAll = function (collection) {
+    return collection.data().slice(0);
+  };
+
+  _getSupported = function (collection, ids) {
     return collection.data().map(function (model) {
       return (ids.indexOf(model.get('id')) !== -1);
     });
@@ -89,11 +95,11 @@ var LookupDataFactory = function (params) {
   };
 
   _onMetadataSuccess = function (data/*, xhr*/) {
-    _designCodes.reset(data.design_code);
-    _hazardBases.reset(data.hazardBasis);
-    _regions.reset(data.region);
-    _riskCategories.reset(data.risk_category);
-    _siteClasses.reset(data.site_class);
+    _designCodes.reset(data.design_code.map(Model));
+    _hazardBases.reset(data.hazard_basis.map(Model));
+    _regions.reset(data.region.map(Model));
+    _riskCategories.reset(data.risk_category.map(Model));
+    _siteClasses.reset(data.site_class.map(Model));
 
     _isReady = true;
 
@@ -125,6 +131,7 @@ var LookupDataFactory = function (params) {
     _siteClasses = null;
 
     _getAll = null;
+    _getSupported = null;
     _onMetadataError = null;
     _onMetadataSuccess = null;
 
@@ -137,7 +144,11 @@ var LookupDataFactory = function (params) {
   };
 
   _this.getDesignCodes = function (ids) {
-    return _getAll(_designCodes, ids);
+    return _getSupported(_designCodes, ids);
+  };
+
+  _this.getAllDesignCodes = function () {
+    return _getAll(_designCodes);
   };
 
   _this.getHazardBasis = function (id) {
@@ -145,7 +156,11 @@ var LookupDataFactory = function (params) {
   };
 
   _this.getHazardBases = function (ids) {
-    return _getAll(_hazardBases, ids);
+    return _getSupported(_hazardBases, ids);
+  };
+
+  _this.getAllHazardBases = function () {
+    return _getAll(_hazardBases);
   };
 
   _this.getRegion = function (id) {
@@ -153,7 +168,11 @@ var LookupDataFactory = function (params) {
   };
 
   _this.getRegions = function (ids) {
-    return _getAll(_regions, ids);
+    return _getSupported(_regions, ids);
+  };
+
+  _this.getAllRegions = function () {
+    return _getAll(_regions);
   };
 
   _this.getRiskCategory = function (id) {
@@ -161,7 +180,11 @@ var LookupDataFactory = function (params) {
   };
 
   _this.getRiskCategories = function (ids) {
-    return _getAll(_riskCategories, ids);
+    return _getSupported(_riskCategories, ids);
+  };
+
+  _this.getAllRiskCategories = function () {
+    return _getAll(_riskCategories);
   };
 
   _this.getSiteClass = function (id) {
@@ -169,7 +192,11 @@ var LookupDataFactory = function (params) {
   };
 
   _this.getSiteClasses = function (ids) {
-    return _getAll(_siteClasses, ids);
+    return _getSupported(_siteClasses, ids);
+  };
+
+  _this.getAllSiteClasses = function () {
+    return _getAll(_siteClasses);
   };
 
   _this.whenReady = function (callback) {
