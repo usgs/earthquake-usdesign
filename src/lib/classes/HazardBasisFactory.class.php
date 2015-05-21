@@ -14,9 +14,8 @@ class HazardBasisFactory extends LookupDataFactory {
    * Create a new HazardBasisFactory instance that extend the Lookup Data
    * Factory.
    */
-
   public function __construct ($db) {
-    parent:: __construct($db, 'design_code');
+    parent:: __construct($db, 'hazard_basis');
   }
 
   //----------------------------------------------------------------------------
@@ -36,17 +35,16 @@ class HazardBasisFactory extends LookupDataFactory {
    *
    * @see LookupDataFactory#_augmentResult
    */
-
   protected function _augmentResult ($row) {
+    $returnRow = null;
+
     if (is_array($row)) {
-      $row = parent::_augmentResult($row);
+      $returnRow = parent::_augmentResult($row);
 
-      $row['design_code'] = $this->_fetchSupportedDesignCodes($row['id']);
-
-      return $row;
-    } else {
-      return null;
+      $returnRow['design_code'] = $this->_fetchSupportedDesignCodes($row['id']);
     }
+
+    return $returnRow;
   }
 
   /**
@@ -58,41 +56,8 @@ class HazardBasisFactory extends LookupDataFactory {
    *
    * @see LookupDataFactory
    */
-
   protected function _initStatements ($table) {
-    $this->_queryAll = $this->_db->prepare(sprintf(
-      '
-        SELECT
-          id,
-          name,
-          hazard_basis_id,
-          display_order
-        FROM
-          %s
-        ORDER BY
-          display_order ASC
-      ',
-      $table
-    ));
-    $this->_queryAll->setFetchMode(PDO::FETCH_ASSOC);
-
-    $this->_queryById = $this->_db->prepare(sprintf(
-      '
-        SELECT
-          id,
-          name,
-          hazard_basis_id,
-          display_order
-        FROM
-          %s
-        WHERE
-          id = :id
-        ORDER BY
-          display_order ASC
-      ',
-      $table
-    ));
-    $this->_queryById->setFetchMode(PDO::FETCH_ASSOC);
+    parent::_initStatements($table);
 
     $this->_querySupportedDesignCode = $this->_db->prepare(
       '
@@ -103,7 +68,7 @@ class HazardBasisFactory extends LookupDataFactory {
         WHERE
           hazard_basis_id = :hazard_basis_id
         ORDER BY
-          id ASC
+          display_order ASC
       '
     );
     $this->_querySupportedDesignCode->setFetchMode(PDO::FETCH_ASSOC);
@@ -123,7 +88,6 @@ class HazardBasisFactory extends LookupDataFactory {
    *       An ordered array contaioning ids of design codes supported by the
    *       input hazard basis id.
    */
-
   private function _fetchSupportedDesignCodes ($id) {
     $results = array();
 
@@ -133,7 +97,7 @@ class HazardBasisFactory extends LookupDataFactory {
 
       $this->_querySupportedDesignCode->execute();
       while ($result = $this->_querySupportedDesignCode->fetch()) {
-        $reslults[] = safeintval($result['id']);
+        $results[] = safeintval($result['id']);
       }
     } finally {
       $this->_querySupportedDesignCode->closeCursor();
