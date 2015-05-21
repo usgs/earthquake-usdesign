@@ -16,25 +16,24 @@
 
 $usage = array();
 
-$usage['url'] = $MOUNT_PATH . 'ws/{design_code_id}/{site_class_id}/' .
+$usage['url'] = $MOUNT_PATH . '/ws/{design_code_id}/{site_class_id}/' .
     '{risk_category_id}/{longitude}/{latitude}/{title}';
 
 try {
-$usage['hazard_basis'] = $HAZARDBASISFACTORY.getAll();
-$usage['design_code'] = $DESIGNCODEFACTORY->getAll();
-$usage['region'] = $REGIONFACTORY->getAll();
-$usage['site_class'] = $SITECLASSFACTORY->getAll();
-$usage['risk_category'] = $RISKCATEGORYFACTORY->getAll();
-}
-catch (Exception $e) {
-  if (is_array($ERROR)) {
-    $ERROR['database_error'] = $e;
-  } else if (is_set($ERROR)) {
-    $ERROR = array(
-      'error' => $ERROR,
-      'database_error' => $e);
+  $usage['hazard_basis'] = $HAZARDBASISFACTORY->getAll();
+  $usage['design_code'] = $DESIGNCODEFACTORY->getAll();
+  $usage['region'] = $REGIONFACTORY->getAll();
+  $usage['site_class'] = $SITECLASSFACTORY->getAll();
+  $usage['risk_category'] = $RISKCATEGORYFACTORY->getAll();
+} catch (Exception $e) {
+  if (isset($ERROR)) {
+    if (is_array($ERROR)) {
+      $ERROR[] = $e->getMessage();
+    } else {
+      $ERROR = array($ERROR, $e->getMessage());
+    }
   } else {
-    $ERROR = array('database_error' => $e);
+    $ERROR = $e->getMessage();
   }
 }
 
