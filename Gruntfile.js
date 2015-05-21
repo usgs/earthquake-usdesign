@@ -27,7 +27,6 @@ module.exports = function (grunt) {
     'mocha_phantomjs',
 
     'configureProxies:dev',
-    'connect:data',
     'connect:template',
     'connect:dev',
     'connect:example',

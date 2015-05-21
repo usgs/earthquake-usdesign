@@ -3,7 +3,6 @@
 var config = {
   build: '.build',
   buildPort: 8510,
-  dataPort: 8517,
   dist: 'dist',
   distPort: 8513,
   example: 'example',

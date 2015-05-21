@@ -5,9 +5,6 @@ var config = require('./config');
 var iniConfig = require('ini').parse(require('fs')
     .readFileSync(config.src + '/conf/config.ini', 'utf-8'));
 
-var dataProxyRewrite = {};
-dataProxyRewrite['^' + iniConfig.MOUNT_PATH + '/data'] = '';
-
 var rewrites = [
   {
     from: '^' + iniConfig.MOUNT_PATH + '/?(.*)$',
@@ -52,12 +49,6 @@ var connect = {
       rewrite: {
         '^/theme': ''
       }
-    },
-    {
-      context: iniConfig.MOUNT_PATH + '/data',
-      host: 'localhost',
-      port: config.dataPort,
-      rewrite: dataProxyRewrite
     }
   ],
 
@@ -104,14 +95,6 @@ var connect = {
       ],
       open: 'http://localhost:' + config.testPort + '/test.html',
       port: config.testPort
-    }
-  },
-
-
-  data: {
-    options: {
-      base: [iniConfig.DATA_DIR],
-      port: config.dataPort
     }
   },
 
