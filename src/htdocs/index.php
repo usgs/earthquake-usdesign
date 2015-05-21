@@ -1,17 +1,31 @@
 <?php
 if (!isset($TEMPLATE)) {
-	$TITLE = 'U.S. DesignMaps Web Application';
+  // Page title. Shows up as <title> in <head> and an <h1> in content.
+  $TITLE = 'Page Title';
 
-	ob_start();
-	include_once '_navigation.inc.php';
-	$NAVIGATION = ob_get_clean();
+  // True, flase, or actual navigation markup
+  $NAVIGATION = true;
 
-	$HEAD = '
-		<link rel="stylesheet" href="css/index.css"/>
-	';
-	$FOOT = '
-		<script data-main="js/index.js" src="requirejs/require.js"></script>
-	';
+  // Additional tags to add to <head> section. Typically stylesheets.
+  $HEAD = '
+    <link rel="stylesheet" href="css/index.css"/>
+  ';
 
-	include_once 'template.inc.php';
+  // Additional tags to add to bottom of body section. Typically javascripts.
+  $FOOT = '
+    <script src="js/index.js"></script>
+  ';
+
+  include_once 'template.inc.php';
 }
+
+// TODO, create a wrapper for data.ws.php
+try {
+  include_once '../lib/classes/data.ws.php';
+  echo '<h3>Data</h3><pre><code>' . json_encode($json, JSON_PRETTY_PRINT) .
+      '</code></pre>';
+} catch (Exception $e) {
+  echo '<h3>Error</h3><pre>' . $e->getMessage() . '</pre>';
+}
+
+?>
