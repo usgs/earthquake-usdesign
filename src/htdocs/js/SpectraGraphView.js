@@ -34,14 +34,23 @@ var SpectraGraphView = function (options) {
       _getX,
       _getY;
 
-  _this = D3GraphView(options);
+  _this = D3GraphView(Util.extend({
+    comment: null,
+    detailPaddingLeft: 140,
+    s1: null,
+    s1Label: 'S<sub>1</sub>',
+    ss: null,
+    ssLabel: 'S<sub>S</sub>',
+    summaryPaddingLeft: 75,
+    xAxisLabel: 'Period, T (sec)',
+    yAxisLabel: 'Sa (g)'
+  }, options));
 
   /**
    * Initialize view.
    */
-  _initialize = function (options) {
-    var el = d3.select(_this.dataEl),
-        toset;
+  _initialize = function (/*options*/) {
+    var el = d3.select(_this.dataEl);
 
     _this.el.classList.add('SpectraGraphView');
 
@@ -55,15 +64,6 @@ var SpectraGraphView = function (options) {
     _line = d3.svg.line()
         .x(_getX)
         .y(_getY);
-
-    toset = {};
-    if (!options.hasOwnProperty('xAxisLabel')) {
-      toset.xAxisLabel = 'Period, T (sec)';
-    }
-    if (!options.hasOwnProperty('yAxisLabel')) {
-      toset.yAxisLabel = 'Sa (g)';
-    }
-    _this.model.set(toset, {silent: true});
   };
 
   /**
@@ -223,9 +223,9 @@ var SpectraGraphView = function (options) {
    */
   _formatYAxis = function (y) {
     if (y === _ss) {
-      return 'SS = ' + _ss;
+      return _this.model.get('ssLabel') + ' = ' + _ss;
     } else if (y === _s1) {
-      return 'S1 = ' + _s1;
+      return _this.model.get('s1Label') + ' = ' + _s1;
     } else {
       return y;
     }
