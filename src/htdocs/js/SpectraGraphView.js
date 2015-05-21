@@ -65,13 +65,14 @@ var SpectraGraphView = function (options) {
   _this = D3GraphView(Util.extend({
     comment: null,
     detailPaddingLeft: 140,
+    paddingTop: 40,
     s1: null,
     s1Label: 'S<sub>1</sub>',
     ss: null,
     ssLabel: 'S<sub>S</sub>',
     summaryPaddingLeft: 75,
     xAxisLabel: 'Period, T (sec)',
-    yAxisLabel: 'Sa (g)'
+    yAxisLabel: 'Spectral Response Acceleration, Sa (g)'
   }, options));
 
   /**
