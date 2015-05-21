@@ -253,6 +253,7 @@ var D3GraphView = function (options) {
 
     if (changed.hasOwnProperty('title')) {
       _plotTitle.textContent = options.title;
+      _plotTitle.setAttribute('y', _plotTitle.getBBox().height);
     }
     if (changed.hasOwnProperty('xAxisLabel')) {
       _xAxisLabel.textContent = options.xAxisLabel;
@@ -293,7 +294,6 @@ var D3GraphView = function (options) {
       _outerFrame.setAttribute('height', outerHeight);
       _outerFrame.setAttribute('width', outerWidth);
       _plotTitle.setAttribute('x', outerWidth / 2);
-      _plotTitle.setAttribute('y', paddingTop);
       _padding.setAttribute('transform',
           'translate(' + paddingLeft + ',' + paddingTop + ')');
       _innerFrame.setAttribute('width', innerWidth);
