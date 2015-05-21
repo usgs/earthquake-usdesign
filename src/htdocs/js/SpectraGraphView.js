@@ -27,6 +27,7 @@ var SpectraGraphView = function (options) {
       _x,
       _y,
       // methods
+      _convertHTML,
       _formatSsS1Values,
       _formatXAxis,
       _formatYAxis,
@@ -63,6 +64,72 @@ var SpectraGraphView = function (options) {
       toset.yAxisLabel = 'Sa (g)';
     }
     _this.model.set(toset, {silent: true});
+  };
+
+  /**
+   * Look for and replace html elements with tspan elements in an svg text node.
+   *
+   * Created <tspan> elements have class "html-" + nodeName.toLowerCase().
+   * <sub> and <sup> elements adjust positioning, which cannot reliably be done
+   * using css; this may change once baseline-shift has better support.
+   *
+   * For example:
+   *     <text>A<sub>0</sub></text>
+   * Becomes:
+   *     <text>
+   *       <tspan class="html-text">A</tspan>
+   *       <tspan class="html-sub" dx="1" dy="5">0</tspan>
+   *     </text>
+   *
+   * @param el {SVG text element}
+   *        element to update.
+   */
+  _convertHTML = function (el) {
+    var className,
+        div,
+        dx,
+        dy,
+        node,
+        nodeName,
+        tspan,
+        y;
+
+    div = document.createElement('div');
+    div.innerHTML = el.text();
+    node = div.firstChild;
+    el.text('');
+
+    y = 0;
+    while (node !== null) {
+      // parse current node
+      nodeName = node.nodeName;
+      className = 'html-' + nodeName.toLowerCase().replace('#', '');
+      tspan = el.append('tspan')
+          .text(node.textContent)
+          .attr('class', className);
+
+      // css can't adjust tspan positioning reliably
+      dx = 0;
+      dy = 0;
+      if (nodeName === 'SUB') {
+        dx = 1;
+        dy = 5;
+      } else if (nodeName === 'SUP') {
+        dx = 2;
+        dy = -8;
+      }
+      // nulls to only set when non-zero, to inherit any existing positioning
+      tspan.attr('dx', dx || null);
+      tspan.attr('dy', (-y + dy) || null);
+      // track current y position
+      y = dy;
+
+      // move to next node
+      node = node.nextSibling;
+    }
+
+    node = null;
+    div = null;
   };
 
   /**
@@ -136,9 +203,9 @@ var SpectraGraphView = function (options) {
    */
   _formatXAxis = function (x) {
     if (x === _t0) {
-      return 'T0 = ' + _t0;
+      return 'T<sub>0</sub> = ' + _t0;
     } else if (x === _ts) {
-      return 'TS = ' + _ts;
+      return 'T<sub>S</sub> = ' + _ts;
     } else if (x === 1) {
       return '1.000';
     } else {
@@ -240,6 +307,12 @@ var SpectraGraphView = function (options) {
     annotations.attr('d', _line);
     annotations.exit()
         .remove();
+
+    d3.select(_this.el).selectAll('.tick text')
+        .each(function () {
+          // convert d3 each "this" into parameter to _convertHTML.
+          _convertHTML(d3.select(this));
+        });
   };
 
   /**
@@ -258,6 +331,7 @@ var SpectraGraphView = function (options) {
     // return value is passed to parent render
     return changed;
   }, _this.render);
+
 
   _initialize(options);
   options = null;
