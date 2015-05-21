@@ -18,11 +18,15 @@ if (!(isset($NO_DB) && $NO_DB)) {
     $DB->exec('SET search_path = ' . $CONFIG['DB_SCHEMA'] . ', public');
   }
 
+  include_once '../lib/classes/DataFactory.class.php';
+
   include_once '../lib/classes/HazardBasisFactory.class.php';
   include_once '../lib/classes/DesignCodeFactory.class.php';
   include_once '../lib/classes/RegionFactory.class.php';
   include_once '../lib/classes/SiteClassFactory.class.php';
   include_once '../lib/classes/LookupDataFactory.class.php';
+
+  $dataFactory = new DataFactory($DB);
 
   $hazardBasisFactory = new HazardBasisFactory($DB);
   $designCodeFactory = new DesignCodeFactory($DB);
