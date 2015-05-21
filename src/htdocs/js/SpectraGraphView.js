@@ -54,9 +54,9 @@ var SpectraGraphView = function (options) {
       _x,
       _y,
       // methods
+      _calculatePeriodValues,
       _convertHTML,
       _formatComment,
-      _formatSsS1Values,
       _formatXAxis,
       _formatYAxis,
       _getX,
@@ -95,6 +95,70 @@ var SpectraGraphView = function (options) {
     _line = d3.svg.line()
         .x(_getX)
         .y(_getY);
+  };
+
+  /**
+   * Calculate T0 and Ts values from Ss and S1.
+   *
+   * Uses _ss and _s1 variables.
+   * Sets _t0, _ts variables.
+   */
+  _calculatePeriodValues = function () {
+    var d,
+        i,
+        x,
+        y;
+
+    _annotationLines = [];
+
+    if (_ss !== null && _s1 !== null) {
+      // find ss x extents
+      _t0 = null;
+      _ts = null;
+      for (i = 0; i < _data.length; i++) {
+        d = _data[i];
+        y = d[1];
+        if (y === _ss) {
+          x = d[0];
+          if (_t0 === null || x < _t0) {
+            // t0 is minimum x value where y === ss
+            _t0 = x;
+          }
+          if (_ts === null || x > _ts) {
+            // ts is maximum x value where y === ss
+            _ts = x;
+          }
+        }
+      }
+
+      // t0, ts lines parallel to y axis
+      _annotationLines.push([[_t0, 0], [_t0, _ss]]);
+      _annotationLines.push([[_ts, 0], [_ts, _ss]]);
+      // ss line parallel to x axis
+      _annotationLines.push([[0, _ss], [_ts, _ss]]);
+      // t1 line parallel to y axis
+      _annotationLines.push([[1, 0], [1, _s1]]);
+      // s1 line parllel to x axis
+      _annotationLines.push([[0, _s1], [1, _s1]]);
+
+      // use custom axis formats
+      _this.model.set({
+        paddingLeft: _this.model.get('detailPaddingLeft'),
+        xAxisFormat: _formatXAxis,
+        xAxisTicks: [_t0, _ts, 1],
+        yAxisFormat: _formatYAxis,
+        yAxisTicks: [_s1, _ss]
+      }, {silent: true});
+    } else {
+      // use default axis formats
+      _this.model.set({
+        paddingLeft: _this.model.get('summaryPaddingLeft'),
+        xAxisFormat: null,
+        xAxisTicks: null,
+        yAxisFormat: null,
+        yAxisTicks: null
+      }, {silent: true});
+    }
   };
 
   /**
@@ -190,67 +254,6 @@ var SpectraGraphView = function (options) {
       text.attr('x', 0);
       text.attr('y', y);
     });
-  };
-
-  /**
-   *
-   */
-  _formatSsS1Values = function () {
-    var d,
-        i,
-        x,
-        y;
-
-    _annotationLines = [];
-
-    if (_ss !== null && _s1 !== null) {
-      // find ss x extents
-      _t0 = null;
-      _ts = null;
-      for (i = 0; i < _data.length; i++) {
-        d = _data[i];
-        y = d[1];
-        if (y === _ss) {
-          x = d[0];
-          if (_t0 === null || x < _t0) {
-            // t0 is minimum x value where y === ss
-            _t0 = x;
-          }
-          if (_ts === null || x > _ts) {
-            // ts is maximum x value where y === ss
-            _ts = x;
-          }
-        }
-      }
-
-      // t0, ts lines parallel to y axis
-      _annotationLines.push([[_t0, 0], [_t0, _ss]]);
-      _annotationLines.push([[_ts, 0], [_ts, _ss]]);
-      // ss line parallel to x axis
-      _annotationLines.push([[0, _ss], [_ts, _ss]]);
-      // t1 line parallel to y axis
-      _annotationLines.push([[1, 0], [1, _s1]]);
-      // s1 line parllel to x axis
-      _annotationLines.push([[0, _s1], [1, _s1]]);
-
-      // use custom axis formats
-      _this.model.set({
-        paddingLeft: _this.model.get('detailPaddingLeft'),
-        xAxisFormat: _formatXAxis,
-        xAxisTicks: [_t0, _ts, 1],
-        yAxisFormat: _formatYAxis,
-        yAxisTicks: [_s1, _ss]
-      }, {silent: true});
-    } else {
-      // use default axis formats
-      _this.model.set({
-        paddingLeft: _this.model.get('summaryPaddingLeft'),
-        xAxisFormat: null,
-        xAxisTicks: null,
-        yAxisFormat: null,
-        yAxisTicks: null
-      }, {silent: true});
-    }
   };
 
   /**
@@ -392,7 +395,7 @@ var SpectraGraphView = function (options) {
     _y = options.yAxisScale;
     _ss = options.ss || null;
     _s1 = options.s1 || null;
-    _formatSsS1Values();
+    _calculatePeriodValues();
 
     // return value is passed to parent render
     return changed;
