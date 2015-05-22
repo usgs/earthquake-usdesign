@@ -53,6 +53,8 @@ var CalculationView = function (params) {
       _destroyLookupFactory = true;
     }
 
+    _this.el.classList.add('calculation-view');
+
     _bindEventListeners();
 
     _this.render();
@@ -64,11 +66,15 @@ var CalculationView = function (params) {
   };
 
   _onDeleteClick = function () {
-    _collection.remove(_model);
+    if (_collection.get(_model.get('id')) !== null) {
+      _collection.remove(_model);
+    }
   };
 
   _onModelClick = function () {
-    _collection.select(_model);
+    if (_collection.get(_model.get('id')) !== null) {
+      _collection.select(_model);
+    }
   };
 
   _onViewClick = function (evt) {
@@ -82,13 +88,13 @@ var CalculationView = function (params) {
   };
 
   _render = function () {
-    var
-        title,
-        designCode,
+    var designCode,
         input,
+        markup,
+        riskCategory,
         siteClass,
         subtitle,
-        riskCategory;
+        title;
 
     input = _model.get('input');
 
@@ -105,12 +111,12 @@ var CalculationView = function (params) {
         Formatter.value(siteClass.get('name'));
     riskCategory = Formatter.value(riskCategory.get('name'));
 
-    _this.el.innerHTML = [
+    markup = [
       '<h3 class="calculation-title">',
         title,
-        '<aside class="calculation-subtitle">', subtitle, '</aside>',
+        '<small class="calculation-subtitle">', subtitle, '</small>',
       '</h3>',
-      '<dl>',
+      '<dl class="calculation-inputs">',
         '<dt class="calculation-design-code">Design Code</dt>',
         '<dd class="calculation-design-code">', designCode, '</dd>',
 
@@ -119,9 +125,14 @@ var CalculationView = function (params) {
 
         '<dt class="calculation-risk-cateogry">Risk Category</dt>',
         '<dd class="calculation-risk-category">', riskCategory, '</dd>',
-      '</dl>',
-      '<button class="calculation-delete">Delete</button>'
-    ].join('');
+      '</dl>'
+    ];
+
+    if (_collection.get(_model.get('id')) !== null) {
+      markup.push('<button class="calculation-delete">Delete</button>');
+    }
+
+    _this.el.innerHTML = markup.join('');
   };
 
   _unbindEventListeners = function () {
