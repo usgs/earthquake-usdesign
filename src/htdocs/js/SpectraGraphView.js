@@ -10,9 +10,9 @@ var d3 = require('d3'),
  *
  * @param options {Object}
  *        all options are passed to D3GraphView.
- * @param options.comment {Array<String>}
+ * @param options.comment {String}
  *        default null.
- *        one item per line.
+ *        may include newline ('\n') characters for multiple lines.
  *        may include simple html (no nested elements).
  * @param options.detailPaddingLeft {Number}
  *        default 140.
@@ -170,16 +170,18 @@ var SpectraGraphView = function (options) {
    * @param lines {Array|null}
    *        lines to render, or null for empty.
    */
-   _formatComment = function (el, lines) {
-    var text,
+   _formatComment = function (el, content) {
+    var lines,
+        text,
         y;
 
     el.text('');
-    if (lines === null) {
+    if (content === null) {
       return;
     }
 
     y = 0;
+    lines = content.split('\n');
     lines.forEach(function (line) {
       var bbox;
       text = el.append('text').text(line);
