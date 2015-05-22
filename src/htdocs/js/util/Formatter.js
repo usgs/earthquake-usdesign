@@ -68,8 +68,12 @@ _value = function (value) {
 
 
 var Formatter = {
+  latitude: _latitude,
+  longitude: _longitude,
+  number: _number,
   siteAmplificationHeader: _siteAmplificationHeader,
-  siteAmplificationValue: _siteAmplificationValue
+  siteAmplificationValue: _siteAmplificationValue,
+  value: _value
 };
 
 
