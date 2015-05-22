@@ -21,7 +21,8 @@
   <script src="js/bundle.js"></script>
   <script>
     var Calculation = require('Calculation'),
-        CalculationView = require('CalculationView');
+        CalculationView = require('CalculationView'),
+        Collection = require('mvc/Collection');
 
 
     var calculation,
@@ -39,6 +40,7 @@
     });
 
     calculationView = CalculationView({
+      collection: Collection([calculation]),
       el: document.querySelector('.view'),
       model: calculation
     });
