@@ -319,10 +319,9 @@ var D3GraphView = function (options) {
     _xAxis.scale(xAxisScale);
     _xAxis.tickFormat(options.xAxisFormat);
     xAxisTicks = options.xAxisTicks;
-    if (typeof xAxisTickValues === 'function') {
+    if (typeof xAxisTicks === 'function') {
       xAxisTicks = xAxisTicks(xExtent);
     }
-    _xAxis.ticks(5);
     _xAxis.tickValues(xAxisTicks);
 
     _yAxis.scale(yAxisScale);
