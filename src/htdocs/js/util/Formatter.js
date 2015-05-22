@@ -18,9 +18,9 @@ _latitude = function (value) {
   } else {
     if (value < 0) {
       value *= -1.0;
-      units = '&deg; S';
+      units = '&deg;S';
     } else {
-      units = '&deg; N';
+      units = '&deg;N';
     }
 
     return _number(value, 3) + units;
@@ -37,9 +37,9 @@ _longitude = function (value) {
   } else {
     if (value < 0) {
       value *= -1.0;
-      units = '&deg; W';
+      units = '&deg;W';
     } else {
-      units = '&deg; E';
+      units = '&deg;E';
     }
 
     return _number(value, 3) + units;
