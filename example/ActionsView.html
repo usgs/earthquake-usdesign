@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+
+  <title>Actions View</title>
+  <link rel="stylesheet" href="site/earthquake/index.css"/>
+  <link rel="stylesheet" href="css/index.css"/>
+  <style>
+    body {
+      padding: 1em;
+    }
+    .view {
+      margin-top: 1em;
+    }
+  </style>
+</head>
+<body>
+  <a href="example.html">Examples</a>
+  <h1>Actions View</h1>
+
+  <div class="view"></div>
+
+  <script src="js/bundle.js"></script>
+  <script>
+    var ActionsView = require('ActionsView'),
+        Calculation = require('Calculation'),
+        Collection = require('mvc/Collection');
+
+
+    var actionsView,
+        collection;
+
+
+    collection = Collection([Calculation()]);
+    collection.select(collection.data()[0]);
+
+    actionsView = ActionsView({
+      el: document.querySelector('.view'),
+      collection: collection
+    });
+  </script>
+</body>
+</html>
