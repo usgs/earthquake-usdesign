@@ -39,6 +39,7 @@ if (!Function.prototype.bind) {
   mocha.reporter('html');
 
   // Add each test class here as they are implemented
+  require('./spec/ActionsView');
   require('./spec/SpectraGraphView');
   require('./spec/CalculationTest');
   require('./spec/WebServiceAccessorTest');
