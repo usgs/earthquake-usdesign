@@ -1,23 +1,32 @@
 <?php
 
-include_once 'classes/FileParser.class.php';
-include_once 'install-funcs.inc.php';
+$CLASSES_DIR = dirname(__FILE__);
+include_once $CLASSES_DIR . '/FileParser.class.php';
+include_once $CLASSES_DIR . '/../install-funcs.inc.php';
 
 class SetParser {
+
+  private $_parsers;
+  private $_region;
+  private $_dataFactory;
 
   /**
    * @Constructor
    *
    * @param $dataset {Array}
    *        Associative array with variable types keyed to appropriate file.
+   * @param $region {Array}
+   *        Region for this dataset, as returned by RegionFactory#get.
+   * @param $dataFactory {DataFactory}
+   *        data factory for storing parsed data.
    */
-  public function __construct ($dataset) {
-    $this->geomeanSsdParser = new FileParser($dataset['geomean_ssd']);
-    $this->geomeanS1dParser = new FileParser($dataset['geomean_s1d']);
-    $this->crsParser = new FileParser($dataset['crs']);
-    $this->cr1Parser = new FileParser($dataset['cr1']);
-    $this->mappedSsParser = new FileParser($dataset['mapped_ss']);
-    $this->mappedS1Parser = new FileParser($dataset['mapped_s1']);
+  public function __construct ($dataset, $region, $dataFactory) {
+    $this->_parsers = array();
+    foreach ($dataset as $key => $file) {
+      $this->_parsers[$key] = new FileParser($file);
+    }
+    $this->_region = $region;
+    $this->_dataFactory = $dataFactory;
   }
 
 
@@ -31,108 +40,51 @@ class SetParser {
    */
   public function process () {
     $eof = false;
-    $errorCount = 0;
 
     while(!$eof) {
-      try {
-        $geomeanSsdData = $this->geomeanSsdParser->nextLine();
-        if ($geomeanSsdData != null) {
-          $geomeanSsdLatitude = $geomeanSsdData['latitude'];
-          $geomeanSsdLongitude = $geomeanSsdData['longitude'];
-          $geomeanSsdValue = $geomeanSsdData['value'];
-        } else {
+      $first = true;
+      $latitude = null;
+      $longitude = null;
+      $values = array();
+
+      foreach ($this->_parsers as $key => $parser) {
+        $data = $parser->nextLine();
+
+        // check for end of file
+        if ($data === null) {
+          if (!$first) {
+            if ($eof === false) {
+              throw new Exception('Files not the same length: ' .
+                  $parser->file . ' ended early');
+            }
+          }
           $eof = true;
+          continue;
         }
 
-        $geomeanS1dData = $this->geomeanS1dParser->nextLine();
-        if ($geomeanS1dData != null) {
-          $geomeanS1dLatitude = $geomeanS1dData['latitude'];
-          $geomeanS1dLongitude = $geomeanS1dData['longitude'];
-          $geomeanS1dValue = $geomeanS1dData['value'];
-        } else {
-          if ($eof == false) {
-            $file = $dataset['geomean_s1d'];
-            throw new Exception ("Files are not the same length: $file ended early.");
-          }
+        // make sure latitude/longitude from this file matches any previous
+        if ($latitude === null || $longitude === null) {
+          $latitude = $data['latitude'];
+          $longitude = $data['longitude'];
+        } else if ($latitude !== $data['latitude']) {
+          throw new Exception('Latitudes don\'t match:' .
+              ' expected ' . $latitude . ', found ' . $data['latitude'] .
+              ' in file ' . $parser->file);
+        } else if ($longitude !== $data['longitude']) {
+          throw new Exception('Longitudes don\'t match:' .
+              ' expected ' .$longitude . ', found ' . $data['longitude'] .
+              ' in file ' . $parser->file);
         }
 
-        $crsData = $this->crsParser->nextLine();
-        if ($crsData != null) {
-          $crsLatitude = $crsData['latitude'];
-          $crsLongitude = $crsData['longitude'];
-          $crsValue = $crsData['value'];
-        } else {
-          if ($eof == false) {
-            $file = $dataset['crs'];
-            throw new Exception ("Files are not the same length: $file ended early.");
-          }
-        }
-
-        $cr1Data = $this->cr1Parser->nextLine();
-        if ($cr1Data != null) {
-          $cr1Latitude = $cr1Data['latitude'];
-          $cr1Longitude = $cr1Data['longitude'];
-          $cr1Value = $cr1Data['value'];
-        } else {
-          if ($eof == false) {
-            $file = $dataset['cr1'];
-            throw new Exception ("Files are not the same length: $file ended early.");
-          }
-        }
-
-        $mappedSsData = $this->mappedSsParser->nextLine();
-        if ($mappedSsData != null) {
-          $mappedSsLatitude = $mappedSsData['latitude'];
-          $mappedSsLongitude = $mappedSsData['longitude'];
-          $mappedSsValue = $mappedSsData['value'];
-        } else {
-          if ($eof == false) {
-            $file = $dataset['mapped_ss'];
-            throw new Exception ("Files are not the same length: $file ended early.");
-          }
-        }
-
-        $mappedS1Data = $this->mappedS1Parser->nextLine();
-        if ($mappedS1Data != null) {
-          $mappedS1Latitude = $mappedS1Data['latitude'];
-          $mappedS1Longitude = $mappedS1Data['longitude'];
-          $mappedS1Value = $mappedS1Data['value'];
-        } else {
-          if ($eof == false) {
-            $file = $dataset['mapped_s1'];
-            throw new Exception ("Files are not the same length: $file ended early.");
-          }
-        }
-
-        // Sanity checks - Latitudes
-        if (($geomeanSsdLatitude != $geomeanS1dLatitude) or
-            ($geomeanS1dLatitude != $crsLatitude) or
-            ($crsLatitude != $cr1Latitude) or
-            ($cr1Latitude != $mappedSsLatitude) or
-            ($mappedSsLatitude != $mappedS1Latitude)) {
-            throw new Exception ("Latitudes don't match.");
-        }
-        // Sanity checks - Longitudes
-        if (($geomeanSsdLongitude != $geomeanS1dLongitude) or
-            ($geomeanS1dLongitude != $crsLongitude) or
-            ($crsLongitude != $cr1Longitude) or
-            ($cr1Longitude != $mappedSsLongitude) or
-            ($mappedSsLongitude != $mappedS1Longitude)) {
-            throw new Exception ("Longitudes don't match.");
-        }
-
-      // TODO - Clear to enter values in database.
-
-      } catch (Exception $e) {
-        $warnings[] = $e->getMessage();
+        // save value
+        $values[$key] = $data['value'];
       }
 
-      if (count($warnings) !== 0) {
-        $errorCount += 1;
-        print "The following warnings occurred while processing '${file}'\n  ";
-        print implode("\n  ", $warnings) . "\n";
+      if (!$eof) {
+        // enter values in database.
+        $this->_dataFactory->insert($latitude, $longitude, $this->_region,
+            $values);
       }
     }
-    return $errorCount;
   }
 }
