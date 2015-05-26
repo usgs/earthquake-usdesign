@@ -36,11 +36,9 @@ var NEHRPCalc2015 = function () {
       return fv * acceleration;
     } else if (table === 2) {
       fpga = _siteAmplification.getFpga(acceleration, siteClass);
-      return fpga * pga;
+      return fpga * acceleration;
     }
-
   };
-
 
   _interpolateResults = function (d0, d1, x, x0, x1) {
     var key,
@@ -74,6 +72,8 @@ var NEHRPCalc2015 = function () {
         mapped_ss,
         maxD84,
         maxD841,
+        maxDirectionSs,
+        maxDirectionS1,
         metadata,
         output,
         pga,
@@ -108,9 +108,13 @@ var NEHRPCalc2015 = function () {
     mapped_ss = output.get('mapped_ss');
     mapped_s1 = output.get('mapped_s1');
 
+    // max direction
+    maxDirectionSs = metadata.get('max_direction_ss');
+    maxDirectionS1 = metadata.get('max_direction_s1');
+
     // factor hazard value for max direction.
-    ssuh = metadata.get('max_direction_ss') * mapped_ss;
-    s1uh = metadata.get('max_direction_s1') * mapped_s1;
+    ssuh = maxDirectionSs * mapped_ss;
+    s1uh = maxDirectionS1 * mapped_s1;
 
     // crs values
     crs = data.get('crs');
@@ -127,8 +131,8 @@ var NEHRPCalc2015 = function () {
     pgdv84 = metadata.get('percentil_ss') * geomean_ssd;
     pgdv841 = metadata.get('percentil_s1') * geomean_s1d;
     // Maximum Direction 84th-Percentile Deterministic
-    maxD84 = metadata.get('max_direction_ss') * pgdv84;
-    maxD841 = metadata.get('max_direction_s1') * pgdv841;
+    maxD84 = maxDirectionSs * pgdv84;
+    maxD841 = maxDirectionS1 * pgdv841;
     // Ssd & S1d MAX value
     ssd = Math.max(maxD84, metadata.get('deterministic_floor_ss'));
     s1d = Math.max(maxD841, metadata.get('deterministic_floor_s1'));
@@ -163,6 +167,8 @@ var NEHRPCalc2015 = function () {
     return result.set({
       'mapped_ss': mapped_ss,
       'mapped_s1': mapped_s1,
+      'max_direction_ss': max_direction_ss,
+      'max_direction_s1': max_direction_s1,
       'ssuh': ssuh,
       's1uh': s1uh,
       'crs': crs,
@@ -188,7 +194,6 @@ var NEHRPCalc2015 = function () {
       'pga': pga,
       'pgam': pgam
     });
-
   };
 
   _this.interpolate = function (calculation) {
