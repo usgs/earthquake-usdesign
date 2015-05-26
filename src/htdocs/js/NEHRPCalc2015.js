@@ -1,74 +1,107 @@
 'use strict';
 
+var Model = require('mvc/Model'),
+    Util = require('util/Util');
+
+
 var NEHRPCalc2015 = function () {
-  var //_this,
+  var _this,
 
-      Interpolate,
-      getInterpolateValue,
-      getData;
+      _interpolateResults,
+      _interpolateValue;
 
-  // _this.getSsuh = function (calculation) {
-  //   var mappedSs = _this.getMappedSs(calculation),
-  //       maxDirectionSs = _this.getMaxDirectionSs(calculation);
-  //       return mappedSs * maxDirectionSs;
-  // };
+  _this = {};
 
+  _interpolateResults = function (d0, d1, x, x0, x1) {
+    var key,
+        result;
 
-  // _this.getMappedSs = function (calculation) {
-  // };
+    result = {};
 
-  Interpolate = function (calculation) {
+    for (key in d0) {
+      if (d0.hasOwnProperty(key) && d1.hasOwnProperty(key)) {
+        result[key] =
+            _interpolateValue(d0[key], d1[key], x, x0, x1);
+      }
+    }
+
+    return result;
+  };
+
+  _interpolateValue = function (y0, y1, x, x0, x1) {
+    return y0 + (((y1-y0)/(x1-x0))*(x-x0));
+  };
+
+  _this.calculate = function (calculation) {
     var data,
-        results,
-        mapped_ss,
-        crs,
-        geomean_ssd,
-        mapped_s1,
-        cr1,
-        geomean_s1d,
-        mapped_pga,
-        geomean_pgad,
-        dataAttributes,
-          value1, value2, value3, value4,
-          latInput, lngInput,
-          lat1, lat2, lat3,
-          lng1, lng2, lng3, lng4,
-          valueP1P2, valueP3P4,
-          i;
+        maxD84,
+        maxD841,
+        metadata,
+        output,
+        pgdv84,
+        pgdv841,
+        result,
+        s1,
+        s1d,
+        s1uh,
+        s1ur,
+        ss,
+        ssd,
+        ssuh,
+        ssur;
 
-    data = calculation.get('output').get('data').data();
+    output = calculation.get('output');
+    metadata = output.get('metadata');
+    result = _this.interpolate(calculation);
+    data = output.get('data').data();
 
-    if (data.length ===1) {
-      latInput = calculation.get('input').get('latitude');
-      lngInput = calculation.get('input').get('longitude');
-      mapped_ss = calculation.get('data').get('mapped_ss');
-      crs = calculation.get('data').get('crs');
-      geomean_ssd = calculation.get('data').get('geomean_ssd');
-      mapped_s1 = calculation.get('data').get('mapped_s1');
-      cr1 = calculation.get('data').get('cr1');
-      geomean_s1d = calculation.get('data').get('geomean_s1d');
-      mapped_pga = calculation.get('data').get('mapped_pga');
-      geomean_pgad = calculation.get('data').get('geomean_pgad');
+    // factor hazard value for max direction
+    ssuh = metadata.get('max_direction_ss') * output.get('mapped_ss');
+    s1uh = metadata.get('max_direction_s1') * output.get('mapped_s1');
 
-      results = [
-        {
-          'latitude': latInput,
-          'longitude': lngInput,
+    // convert uniform hazard to uniform risk
+    ssur = ssuh * data.get('crs');
+    s1ur = s1uh * data.get('cr1');
 
-          'mapped_ss': mapped_ss,
-          'crs': crs,
-          'geomean_ssd': geomean_ssd,
+    // Factor deterministic acceleratin values Ssd and S1d
+    //84th-Percentile geomean Deterministic value
+    pgdv84 = metadata.get('percentil_ss') * data.get('geomean_ssd');
+    pgdv841 = metadata.get('percentil_s1') * data.get('geomean_s1d');
+    //Maximum Direction 84th-Percentile Deterministic
+    maxD84 = metadata.get('max_direction_ss') * pgdv84;
+    maxD841 = metadata.get('max_direction_s1') * pgdv841;
+    //Ssd & S1d MAX value
+    ssd = Math.max(maxD84, metadata.get('deterministic_floor_ss'));
+    s1d = Math.max(maxD841, metadata.get('deterministic_floor_s1'));
 
-          'mapped_s1': mapped_s1,
-          'cr1': cr1,
-          'geomean_s1d': geomean_s1d,
 
-          'mapped_pga': mapped_pga,
-          'geomean_pgad': geomean_pgad
-        }
-      ];
+    //Compare 0.2 and 1.0 risk-rargeted probabilisic spectral acceleration
+    //values with Ssd and S1d. Use minimuim value from each pair.
+    ss = Math.min(ssur, ssd);
+    s1 = Math.min(s1ur, s1d);
 
-      return results;
+
+  };
+  _this.interpolate = function (calculation) {
+    var data,
+        latInput, lngInput,
+        lat1, lat2, lat3,
+        lng1, lng2, lng3, lng4,
+        input,
+        output,
+        result,
+        resultLat1,
+        resultLat3;
+
+    input = calculation.get('input');
+    output = calculation.get('output');
+    data = output.get('data').data();
+    latInput = input.get('latitude');
+    lngInput = input.get('longitude');
+
+    if (data.length === 1) {
+      result = Util.extend({}, data[0].get());
+
     } else if (data.length === 2) {
       lat1 = data[0].get('latitude');
       lat2 = data[1].get('latitude');
@@ -76,76 +109,60 @@ var NEHRPCalc2015 = function () {
       lng2 = data[1].get('longitude');
 
       if (lat1 === lat2) {
+        result = _interpolateResults(
+            data[0].get(),
+            data[1].get(),
+            lngInput,
+            lng1,
+            lng2);
 
-        } else if (lng1 === lng2) {
-        } else {
-        //Lat and lng don't match throw error
-        }
-    } else if (data.length === 4) {
-      // var dataAttributes,
-      //     value1, value2, value3, value4,
-      //     latInput, lngInput,
-      //     lat1, lat3,
-      //     lng1, lng2, lng3, lng4,
-      //     valueP1P2, valueP3P4;
+      } else if (lng1 === lng2) {
+        result = _interpolateResults(
+            data[0].get(),
+            data[1].get(),
+            latInput,
+            lat1,
+            lat2);
 
-      dataAttributes = calculation.get('output').get('data');
-
-      for (i = 0; dataAttributes.length < i; i++) {
-        value1 = data[0].get(dataAttributes[i]);
-        value2 = data[1].get(dataAttributes[i]);
-        value3 = data[2].get(dataAttributes[i]);
-        value4 = data[3].get(dataAttributes[i]);
-
-        latInput = calculation.get('input').get('latitude');
-        lngInput = calculation.get('input').get('longitude');
-
-        lat1 = data[0].get('latitude');
-        lat3 = data[2].get('latitude');
-
-        lng1 = data[0].get('longitude');
-        lng2 = data[1].get('longitude');
-        lng3 = data[2].get('longitude');
-        lng4 = data[3].get('longitude');
-
-        valueP1P2 = getInterpolateValue(value1, value2, lngInput, lng1, lng2);
-        valueP3P4 = getInterpolateValue(value3, value4, lngInput, lng3, lng4);
-
-        dataAttributes[i] =
-            getInterpolateValue(valueP1P2, valueP3P4, latInput, lat1, lat3);
-
-        results = [
-          {
-            'latitude': latInput,
-            'longitude': lngInput,
-
-            'mapped_ss': mapped_ss,
-            'crs': crs,
-            'geomean_ssd': geomean_ssd,
-
-            'mapped_s1': mapped_s1,
-            'cr1': cr1,
-            'geomean_s1d': geomean_s1d,
-
-            'mapped_pga': mapped_pga,
-            'geomean_pgad': geomean_pgad
-          }
-        ];
+      } else {
+        throw new Error('Lat and lng don\'t match and only 2 data points');
       }
-      return results;
+    } else if (data.length === 4) {
+      lat1 = data[0].get('latitude');
+      lat3 = data[2].get('latitude');
+
+      lng1 = data[0].get('longitude');
+      lng2 = data[1].get('longitude');
+      lng3 = data[2].get('longitude');
+      lng4 = data[3].get('longitude');
+
+      resultLat1 = _interpolateResults(
+          data[0].get(),
+          data[1].get(),
+          lngInput,
+          lng1,
+          lng2);
+
+      resultLat3 = _interpolateResults(
+          data[0].get(),
+          data[1].get(),
+          lngInput,
+          lng3,
+          lng4);
+
+      result = _interpolateResults(
+          resultLat1,
+          resultLat3,
+          latInput,
+          lat1,
+          lat3);
+
     } else {
-      //Does not have 1,2,4 points error
+      throw new Error('Does not have 1, 2, or 4 points.');
     }
-
+    return Model(result);
   };
 
-  getInterpolateValue = function (y0, y1, x, x0, x1) {
-    return y0 + (((y1-y0)/(x1-x0))*(x-x0));
-  };
-
-  getData = function (calculation) {
-    return calculation.get('output').get('data');
-  };
 };
 
 module.export = NEHRPCalc2015;
