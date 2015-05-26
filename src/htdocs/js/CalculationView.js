@@ -11,7 +11,13 @@ var Calculation = require('Calculation'),
 
     Util = require('util/Util');
 
-
+/**
+ * This class is a view for a single Calculation model. It is suitable for
+ * use with the CollectionView abstraction. This view shows input values for
+ * a calculation.
+ *
+ * @param params {Object} See: #_initialize
+ */
 var CalculationView = function (params) {
   var _this,
       _initialize,
@@ -33,6 +39,22 @@ var CalculationView = function (params) {
 
   _this = View(params);
 
+  /**
+   *
+   * @param params {Object}
+   *      An object containing configuration parameters for this view. This
+   *      object may have the following keys:
+   *
+   *      params.collection {Collection}
+   *          Collection containing the model.
+   *      params.lookupFactory {LookupDataFactory}
+   *          Factory to map model ids to strings.
+   *      params.model {Calculation}
+   *          Model to render.
+   *      params.el {DOMElement}
+   *          Container to render into.
+   *
+   */
   _initialize = function (params) {
     _model = params.model;
     _collection = params.collection;
@@ -60,23 +82,44 @@ var CalculationView = function (params) {
     _this.render();
   };
 
-
+  /**
+   * Creates DOM and Model event listeners.
+   *
+   */
   _bindEventListeners = function () {
     _this.el.addEventListener('click', _onViewClick);
   };
 
+  /**
+   * Called when delete button is clicked. If the _model is in the _collection,
+   * removes it.
+   *
+   */
   _onDeleteClick = function () {
     if (_collection.get(_model.get('id')) !== null) {
       _collection.remove(_model);
     }
   };
 
+  /**
+   * Called when the model view is clicked. If the _model is in the _collection,
+   * selects it.
+   *
+   */
   _onModelClick = function () {
     if (_collection.get(_model.get('id')) !== null) {
       _collection.select(_model);
     }
   };
 
+  /**
+   * Event delegator. Called when any part of the view is clicked. Determines
+   * which part of the view was clicked and executes the corresponding
+   * event handler.
+   *
+   * @param evt {Event}
+   *      The event that triggered this method call.
+   */
   _onViewClick = function (evt) {
     var target = evt.target;
 
@@ -87,6 +130,11 @@ var CalculationView = function (params) {
     }
   };
 
+  /**
+   * Performs actual rendering. Updates view to reflect current state of the
+   * _model attributes.
+   *
+   */
   _render = function () {
     var designCode,
         input,
@@ -135,11 +183,20 @@ var CalculationView = function (params) {
     _this.el.innerHTML = markup.join('');
   };
 
+  /**
+   * Removes event listeners.
+   *
+   */
   _unbindEventListeners = function () {
     _this.el.removeEventListener('click', _onViewClick);
   };
 
 
+  /**
+   * Extends default view implementation. Cleans up allocations made for
+   * this instance.
+   *
+   */
   _this.destroy = Util.compose(_this.destroy, function () {
     _unbindEventListeners();
 
@@ -173,6 +230,12 @@ var CalculationView = function (params) {
     _this = null;
   });
 
+  /**
+   * Render the _model. This waits for the _lookupFactory to be ready before
+   * rendering is performed.
+   *
+   * @see #_render
+   */
   _this.render = function () {
     _lookupFactory.whenReady(_render);
   };
