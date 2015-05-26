@@ -122,22 +122,20 @@ if ($answer) {
       print "success!\n";
     }
 
-    // Gridded Data
-    $answer = promptYesNo("Would you like to load the gridded data into the " .
-        "database", true);
-
-    if ($answer) {
-        // TODO, load data
-        // include_once('install/gridded_data.php')
-    }
-
     $dbInstaller->commit();
     echo "SUCCESS!!\n";
   }
 
 }
 
+// Gridded Data
+$answer = promptYesNo("Would you like to load the gridded data into the " .
+    "database", true);
 
+if ($answer) {
+    // load data
+    include_once('install/gridded_data.php');
+}
 
 
 // ----------------------------------------------------------------------
