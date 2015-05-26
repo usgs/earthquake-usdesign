@@ -27,13 +27,16 @@ var ActionsView = function (params) {
       _bindEventHandlers,
       _createViewSkeleton,
       _onCalculateClick,
+      _onCollectionDeselect,
+      _onCollectionSelect,
       _onEditClick,
+      _onModelChange,
       _onNewClick,
       _setRenderMode,
       _unbindEventHandlers;
 
 
-  _this = View(params);
+  _this = View(Util.extend({model: Calculation()}, params));
 
   _initialize = function (params) {
     params = params || {};
@@ -45,6 +48,8 @@ var ActionsView = function (params) {
       _destroyCollection = true;
     }
 
+    _this.model.off('change', 'render', _this);
+
     _createViewSkeleton();
     _bindEventHandlers();
   };
@@ -54,11 +59,17 @@ var ActionsView = function (params) {
     _btnCalculate.addEventListener('click', _onCalculateClick);
     _btnEdit.addEventListener('click', _onEditClick);
     _btnNew.addEventListener('click', _onNewClick);
+
+    _collection.on('select', _onCollectionSelect);
+    _collection.on('deselect', _onCollectionDeselect);
+
+    _onCollectionSelect();
   };
 
   _createViewSkeleton = function () {
     var headerMarkup;
 
+    _this.el.classList.add('actions-view');
     _this.el.classList.add('actions-view-mode-input');
 
     headerMarkup = [
@@ -78,16 +89,22 @@ var ActionsView = function (params) {
       el: document.createElement('ul'),
       factory: CalculationView
     });
+    _collectionView.el.classList.add('actions-view-history');
 
     _accordion = Accordion({
       el: _this.el,
       accordions: [
         {
+          toggleElement: 'div',
           toggleText: headerMarkup,
-          content: _collectionView.el
+          content: _collectionView.el,
+          classes: 'accordion-closed'
         }
       ]
     });
+    _this.el.querySelector('.accordion-toggle').classList.add(
+        'actions-view-actions');
+
 
     _btnCalculate = _this.el.querySelector('.actions-view-calculate');
     _btnEdit = _this.el.querySelector('.actions-view-edit');
@@ -95,22 +112,37 @@ var ActionsView = function (params) {
   };
 
   _onCalculateClick = function () {
-    var selected;
+    if (_this.model) {
+      _this.model.set({'mode': Calculation.MODE_OUTPUT});
 
-    selected = _collection.getSelected();
-    selected.set({'mode': Calculation.MODE_OUTPUT});
-    _setRenderMode(Calculation.MODE_OUTPUT);
+      // TODO :: Run calculation ...
+    }
 
-    // TODO :: Run calculation ...
+  };
+
+  _onCollectionDeselect = function () {
+    if (_this.model) {
+      _this.model.off('change:mode', _onModelChange);
+    }
+    _this.model = null;
+  };
+
+  _onCollectionSelect = function () {
+    _this.model = _collection.getSelected();
+    if (_this.model) {
+      _this.model.on('change:mode', _onModelChange);
+      _onModelChange();
+    }
   };
 
   _onEditClick = function () {
-    var selected;
+    if (_this.model) {
+      _this.model.set({'mode': Calculation.MODE_INPUT});
+    }
+  };
 
-    selected = _collection.getSelected();
-    selected.set({'mode': Calculation.MODE_INPUT});
-
-    _setRenderMode(Calculation.MODE_INPUT);
+  _onModelChange = function () {
+    _setRenderMode(_this.model.get('mode'));
   };
 
   _onNewClick = function () {
@@ -140,6 +172,9 @@ var ActionsView = function (params) {
     _btnCalculate.removeEventListener('click', _onCalculateClick);
     _btnEdit.removeEventListener('click', _onEditClick);
     _btnNew.removeEventListener('click', _onNewClick);
+
+    _collection.off('select', _onCollectionSelect);
+    _collection.off('deselect', _onCollectionDeselect);
   };
 
 
@@ -160,8 +195,11 @@ var ActionsView = function (params) {
     _bindEventHandlers = null;
     _createViewSkeleton = null;
     _onCalculateClick = null;
+    _onCollectionDeselect = null;
+    _onCollectionSelect = null;
     _onEditClick = null;
     _onNewClick = null;
+    _onModelChange = null;
     _setRenderMode = null;
     _unbindEventHandlers = null;
 
