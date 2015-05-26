@@ -92,6 +92,12 @@ file_put_contents($APACHE_CONFIG_FILE, '
     Order Allow,Deny
     Allow from all
   </Location>
+
+  RewriteEngine on
+  RewriteRule ^' . $CONFIG['MOUNT_PATH'] .
+    '/service/?([^/]+)?/?([^/]+)?/?([^/]+)?/?([^/]+)?/?([^/]+)?/?([^/]+)? ' .
+    $CONFIG['MOUNT_PATH'] . '/service.php?design_code_id=$1&site_class_id=$2' .
+    '&risk_category_id=$3&longitude=$4&latitude=$5&title=$6 [L,PT]
 ');
 
 
