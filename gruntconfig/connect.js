@@ -105,6 +105,18 @@ var connect = {
         config.build + '/' + config.src + '/htdocs',
         'node_modules' // primarily for mocha/chai
       ],
+      middleware: function (connect, options, middlewares) {
+        middlewares.unshift(require('gateway')(
+          config.build + '/' + config.src + '/htdocs', {
+            '.php': 'php-cgi',
+            'env': {
+              'PHPRC': 'node_modules/hazdev-template/dist/conf/php.ini'
+            }
+          })
+        );
+
+        return middlewares;
+      },
       open: 'http://localhost:' + config.testPort + '/test.html',
       port: config.testPort
     }
