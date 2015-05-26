@@ -39,6 +39,8 @@ if (!Function.prototype.bind) {
   mocha.reporter('html');
 
   // Add each test class here as they are implemented
+  require('./spec/SpectraGraphView');
+  require('./spec/util/D3GraphView');
   require('./spec/util/SiteAmplification');
 
   if (window.mochaPhantomJS) {
