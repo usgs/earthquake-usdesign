@@ -18,14 +18,6 @@ if (!isset($TEMPLATE)) {
 
   include_once 'template.inc.php';
 }
-
-// TODO, create a wrapper for data.ws.php
-try {
-  include_once '../lib/classes/data.ws.php';
-  echo '<h3>Data</h3><pre><code>' . json_encode($json, JSON_PRETTY_PRINT) .
-      '</code></pre>';
-} catch (Exception $e) {
-  echo '<h3>Error</h3><pre>' . $e->getMessage() . '</pre>';
-}
-
 ?>
+
+<div id="input-view"></div>
