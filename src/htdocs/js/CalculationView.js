@@ -56,6 +56,8 @@ var CalculationView = function (params) {
    *
    */
   _initialize = function (params) {
+    params = params || {};
+
     _model = params.model;
     _collection = params.collection;
     _lookupFactory = params.lookupFactory;
