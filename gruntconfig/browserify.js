@@ -30,7 +30,8 @@ var browerify = {
       debug: true,
       paths: [
         JSDIR,
-        CWD + '/node_modules/hazdev-webutils/src'
+        CWD + '/node_modules/hazdev-webutils/src',
+        CWD + '/node_modules/hazdev-accordion/src'
       ]
     }
   },
