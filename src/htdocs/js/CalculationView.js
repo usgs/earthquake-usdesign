@@ -156,10 +156,24 @@ var CalculationView = function (params) {
     siteClass = _lookupFactory.getSiteClass(input.get('site_class'));
     riskCategory = _lookupFactory.getRiskCategory(input.get('risk_category'));
 
-    designCode = Formatter.value(designCode.get('name'));
-    siteClass = Formatter.value(siteClass.get('value')) + ' - ' +
-        Formatter.value(siteClass.get('name'));
-    riskCategory = Formatter.value(riskCategory.get('name'));
+    if (designCode && designCode.get) {
+      designCode = Formatter.value(designCode.get('name'));
+    } else {
+      designCode = '&ndash;';
+    }
+
+    if (siteClass && siteClass.get) {
+      siteClass = Formatter.value(siteClass.get('value')) + ' - ' +
+          Formatter.value(siteClass.get('name'));
+    } else {
+      siteClass = '&ndash;';
+    }
+
+    if (riskCategory && riskCategory.get) {
+      riskCategory = Formatter.value(riskCategory.get('name'));
+    } else {
+      riskCategory = '&ndash;';
+    }
 
     markup = [
       '<h3 class="calculation-title">',
