@@ -65,11 +65,11 @@ var NEHRPCalc2015 = function () {
         deterministicPga,
         cr1,
         crs,
-        geomean_s1d,
-        geomean_ssd,
+        geomeanS1d,
+        geomeanSsd,
         input,
-        mapped_s1,
-        mapped_ss,
+        mappedS1,
+        mappedSs,
         maxD84,
         maxD841,
         maxDirectionSs,
@@ -105,16 +105,16 @@ var NEHRPCalc2015 = function () {
 
     // Determin Uniform Hazard (2% in 50-year) Ground motion values for periods
     // of 0.2s and 1.0s.
-    mapped_ss = output.get('mapped_ss');
-    mapped_s1 = output.get('mapped_s1');
+    mappedSs = output.get('mapped_ss');
+    mappedS1 = output.get('mapped_s1');
 
     // max direction
     maxDirectionSs = metadata.get('max_direction_ss');
     maxDirectionS1 = metadata.get('max_direction_s1');
 
     // factor hazard value for max direction.
-    ssuh = maxDirectionSs * mapped_ss;
-    s1uh = maxDirectionS1 * mapped_s1;
+    ssuh = maxDirectionSs * mappedSs;
+    s1uh = maxDirectionS1 * mappedS1;
 
     // crs values
     crs = data.get('crs');
@@ -128,8 +128,8 @@ var NEHRPCalc2015 = function () {
     geomean_ssd = data.get('geomean_ssd');
     geomean_s1d = data.get('geomean_s1d');
     // 84th-Percentile geomean Deterministic value.
-    pgdv84 = metadata.get('percentil_ss') * geomean_ssd;
-    pgdv841 = metadata.get('percentil_s1') * geomean_s1d;
+    pgdv84 = metadata.get('percentil_ss') * geomeanSsd;
+    pgdv841 = metadata.get('percentil_s1') * geomeanS1d;
     // Maximum Direction 84th-Percentile Deterministic
     maxD84 = maxDirectionSs * pgdv84;
     maxD841 = maxDirectionS1 * pgdv841;
@@ -165,18 +165,18 @@ var NEHRPCalc2015 = function () {
     pgam = _siteAdjusted(siteClass, pga, 2);
 
     return result.set({
-      'mapped_ss': mapped_ss,
-      'mapped_s1': mapped_s1,
-      'max_direction_ss': max_direction_ss,
-      'max_direction_s1': max_direction_s1,
+      'mapped_ss': mappedSs,
+      'mapped_s1': mappedS1,
+      'max_direction_ss': maxDirectionSs,
+      'max_direction_s1': maxDirectionS1,
       'ssuh': ssuh,
       's1uh': s1uh,
       'crs': crs,
       'cr1': cr1,
       'ssur': ssur,
       's1ur': s1ur,
-      'geomean_ssd': geomean_ssd,
-      'geomean_s1d': geomean_s1d,
+      'geomean_ssd': geomeanSsd,
+      'geomean_s1d': geomeanS1d,
       'pgdv84': pgdv84,
       'pgdv841': pgdv841,
       'maxD84': maxD84,
@@ -198,14 +198,20 @@ var NEHRPCalc2015 = function () {
 
   _this.interpolate = function (calculation) {
     var data,
-        latInput, lngInput,
-        lat1, lat2, lat3,
-        lng1, lng2, lng3, lng4,
         input,
+        lat1,
+        lat2,
+        lat3,
+        lng1,
+        lng2,
+        lng3,
+        lng4,
+        latInput,
+        lngInput,
         output,
         result,
         resultLat1,
-        resultLat3;
+        resultLat3,
 
     input = calculation.get('input');
     output = calculation.get('output');
