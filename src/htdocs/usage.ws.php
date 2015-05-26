@@ -15,6 +15,7 @@
  */
 
 include_once '../conf/config.inc.php';
+header('Content-Type: application/json'); // TODO :: Remove this when service.php sets it
 $usage = array();
 
 $usage['url'] = (($_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://') .

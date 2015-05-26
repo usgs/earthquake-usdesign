@@ -40,8 +40,11 @@ if (!Function.prototype.bind) {
 
   // Add each test class here as they are implemented
   require('./spec/SpectraGraphView');
+  require('./spec/CalculationTest');
+
   require('./spec/util/D3GraphView');
-  require('./spec/util/SiteAmplification');
+  require('./spec/util/LookupDataFactoryTest');
+  require('./spec/util/SiteAmplificationTest');
 
   if (window.mochaPhantomJS) {
       window.mochaPhantomJS.run();
