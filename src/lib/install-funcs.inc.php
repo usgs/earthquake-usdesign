@@ -200,4 +200,35 @@
     return ($answer === 'Y');
   }
 
+  /**
+   * Unzip a zip file.
+   *
+   * @param $zipfile {String}
+   *        path to zip file.
+   * @param $deleteOriginal {Boolean}
+   *        whether to deleted $zipfile after successful extraction.
+   * @param $path {String}
+   *        default null.
+   *        path where zip file should be extracted.
+   *        when null, use directory containing $zipfile.
+   * @throws {Exception}
+   *         if unable to open $zipfile using ZipArchive.
+   */
+  function unzipFile ($zipfile, $deleteOriginal=false, $path=null) {
+    if ($path === null) {
+      $path = dirname(realpath($zipfile));
+    }
+
+    $zip = new ZipArchive();
+    if (!$zip->open($zipfile)) {
+      throw new Exception('Unable to open "' . $zipfile . '" using ZipArchive');
+    }
+    $zip->extractTo($path);
+    $zip->close();
+
+    if ($deleteOriginal) {
+      unlink($zipfile);
+    }
+  }
+
 ?>
