@@ -69,7 +69,6 @@ var Calculation = function (params) {
       _generateId;
 
 
-  params = Util.extend({}, _DEFAULTS, params);
   _this = Model(params);
 
   /**
@@ -86,18 +85,29 @@ var Calculation = function (params) {
 
     id = _this.get('id');
     attributes = _this.get();
+    attributes.output = attributes.output || {};
 
-    input = Model(attributes.input);
+    input = Util.extend({}, _DEFAULTS.input, attributes.input);
+    output = {};
 
-    output = Model({
-      metadata: Model(attributes.output.metadata),
-      tl: attributes.output.tl,
-      data: Collection(attributes.output.data.map(Model))
-    });
+    output.metadata = Model(Util.extend({}, _DEFAULTS.output.metadata,
+        attributes.output.metadata));
+
+    if (attributes.output.hasOwnProperty('tl')) {
+      output.tl = attributes.tl;
+    } else {
+      output.tl = _DEFAULTS.tl;
+    }
+
+    if (attributes.output.data) {
+      output.data = Collection(attributes.output.data.map(Model));
+    } else {
+      output.data = Collection(_DEFAULTS.output.data.map(Model));
+    }
 
     attributes = {
-      input: input,
-      output: output
+      input: Model(input),
+      output: Model(output)
     };
 
 
