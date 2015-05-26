@@ -4,6 +4,8 @@ include_once dirname(__FILE__) . '/../install-funcs.inc.php';
 
 class FileParser {
 
+  public $file;
+
   /**
    * @Constructor
    *
@@ -15,6 +17,7 @@ class FileParser {
       throw new Exception ("No such file: $file.");
     }
 
+    $this->file = $file;
     $this->handle = fopen($file, "r");
     if (!$this->handle) {
       throw new Exception ("File open failed: $file.");
