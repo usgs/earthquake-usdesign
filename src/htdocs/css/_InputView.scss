@@ -1,6 +1,30 @@
 .location-view {
   background: rgb(248, 248, 248);
   border: 1px solid #d8d8d8;
-  height: 400px;
+  height: 300px;
   margin: 4px 0;
+}
+
+#input-view {
+
+  select[disabled] {
+    color: #999;
+    background: #ededed;
+    border: none;
+  }
+
+  label {
+    font-size: .8125em;
+    color: #777;
+  }
+
+  #title {
+    font-size: 2em; // h1 size
+    height: auto;
+  }
+
+  input,
+  select {
+    width: 100%;
+  }
 }

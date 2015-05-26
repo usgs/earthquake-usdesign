@@ -12,7 +12,7 @@ var _CALCULATION_MODE_INPUT = 'input',
 var _DEFAULTS = {
   mode: _CALCULATION_MODE_INPUT,
   input: {
-    title: 'Untitled Report',
+    title: null,
     latitude: null,
     longitude: null,
     design_code: null,
