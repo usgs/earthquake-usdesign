@@ -6,6 +6,7 @@ class DataFactory {
 
   private $_db = null;
   private $_query = null;
+  private $_insert = null;
 
 
   /**
@@ -87,6 +88,48 @@ class DataFactory {
   }
 
   /**
+   * Insert a data value.
+   *
+   * @param latitude {Double}
+   *      Decimal degrees latitude for point of interest.
+   * @param longitude {Double}
+   *      Decimal degrees longitude for point of interest.
+   * @param region {Array}
+   *      Associative array containing at least "id" and "grid_spacing" keys.
+   * @throws {Exception}
+   *         if unable to insert.
+   */
+  public function insert ($latitude, $longitude, $region, $data) {
+    $regionId = $region['id'];
+
+    $latitude = safefloatval($latitude);
+    $longitude = safefloatval($longitude);
+
+    if ($latitude === null) {
+      throw new Exception('Latitude may not be null.');
+    }
+
+    if ($longitude === null) {
+      throw new Exception('Longitude may not be null.');
+    }
+
+    $this->_insert->bindValue(':region_id', safeintval($regionId),
+        PDO::PARAM_INT);
+    $this->_insert->bindValue(':latitude', $latitude);
+    $this->_insert->bindValue(':longitude', $longitude);
+    $this->_insert->bindValue(':mapped_ss', $data['mapped_ss']);
+    $this->_insert->bindValue(':mapped_s1', $data['mapped_s1']);
+    $this->_insert->bindValue(':mapped_pga', $data['mapped_pga']);
+    $this->_insert->bindValue(':crs', $data['crs']);
+    $this->_insert->bindValue(':cr1', $data['cr1']);
+    $this->_insert->bindValue(':geomean_ssd', $data['geomean_ssd']);
+    $this->_insert->bindValue(':geomean_s1d', $data['geomean_s1d']);
+    $this->_insert->bindValue(':geomean_pgad', $data['geomean_pgad']);
+
+    $this->_insert->execute();
+  }
+
+  /**
    * Alters the raw result such that data are of the proper type.
    *
    * @param row {Array}
@@ -144,6 +187,37 @@ class DataFactory {
         ORDER BY
           latitude DESC,
           longitude ASC
+      '
+    );
+
+    $this->_insert = $this->_db->prepare(
+      '
+        INSERT INTO data
+        (
+          region_id,
+          latitude,
+          longitude,
+          mapped_ss,
+          mapped_s1,
+          mapped_pga,
+          crs,
+          cr1,
+          geomean_ssd,
+          geomean_s1d,
+          geomean_pgad
+        ) values (
+          :region_id,
+          :latitude,
+          :longitude,
+          :mapped_ss,
+          :mapped_s1,
+          :mapped_pga,
+          :crs,
+          :cr1,
+          :geomean_ssd,
+          :geomean_s1d,
+          :geomean_pgad
+        )
       '
     );
   }

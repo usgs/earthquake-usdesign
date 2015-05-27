@@ -1,6 +1,6 @@
 /* create table statements for schema */
 
-/* 
+/*
  * Tables:
  *  - hazard_basis
  *  - design_code
@@ -76,7 +76,7 @@ CREATE TABLE region (
 );
 
 CREATE TABLE data (
-  id INTEGER PRIMARY KEY,
+  id BIGSERIAL PRIMARY KEY,
   region_id INTEGER REFERENCES region (id),
   latitude NUMERIC,
   longitude NUMERIC,
