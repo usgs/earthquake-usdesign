@@ -82,6 +82,7 @@ var D3GraphView = function (options) {
   var _this,
       _initialize,
       // variables
+      _firstRender,
       _innerFrame,
       _margin,
       _outerFrame,
@@ -103,6 +104,8 @@ var D3GraphView = function (options) {
 
   _initialize = function (options) {
     var el;
+
+    _firstRender = true;
 
     _this.model.set(Util.extend({
       data: null,
@@ -240,11 +243,15 @@ var D3GraphView = function (options) {
         yDomainPadding,
         yExtent;
 
-    // changed options,
-    // when called with no arguments, update everything
-    changed = changed || _this.model.get();
-    // all options
+
     options = _this.model.get();
+
+    if (_firstRender || !changed) {
+      changed = options;
+      _firstRender = false;
+    }
+
+    // all options
     xAxisScale = options.xAxisScale;
     yAxisScale = options.yAxisScale;
     // these are used for label positioning
