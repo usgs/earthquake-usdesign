@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+
+  <title>NEHRP 2015 Report View</title>
+  <link rel="stylesheet" href="site/earthquake/index.css"/>
+  <link rel="stylesheet" href="css/index.css"/>
+  <style>
+    body {
+      padding: 1em;
+    }
+    .view {
+      margin-top: 1em;
+    }
+  </style>
+</head>
+<body>
+  <a href="example.html">Examples</a>
+  <h1>NEHRP 2015 Report View</h1>
+
+  <div class="view"></div>
+
+  <script src="js/bundle.js"></script>
+  <script>
+    var Calculation = require('Calculation'),
+        Nehrp2015ReportView = require('Nehrp2015ReportView'),
+
+        Collection = require('mvc/Collection');
+
+
+    calculation = Calculation({
+      mode: Calculation.MODE_OUTPUT,
+      input: {
+        latitude: 35.000,
+        longitude: -90.000,
+        design_code: 1,
+        site_class: 4,
+        risk_cateogry: 1
+      },
+      output: {
+        metadata: {
+
+        },
+        tl: 12,
+        data: []
+      },
+      result: {
+        ss: 0.823,
+        sms: 0.964,
+        sds: 0.643,
+
+        s1: 0.291,
+        sm1: 0.529,
+        sd1: 0.353,
+
+        smSpectrum: [
+          [0.000, 0.386],
+          [0.110, 0.965],
+          [0.200, 0.965],
+          [0.549,0.965],
+          [0.600, 0.882],
+          [0.700, 0.756],
+          [0.800, 0.662],
+          [0.900, 0.588],
+          [1.000, 0.530],
+          [1.100, 0.482],
+          [1.200, 0.441],
+          [1.300, 0.407],
+          [1.400, 0.378],
+          [1.500, 0.353],
+          [1.600, 0.330],
+          [1.700, 0.312],
+          [1.800, 0.294],
+          [1.900, 0.279],
+          [2.000, 0.264]
+        ],
+
+        sdSpectrum: [
+          [0.000, 0.257],
+          [0.110, 0.643],
+          [0.200, 0.643],
+          [0.549, 0.643],
+          [0.600, 0.588],
+          [0.700, 0.504],
+          [0.800, 0.441],
+          [0.900, 0.392],
+          [1.000, 0.353],
+          [1.100, 0.321],
+          [1.200, 0.294],
+          [1.300, 0.271],
+          [1.400, 0.252],
+          [1.500, 0.235],
+          [1.600, 0.22],
+          [1.700, 0.208],
+          [1.800, 0.196],
+          [1.900, 0.186],
+          [2.000, 0.176]
+        ]
+      }
+    });
+
+    Nehrp2015ReportView({
+      el: document.querySelector('.view'),
+      model: calculation
+    })
+  </script>
+</body>
+</html>
