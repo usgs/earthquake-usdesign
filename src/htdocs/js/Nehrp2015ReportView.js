@@ -44,7 +44,8 @@ var Nehrp2015ReportView = function (params) {
 
     el = _this.el;
 
-    el.classList.add('report-view nehrp-2015-report-view');
+    el.classList.add('report-view');
+    el.classList.add('nehrp-2015-report-view');
 
     el.innerHTML = [
       '<section class="summary-output">',
