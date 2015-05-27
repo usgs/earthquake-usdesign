@@ -41,6 +41,7 @@ if (!Function.prototype.bind) {
   // Add each test class here as they are implemented
   require('./spec/ActionsView');
   require('./spec/SpectraGraphView');
+  require('./spec/NEHRPCalc2015Test');
   require('./spec/CalculationTest');
   require('./spec/WebServiceAccessorTest');
   require('./spec/CalculationViewTest');
