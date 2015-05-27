@@ -7,7 +7,7 @@ var Calculation = require('Calculation'),
 
 var expect = chai.expect;
 
-var calculation = Calculation({
+var input = {
           input:{
             latitude: 3.5,
             longitude: 1.0,
@@ -16,7 +16,9 @@ var calculation = Calculation({
             site_class: 1,
             title: 'tmp'
           }
-        });
+        };
+
+var calculation = Calculation(input);
 
 var testResultData = {
   input: {
@@ -64,7 +66,7 @@ var testResultData = {
   }
 };
 
-/* var testUsageData =
+var testUsageData =
   {'url':
   'http://localhost:8510/ws/{design_code_id}/' +
       '{site_class_id}/{risk_category_id}/{longitude}/{latitude}/{title}',
@@ -140,7 +142,7 @@ var testResultData = {
   'error':
       'Missing Parameter(s) ' +
           'site_class_id,risk_category_id,longitude,latitude,title'
-}; */
+};
 
 describe('WebServiceAccessor', function () {
   describe('constructor', function () {
@@ -150,6 +152,29 @@ describe('WebServiceAccessor', function () {
       };
 
       expect(create).not.to.throw(Error);
+    });
+  });
+
+  describe('getUsage', function () {
+    var stub;
+    before(function () {
+      stub = sinon.stub(Xhr, 'ajax', function (options) {
+        options.success(testUsageData);
+      });
+    });
+    after( function () {
+      stub.restore();
+    });
+
+    it('Uses WebServiceAccessor class for usage data', function (done) {
+      var webServiceAccessor = WebServiceAccessor();
+
+      webServiceAccessor.getUsage(function () {
+        expect(stub.callCount).to.equal(1);
+
+        expect(stub.getCall(0).args[0].url).to.equal('service');
+        done();
+      });
     });
   });
 
@@ -169,6 +194,10 @@ describe('WebServiceAccessor', function () {
 
       webServiceAccessor.getResults(calculation, function () {
         expect(stub.callCount).to.equal(1);
+
+        expect(stub.getCall(0).args[0].url).to.equal(
+          'service/1/1/1/3.5/1/tmp'
+        );
         done();
       });
     });

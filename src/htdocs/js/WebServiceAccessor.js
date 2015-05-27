@@ -24,7 +24,7 @@ var WebServiceAccessor = function (params) {
 
   _this.getUsage = function (callback) {
     Xhr.ajax({
-      url: _this.params.url,
+      url: _url,
       success: function(data) {
         callback(data);
       }
