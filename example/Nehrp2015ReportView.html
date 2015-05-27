@@ -30,7 +30,8 @@
     var Calculation = require('Calculation'),
         Nehrp2015ReportView = require('Nehrp2015ReportView'),
 
-        Collection = require('mvc/Collection');
+        Collection = require('mvc/Collection'),
+        Model = require('mvc/Model');
 
 
     calculation = Calculation({
@@ -57,6 +58,15 @@
         cr1: 0.857,
         s1uh: 0.176,
         s1d: 0.60,
+
+        site_class: Model({
+          id: 4,
+          value: 'D',
+          name: 'Stiff Soil'
+        }),
+
+        fa: 1.496,
+        fv: 2.298,
 
         ss: 0.381,
         sms: 0.569,
