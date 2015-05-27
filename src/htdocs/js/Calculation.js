@@ -89,22 +89,15 @@ var Calculation = function (params) {
 
     id = _this.get('id');
     attributes = _this.get();
-    attributes.output = attributes.output || {};
 
     input = Util.extend({}, _DEFAULTS.input, attributes.input);
-    output = {};
+    output = Util.extend({}, _DEFAULTS.output, attributes.output);
 
     output.metadata = Model(Util.extend({}, _DEFAULTS.output.metadata,
-        attributes.output.metadata));
+        output.metadata));
 
-    if (attributes.output.hasOwnProperty('tl')) {
-      output.tl = attributes.tl;
-    } else {
-      output.tl = _DEFAULTS.tl;
-    }
-
-    if (attributes.output.data) {
-      output.data = Collection(attributes.output.data.map(Model));
+    if (output.data) {
+      output.data = Collection(output.data.map(Model));
     } else {
       output.data = Collection(_DEFAULTS.output.data.map(Model));
     }
