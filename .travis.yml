@@ -1,3 +1,10 @@
 language: node_js
 node_js:
   - '0.10'
+env:
+  - noninteractive=true
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -y php
+before_script:
+  - npm install -g grunt-cli
