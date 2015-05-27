@@ -110,3 +110,22 @@
     text-align: center;
   }
 }
+
+.equation {
+  border-bottom: 1px solid #999;
+  overflow: hidden;
+  padding: .5em;
+
+  &.equation-summary {
+    border-bottom: 2px solid #333;
+    text-align: right;
+
+    > span {
+      float: none;
+    }
+  }
+
+  > span {
+    float: right;
+  }
+}
