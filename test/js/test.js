@@ -41,6 +41,7 @@ if (!Function.prototype.bind) {
   // Add each test class here as they are implemented
   require('./spec/SpectraGraphView');
   require('./spec/CalculationTest');
+  require('./spec/WebServiceAccessorTest');
 
   require('./spec/util/D3GraphView');
   require('./spec/util/LookupDataFactoryTest');
