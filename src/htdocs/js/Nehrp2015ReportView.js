@@ -27,6 +27,10 @@ var Nehrp2015ReportView = function (params) {
       _eq11_4_2,
       _eq11_4_3,
       _eq11_4_4,
+      _eq11_4_5,
+      _eq11_4_6,
+      _eq11_4_7,
+      _eq11_4_8,
       _eqSummaryS1,
       _eqSummarySs,
       _faSummary,
@@ -50,6 +54,10 @@ var Nehrp2015ReportView = function (params) {
       _updateEquation11_4_2,
       _updateEquation11_4_3,
       _updateEquation11_4_4,
+      _updateEquation11_4_5,
+      _updateEquation11_4_6,
+      _updateEquation11_4_7,
+      _updateEquation11_4_8,
       _updateEquationSummaryS1,
       _updateEquationSummarySs,
       _updateFaInfo,
@@ -287,6 +295,30 @@ var Nehrp2015ReportView = function (params) {
           '(excluding Eor F), F<sub>a</sub> and F<sub>v</sub>',
         '</h4>',
         '<div class="report-table-undetermined-fafv"></div>',
+
+        '<div class="equation">',
+          '<label for="equation-11-4-5">Equation (11.4-5)</label>',
+          '<span id="equation-11-4-5"><span>',
+        '</div>',
+        '<div class="equation">',
+          '<label for="equation-11-4-6">Equation (11.4-6)</label>',
+          '<span id="equation-11-4-6"><span>',
+        '</div>',
+      '</section>',
+
+      '<section class="report-section section-11-4-4">',
+        '<h3>',
+          'Section 11.4.4 &mdash; Design Spectral Acceleration Parameters',
+        '</h3>',
+
+        '<div class="equation">',
+          '<label for="equation-11-4-7">Equation (11.4-7)</label>',
+          '<span id="equation-11-4-7"><span>',
+        '</div>',
+        '<div class="equation">',
+          '<label for="equation-11-4-8">Equation (11.4-8)</label>',
+          '<span id="equation-11-4-8"><span>',
+        '</div>',
       '</section>'
     ].join('');
 
@@ -325,6 +357,12 @@ var Nehrp2015ReportView = function (params) {
     _fvSummary = el.querySelector('.report-summary-fv');
 
     _fafvUnknownTable = el.querySelector('.report-table-undetermined-fafv');
+
+    _eq11_4_5 = el.querySelector('#equation-11-4-5');
+    _eq11_4_6 = el.querySelector('#equation-11-4-6');
+
+    _eq11_4_7 = el.querySelector('#equation-11-4-7');
+    _eq11_4_8 = el.querySelector('#equation-11-4-8');
   };
 
   _displayNumber = function (number) {
@@ -384,6 +422,64 @@ var Nehrp2015ReportView = function (params) {
     _eq11_4_4.innerHTML = [
       'S<sub>1D</sub> = ',
         _displayNumber(s1d), ' g'
+    ].join('');
+  };
+
+  _updateEquation11_4_5 = function (result) {
+    var fa,
+        sms,
+        ss;
+
+    ss = result.get('ss');
+    sms = result.get('sms');
+    fa = result.get('fa');
+
+    _eq11_4_5.innerHTML = [
+      'S<sub>MS</sub> = F<sub>a</sub>S<sub>S</sub> = ',
+      _displayNumber(fa), ' &times; ', _displayNumber(ss), ' = ',
+      _displayNumber(sms)
+    ].join('');
+  };
+
+  _updateEquation11_4_6 = function (result) {
+    var fv,
+        sm1,
+        s1;
+
+    s1 = result.get('s1');
+    sm1 = result.get('sm1');
+    fv = result.get('fv');
+
+    _eq11_4_6.innerHTML = [
+      'S<sub>M1</sub> = F<sub>a</sub>S<sub>1</sub> = ',
+      _displayNumber(fv), ' &times; ', _displayNumber(s1), ' = ',
+      _displayNumber(sm1)
+    ].join('');
+  };
+
+  _updateEquation11_4_7 = function (result) {
+    var sds,
+        sms;
+
+    sds = result.get('sds');
+    sms = result.get('sms');
+
+    _eq11_4_7.innerHTML = [
+      'S<sub>DS</sub> = &#8532 S<sub>MS</sub> = &#8532 &times; ',
+      _displayNumber(sms), ' = ', _displayNumber(sds)
+    ].join('');
+  };
+
+  _updateEquation11_4_8 = function (result) {
+    var sd1,
+        sm1;
+
+    sd1 = result.get('sd1');
+    sm1 = result.get('sm1');
+
+    _eq11_4_8.innerHTML = [
+      'S<sub>D1</sub> = &#8532 S<sub>M1</sub> = &#8532 &times; ',
+      _displayNumber(sm1), ' = ', _displayNumber(sd1)
     ].join('');
   };
 
@@ -469,6 +565,10 @@ var Nehrp2015ReportView = function (params) {
     _eq11_4_2 = null;
     _eq11_4_3 = null;
     _eq11_4_4 = null;
+    _eq11_4_5 = null;
+    _eq11_4_6 = null;
+    _eq11_4_7 = null;
+    _eq11_4_8 = null;
     _eqSummaryS1 = null;
     _eqSummarySs = null;
     _faSummary = null;
@@ -492,6 +592,10 @@ var Nehrp2015ReportView = function (params) {
     _updateEquation11_4_2 = null;
     _updateEquation11_4_3 = null;
     _updateEquation11_4_4 = null;
+    _updateEquation11_4_5 = null;
+    _updateEquation11_4_6 = null;
+    _updateEquation11_4_7 = null;
+    _updateEquation11_4_8 = null;
     _updateEquationSummaryS1 = null;
     _updateEquationSummarySs = null;
     _updateFaInfo = null;
@@ -538,6 +642,11 @@ var Nehrp2015ReportView = function (params) {
     _updateFaInfo(result);
     _updateFvInfo(result);
     _updateFaFvUnknownTable(result);
+
+    _updateEquation11_4_5(result);
+    _updateEquation11_4_6(result);
+    _updateEquation11_4_7(result);
+    _updateEquation11_4_8(result);
   };
 
 
