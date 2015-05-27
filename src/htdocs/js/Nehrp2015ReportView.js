@@ -5,6 +5,7 @@ var
   SpectraGraphView = require('SpectraGraphView'),
 
   Formatter = require('util/Formatter'),
+  SiteAmplification = require('util/SiteAmplification'),
 
   View = require('mvc/View')/*,
 
@@ -28,6 +29,12 @@ var Nehrp2015ReportView = function (params) {
       _eq11_4_4,
       _eqSummaryS1,
       _eqSummarySs,
+      _faSummary,
+      _faTable,
+      _fafvUnknownTable,
+      _fvSummary,
+      _fvTable,
+      _siteAmplification,
       _summaryS1,
       _summarySs,
       _summarySd1,
@@ -45,12 +52,16 @@ var Nehrp2015ReportView = function (params) {
       _updateEquation11_4_4,
       _updateEquationSummaryS1,
       _updateEquationSummarySs,
+      _updateFaInfo,
+      _updateFaFvUnknownTable,
+      _updateFvInfo,
       _updateVisiblity;
 
 
   _this = View(params);
 
   _initialize = function (/*params*/) {
+    _siteAmplification = SiteAmplification();
 
     // Don't listen for all changes, just result changes
     _this.model.off('change', 'render', _this);
@@ -262,6 +273,20 @@ var Nehrp2015ReportView = function (params) {
           'S<sub>1</sub> &equiv; &ldquo;Less of values from Equations ',
           '(11.4-3) and (11.4-4)&rdquo; = <span class="eq-summary-s1"></span>',
         '</div>',
+
+        '<h4>Table 11.4-1: Site Coefficient F<sub>a</sub></h4>',
+        '<div class="report-table-fa"></div>',
+        '<p class="report-summary-fa"></p>',
+
+        '<h4>Table 11.4-2: Site Coefficient F<sub>v</sub></h4>',
+        '<div class="report-table-fv"></div>',
+        '<p class="report-summary-fv"></p>',
+
+        '<h4>',
+          'Table 11.4-3: Site Coefficients for Undetermined Soil Sites ',
+          '(excluding Eor F), F<sub>a</sub> and F<sub>v</sub>',
+        '</h4>',
+        '<div class="report-table-undetermined-fafv"></div>',
       '</section>'
     ].join('');
 
@@ -292,6 +317,14 @@ var Nehrp2015ReportView = function (params) {
     _eq11_4_3 = el.querySelector('#equation-11-4-3');
     _eq11_4_4 = el.querySelector('#equation-11-4-4');
     _eqSummaryS1 = el.querySelector('.eq-summary-s1');
+
+    _faTable = el.querySelector('.report-table-fa');
+    _faSummary = el.querySelector('.report-summary-fa');
+
+    _fvTable = el.querySelector('.report-table-fv');
+    _fvSummary = el.querySelector('.report-summary-fv');
+
+    _fafvUnknownTable = el.querySelector('.report-table-undetermined-fafv');
   };
 
   _displayNumber = function (number) {
@@ -362,6 +395,54 @@ var Nehrp2015ReportView = function (params) {
     _eqSummarySs.innerHTML = _displayNumber(result.get('ss')) + ' g';
   };
 
+  _updateFaInfo = function (result) {
+    var fa,
+        ss,
+        siteClass;
+
+    fa = result.get('fa');
+    ss = result.get('ss');
+    siteClass = result.get('site_class').get('value');
+
+    _faTable.innerHTML = '';
+    _faTable.appendChild(_siteAmplification.getFaTable(ss, siteClass));
+    _faSummary.innerHTML = [
+      'For Site Class = ', siteClass, ' and S<sub>S</sub> = ',
+      _displayNumber(ss), ' g, F<sub>a</sub> = ', _displayNumber(fa)
+    ].join('');
+  };
+
+  _updateFaFvUnknownTable = function (result) {
+    var s1,
+        ss,
+        siteClass;
+
+    ss = result.get('ss');
+    s1 = result.get('s1');
+    siteClass = result.get('site_class').get('value');
+
+    _fafvUnknownTable.innerHTML = '';
+    _fafvUnknownTable.appendChild(
+        _siteAmplification.getUndeterminedSsS1Table(ss, s1, siteClass));
+  };
+
+  _updateFvInfo = function (result) {
+    var fv,
+        s1,
+        siteClass;
+
+    fv = result.get('fv');
+    s1 = result.get('s1');
+    siteClass = result.get('site_class').get('value');
+
+    _fvTable.innerHTML = '';
+    _fvTable.appendChild(_siteAmplification.getFvTable(s1, siteClass));
+    _fvSummary.innerHTML = [
+      'For Site Class = ', siteClass, ' and S<sub>1</sub> = ',
+      _displayNumber(s1), ' g, F<sub>v</sub> = ', _displayNumber(fv)
+    ].join('');
+  };
+
   _updateVisiblity = function () {
     var mode;
 
@@ -390,6 +471,11 @@ var Nehrp2015ReportView = function (params) {
     _eq11_4_4 = null;
     _eqSummaryS1 = null;
     _eqSummarySs = null;
+    _faSummary = null;
+    _faTable = null;
+    _fafvUnknownTable = null;
+    _fvSummary = null;
+    _fvTable = null;
     _summaryS1 = null;
     _summarySs = null;
     _summarySd1 = null;
@@ -408,6 +494,9 @@ var Nehrp2015ReportView = function (params) {
     _updateEquation11_4_4 = null;
     _updateEquationSummaryS1 = null;
     _updateEquationSummarySs = null;
+    _updateFaInfo = null;
+    _updateFaFvUnknownTable = null;
+    _updateFvInfo = null;
     _updateVisiblity = null;
 
 
@@ -445,6 +534,10 @@ var Nehrp2015ReportView = function (params) {
     _updateEquation11_4_3(result);
     _updateEquation11_4_4(result);
     _updateEquationSummaryS1(result);
+
+    _updateFaInfo(result);
+    _updateFvInfo(result);
+    _updateFaFvUnknownTable(result);
   };
 
 
