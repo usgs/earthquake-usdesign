@@ -6,7 +6,11 @@ var Collection = require('mvc/Collection'),
     Util = require('util/Util');
 
 
+var _CALCULATION_MODE_INPUT = 'input',
+    _CALCULATION_MODE_OUTPUT = 'output';
+
 var _DEFAULTS = {
+  mode: _CALCULATION_MODE_INPUT,
   input: {
     title: 'Untitled Report',
     latitude: null,
@@ -139,5 +143,8 @@ var Calculation = function (params) {
   params = null;
   return _this;
 };
+
+Calculation.MODE_INPUT = _CALCULATION_MODE_INPUT;
+Calculation.MODE_OUTPUT = _CALCULATION_MODE_OUTPUT;
 
 module.exports = Calculation;

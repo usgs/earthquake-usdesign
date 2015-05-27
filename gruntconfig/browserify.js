@@ -8,6 +8,7 @@ var CWD = '.',
 // List individual modules here. Each listed module will be aliased in the
 // "bundle", and will be set as an external in the "test".
 var EXPORTS = [
+  JSDIR + '/ActionsView.js:ActionsView',
   JSDIR + '/Calculation.js:Calculation',
   JSDIR + '/CalculationView.js:CalculationView',
   JSDIR + '/SpectraGraphView.js:SpectraGraphView',
@@ -29,7 +30,8 @@ var browerify = {
       debug: true,
       paths: [
         JSDIR,
-        CWD + '/node_modules/hazdev-webutils/src'
+        CWD + '/node_modules/hazdev-webutils/src',
+        CWD + '/node_modules/hazdev-accordion/src'
       ]
     }
   },
