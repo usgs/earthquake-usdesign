@@ -47,7 +47,11 @@ _longitude = function (value) {
 };
 
 _number = function (value, decimals) {
-  return value.toFixed(decimals);
+  if (!isNaN(value)) {
+    return parseFloat(value).toFixed(decimals);
+  } else {
+    return value;
+  }
 };
 
 _siteAmplificationHeader = function (value) {
