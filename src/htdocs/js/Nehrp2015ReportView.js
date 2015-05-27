@@ -4,6 +4,8 @@ var
   Calculation = require('Calculation'),
   SpectraGraphView = require('SpectraGraphView'),
 
+  Formatter = require('util/Formatter'),
+
   View = require('mvc/View')/*,
 
   Util = require('util/Util')*/;
@@ -20,6 +22,12 @@ var Nehrp2015ReportView = function (params) {
   var _this,
       _initialize,
 
+      _eq11_4_1,
+      _eq11_4_2,
+      _eq11_4_3,
+      _eq11_4_4,
+      _eqSummaryS1,
+      _eqSummarySs,
       _summaryS1,
       _summarySs,
       _summarySd1,
@@ -30,6 +38,13 @@ var Nehrp2015ReportView = function (params) {
       _summarySmSpectrum,
 
       _createViewSkeleton,
+      _displayNumber,
+      _updateEquation11_4_1,
+      _updateEquation11_4_2,
+      _updateEquation11_4_3,
+      _updateEquation11_4_4,
+      _updateEquationSummaryS1,
+      _updateEquationSummarySs,
       _updateVisiblity;
 
 
@@ -213,6 +228,40 @@ var Nehrp2015ReportView = function (params) {
             '</tr>',
           '</tfoot>',
         '</table>',
+      '</section>',
+
+      '<section class="report-section section-11-4-3">',
+        '<h3>',
+          'Section 11.4.3 &mdash; Site Coefficients, Risk Coefficients, and ',
+          'Risk-Targeted Maximum Considered Earthquake (MCE<sub>R</sub>) ',
+          'Spectral Response Acceleration Parameters',
+        '</h3>',
+
+        '<div class="equation">',
+          '<label for="equation-11-4-1">Equation (11.4-1)</label>',
+          '<span id="equation-11-4-1"></span>',
+        '</div>',
+        '<div class="equation">',
+          '<label for="equation-11-4-2">Equation (11.4-2)</label>',
+          '<span id="equation-11-4-2"></span>',
+        '</div>',
+        '<div class="equation equation-summary">',
+          'S<sub>S</sub> &equiv; &ldquo;Less of values from Equations ',
+          '(11.4-1) and (11.4-2)&rdquo; = <span class="eq-summary-ss"></span>',
+        '</div>',
+
+        '<div class="equation">',
+          '<label for="equation-11-4-3">Equation (11.4-3)</label>',
+          '<span id="equation-11-4-3"></span>',
+        '</div>',
+        '<div class="equation">',
+          '<label for="equation-11-4-4">Equation (11.4-3)</label>',
+          '<span id="equation-11-4-4"></span>',
+        '</div>',
+        '<div class="equation equation-summary">',
+          'S<sub>1</sub> &equiv; &ldquo;Less of values from Equations ',
+          '(11.4-3) and (11.4-4)&rdquo; = <span class="eq-summary-s1"></span>',
+        '</div>',
       '</section>'
     ].join('');
 
@@ -235,6 +284,82 @@ var Nehrp2015ReportView = function (params) {
       data: [],
       title: 'Design Response Spectrum'
     });
+
+    _eq11_4_1 = el.querySelector('#equation-11-4-1');
+    _eq11_4_2 = el.querySelector('#equation-11-4-2');
+    _eqSummarySs = el.querySelector('.eq-summary-ss');
+
+    _eq11_4_3 = el.querySelector('#equation-11-4-3');
+    _eq11_4_4 = el.querySelector('#equation-11-4-4');
+    _eqSummaryS1 = el.querySelector('.eq-summary-s1');
+  };
+
+  _displayNumber = function (number) {
+    return Formatter.number(Formatter.value(number), 3);
+  };
+
+  _updateEquation11_4_1 = function (result) {
+    var crs,
+        ssuh,
+        value;
+
+    crs = result.get('crs');
+    ssuh = result.get('ssuh');
+    value = crs * ssuh;
+
+    _eq11_4_1.innerHTML = [
+      'C<sub>RS</sub>S<sub>SUH</sub> = ',
+        _displayNumber(crs), ' &times; ',
+        _displayNumber(ssuh), ' = ',
+        _displayNumber(value), ' g'
+    ].join('');
+  };
+
+  _updateEquation11_4_2 = function (result) {
+    var ssd;
+
+    ssd = result.get('ssd');
+
+    _eq11_4_2.innerHTML = [
+      'S<sub>SD</sub> = ',
+        _displayNumber(ssd), ' g'
+    ].join('');
+  };
+
+  _updateEquation11_4_3 = function (result) {
+    var cr1,
+        s1uh,
+        value;
+
+    cr1 = result.get('crs');
+    s1uh = result.get('ssuh');
+    value = cr1 * s1uh;
+
+    _eq11_4_3.innerHTML = [
+      'C<sub>R1</sub>S<sub>1UH</sub> = ',
+        _displayNumber(cr1), ' &times; ',
+        _displayNumber(s1uh), ' = ',
+        _displayNumber(value), ' g'
+    ].join('');
+  };
+
+  _updateEquation11_4_4 = function (result) {
+    var s1d;
+
+    s1d = result.get('s1d');
+
+    _eq11_4_4.innerHTML = [
+      'S<sub>1D</sub> = ',
+        _displayNumber(s1d), ' g'
+    ].join('');
+  };
+
+  _updateEquationSummaryS1 = function (result) {
+    _eqSummaryS1.innerHTML = _displayNumber(result.get('s1')) + ' g';
+  };
+
+  _updateEquationSummarySs = function (result) {
+    _eqSummarySs.innerHTML = _displayNumber(result.get('ss')) + ' g';
   };
 
   _updateVisiblity = function () {
@@ -259,7 +384,12 @@ var Nehrp2015ReportView = function (params) {
     _summarySdSpectrum.destroy();
     _summarySmSpectrum.destroy();
 
-
+    _eq11_4_1 = null;
+    _eq11_4_2 = null;
+    _eq11_4_3 = null;
+    _eq11_4_4 = null;
+    _eqSummaryS1 = null;
+    _eqSummarySs = null;
     _summaryS1 = null;
     _summarySs = null;
     _summarySd1 = null;
@@ -271,6 +401,13 @@ var Nehrp2015ReportView = function (params) {
 
 
     _createViewSkeleton = null;
+    _displayNumber = null;
+    _updateEquation11_4_1 = null;
+    _updateEquation11_4_2 = null;
+    _updateEquation11_4_3 = null;
+    _updateEquation11_4_4 = null;
+    _updateEquationSummaryS1 = null;
+    _updateEquationSummarySs = null;
     _updateVisiblity = null;
 
 
@@ -300,6 +437,14 @@ var Nehrp2015ReportView = function (params) {
 
     _summarySmSpectrum.model.set({data: result.get('smSpectrum')});
     _summarySdSpectrum.model.set({data: result.get('sdSpectrum')});
+
+    _updateEquation11_4_1(result);
+    _updateEquation11_4_2(result);
+    _updateEquationSummarySs(result);
+
+    _updateEquation11_4_3(result);
+    _updateEquation11_4_4(result);
+    _updateEquationSummaryS1(result);
   };
 
 
