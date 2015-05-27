@@ -22,6 +22,7 @@ var EXPORTS = [
 
   // Dependencies that need to be exported so stuff works in examples/tests
   CWD + '/node_modules/hazdev-webutils/src/mvc/Collection.js:mvc/Collection',
+  CWD + '/node_modules/hazdev-webutils/src/mvc/Model.js:mvc/Model',
   CWD + '/node_modules/hazdev-webutils/src/util/Xhr.js:util/Xhr'
 ];
 // Subsequent source files can then require "ExampleModule" with:
