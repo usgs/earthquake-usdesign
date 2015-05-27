@@ -7,22 +7,24 @@ var
   Formatter = require('util/Formatter'),
   SiteAmplification = require('util/SiteAmplification'),
 
-  View = require('mvc/View')/*,
-
-  Util = require('util/Util')*/;
+  View = require('mvc/View');
 
 
+// TODO :: Update links to actual images
 var _FIGURE_22_1 = 'http://placehold.it/640x480',
     _FIGURE_22_2 = 'http://placehold.it/640x480',
     _FIGURE_22_3 = 'http://placehold.it/640x480',
     _FIGURE_22_4 = 'http://placehold.it/640x480',
     _FIGURE_22_5 = 'http://placehold.it/640x480',
-    _FIGURE_22_6 = 'http://placehold.it/640x480';
+    _FIGURE_22_6 = 'http://placehold.it/640x480',
+    _FIGURE_22_7 = 'http://placehold.it/640x480';
 
 var Nehrp2015ReportView = function (params) {
   var _this,
       _initialize,
 
+      _detailSdSpectrum,
+      _detailSmSpectrum,
       _eq11_4_1,
       _eq11_4_2,
       _eq11_4_3,
@@ -319,6 +321,27 @@ var Nehrp2015ReportView = function (params) {
           '<label for="equation-11-4-8">Equation (11.4-8)</label>',
           '<span id="equation-11-4-8"><span>',
         '</div>',
+      '</section>',
+
+      '<sction class="report-section section-11-4-5">',
+        '<h3>Section 11.4.5 &mdash; Design Response Spectrum</h3>',
+
+        '<h5>',
+          '<a href="', _FIGURE_22_7, '">',
+            'Figure 22-7: Long-period Transition Period, T<sub>L</sub> (s)',
+          '</a>',
+        '</h5>',
+
+        '<div class="report-details-spectra-sd"></div>',
+      '</section>',
+
+      '<section class="report-section section-11-4-6">',
+        '<h3>Section 11.4.6 &mdash; MCE<sub>R</sub> Response Spectrum</h3>',
+        '<aside>',
+          'The MCE<sub>R</sub> response spectrum is determined by ',
+          'multiplying the design response spectrum above by 1.5.',
+        '</aside>',
+        '<div class="report-details-spectra-sm"></div>',
       '</section>'
     ].join('');
 
@@ -363,6 +386,31 @@ var Nehrp2015ReportView = function (params) {
 
     _eq11_4_7 = el.querySelector('#equation-11-4-7');
     _eq11_4_8 = el.querySelector('#equation-11-4-8');
+
+    _detailSdSpectrum = SpectraGraphView({
+      el: el.querySelector('.report-details-spectra-sd'),
+      data: [],
+      title: null,
+      ssLabel: 'S<sub>DS</sub>',
+      s1Label: 'S<sub>D1</sub>',
+      comment:
+        'T < T<sub>0</sub> : ' +
+            'S<sub>a</sub> = S<sub>DS</sub> ( 0.4 + 0.6 T / T<sub>0</sub> )\n' +
+        'T<sub>0</sub> ≤ T ≤ T<sub>S</sub> : ' +
+            'S<sub>a</sub> = S<sub>DS</sub>\n' +
+        'T<sub>S</sub> < T ≤ T<sub>L</sub> : ' +
+            'S<sub>a</sub> = S<sub>D1</sub> / T\n' +
+        'T > T<sub>L</sub> : ' +
+            'S<sub>a</sub> = S<sub>D1</sub> T<sub>L</sub> / T<sup>2</sup>'
+    });
+
+    _detailSmSpectrum = SpectraGraphView({
+      el: el.querySelector('.report-details-spectra-sm'),
+      data: [],
+      title: null,
+      ssLabel: 'S<sub>MS</sub>',
+      s1Label: 'S<sub>M1</sub>'
+    });
   };
 
   _displayNumber = function (number) {
@@ -558,9 +606,13 @@ var Nehrp2015ReportView = function (params) {
     _this.model.off('change:mode', _updateVisiblity);
 
 
+    _detailSdSpectrum.destroy();
+    _detailSmSpectrum.destroy();
     _summarySdSpectrum.destroy();
     _summarySmSpectrum.destroy();
 
+    _detailSdSpectrum = null;
+    _detailSmSpectrum = null;
     _eq11_4_1 = null;
     _eq11_4_2 = null;
     _eq11_4_3 = null;
@@ -647,6 +699,18 @@ var Nehrp2015ReportView = function (params) {
     _updateEquation11_4_6(result);
     _updateEquation11_4_7(result);
     _updateEquation11_4_8(result);
+
+    _detailSdSpectrum.model.set({
+      data: result.get('sdSpectrum'),
+      ss: result.get('sds'),
+      s1: result.get('sd1')
+    });
+
+    _detailSmSpectrum.model.set({
+      data: result.get('smSpectrum'),
+      ss: result.get('sms'),
+      s1: result.get('sm1')
+    });
   };
 
 
