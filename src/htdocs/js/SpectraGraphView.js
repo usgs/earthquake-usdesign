@@ -340,6 +340,8 @@ var SpectraGraphView = function (options) {
       _convertHTML(d3.select(this));
     });
 
+    _convertHTML(d3.select(_this.el.querySelector('.plot-title')));
+
     // show comment
     _formatComment(_comment, _this.model.get('comment'));
     // position in top right corner
