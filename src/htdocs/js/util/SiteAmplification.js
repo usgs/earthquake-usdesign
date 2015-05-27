@@ -5,16 +5,12 @@ var Formatter = require('util/Formatter'),
 
 // Bins provided by defaults are valid for 2015 NEHRP
 var _DEFAULTS = {
-  faTitle: 'Mapped Risk-Targeted Maximum Considered Earthquake ' +
-      '(MCE<sub>R</sub>)<br/>Spectral Response Acceleration Parameter at ' +
-      'Short Period',
+  faTitle: 'Spectral Reponse Acceleration Parameter at Short Period',
 
   fpgaTitle: 'Mapped Maximum Considered Geometric Mean ' +
       '(MCE<sub>G</sub>) Peak Ground Acceleration, PGA',
 
-  fvTitle: 'Mapped Risk-Targeted Maximum Considered Earthquake ' +
-      '(MCE<sub>R</sub>)<br/>Spectral Response Acceleration Parameter at ' +
-      '1-s Period',
+  fvTitle: 'Spectral Response Acceleration Parameter at 1-Second Period',
 
   ssInfo: {
     bins: [0.25, 0.50, 0.75, 1.00, 1.25, 1.50],
@@ -485,8 +481,7 @@ var SiteAmplification = function (params) {
           '<tr>',
             '<th scope="col" rowspan="2">Site Coefficient</th>',
             '<th colspan="', len, '">',
-              'Mapped Risk-Targeted Maximum Considered Earthquake ',
-              '(MCE<sub>R</sub>) Spectral Response Acceleration Parameters',
+              'Spectral Response Acceleration Parameters',
             '</th>',
           '</tr>',
           '<tr>', faHeaders.join(''), '</tr>',
