@@ -33,5 +33,31 @@ describe('Calculation', function () {
 
       expect(c.get('id')).to.equal(1);
     });
+
+    it('has models/collections as appropriate', function () {
+      var c,
+          data,
+          input,
+          metadata,
+          output;
+
+      c = Calculation();
+
+      input = c.get('input');
+      expect(input).to.respondTo('get');
+      expect(input).to.respondTo('set');
+
+      output = c.get('output');
+      expect(output).to.respondTo('get');
+      expect(output).to.respondTo('set');
+
+      metadata = output.get('metadata');
+      expect(metadata).to.respondTo('get');
+      expect(metadata).to.respondTo('set');
+
+      data = output.get('data');
+      expect(data).to.respondTo('get');
+      expect(data).to.respondTo('reset');
+    });
   });
 });
