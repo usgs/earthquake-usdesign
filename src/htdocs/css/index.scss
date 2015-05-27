@@ -10,5 +10,7 @@ provide SCSS alternatives.
 This file probably has only a minimal ammount of selectors/styles.
 */
 
+@import '_CalculationView';
 @import '_SpectraGraphView';
+
 @import 'util/_SiteAmplification';

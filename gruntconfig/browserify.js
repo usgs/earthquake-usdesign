@@ -9,13 +9,15 @@ var CWD = '.',
 // "bundle", and will be set as an external in the "test".
 var EXPORTS = [
   JSDIR + '/Calculation.js:Calculation',
+  JSDIR + '/CalculationView.js:CalculationView',
   JSDIR + '/SpectraGraphView.js:SpectraGraphView',
 
   JSDIR + '/util/D3GraphView.js:util/D3GraphView',
   JSDIR + '/util/LookupDataFactory.js:util/LookupDataFactory',
   JSDIR + '/util/SiteAmplification.js:util/SiteAmplification',
 
-  // Dependencies that need to be exported so spies work in tests
+  // Dependencies that need to be exported so stuff works in examples/tests
+  CWD + '/node_modules/hazdev-webutils/src/mvc/Collection.js:mvc/Collection',
   CWD + '/node_modules/hazdev-webutils/src/util/Xhr.js:util/Xhr'
 ];
 // Subsequent source files can then require "ExampleModule" with:
