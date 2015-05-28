@@ -5,6 +5,9 @@ $remote_server = 'hazards.cr.usgs.gov';
 
 $datasets = array(
   '2015nehrp_alaska' => array(
+    // lat/lon is a point inside AK bounds:
+    // 48.00, 72.00, -200.00, -125.10
+    'name' => '2015 NEHRP Alaska',
     'latitude' => 50,
     'longitude' => -180,
     'design_code_id' => 1,
@@ -52,9 +55,14 @@ ftp_login($ftp, 'anonymous', 'earthquake-usdesign@usgs.gov');
 
 
 // loop over editions
+$anyErrors = false;
 foreach ($datasets as $id => $metadata) {
+  if (!promptYesNo('Load ' . $metadata['name'] . '?', true)) {
+    continue;
+  }
+
   // download dataset
-  echo "\t" . 'downloading ' . $id . ' ...';
+  echo "\t" . 'downloading ...';
   $local_dataset = $local_dir . '/' . $id;
   if (!is_dir($local_dataset)) {
     mkdir($local_dataset);
@@ -77,7 +85,7 @@ foreach ($datasets as $id => $metadata) {
 
 
   // load dataset files into database
-  echo "\t" . 'loading ' . $id . ' ...';
+  echo "\t" . 'loading ...';
   $DB->beginTransaction();
   try {
     // check that files exist
@@ -141,6 +149,12 @@ foreach ($datasets as $id => $metadata) {
         'ERROR: ' . $e->getMessage() . PHP_EOL .
         PHP_EOL;
 
-    exit(-1);
+    $anyErrors = true;
   }
+}
+
+if ($anyErrors) {
+  echo PHP_EOL . 'There were errors loading datasets,' .
+      ' check the output above for more information.' . PHP_EOL;
+  exit(-1);
 }
