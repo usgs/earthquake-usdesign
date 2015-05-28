@@ -9,6 +9,7 @@ class SetParser {
   private $_parsers;
   private $_region;
   private $_dataFactory;
+  private $_showStatus;
 
   /**
    * @Constructor
@@ -19,14 +20,20 @@ class SetParser {
    *        Region for this dataset, as returned by RegionFactory#get.
    * @param $dataFactory {DataFactory}
    *        data factory for storing parsed data.
+   * @param $showStatus {Integer}
+   *        default 10000.
+   *        how often to print a period as a status indicator.
+   *        negative number means omit.
    */
-  public function __construct ($dataset, $region, $dataFactory) {
+  public function __construct ($dataset, $region, $dataFactory,
+      $showStatus=10000) {
     $this->_parsers = array();
     foreach ($dataset as $key => $file) {
       $this->_parsers[$key] = new FileParser($file);
     }
     $this->_region = $region;
     $this->_dataFactory = $dataFactory;
+    $this->_showStatus = $showStatus;
   }
 
 
@@ -40,12 +47,18 @@ class SetParser {
    */
   public function process () {
     $eof = false;
+    $lines = 0;
 
     while(!$eof) {
       $first = true;
       $latitude = null;
       $longitude = null;
       $values = array();
+
+      $lines = $lines + 1;
+      if ($this->_showStatus > 0 && $lines % $this->_showStatus === 0) {
+        echo '.';
+      }
 
       foreach ($this->_parsers as $key => $parser) {
         $data = $parser->nextLine();
