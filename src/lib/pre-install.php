@@ -103,6 +103,6 @@ file_put_contents($APACHE_CONFIG_FILE, '
 
 // configure database
 echo "\n";
-if (promptYesNo('Would you like to setup the database or load data', true)) {
+if (promptYesNo('Would you like to setup the database or load data?', true)) {
   include_once 'install/setup_database.php';
 }

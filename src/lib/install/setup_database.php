@@ -35,11 +35,11 @@ $dbInstaller = new DatabaseInstaller($DB_DSN, $username, $password,
 
 try {
   echo PHP_EOL;
-  $answer = promptYesNo('Would you like to create the database schema', true);
+  $answer = promptYesNo('Would you like to create the database schema?', true);
   if ($answer) {
     $answer = promptYesNo(PHP_EOL .
         'Loading the schema removes any existing schema and/or data!' . PHP_EOL .
-        'Are you sure you wish to continue', false);
+        'Are you sure you wish to continue?', false);
     if ($answer) {
       // ----------------------------------------------------------------------
       // Create Schema
@@ -65,7 +65,7 @@ try {
       // Load Reference Data
       // ----------------------------------------------------------------------
       $answer = promptYesNo(
-          'Would you like to load the reference data into the database', true);
+          'Would you like to load the reference data into the database?', true);
       if ($answer) {
         $referenceDataScript = promptFile(
             'SQL script contiaining reference data',
@@ -81,8 +81,8 @@ try {
   // ----------------------------------------------------------------------
   // Create User
   // ----------------------------------------------------------------------
-  $answer = promptYesNo("Would you like to create the read-only " .
-      "database user = '" . $CONFIG['DB_USER'] . "'", true);
+  $answer = promptYesNo('Would you like to create the read-only' .
+      ' database user (' . $CONFIG['DB_USER'] . ')?', true);
   if ($answer) {
     echo 'Creating read-only user ...';
     try {
@@ -116,7 +116,7 @@ try {
 // US Design gridded data
 // ----------------------------------------------------------------------
 $answer = promptYesNo(
-    'Would you like to load the gridded data into the database', true);
+    'Would you like to load the gridded data into the database?', true);
 if ($answer) {
     // load data
     include_once('install/gridded_data.php');
