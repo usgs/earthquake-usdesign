@@ -2,6 +2,9 @@
 
 var LookupDataFactory = require('util/LookupDataFactory'),
 
+    L = require('leaflet'),
+    LocationControl = require('locationview/LocationControl'),
+
     Collection = require('mvc/Collection'),
     CollectionSelectBox = require('mvc/CollectionSelectBox'),
     View = require('mvc/View');
@@ -24,12 +27,14 @@ var NEHRP2015InputView = function (params) {
 
       _buildForm,
       _buildCollectionSelectBoxes,
+      _buildLocationControl,
       _renderInputMode,
       _renderOutputMode,
       _resetDesignCodeCollection,
       _resetSiteClassCollection,
       _resetRiskCategoryCollection,
       _updateDesignCode,
+      _updateLocation,
       _updateSiteClass,
       _updateRiskCategory,
       _updateTitle;
@@ -50,6 +55,7 @@ var NEHRP2015InputView = function (params) {
 
     // re-render the view with a calculation model update (for print version)
     _this.model.get('input').on('change', _this.render);
+    _this.model.on('change', _this.render); // mode changes
 
     // Lookup data for collection select boxes
     _factory = LookupDataFactory({});
@@ -58,8 +64,41 @@ var NEHRP2015InputView = function (params) {
       _buildForm();
       _buildCollectionSelectBoxes();
       _this.render();
+      _buildLocationControl();
     });
+
   };
+
+
+  _buildLocationControl = function () {
+    // LocationView
+    L.Icon.Default.imagePath = 'images';
+
+    var map = new L.Map(_this.el.querySelector('#location-view'), {
+      center: new L.LatLng(40.0, -100.0),
+      zoom: 3
+    });
+
+    var lc = new LocationControl({
+      includePointControl: true,
+      includeCoordinateControl: true,
+      includeGeocodeControl: true,
+      includeGeolocationControl: true,
+      el: _this.el.querySelector('#map')
+    });
+
+    var natgeo = new L.TileLayer('http://server.arcgisonline.com' +
+        '/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}');
+
+    // Update location
+    lc.on('location', function(/*loc*/) {
+      _updateLocation(this.getLocation());
+    });
+
+    map.addLayer(natgeo);
+    map.addControl(lc);
+  };
+
 
   _buildForm = function () {
     _this.el.className = 'vertical';
@@ -71,7 +110,7 @@ var NEHRP2015InputView = function (params) {
         '<div class="row">' +
           '<div class="column three-of-five">' +
             '<label for="location-view">Location</label>' +
-            '<div class="location-view"></div>' +
+            '<div id="location-view"></div>' +
           '</div>' +
           '<div class="column two-of-five">' +
             '<label for="design-code">Design Code</label>' +
@@ -84,11 +123,45 @@ var NEHRP2015InputView = function (params) {
             '<select name="risk-category" id="risk-category"></select>' +
             '<div class="risk-category-output"></div>' +
           '</div>' +
+        '</div>' +
+        '<div class="row">' +
+          '<div class="column one-of-one">' +
+              '<button class="toggle-mode">Toggle Mode</button>' +
+              '<button class="reset-model">Reset Model</button>' +
+          '</div>' +
         '</div>';
 
     _titleEl = _this.el.querySelector('#title');
     // Update title on change
     _titleEl.addEventListener('blur', _updateTitle);
+
+
+    // TODO, move this into an example page
+    var toggleButton = _this.el.querySelector('.toggle-mode');
+    toggleButton.addEventListener('click', function () {
+      var mode = _this.model.get('mode');
+
+      if (mode === _CALCULATION_MODE_INPUT) {
+        _this.model.set({'mode': _CALCULATION_MODE_OUTPUT});
+      } else {
+        _this.model.set({'mode': _CALCULATION_MODE_INPUT});
+      }
+    });
+
+    // TODO, move this into an example page
+    var resetButton = _this.el.querySelector('.reset-model');
+    resetButton.addEventListener('click', function () {
+      var input = _this.model.get('input');
+      input.set({
+        'title': null,
+        'latitude': null,
+        'longitude': null,
+        'design_code': null,
+        'site_class': null,
+        'risk_category': null
+      });
+    });
+
   };
 
   _buildCollectionSelectBoxes = function () {
@@ -176,6 +249,14 @@ var NEHRP2015InputView = function (params) {
     input.set({'title': _titleEl.value});
   };
 
+  _updateLocation = function (location) {
+    var input = _this.model.get('input');
+    input.set({
+      'latitude': location.latitude,
+      'longitude': location.longitude
+    });
+  };
+
   // updates output view
   _renderOutputMode = function (model) {
     var title,
@@ -206,16 +287,18 @@ var NEHRP2015InputView = function (params) {
 
     // Use name instead of id for display in output mode
     titleEl.innerHTML = title;
-    designCodeEl.innerHTML = designCode.get('name');
-    siteClassEl.innerHTML = siteClass.get('name');
-    riskCategoryEl.innerHTML = riskCategory.get('name');
+    designCodeEl.innerHTML = (designCode ? designCode.get('name') : '');
+    siteClassEl.innerHTML = (siteClass ? siteClass.get('name') : '');
+    riskCategoryEl.innerHTML = (riskCategory ? riskCategory.get('name') : '');
   };
 
   // updates input view
   _renderInputMode = function (model) {
     var design_code = null;
 
-    if (model.get('title') !== null) {
+    if (model.get('title') === null) {
+      _titleEl.value = '';
+    } else {
       _titleEl.value = model.get('title');
     }
 
