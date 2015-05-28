@@ -24,13 +24,15 @@ var NEHRP2015InputView = function (params) {
 
       _buildForm,
       _buildCollectionSelectBoxes,
+      _renderInputMode,
       _renderOutputMode,
       _resetDesignCodeCollection,
       _resetSiteClassCollection,
       _resetRiskCategoryCollection,
       _updateDesignCode,
       _updateSiteClass,
-      _updateRiskCategory;
+      _updateRiskCategory,
+      _updateTitle;
 
   _this = View(params);
 
@@ -47,7 +49,7 @@ var NEHRP2015InputView = function (params) {
     _riskCategoryCollection.on('select', _updateRiskCategory);
 
     // re-render the view with a calculation model update (for print version)
-    _designCodeCollection.on('select', _this.render);
+    _this.model.get('input').on('change', _this.render);
 
     // Lookup data for collection select boxes
     _factory = LookupDataFactory({});
@@ -83,12 +85,15 @@ var NEHRP2015InputView = function (params) {
             '<div class="risk-category-output"></div>' +
           '</div>' +
         '</div>';
+
+    _titleEl = _this.el.querySelector('#title');
+    // Update title on change
+    _titleEl.addEventListener('blur', _updateTitle);
   };
 
   _buildCollectionSelectBoxes = function () {
 
     // Save references to collection select boxes
-    _titleEl = _this.el.querySelector('#title');
     _designCodeEl = _this.el.querySelector('#design-code');
     _siteClassEl = _this.el.querySelector('#site-class');
     _riskCategoryEl = _this.el.querySelector('#risk-category');
@@ -151,71 +156,79 @@ var NEHRP2015InputView = function (params) {
   // update design_code in the model
   _updateDesignCode = function () {
     var input = _this.model.get('input');
-    //input.design_code = _designCodeEl.selectedOptions[_designCodeEl.selectedIndex].innerHTML;
-    input.design_code = _designCodeEl.selectedOptions[0].innerHTML;
+    input.set({'design_code': _designCodeCollection.getSelected().get('id')});
   };
 
   // update site_class in the model
   _updateSiteClass = function () {
     var input = _this.model.get('input');
-    input.site_class = _siteClassEl.selectedOptions[0].innerHTML;
+    input.set({'site_class': _siteClassCollection.getSelected().get('id')});
   };
 
   // update risk_category in the model
   _updateRiskCategory = function () {
     var input = _this.model.get('input');
-    input.risk_category = _riskCategoryEl.selectedOptions[0].innerHTML;
+    input.set({'risk_category': _riskCategoryCollection.getSelected().get('id')});
   };
 
-  _renderOutputMode = function () {
-    var input,
-        title_output,
-        design_code_output,
-        site_class_output,
-        risk_category_output;
-
-    input = _this.model.get('input');
-    title_output = _this.el.querySelector('.title-output');
-    design_code_output = _this.el.querySelector('.design-code-output');
-    site_class_output = _this.el.querySelector('.site-class-output');
-    risk_category_output = _this.el.querySelector('.risk-category-output');
-
-
-
-    title_output.innerHTML = input.title + '<small>(' + input.latitude + ', ' +
-        input.longitude + ')</small>' || '';
-    design_code_output.innerHTML = input.design_code || '';
-    site_class_output.innerHTML = input.site_class || '';
-    risk_category_output.innerHTML = input.risk_category || '';
+  _updateTitle = function () {
+    var input = _this.model.get('input');
+    input.set({'title': _titleEl.value});
   };
 
-  // Updates the view based on the model
-  _this.render = function () {
-    var design_code = null,
-        design_code_id = null,
-        input = null;
+  // updates output view
+  _renderOutputMode = function (model) {
+    var title,
+        titleEl,
+        designCode,
+        designCodeEl,
+        siteClass,
+        siteClassEl,
+        riskCategory,
+        riskCategoryEl;
 
-    input = _this.model.get('input');
+    titleEl = _this.el.querySelector('.title-output');
+    designCodeEl = _this.el.querySelector('.design-code-output');
+    siteClassEl = _this.el.querySelector('.site-class-output');
+    riskCategoryEl = _this.el.querySelector('.risk-category-output');
 
-    // update title text
-    if (input.title !== null) {
-      _titleEl.value = input.title;
+    title = model.get('title') || '';
+
+    if (model.get('latitude') !== null && model.get('latitude') !== null) {
+      title = title + '<small>(' + model.get('latitude') + ', ' +
+        model.get('longitude') + ')</small>';
     }
 
-    // get design code values from the DOM
-    design_code_id = 1; //_designCodeEl.value;
-    design_code = _factory.getDesignCode(design_code_id);
+    // use factory to grab model
+    designCode = _factory.getDesignCode(model.get('design_code'));
+    siteClass = _factory.getSiteClass(model.get('site_class'));
+    riskCategory = _factory.getRiskCategory(model.get('risk_category'));
 
-    // if design_code is set it determines the values in the remaining CollectionSelectBoxes
-    if (input.design_code === null) {
-      // reset CollectionSelectBox
-      _resetDesignCodeCollection();
+    // Use name instead of id for display in output mode
+    titleEl.innerHTML = title;
+    designCodeEl.innerHTML = designCode.get('name');
+    siteClassEl.innerHTML = siteClass.get('name');
+    riskCategoryEl.innerHTML = riskCategory.get('name');
+  };
+
+  // updates input view
+  _renderInputMode = function (model) {
+    var design_code = null;
+
+    if (model.get('title') !== null) {
+      _titleEl.value = model.get('title');
+    }
+
+    if (model.get('design_code') === null) {
+      _designCodeCollection.selectById('-1');
       // disable site_class & risk_category
       _siteClassEl.setAttribute('disabled', true);
       _riskCategoryEl.setAttribute('disabled', true);
-    // the value recently changed
     } else {
-      // update site_class and risk_category
+      // update design_code collection
+      _designCodeCollection.selectById(model.get('design_code'));
+      // update site_class and risk_category collections
+      design_code = _factory.getDesignCode(model.get('design_code'));
       _resetSiteClassCollection(design_code.get('site_classes'));
       _resetRiskCategoryCollection(design_code.get('risk_categories'));
       // enable the now populated CollectionSelectBoxes
@@ -223,10 +236,33 @@ var NEHRP2015InputView = function (params) {
       _riskCategoryEl.removeAttribute('disabled');
     }
 
+    if (model.get('site_class') === null) {
+      _siteClassCollection.selectById('-1');
+    } else {
+      _siteClassCollection.selectById(model.get('site_class'));
+    }
+
+    if (model.get('risk_category') === null) {
+      _riskCategoryCollection.selectById('-1');
+    } else {
+      _riskCategoryCollection.selectById(model.get('risk_category'));
+    }
+  };
+
+
+  // Updates the view based on the model
+  _this.render = function () {
+
+    // load design_codes
+    if (_designCodeCollection.data().length === 0) {
+      _resetDesignCodeCollection();
+    }
+
     if (_this.model.get('mode') === _CALCULATION_MODE_OUTPUT) {
-      _renderOutputMode();
+      _renderOutputMode(_this.model.get('input'));
       _this.el.classList.add('input-view-' + _CALCULATION_MODE_OUTPUT);
-    } else if (input.mode === _CALCULATION_MODE_INPUT) {
+    } else if (_this.model.get('mode') === _CALCULATION_MODE_INPUT) {
+      _renderInputMode(_this.model.get('input'));
       _this.el.classList.remove('input-view-' + _CALCULATION_MODE_OUTPUT);
     }
   };
