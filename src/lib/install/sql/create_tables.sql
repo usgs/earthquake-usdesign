@@ -64,7 +64,7 @@ CREATE TABLE metadata (
 );
 
 CREATE TABLE region (
-  id INTEGER PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   design_code_id INTEGER REFERENCES design_code (id),
   metadata_id INTEGER REFERENCES metadata (id),
   name VARCHAR(255),
