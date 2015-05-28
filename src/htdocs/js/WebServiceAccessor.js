@@ -57,12 +57,12 @@ var WebServiceAccessor = function (params) {
 
     input = calculation.get('input');
     url = _url + '/' +
-        input.design_code + '/' +
-        input.site_class + '/' +
-        input.risk_category + '/' +
-        input.latitude + '/' +
-        input.longitude + '/' +
-        input.title;
+        input.get('design_code') + '/' +
+        input.get('site_class') + '/' +
+        input.get('risk_category') + '/' +
+        input.get('latitude') + '/' +
+        input.get('longitude') + '/' +
+        input.get('title');
     return url;
   };
 
