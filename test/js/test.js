@@ -42,6 +42,7 @@ if (!Function.prototype.bind) {
   require('./spec/ActionsView');
   require('./spec/SpectraGraphView');
   require('./spec/CalculationTest');
+  require('./spec/WebServiceAccessorTest');
   require('./spec/CalculationViewTest');
 
   require('./spec/util/D3GraphView');
