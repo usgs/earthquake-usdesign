@@ -6,6 +6,9 @@ var LookupDataFactory = require('util/LookupDataFactory'),
     CollectionSelectBox = require('mvc/CollectionSelectBox'),
     View = require('mvc/View');
 
+var _CALCULATION_MODE_INPUT = 'input',
+    _CALCULATION_MODE_OUTPUT = 'output';
+
 var NEHRP2015InputView = function (params) {
   var _this,
       _initialize,
@@ -21,6 +24,7 @@ var NEHRP2015InputView = function (params) {
 
       _buildForm,
       _buildCollectionSelectBoxes,
+      _renderOutputMode,
       _resetDesignCodeCollection,
       _resetSiteClassCollection,
       _resetRiskCategoryCollection,
@@ -61,6 +65,7 @@ var NEHRP2015InputView = function (params) {
         '<label for="title">Title</label>' +
         '<input type="text" name="title" id="title" ' +
           'placeholder="Untitled Report" />' +
+        '<h1 class="title-output"></h1>' +
         '<div class="row">' +
           '<div class="column three-of-five">' +
             '<label for="location-view">Location</label>' +
@@ -69,10 +74,13 @@ var NEHRP2015InputView = function (params) {
           '<div class="column two-of-five">' +
             '<label for="design-code">Design Code</label>' +
             '<select name="design-code" id="design-code"></select>' +
+            '<div class="design-code-output"></div>' +
             '<label for="site-class">Site Class</label>' +
             '<select name="site-class" id="site-class"></select>' +
+            '<div class="site-class-output"></div>' +
             '<label for="risk-category">Risk Category</label>' +
             '<select name="risk-category" id="risk-category"></select>' +
+            '<div class="risk-category-output"></div>' +
           '</div>' +
         '</div>';
   };
@@ -143,22 +151,42 @@ var NEHRP2015InputView = function (params) {
   // update design_code in the model
   _updateDesignCode = function () {
     var input = _this.model.get('input');
-    // TODO, make this silent
+    //input.design_code = _designCodeEl.selectedOptions[_designCodeEl.selectedIndex].innerHTML;
     input.design_code = _designCodeEl.selectedOptions[0].innerHTML;
   };
 
   // update site_class in the model
   _updateSiteClass = function () {
     var input = _this.model.get('input');
-    // TODO, make this silent
     input.site_class = _siteClassEl.selectedOptions[0].innerHTML;
   };
 
   // update risk_category in the model
   _updateRiskCategory = function () {
     var input = _this.model.get('input');
-    // TODO, make this silent
     input.risk_category = _riskCategoryEl.selectedOptions[0].innerHTML;
+  };
+
+  _renderOutputMode = function () {
+    var input,
+        title_output,
+        design_code_output,
+        site_class_output,
+        risk_category_output;
+
+    input = _this.model.get('input');
+    title_output = _this.el.querySelector('.title-output');
+    design_code_output = _this.el.querySelector('.design-code-output');
+    site_class_output = _this.el.querySelector('.site-class-output');
+    risk_category_output = _this.el.querySelector('.risk-category-output');
+
+
+
+    title_output.innerHTML = input.title + '<small>(' + input.latitude + ', ' +
+        input.longitude + ')</small>' || '';
+    design_code_output.innerHTML = input.design_code || '';
+    site_class_output.innerHTML = input.site_class || '';
+    risk_category_output.innerHTML = input.risk_category || '';
   };
 
   // Updates the view based on the model
@@ -193,6 +221,13 @@ var NEHRP2015InputView = function (params) {
       // enable the now populated CollectionSelectBoxes
       _siteClassEl.removeAttribute('disabled');
       _riskCategoryEl.removeAttribute('disabled');
+    }
+
+    if (_this.model.get('mode') === _CALCULATION_MODE_OUTPUT) {
+      _renderOutputMode();
+      _this.el.classList.add('input-view-' + _CALCULATION_MODE_OUTPUT);
+    } else if (input.mode === _CALCULATION_MODE_INPUT) {
+      _this.el.classList.remove('input-view-' + _CALCULATION_MODE_OUTPUT);
     }
   };
 
