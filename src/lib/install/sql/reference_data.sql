@@ -35,7 +35,7 @@ INSERT INTO metadata (
     1.1, 1.3,
     1.8, 1.8, 1.8,
     1.5, 0.6, 0.5,
-    'loglog'
+    'linearlog'
   ),
   -- NEHRP 2015 Hawaii
   (
