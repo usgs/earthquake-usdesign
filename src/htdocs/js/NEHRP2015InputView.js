@@ -71,8 +71,6 @@ var NEHRP2015InputView = function (params) {
 
 
   _buildLocationControl = function () {
-    // LocationView
-    L.Icon.Default.imagePath = 'images';
 
     var map = new L.Map(_this.el.querySelector('#location-view'), {
       center: new L.LatLng(40.0, -100.0),

@@ -13,6 +13,7 @@ if (!isset($TEMPLATE)) {
 
   // Additional tags to add to bottom of body section. Typically javascripts.
   $FOOT = '
+    <script src="lib/leaflet/leaflet.js"></script>
     <script src="js/index.js"></script>
   ';
 

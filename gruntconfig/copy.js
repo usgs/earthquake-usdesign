@@ -46,7 +46,24 @@ var copy = {
     src: [
       'test.html'
     ]
-  }
+  },
+
+  leaflet: {
+    expand: true,
+    cwd: 'node_modules/leaflet/dist',
+    dest: config.build + '/' + config.src + '/htdocs/lib/leaflet',
+    src: [
+      'leaflet.css',
+      'images/**'
+    ]
+  },
+
+  locationView: {
+    expand: true,
+    cwd: 'node_modules/hazdev-location-view/src/locationview',
+    src: ['images/*'],
+    dest: config.build + '/' + config.src + '/htdocs/css'
+  },
 };
 
 module.exports = copy;
