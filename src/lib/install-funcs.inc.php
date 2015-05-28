@@ -201,6 +201,39 @@
   }
 
   /**
+   * Prompt user for a file.
+   *
+   * @param $prompt {String}
+   *        yes or no question, should include question mark if desired.
+   * @param $default {String}
+   *        default null (user must enter a path).
+   *        default answer is used when user presses enter with no other input.
+   * @param $requireExists {Boolean}
+   *        default true (entered path must exist).
+   *        whether file must already exist.
+   * @return {String} path to file
+   */
+  function promptFile ($prompt='Enter file', $default=null, $requireExists=true) {
+    $question = $prompt .
+        ($default !== null ? ' [' . $default . ']' : '') .
+        ': ';
+    $answer = null;
+    while ($answer === null) {
+      echo $question;
+      $answer = trim(fgets(STDIN));
+      if ($answer === '') {
+        $answer = $default;
+      }
+
+      if ($answer === null || ($requireExists && !file_exists($answer))) {
+        echo 'File does not exist.' . PHP_EOL;
+        $answer = null;
+      }
+    }
+    return $answer;
+  }
+
+  /**
    * Unzip a zip file.
    *
    * @param $zipfile {String}
