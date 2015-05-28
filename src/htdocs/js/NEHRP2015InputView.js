@@ -11,18 +11,19 @@ var NEHRP2015InputView = function (params) {
       _initialize,
 
       _factory,
-      _designCodes,
+      _designCodeCollection,
       _designCodeEl,
-      _riskCategories,
-      _riskCategoriesEl,
-      _siteClasses,
-      _siteClassesEl,
+      _riskCategoryCollection,
+      _riskCategoryEl,
+      _siteClassCollection,
+      _siteClassEl,
       _titleEl,
 
       _buildForm,
-      _getDesignCodes,
-      _getSiteClasses,
-      _getRiskCategories,
+      _buildCollectionSelectBoxes,
+      _resetDesignCodeCollection,
+      _resetSiteClassCollection,
+      _resetRiskCategoryCollection,
       _updateDesignCode,
       _updateSiteClass,
       _updateRiskCategory;
@@ -32,26 +33,25 @@ var NEHRP2015InputView = function (params) {
   _initialize = function () {
 
     // Three collections for the collection select boxes
-    _designCodes = Collection();
-    _siteClasses = Collection();
-    _riskCategories = Collection();
+    _designCodeCollection = Collection();
+    _siteClassCollection = Collection();
+    _riskCategoryCollection = Collection();
 
     // Update the Calculation model when an input new value is selected
-    _designCodes.on('select', _updateDesignCode);
-    _siteClasses.on('select', _updateSiteClass);
-    _riskCategories.on('select', _updateRiskCategory);
+    _designCodeCollection.on('select', _updateDesignCode);
+    _siteClassCollection.on('select', _updateSiteClass);
+    _riskCategoryCollection.on('select', _updateRiskCategory);
 
-    _buildForm();
+    // re-render the view with a calculation model update (for print version)
+    _designCodeCollection.on('select', _this.render);
 
     // Lookup data for collection select boxes
     _factory = LookupDataFactory({});
     _factory.whenReady(function () {
+      // structure html
+      _buildForm();
+      _buildCollectionSelectBoxes();
       _this.render();
-
-      // // TODO, re-render the view with a calculation model update (for print version)
-      // _designCodes.on('select', _this.render);
-      // _siteClasses.on('select', _this.render);
-      // _riskCategories.on('select', _this.render);
     });
   };
 
@@ -75,16 +75,19 @@ var NEHRP2015InputView = function (params) {
             '<select name="risk-category" id="risk-category"></select>' +
           '</div>' +
         '</div>';
+  };
+
+  _buildCollectionSelectBoxes = function () {
 
     // Save references to collection select boxes
     _titleEl = _this.el.querySelector('#title');
     _designCodeEl = _this.el.querySelector('#design-code');
-    _siteClassesEl = _this.el.querySelector('#site-class');
-    _riskCategoriesEl = _this.el.querySelector('#risk-category');
+    _siteClassEl = _this.el.querySelector('#site-class');
+    _riskCategoryEl = _this.el.querySelector('#risk-category');
 
     // design_code CollectionSelectBox
     CollectionSelectBox({
-      collection: _designCodes,
+      collection: _designCodeCollection,
       el: _designCodeEl,
       includeBlankOption: true,
       format: function (model) {
@@ -94,8 +97,8 @@ var NEHRP2015InputView = function (params) {
 
     // site_class CollectionSelectBox
     CollectionSelectBox({
-      collection: _siteClasses,
-      el: _siteClassesEl,
+      collection: _siteClassCollection,
+      el: _siteClassEl,
       includeBlankOption: true,
       format: function (model) {
         return model.get('name');
@@ -104,8 +107,8 @@ var NEHRP2015InputView = function (params) {
 
     // risk_category CollectionSelectBox
     CollectionSelectBox({
-      collection: _riskCategories,
-      el: _riskCategoriesEl,
+      collection: _riskCategoryCollection,
+      el: _riskCategoryEl,
       includeBlankOption: true,
       format: function (model) {
         return model.get('name');
@@ -113,90 +116,84 @@ var NEHRP2015InputView = function (params) {
     });
   };
 
-  _getDesignCodes = function (ids) {
+  _resetDesignCodeCollection = function (ids) {
     if (typeof ids === 'undefined') {
-      _designCodes.reset(_factory.getAllDesignCodes());
+      _designCodeCollection.reset(_factory.getAllDesignCodes());
     } else {
-      _designCodes.reset(_factory.getDesignCodes(ids));
+      _designCodeCollection.reset(_factory.getDesignCodes(ids));
     }
   };
 
-  _getSiteClasses = function (ids) {
+  _resetSiteClassCollection = function (ids) {
     if (typeof ids === 'undefined') {
-      _siteClasses.reset(_factory.getAllSiteClasses());
+      _siteClassCollection.reset(_factory.getAllSiteClasses());
     } else {
-      _siteClasses.reset(_factory.getSiteClasses(ids));
+      _siteClassCollection.reset(_factory.getSiteClasses(ids));
     }
   };
 
-  _getRiskCategories = function (ids) {
+  _resetRiskCategoryCollection = function (ids) {
     if (typeof ids === 'undefined') {
-      _riskCategories.reset(_factory.getAllRiskCategories());
+      _riskCategoryCollection.reset(_factory.getAllRiskCategories());
     } else {
-      _riskCategories.reset(_factory.getRiskCategories(ids));
+      _riskCategoryCollection.reset(_factory.getRiskCategories(ids));
     }
   };
 
+  // update design_code in the model
   _updateDesignCode = function () {
-    var design_code,
-        design_code_id;
-
-    // dummied up, the CollectionSelectBox doesn't allow you to set the value
-    design_code_id = 1;
-
-    // update design_code in the model
-    _this.model.get('input').design_code = design_code_id;
-    _this.model.get('input').site_class = null;
-    _this.model.get('input').risk_category = null;
-
-    // update site_class and risk_category
-    design_code = _factory.getDesignCode(design_code_id);
-    _getSiteClasses(design_code.get('site_classes'));
-    _getRiskCategories(design_code.get('risk_categories'));
+    var input = _this.model.get('input');
+    // TODO, make this silent
+    input.design_code = _designCodeEl.selectedOptions[0].innerHTML;
   };
 
+  // update site_class in the model
   _updateSiteClass = function () {
-    // update site_class in the model
-    _this.model.get('input').site_class = _siteClassesEl.value;
+    var input = _this.model.get('input');
+    // TODO, make this silent
+    input.site_class = _siteClassEl.selectedOptions[0].innerHTML;
   };
 
+  // update risk_category in the model
   _updateRiskCategory = function () {
-    // update risk_category in the model
-    _this.model.get('input').risk_category = _riskCategoriesEl.value;
+    var input = _this.model.get('input');
+    // TODO, make this silent
+    input.risk_category = _riskCategoryEl.selectedOptions[0].innerHTML;
   };
 
+  // Updates the view based on the model
   _this.render = function () {
-    var inputs = null;
+    var design_code = null,
+        design_code_id = null,
+        input = null;
 
-    inputs = _this.model.get('input');
+    input = _this.model.get('input');
 
-    if (inputs.title !== null) {
-      _titleEl.value = inputs.title;
+    // update title text
+    if (input.title !== null) {
+      _titleEl.value = input.title;
     }
 
-    if (inputs.design_code !== null) {
-      _getDesignCodes(inputs.design_code);
-      _siteClassesEl.setAttribute('disabled', false);
-      _riskCategoriesEl.setAttribute('disabled', false);
+    // get design code values from the DOM
+    design_code_id = 1; //_designCodeEl.value;
+    design_code = _factory.getDesignCode(design_code_id);
+
+    // if design_code is set it determines the values in the remaining CollectionSelectBoxes
+    if (input.design_code === null) {
+      // reset CollectionSelectBox
+      _resetDesignCodeCollection();
+      // disable site_class & risk_category
+      _siteClassEl.setAttribute('disabled', true);
+      _riskCategoryEl.setAttribute('disabled', true);
+    // the value recently changed
     } else {
-      _getDesignCodes();
-      // disable siteClassEl and riskCategoriesEl when design_code is null
-      _siteClassesEl.setAttribute('disabled', true);
-      _riskCategoriesEl.setAttribute('disabled', true);
+      // update site_class and risk_category
+      _resetSiteClassCollection(design_code.get('site_classes'));
+      _resetRiskCategoryCollection(design_code.get('risk_categories'));
+      // enable the now populated CollectionSelectBoxes
+      _siteClassEl.removeAttribute('disabled');
+      _riskCategoryEl.removeAttribute('disabled');
     }
-
-    if (inputs.site_class !== null) {
-      _getSiteClasses(inputs.site_class);
-    } else {
-      _getSiteClasses();
-    }
-
-    if (inputs.risk_category !== null) {
-      _getRiskCategories(inputs.risk_category);
-    } else {
-      _getRiskCategories();
-    }
-
   };
 
   _initialize();
