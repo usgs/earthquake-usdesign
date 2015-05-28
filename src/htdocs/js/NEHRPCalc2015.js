@@ -2,7 +2,8 @@
 
 var Model = require('mvc/Model'),
     Util = require('util/Util'),
-    LookUpDataFactory = require('util/LookUpDataFactory'),
+
+    LookupDataFactory = require('util/LookupDataFactory'),
     SiteAmplification = require('util/SiteAmplification');
 
 var _DEFAULTS = {
@@ -11,31 +12,10 @@ var _DEFAULTS = {
 
 var NEHRPCalc2015 = function (params) {
   var _this,
-
       _initialize,
-      _interpolateResults,
-      _interpolateValue,
-      _computeSds,
-      _computeSd1,
-      _siteAmplification,
-      _computeSsuh,
-      _computeS1uh,
-      _computeSsur,
-      _computeS1ur,
-      _computeSsd,
-      _computeS1d,
-      _computeSs,
-      _computeS1,
-      _computeFa,
-      _computeFv,
-      _computeSms,
-      _computeSm1,
-      _computeFpga,
-      _computePga,
-      _computePgam,
-      _computeSdSpectra,
-      _computeSmSpectra,
-      _lookUpDataFactory;
+
+      _lookupDataFactory,
+      _siteAmplification;
 
   _this = {};
 
@@ -43,17 +23,17 @@ var NEHRPCalc2015 = function (params) {
     _siteAmplification = SiteAmplification();
     params = Util.extend({}, _DEFAULTS, params);
 
-    _lookUpDataFactory = params.LookUpDataFactory;
+    _lookupDataFactory = params.lookupDataFactory;
 
-    if (_lookUpDataFactory === null) {
-      _lookUpDataFactory = new LookUpDataFactory();
+    if (!_lookupDataFactory) {
+      _lookupDataFactory = LookupDataFactory();
     }
   };
 
   /**
    * Interpolates results
    */
-  _interpolateResults = function (d0, d1, x, x0, x1) {
+  _this.interpolateResults = function (d0, d1, x, x0, x1) {
     var key,
         result;
 
@@ -62,31 +42,34 @@ var NEHRPCalc2015 = function (params) {
     for (key in d0) {
       if (d0.hasOwnProperty(key) && d1.hasOwnProperty(key)) {
         result[key] =
-            _interpolateValue(d0[key], d1[key], x, x0, x1);
+            _this.interpolateValue(d0[key], d1[key], x, x0, x1);
       }
     }
-
     return result;
   };
 
   /**
    * Interpolates a single value
    */
-  _interpolateValue = function (y0, y1, x, x0, x1) {
+  _this.interpolateValue = function (y0, y1, x, x0, x1) {
     return y0 + (((y1-y0)/(x1-x0))*(x-x0));
   };
 
   /**
    * Factor hazard value for max direction. Period 0.2
    */
-  _computeSsuh = function (result) {
-    var ssuh;
+  _this.getSsuh = function (calculation) {
+    var metadata,
+        result,
+        ssuh;
 
+    result = _this.getResult(calculation);
     ssuh = result.get('ssuh');
-
     if (ssuh === null) {
-      ssuh = result.get('max_direction_ss') * result.get('mapped_ss');
-      return result.set({
+      metadata = calculation.get('output').get('metadata');
+      ssuh = metadata.get('max_direction_ss') * result.get('mapped_ss');
+
+      result.set({
         'ssuh': ssuh
       });
     }
@@ -96,14 +79,19 @@ var NEHRPCalc2015 = function (params) {
   /**
    * Factor hazard value for max direction. Period 1.0
    */
-  _computeS1uh = function (result) {
-    var s1uh;
+  _this.getS1uh = function (calculation) {
+    var metadata,
+        result,
+        s1uh;
 
+    result = _this.getResult(calculation);
     s1uh = result.get('s1uh');
 
     if (s1uh === null) {
-      s1uh = result.get('max_direction_s1') * result.get('mapped_s1');
-      return result.set({
+      metadata = calculation.get('output').get('metadata');
+      s1uh = metadata.get('max_direction_s1') * result.get('mapped_s1');
+
+      result.set({
         's1uh': s1uh
       });
     }
@@ -112,35 +100,47 @@ var NEHRPCalc2015 = function (params) {
   /**
    * Convert uniform hazard to uniform risk. Period 0.2
    */
-  _computeSsur = function (result) {
-    return _computeSsuh() * result.get('crs');
+  _this.getSsur = function (calculation) {
+    var result;
+
+    result = _this.getResult(calculation);
+
+    return _this.getSsuh(calculation) * result.get('crs');
   };
 
   /**
    * Convert uniform hazard to uniform risk. Period 1.0
    */
-  _computeS1ur = function (result) {
-    return _computeS1uh(result) * result.get('cr1');
+  _this.getS1ur = function (calculation) {
+    var result;
+
+    result = _this.getResult(calculation);
+
+    return _this.getS1uh(calculation) * result.get('cr1');
   };
 
   /* Factor deterministic acceleration values Ssd.
    *  pgdv84 = 84th-Percentile Geomean Deterministic value
    *  maxD84 = Maximum Direction 84th-Percentile Deterministic value
    */
-  _computeSsd = function (result) {
+  _this.getSsd = function (calculation) {
     var geomeanSsd,
         maxD84,
+        metadata,
         pgdv84,
+        result,
         ssd;
 
+    result = _this.getResult(calculation);
     ssd = result.get('ssd');
     if (ssd === null) {
+      metadata = calculation.get('output').get('metadata');
       geomeanSsd = result.get('geomean_ssd');
-      pgdv84 = result.get('percentil_ss') * geomeanSsd;
-      maxD84 = result.get('max_direction_ss') * pgdv84;
+      pgdv84 = metadata.get('percentile_ss') * geomeanSsd;
+      maxD84 = metadata.get('max_direction_ss') * pgdv84;
 
-      ssd = Math.max(maxD84, result.get('deterministic_floor_ss'));
-      return result.set({
+      ssd = Math.max(maxD84, metadata.get('deterministic_floor_ss'));
+      result.set({
         'ssd': ssd
       });
     }
@@ -151,20 +151,24 @@ var NEHRPCalc2015 = function (params) {
    *  pgdv841 = 84th-Percentile Geomean Deterministic value
    *  maxD841 = Maximum Direction 84th-Percentile Deterministic value
    */
-  _computeS1d = function (result) {
+  _this.getS1d = function (calculation) {
     var geomeanS1d,
         maxD841,
+        metadata,
         pgdv841,
+        result,
         s1d;
 
+    result = _this.getResult(calculation);
     s1d = result.get('s1d');
     if (s1d === null) {
+      metadata = calculation.get('output').get('metadata');
       geomeanS1d = result.get('geomean_s1d');
-      pgdv841 = result.get('percentil_s1') * geomeanS1d;
-      maxD841 = result.get('max_direction_s1') * pgdv841;
+      pgdv841 = metadata.get('percentil_s1') * geomeanS1d;
+      maxD841 = metadata.get('max_direction_s1') * pgdv841;
 
-      s1d = Math.max(maxD841, result.get('deterministic_floor_s1'));
-      return result.set({
+      s1d = Math.max(maxD841, metadata.get('deterministic_floor_s1'));
+      result.set({
         's1d': s1d
       });
     }
@@ -175,14 +179,17 @@ var NEHRPCalc2015 = function (params) {
    * Compare 0.2 risk-targeted probabilisic spectral acceleration
    * values with Ssd. Use minimuim value from each pair.
    */
-  _computeSs = function (result) {
-    var ss;
+  _this.getSs = function (calculation) {
+    var result,
+        ss;
 
+    result = _this.getResult(calculation);
     ss = result.get('ss');
 
     if (ss === null) {
-      ss = Math.min(_computeSsur(result), _computeSsd(result));
-      return result.set({
+      ss = Math.min(_this.getSsur(calculation),
+          _this.getSsd(calculation));
+      result.set({
         'ss': ss
       });
     }
@@ -193,14 +200,17 @@ var NEHRPCalc2015 = function (params) {
    * Compare 1.0 risk-targeted probabilisic spectral acceleration
    * values with S1d. Use minimuim value from each pair.
    */
-  _computeS1 = function (result) {
-    var s1;
+  _this.getS1 = function (calculation) {
+    var result,
+        s1;
 
+    result = _this.getResult(calculation);
     s1 = result.get('s1');
 
     if (s1 === null) {
-      s1 = Math.min(_computeS1ur(result), _computeS1d(result));
-      return result.set({
+      s1 = Math.min(_this.getS1ur(calculation),
+          _this.getS1d(calculation));
+      result.set({
         's1': s1
       });
     }
@@ -210,16 +220,19 @@ var NEHRPCalc2015 = function (params) {
   /**
    * Uses SiteAmplification tables to get fa values.
    */
-  _computeFa = function (result) {
+  _this.getFa = function (calculation) {
     var fa,
+        result,
         siteClass;
 
+    result = _this.getResult(calculation);
     fa = result.get('fa');
-    siteClass = result.get('site_class');
+
 
     if (fa === null) {
-      fa = _siteAmplification.getFa(_computeSs(result), siteClass);
-      return result.set({
+      siteClass = _this.getSiteClass(calculation);
+      fa = _siteAmplification.getFa(_this.getSs(calculation), siteClass);
+      result.set({
         'fa': fa
       });
     }
@@ -229,32 +242,37 @@ var NEHRPCalc2015 = function (params) {
   /**
    * Uses SiteAmplification tables to get fv values.
    */
-  _computeFv = function (result) {
+  _this.getFv = function (calculation) {
     var fv,
+        result,
         siteClass;
 
+    result = _this.getResult(calculation);
     fv = result.get('fv');
-    siteClass = result.get('site_class');
 
     if (fv === null) {
-      fv = _siteAmplification.getFv(_computeS1(result), siteClass);
-      return result.set({
+      siteClass = _this.getSiteClass(calculation);
+      fv = _siteAmplification.getFv(_this.getS1(calculation), siteClass);
+      result.set({
         'fv': fv
       });
     }
+    return fv;
   };
 
   /**
    * Site-adjusted MCEr spectral acceleration values Sms.
    */
-  _computeSms = function (result) {
-    var sms;
+  _this.getSms = function (calculation) {
+    var result,
+        sms;
 
+    result = _this.getResult(calculation);
     sms = result.get('sms');
 
     if (sms === null) {
-      sms = _computeFa(result) * _computeSs(result);
-      return result.set({
+      sms = _this.getFa(calculation) * _this.getSs(calculation);
+      result.set({
         'sms': sms
       });
     }
@@ -264,14 +282,16 @@ var NEHRPCalc2015 = function (params) {
   /**
   * Site-adjusted MCEr spectral acceleration values Sm1.
   */
-  _computeSm1 = function (result) {
-    var sm1;
+  _this.getSm1 = function (calculation) {
+    var result,
+        sm1;
 
+    result = _this.getResult(calculation);
     sm1 = result.get('sm1');
 
     if (sm1 === null) {
-      sm1 = _computeFv(result) * _computeS1(result);
-      return result.set({
+      sm1 = _this.getFv(calculation) * _this.getS1(calculation);
+      result.set({
         'sm1': sm1
       });
     }
@@ -281,14 +301,16 @@ var NEHRPCalc2015 = function (params) {
   /**
   * Multiply Sms by 2/3 to get the design value Sds.
   */
-  _computeSds = function (result) {
-    var sds;
+  _this.getSds = function (calculation) {
+    var result,
+        sds;
 
+    result = _this.getResult(calculation);
     sds = result.get('sds');
 
     if (sds === null) {
-      sds = (2/3) * _computeSms(result);
-      return result.set({
+      sds = (2/3) * _this.getSms(calculation);
+      result.set({
         'sds': sds
       });
     }
@@ -298,14 +320,16 @@ var NEHRPCalc2015 = function (params) {
   /**
   * Multiply Sm1 by 2/3 to get the design value Sda
   */
-  _computeSd1 = function (result) {
-    var sd1;
+  _this.getSd1 = function (calculation) {
+    var result,
+        sd1;
 
+    result = _this.getResult(calculation);
     sd1 = result.get('sd1');
 
     if (sd1 === null) {
-      sd1 = (2/3) * _computeSm1(result);
-      return result.set({
+      sd1 = (2/3) * _this.getSm1(calculation);
+      result.set({
         'sd1': sd1
       });
     }
@@ -316,20 +340,24 @@ var NEHRPCalc2015 = function (params) {
    * Calculates the Probabilistic PGA and Deterministic PGA values to
    * get the PGA value.
    */
-  _computePga = function (result) {
-    var pga,
+  _this.getPga = function (calculation) {
+    var deterministicPga,
+        metadata,
+        pga,
         probabilisticPga,
-        deterministicPga;
+        result;
 
+    result = _this.getResult(calculation);
     pga = result.get('pga');
 
     if (pga === null) {
+      metadata = calculation.get('output').get('metadata');
       probabilisticPga = result.get('mapped_pga');
       deterministicPga = Math.max(result.get('geomean_pgad'),
-          result.get('deterministic_flor_pga'));
+          metadata.get('deterministic_flor_pga'));
 
       pga = Math.min(probabilisticPga, deterministicPga);
-      return result.set({
+      result.set({
         'pga': pga
       });
     }
@@ -337,19 +365,22 @@ var NEHRPCalc2015 = function (params) {
   };
 
   /**
-   * Fpga is pulled from a table in SiteAmplification and used to compute
+   * Fpga is pulled from a table in SiteAmplification and used to get
    * the PGAm value.
    */
-  _computeFpga = function (result) {
+  _this.getFpga = function (calculation) {
     var fpga,
+        result,
         siteClass;
 
+    result = _this.getResult(calculation);
     fpga = result.get('fpga');
-    siteClass = result.get('site_class');
 
     if (fpga === null) {
-      fpga = _siteAmplification.getFpga(_computePga(result), siteClass);
-      return result.set({
+      siteClass = _this.getSiteClass(calculation);
+      fpga = _siteAmplification.getFpga(_this.getPga(calculation),
+          siteClass);
+      result.set({
         'fpga': fpga
       });
     }
@@ -357,34 +388,38 @@ var NEHRPCalc2015 = function (params) {
   };
 
   /**
-   * Fpga is used to compute the Pgam value.
+   * Fpga is used to get the Pgam value.
    */
-  _computePgam = function (result) {
-    var pgam;
+  _this.getPgam = function (calculation) {
+    var pgam,
+        result;
 
+    result = _this.getResult(calculation);
     pgam = result.get('pgam');
 
     if (pgam === null) {
-      pgam = _computeFpga(result) * _computePga(result);
-      return result.set({
+      pgam = _this.getFpga(calculation) * _this.getPga(calculation);
+      result.set({
         'pgam': pgam
       });
     }
     return pgam;
   };
 
-  _computeSdSpectra = function (result) {
-    var sdSpectra,
-        tn,
-        t1,
-        tl,
-        i,
-        sds,
+  _this.getSdSpectra = function (calculation) {
+    var i,
+        result,
         sd1,
-        tHat;
+        sds,
+        sdSpectra,
+        t1,
+        tHat,
+        tl,
+        tn;
 
-    sds =_computeSds(result);
-    sd1 = _computeSd1(result);
+    result = _this.getResult(calculation);
+    sds =_this.getSds(calculation);
+    sd1 = _this.getSd1(calculation);
 
     tl = result.get('tl');
     sdSpectra = [];
@@ -402,23 +437,26 @@ var NEHRPCalc2015 = function (params) {
       sdSpectra.push([ tn, sds/tn]);
       i += 1;
     }
-    return result.set({
+    result.set({
       'sdSpectra': sdSpectra
     });
+    return sdSpectra;
   };
 
-  _computeSmSpectra = function (result) {
-    var smSpectra,
-        tn,
-        t1,
-        tl,
-        i,
-        sms,
+  _this.getSmSpectra = function (calculation) {
+    var i,
+        result,
         sm1,
-        tHat;
+        sms,
+        smSpectra,
+        t1,
+        tHat,
+        tl,
+        tn;
 
-    sms =_computeSms(result);
-    sm1 = _computeSm1(result);
+    result = _this.getResult(calculation);
+    sms = _this.getSms(calculation);
+    sm1 = _this.getSm1(calculation);
 
     tl = result.get('tl');
     smSpectra = [];
@@ -436,52 +474,72 @@ var NEHRPCalc2015 = function (params) {
       smSpectra.push([ tn, sms/tn]);
       i += 1;
     }
-    return result.set({
+    result.set({
       'smSpectra': smSpectra
     });
+    return smSpectra;
   };
 
-  _this.calculate = function (calculation) {
+  _this.destroy = function () {
+    // TODO make this
+  };
+
+  _this.getResult = function (calculation) {
+    var result;
+
+    result = calculation.get('result');
+    if (result === null) {
+      result = _this.interpolate(calculation);
+      calculation.set({
+        'result': result
+      });
+    }
+    return result;
+  };
+
+  _this.getSiteClass = function (calculation) {
     var input,
-        metadata,
-        output,
         result,
         siteClass;
 
-    output = calculation.get('output');
-    input = calculation.get('input');
-    metadata = output.get('metadata');
-    result = _this.interpolate(calculation);
-    siteClass = input.get('site_class');
+    result = _this.getResult(calculation);
+    siteClass = result.get('site_class');
 
-    siteClass = LookUpDataFactory.getSiteClass(siteClass);
+    if (siteClass === null) {
+      input = calculation.get('input');
+      siteClass = input.get('site_class');
+      siteClass = _lookupDataFactory.getSiteClass(siteClass).get('value');
+      result.set({
+        'site_class': siteClass
+      });
+    }
+    return siteClass;
+  };
 
-    result.set({
-      'site_class': siteClass
-    });
+  _this.calculate = function (calculation) {
+    var result;
 
-    result.set(metadata.get());
-    _computeSsuh(result);
-    _computeS1uh(result);
+    result = _this.getResult(calculation);
 
-    _computeSsd(result);
-    _computeS1d(result);
+    _this.getSsuh(calculation);
+    _this.getS1uh(calculation);
 
-    _computeSs(result);
-    _computeS1(result);
+    _this.getSsd(calculation);
+    _this.getS1d(calculation);
 
-    _computeSms(result);
-    _computeSm1(result);
+    _this.getSs(calculation);
+    _this.getS1(calculation);
 
-    _computeSds(result);
-    _computeSd1(result);
+    _this.getSms(calculation);
+    _this.getSm1(calculation);
 
-    _computePga(result);
-    _computePgam(result);
+    _this.getSds(calculation);
+    _this.getSd1(calculation);
 
-    return calculation.set({
-      'result': result
-    });
+    _this.getPga(calculation);
+    _this.getPgam(calculation);
+
+    return result;
   };
 
   _this.interpolate = function (calculation) {
@@ -517,7 +575,7 @@ var NEHRPCalc2015 = function (params) {
       lng2 = data[1].get('longitude');
 
       if (lat1 === lat2) {
-        result = _interpolateResults(
+        result = _this.interpolateResults(
             data[0].get(),
             data[1].get(),
             lngInput,
@@ -525,7 +583,7 @@ var NEHRPCalc2015 = function (params) {
             lng2);
 
       } else if (lng1 === lng2) {
-        result = _interpolateResults(
+        result = _this.interpolateResults(
             data[0].get(),
             data[1].get(),
             latInput,
@@ -544,21 +602,21 @@ var NEHRPCalc2015 = function (params) {
       lng3 = data[2].get('longitude');
       lng4 = data[3].get('longitude');
 
-      resultLat1 = _interpolateResults(
+      resultLat1 = _this.interpolateResults(
           data[0].get(),
           data[1].get(),
           lngInput,
           lng1,
           lng2);
 
-      resultLat3 = _interpolateResults(
+      resultLat3 = _this.interpolateResults(
           data[0].get(),
           data[1].get(),
           lngInput,
           lng3,
           lng4);
 
-      result = _interpolateResults(
+      result = _this.interpolateResults(
           resultLat1,
           resultLat3,
           latInput,
@@ -568,6 +626,7 @@ var NEHRPCalc2015 = function (params) {
     } else {
       throw new Error('Does not have 1, 2, or 4 points.');
     }
+
     return Model(result);
   };
 
