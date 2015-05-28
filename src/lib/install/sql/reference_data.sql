@@ -27,19 +27,7 @@ INSERT INTO metadata (
     1.5, 0.6, 0.5
   );
 
--- Region refgerence data
-INSERT INTO region (
-  id, design_code_id, metadata_id, name,
-  min_latitude, max_latitude, min_longitude, max_longitude, grid_spacing
-) VALUES
-  (
-    1, 1, 1, 'Alaska',
-    48.00, 72.00, -200.00, -125.10, 0.05
-  ),
-  (
-    2, 1, 1, 'Conterminous US',
-    24.60, 50.00, -125.00, -65.10, 0.05
-  );
+-- Region reference data (added by gridded_data.php)
 
 -- Site class reference data
 INSERT INTO site_class (

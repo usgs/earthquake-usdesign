@@ -5,22 +5,37 @@ $remote_server = 'hazards.cr.usgs.gov';
 
 $datasets = array(
   '2015nehrp_alaska' => array(
-    // lat/lon is a point inside AK bounds:
-    // 48.00, 72.00, -200.00, -125.10
-    'name' => '2015 NEHRP Alaska',
-    'latitude' => 50,
-    'longitude' => -180,
     'design_code_id' => 1,
+    'metadata_id' => 1,
+    'name' => 'Alaska',
+    'min_latitude' => 48.00,
+    'max_latitude' => 72.00,
+    'min_longitude' => -200.00,
+    'max_longitude' => -125.10,
+    'grid_spacing' => 0.05,
     'remote_dir' => '/web/earthquake-usdesign/2015nehrp/alaska'
   ),
   '2015nehrp_us' => array(
-    // lat/lon is a point inside US bounds:
-    // 24.60, 50.00, -125.00, -65.10
-    'name' => '2015 NEHRP Conterminous US',
-    'latitude' => 34,
-    'longitude' => -118,
     'design_code_id' => 1,
+    'metadata_id' => 1,
+    'name' => 'Conterminous US',
+    'min_latitude' => 24.60,
+    'max_latitude' => 50.00,
+    'min_longitude' => -125.00,
+    'max_longitude' => -65.10,
+    'grid_spacing' => 0.05,
     'remote_dir' => '/web/earthquake-usdesign/2015nehrp/us'
+  ),
+  '2015nehrp_amsam' => array(
+    'design_code_id' => 1,
+    'metadata_id' => 1,
+    'name' => 'American Samoa',
+    'min_latitude' => -33.00,
+    'max_latitude' => -11.00,
+    'min_longitude' => -195.00,
+    'max_longitude' => -165.10,
+    'grid_spacing' => 0.10,
+    'remote_dir' => '/web/earthquake-usdesign/2015nehrp/amsam'
   )
 );
 
@@ -66,37 +81,64 @@ ftp_login($ftp, 'anonymous', 'earthquake-usdesign@usgs.gov');
 // loop over editions
 $anyErrors = false;
 foreach ($datasets as $id => $metadata) {
-  if (!promptYesNo('Load ' . $metadata['name'] . '?', true)) {
+  // check whether to load dataset
+  $region = $regionFactory->get(
+      ($metadata['min_latitude'] + $metadata['max_latitude']) / 2,
+      ($metadata['min_longitude'] + $metadata['max_longitude']) / 2,
+      $metadata['design_code_id']);
+  if ($region !== null) {
+    // already exists, make sure user want's to replace
+    if (!promptYesNo($metadata['name'] . ' already exists,' .
+        ' replace existing data?', false)) {
+      continue;
+    }
+  } else if (!promptYesNo('Load ' . $metadata['name'] . '?', true)) {
     continue;
   }
 
-  // download dataset
-  echo "\t" . 'downloading ...';
-  $local_dataset = $local_dir . '/' . $id;
-  if (!is_dir($local_dataset)) {
-    mkdir($local_dataset);
-  }
-  $remote_dataset = $metadata['remote_dir'];
-  // loop over dataset files
-  $files = ftp_nlist($ftp, $remote_dataset);
-  foreach ($files as $remote_file) {
-    $file = basename($remote_file);
-    $local_file = $local_dataset . '/' . $file;
-    ftp_get($ftp, $local_file, $remote_file, FTP_BINARY);
-
-    // unzip if needed
-    $ext = pathinfo($local_file, PATHINFO_EXTENSION);
-    if ($ext === 'zip') {
-      unzipFile($local_file, true);
-    }
-  }
-  echo ' success!' . PHP_EOL;
-
-
-  // load dataset files into database
-  echo "\t" . 'loading ...';
   $DB->beginTransaction();
   try {
+    if ($region !== null) {
+      // remove existing data
+      $dataFactory->delete($region);
+    } else {
+      // does not exist, insert
+      $regionFactory->insert($metadata['design_code_id'],
+          $metadata['metadata_id'], $metadata['name'],
+          $metadata['min_latitude'], $metadata['max_latitude'],
+          $metadata['min_longitude'], $metadata['max_longitude'],
+          $metadata['grid_spacing']);
+      // get inserted region
+      $region = $regionFactory->get(
+          ($metadata['min_latitude'] + $metadata['max_latitude']) / 2,
+          ($metadata['min_longitude'] + $metadata['max_longitude']) / 2,
+          $metadata['design_code_id']);
+    }
+
+    // download dataset
+    echo "\t" . 'downloading ...';
+    $local_dataset = $local_dir . '/' . $id;
+    if (!is_dir($local_dataset)) {
+      mkdir($local_dataset);
+    }
+    $remote_dataset = $metadata['remote_dir'];
+    // loop over dataset files
+    $files = ftp_nlist($ftp, $remote_dataset);
+    foreach ($files as $remote_file) {
+      $file = basename($remote_file);
+      $local_file = $local_dataset . '/' . $file;
+      ftp_get($ftp, $local_file, $remote_file, FTP_BINARY);
+
+      // unzip if needed
+      $ext = pathinfo($local_file, PATHINFO_EXTENSION);
+      if ($ext === 'zip') {
+        unzipFile($local_file, true);
+      }
+    }
+    echo ' success!' . PHP_EOL;
+
+    // load dataset files into database
+    echo "\t" . 'loading ...';
     // check that files exist
     $cr1 = $local_dataset . '/mapped_cr1.txt';
     $crs = $local_dataset . '/mapped_crs.txt';
@@ -135,11 +177,7 @@ foreach ($datasets as $id => $metadata) {
       'mapped_s1' => $s1,
       'mapped_ss' => $ss
     );
-    // get region that is used for loading data
-    $region = $regionFactory->get(
-        $metadata['latitude'],
-        $metadata['longitude'],
-        $metadata['design_code_id']);
+
     // parse dataset files
     $parser = new SetParser($dataset, $region, $dataFactory);
     $parser->process();
@@ -147,7 +185,6 @@ foreach ($datasets as $id => $metadata) {
     // successfully processed, commit
     $DB->commit();
     echo ' success!' . PHP_EOL;
-
   } catch (Exception $e) {
     // something went wrong, rollback
     $DB->rollBack();
