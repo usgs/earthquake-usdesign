@@ -32,7 +32,8 @@ var browerify = {
       paths: [
         JSDIR,
         CWD + '/node_modules/hazdev-webutils/src',
-        CWD + '/node_modules/hazdev-accordion/src'
+        CWD + '/node_modules/hazdev-accordion/src',
+        CWD + '/node_modules/hazdev-location-view/src'
       ]
     }
   },
@@ -41,7 +42,12 @@ var browerify = {
   // the bundle used by the index page
   index: {
     src: [config.src + '/htdocs/js/index.js'],
-    dest: config.build + '/' + config.src + '/htdocs/js/index.js'
+    dest: config.build + '/' + config.src + '/htdocs/js/index.js',
+    options: {
+      external: [
+        CWD + '/node_modules/leaflet/dist/leaflet-src.js:leaflet'
+      ]
+    }
   },
 
   // the bundle used by tests
@@ -49,7 +55,10 @@ var browerify = {
     src: [],
     dest: config.build + '/' + config.src + '/htdocs/js/bundle.js',
     options: {
-      alias: EXPORTS
+      alias: EXPORTS,
+      external: [
+        CWD + '/node_modules/leaflet/dist/leaflet-src.js:leaflet'
+      ]
     }
   },
 
@@ -58,9 +67,21 @@ var browerify = {
     src: [config.test + '/js/test.js'],
     dest: config.build + '/' + config.test + '/js/test.js',
     options: {
-      external: EXPORTS
+      external: EXPORTS.concat(CWD + '/node_modules/leaflet/dist/leaflet-src.js:leaflet'
+      )
     }
-  }
+  },
+
+  // bundle leaflet externally
+  leaflet: {
+    src: [],
+    dest: config.build + '/' + config.src + '/htdocs/lib/leaflet/leaflet.js',
+    options: {
+      alias: [
+        CWD + '/node_modules/leaflet/dist/leaflet-src.js:leaflet'
+      ]
+    }
+  },
 };
 
 module.exports = browerify;
