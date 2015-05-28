@@ -47,10 +47,10 @@ _longitude = function (value) {
 };
 
 _number = function (value, decimals) {
-  if (!isNaN(value)) {
-    return parseFloat(value).toFixed(decimals);
+  if (value === null || typeof value === 'undefined' || isNaN(value)) {
+    return '&ndash';
   } else {
-    return value;
+    return parseFloat(value).toFixed(decimals);
   }
 };
 
