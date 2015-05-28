@@ -12,6 +12,15 @@ $datasets = array(
     'longitude' => -180,
     'design_code_id' => 1,
     'remote_dir' => '/web/earthquake-usdesign/2015nehrp/alaska'
+  ),
+  '2015nehrp_us' => array(
+    // lat/lon is a point inside US bounds:
+    // 24.60, 50.00, -125.00, -65.10
+    'name' => '2015 NEHRP Conterminous US',
+    'latitude' => 34,
+    'longitude' => -118,
+    'design_code_id' => 1,
+    'remote_dir' => '/web/earthquake-usdesign/2015nehrp/us'
   )
 );
 

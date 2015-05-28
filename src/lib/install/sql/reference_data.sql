@@ -35,6 +35,10 @@ INSERT INTO region (
   (
     1, 1, 1, 'Alaska',
     48.00, 72.00, -200.00, -125.10, 0.05
+  ),
+  (
+    2, 1, 1, 'Conterminous US',
+    24.60, 50.00, -125.00, -65.10, 0.05
   );
 
 -- Site class reference data
