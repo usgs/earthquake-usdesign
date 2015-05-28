@@ -4,13 +4,12 @@
 //
 // (1) Create the database schema
 //     (1.1) If initially answering yes, notify current content may be
-//           destroyed. If user confirms descision, wipe existing database and
-//           create a new schema using script.
-// (2) Load reference data into the database.
-// (3) [Only if script is run directly]
-//     Load data into database.
+//           destroyed.
+//     (1.2) Load reference data
+// (2) Create user
+// (3) Grant access to user
+// (4) Load gridded data.
 //
-// Note: If the user declines any step along the way this script is complete.
 
 date_default_timezone_set('UTC');
 
@@ -23,7 +22,6 @@ $DB_DSN = configure('DB_ROOT_DSN', $CONFIG['DB_DSN'],
 $username = configure('DB_ROOT_USER', 'root', 'Database adminitrator user');
 $password = configure('DB_ROOT_PASS', '', 'Database administrator password',
     true);
-
 $defaultScriptDir = implode(DIRECTORY_SEPARATOR, array(
     $APP_DIR, 'lib', 'install', 'sql'));
 
@@ -35,103 +33,90 @@ $defaultScriptDir = implode(DIRECTORY_SEPARATOR, array(
 $dbInstaller = new DatabaseInstaller($DB_DSN, $username, $password,
     $CONFIG['DB_SCHEMA']);
 
-$answer = promptYesNo("Would you like to create the database schema", true);
-
-if ($answer) {
-
-  $answer = promptYesNo("\nLoading the schema removes any existing schema " .
-      "and/or data.\nAre you sure you wish to continue", false);
-
+try {
+  echo PHP_EOL;
+  $answer = promptYesNo('Would you like to create the database schema', true);
   if ($answer) {
-
-    // ----------------------------------------------------------------------
-    // Prompt for create/drop sql scripts
-    // ----------------------------------------------------------------------
-
-    $createTablesScript = configure('SCHEMA_SCRIPT',
-        $defaultScriptDir . DIRECTORY_SEPARATOR . 'create_tables.sql',
-        "SQL script containing \"create\" schema definition");
-    if (!file_exists($createTablesScript)) {
-      print "The indicated script does not exist. Please try again.\n";
-      exit(-1);
-    }
-
-    $dropTablesScript = configure('SCHEMA_SCRIPT', str_replace(
-        'create_tables.sql', 'drop_tables.sql', $createTablesScript),
-        "SQL script containing \"drop\" schema definition");
-    if (!file_exists($dropTablesScript)) {
-      print "The indicated script does not exist. Please try again.\n";
-      exit(-1);
-    }
-
-
-    // ----------------------------------------------------------------------
-    // Create Schema
-    // ----------------------------------------------------------------------
-
-    print "Loading schema ... ";
-
-    // run create schema
-    $dbInstaller->createSchema($CONFIG['DB_SCHEMA']);
-    // drop tables
-    $dbInstaller->runScript($dropTablesScript);
-    // create tables
-    $dbInstaller->runScript($createTablesScript);
-
-    print "success!\n";
-
-    try {
-      $answer = promptYesNo("Would you like to create the read-only " .
-          "database user = '" . $CONFIG['DB_USER'] . "'", true);
-
-      if ($answer) {
-        print 'Creating read-only user ... ';
-
-        // create read user
-        $dbInstaller->createUser(array('SELECT'), $CONFIG['DB_USER'],
-            $CONFIG['DB_PASS']);
-
-        print "success!\n";
-      }
-    } catch (Exception $e) {
-        print $e->getMessage() . "\n";
-        print "Rolling back database transaction... \n";
-        $dbInstaller->rollBack();
-        exit(-1);
-    }
-
-    // ----------------------------------------------------------------------
-    // US Design data load
-    // ----------------------------------------------------------------------
-
-    // Reference Data
-    $answer = promptYesNo("Would you like to load the reference data into " .
-        "the database", true);
-
+    $answer = promptYesNo(PHP_EOL .
+        'Loading the schema removes any existing schema and/or data!' . PHP_EOL .
+        'Are you sure you wish to continue', false);
     if ($answer) {
-      $referenceDataScript = configure('REFERENCE_SCRIPT',
-          $defaultScriptDir . DIRECTORY_SEPARATOR . 'reference_data.sql',
-          'SQL script containing reference data');
-      if (!file_exists($referenceDataScript)) {
-        print "The indicated script does not exist. Please try again.\n";
-        exit(-1);
+      // ----------------------------------------------------------------------
+      // Create Schema
+      // ----------------------------------------------------------------------
+      $createTablesScript = promptFile(
+          'SQL script containing "create" schema definition',
+          $defaultScriptDir . DIRECTORY_SEPARATOR . 'create_tables.sql');
+      $dropTablesScript = promptFile(
+          'SQL script containing "drop" schema definition',
+          $defaultScriptDir . DIRECTORY_SEPARATOR . 'drop_tables.sql');
+
+      echo 'Loading schema ...';
+      // run create schema
+      $dbInstaller->createSchema($CONFIG['DB_SCHEMA']);
+      // drop tables
+      $dbInstaller->runScript($dropTablesScript);
+      // create tables
+      $dbInstaller->runScript($createTablesScript);
+      echo ' success!' . PHP_EOL . PHP_EOL;
+
+
+      // ----------------------------------------------------------------------
+      // Load Reference Data
+      // ----------------------------------------------------------------------
+      $answer = promptYesNo(
+          'Would you like to load the reference data into the database', true);
+      if ($answer) {
+        $referenceDataScript = promptFile(
+            'SQL script contiaining reference data',
+            $defaultScriptDir . DIRECTORY_SEPARATOR . 'reference_data.sql');
+
+        echo 'Loading reference data ...';
+        $dbInstaller->runScript($referenceDataScript);
+        echo ' success' . PHP_EOL . PHP_EOL;
       }
-
-      print 'Loading reference data ... ';
-      $dbInstaller->runScript($referenceDataScript);
-      print "success!\n";
     }
-
-    $dbInstaller->commit();
-    echo "SUCCESS!!\n";
   }
 
+  // ----------------------------------------------------------------------
+  // Create User
+  // ----------------------------------------------------------------------
+  $answer = promptYesNo("Would you like to create the read-only " .
+      "database user = '" . $CONFIG['DB_USER'] . "'", true);
+  if ($answer) {
+    echo 'Creating read-only user ...';
+    try {
+      $dbInstaller->createUser($CONFIG['DB_USER'], $CONFIG['DB_PASS']);
+      echo ' success!' . PHP_EOL;
+    } catch (Exception $e) {
+      $message = $e->getMessage();
+      if (strpos($message, 'user already exists') === -1) {
+        throw $e;
+      }
+      echo ' user already exists!' . PHP_EOL;
+    }
+  }
+
+  echo 'Granting access to read-only user ...';
+  // always grant usage in case user already exists
+  $dbInstaller->grantUsage(array('SELECT'), $CONFIG['DB_USER']);
+  echo ' success!' . PHP_EOL . PHP_EOL;
+
+  // save changes
+  $dbInstaller->commit();
+} catch (Exception $e) {
+  echo 'ERROR: ' . $e->getMessage() . PHP_EOL;
+  echo 'ERROR: Rolling back database transaction...' . PHP_EOL;
+  $dbInstaller->rollBack();
+  exit(-1);
 }
 
-// Gridded Data
-$answer = promptYesNo("Would you like to load the gridded data into the " .
-    "database", true);
 
+// ----------------------------------------------------------------------
+// US Design gridded data
+// ----------------------------------------------------------------------
+$answer = promptYesNo(
+    'Would you like to load the gridded data into the database', true);
 if ($answer) {
     // load data
     include_once('install/gridded_data.php');
