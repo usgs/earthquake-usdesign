@@ -33,7 +33,7 @@
   <script src="js/bundle.js"></script>
   <script>
     var Calculation = require('Calculation'),
-        Nehrp2015ReportView = require('Nehrp2015ReportView'),
+        ReportView = require('ReportView'),
 
         Collection = require('mvc/Collection'),
         Model = require('mvc/Model');
@@ -49,6 +49,7 @@
         risk_cateogry: 1
       },
       output: {
+        region: 1,
         metadata: {
           max_direction_ss: 1.1,
           max_direction_s1: 1.3
@@ -130,9 +131,10 @@
       }
     });
 
-    Nehrp2015ReportView({
+    ReportView({
       el: document.querySelector('.view'),
-      model: calculation
+      model: calculation,
+      collection: Collection([calculation])
     })
   </script>
 </body>
