@@ -140,7 +140,9 @@ foreach ($datasets as $id => $metadata) {
   try {
     if ($region !== null) {
       // remove existing data
+      echo "\t" . 'removing existing data ...';
       $dataFactory->delete($region);
+      echo ' success!' . PHP_EOL;
     } else {
       // does not exist, insert
       $regionFactory->insert($metadata['design_code_id'],

@@ -139,7 +139,7 @@ class DataFactory {
    *         if unable to delete.
    */
   public function delete ($region) {
-    $regionid = $region['id'];
+    $regionId = $region['id'];
 
     $this->_delete->bindValue(':region_id', safeintval($regionId),
         PDO::PARAM_INT);
