@@ -25,6 +25,12 @@ INSERT INTO metadata (
     1.1, 1.3,
     1.8, 1.8, 1.8,
     1.5, 0.6, 0.5
+  ),
+  (
+    2,
+    1.0, 1.0,
+    1.8, 1.8, 1.8,
+    1.5, 0.6, 0.5
   );
 
 -- Region reference data (added by gridded_data.php)
