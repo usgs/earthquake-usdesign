@@ -60,7 +60,8 @@ CREATE TABLE metadata (
   percentile_pga NUMERIC,
   deterministic_floor_ss NUMERIC,
   deterministic_floor_s1 NUMERIC,
-  deterministic_floor_pga NUMERIC
+  deterministic_floor_pga NUMERIC,
+  interpolation_method VARCHAR(255)
 );
 
 CREATE TABLE region (

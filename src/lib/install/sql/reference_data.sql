@@ -18,19 +18,32 @@ INSERT INTO metadata (
   id,
   max_direction_ss, max_direction_s1,
   percentile_ss, percentile_s1, percentile_pga,
-  deterministic_floor_ss, deterministic_floor_s1, deterministic_floor_pga
+  deterministic_floor_ss, deterministic_floor_s1, deterministic_floor_pga,
+  interpolation_method
 ) VALUES
+  -- NEHRP 2015 default
   (
     1,
     1.1, 1.3,
     1.8, 1.8, 1.8,
-    1.5, 0.6, 0.5
+    1.5, 0.6, 0.5,
+    'linear'
   ),
+  -- NEHRP 2015 American Samoa, Guam, Conterminous US
   (
     2,
+    1.1, 1.3,
+    1.8, 1.8, 1.8,
+    1.5, 0.6, 0.5,
+    'loglog'
+  ),
+  -- NEHRP 2015 Hawaii
+  (
+    3,
     1.0, 1.0,
     1.8, 1.8, 1.8,
-    1.5, 0.6, 0.5
+    1.5, 0.6, 0.5,
+    'linear'
   );
 
 -- Region reference data (added by gridded_data.php)

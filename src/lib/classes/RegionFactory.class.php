@@ -146,7 +146,9 @@
           'deterministic_floor_s1' =>
               safefloatval($row['deterministic_floor_s1']),
           'deterministic_floor_pga' =>
-              safefloatval($row['deterministic_floor_pga'])
+              safefloatval($row['deterministic_floor_pga']),
+
+          'interpolation_method' => $row['interpolation_method']
         );
       } else {
         return null;
@@ -179,7 +181,8 @@
             m.percentile_pga,
             m.deterministic_floor_ss,
             m.deterministic_floor_s1,
-            m.deterministic_floor_pga
+            m.deterministic_floor_pga,
+            m.interpolation_method
           FROM
             region r JOIN metadata m ON (r.metadata_id = m.id)
           ORDER BY
@@ -207,7 +210,8 @@
             m.percentile_pga,
             m.deterministic_floor_ss,
             m.deterministic_floor_s1,
-            m.deterministic_floor_pga
+            m.deterministic_floor_pga,
+            m.interpolation_method
           FROM
             region r JOIN metadata m ON (r.metadata_id = m.id)
           WHERE r.id = :id
@@ -236,7 +240,8 @@
             m.percentile_pga,
             m.deterministic_floor_ss,
             m.deterministic_floor_s1,
-            m.deterministic_floor_pga
+            m.deterministic_floor_pga,
+            m.interpolation_method
           FROM
             region r JOIN metadata m ON (r.metadata_id = m.id)
           WHERE r.design_code_id = :design_code_id
