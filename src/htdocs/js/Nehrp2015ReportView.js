@@ -44,8 +44,11 @@ var Nehrp2015ReportView = function (params) {
       _fpgaSummary,
       _fvSummary,
       _fvTable,
+      _maxDirectionS1,
+      _maxDirectionSs,
       _pgaUnknownTable,
       _siteAmplification,
+      _siteClassLetter,
       _summaryS1,
       _summarySs,
       _summarySd1,
@@ -124,7 +127,7 @@ var Nehrp2015ReportView = function (params) {
           'See below for information on how the S<sub>S</sub> and ',
           'S<sub>1</sub> values above have been calculated from probabilistic ',
           '(risk-targeted) and deterministic ground motions in the direction ',
-          'of maximum horizontal reponse.',
+          'of maximum horizontal response.',
         '</aside>',
         '<div class="report-summary-spectra row">',
           '<div class="report-summary-spectra-sm column one-of-two"></div>',
@@ -136,7 +139,19 @@ var Nehrp2015ReportView = function (params) {
         '<h3>',
           'Section 11.4.1 &mdash; Mapped Acceleration Parameters and ',
           'Risk Coefficients',
-        '<h3>',
+        '</h3>',
+        '<p>',
+          'Note: Ground motion values contoured on Figures 22-1, 2, 5 &amp; 6 ',
+          'below are for the direction of maximmum considered spectral ',
+          'response acceleration. They have been converted from corresponding ',
+          'geometric mean ground motions computed by the USGS by ',
+          'applying factors of <span class="max_direction_ss"></span> (to ',
+          'obtain S<sub>SUH</sub> and S<sub>SD</sub>) and ',
+          '<span class="max_direction_s1"></span> (to obtain S<sub>1UH</sub> ',
+          'and S<sub>1D</sub>). Maps in the proposed 2015 NEHRP Provisions ',
+          'are provided for Site Class B. Adjustments for other Site Classes ',
+          'are made, ad needed, in Section 11.4.3.',
+        '</p>',
         '<h5>',
           '<a href="', _FIGURE_22_1, '">',
             'Figure 22-1: Uniform-Hazard (2% in 50-Year) Ground Motions of ',
@@ -154,12 +169,14 @@ var Nehrp2015ReportView = function (params) {
 
         '<h5>',
           '<a href="', _FIGURE_22_3, '">',
-            'Figure 22-3: Risk Coefficient at 0.2-Second Spectral Reponse Period',
+            'Figure 22-3: Risk Coefficient at 0.2-Second Spectral Response ',
+            'Period',
           '</a>',
         '</h5>',
         '<h5>',
           '<a href="', _FIGURE_22_4, '">',
-            'Figure 22-4: Risk Coefficient at 1.0-Second Spectral Reponse Period',
+            'Figure 22-4: Risk Coefficient at 1.0-Second Spectral Response ',
+            'Period',
           '</a>',
         '</h5>',
 
@@ -179,6 +196,12 @@ var Nehrp2015ReportView = function (params) {
 
       '<section class="report-section section-11-4-2">',
         '<h3>Section 11.4.2 &mdash; Site Class</h3>',
+        '<p>',
+          'The authority having jurisdiction (not the USGS), site-specific ',
+          'geotechnical data, and/or the default has classified the site ',
+          'class as Site Class <span class="site-class-letter"></span>, ',
+          'based on the site soil properties in accordance with Chapter 20.',
+        '</p>',
         '<h4>',
           'Table 20.3-1 Site Classification',
         '</h4>',
@@ -243,7 +266,7 @@ var Nehrp2015ReportView = function (params) {
             '</tr>',
             '<tr>',
               '<th scope="row">',
-                'F. Soils requiring site reponse analysis in accordance with ',
+                'F. Soils requiring site response analysis in accordance with ',
                 'Section 21.1',
               '</th>',
               '<td colspan="3">See Section 20.3.1</td>',
@@ -276,7 +299,7 @@ var Nehrp2015ReportView = function (params) {
           '<span id="equation-11-4-2"></span>',
         '</div>',
         '<div class="equation equation-summary">',
-          'S<sub>S</sub> &equiv; &ldquo;Less of values from Equations ',
+          'S<sub>S</sub> &equiv; &ldquo;Lesser of values from Equations ',
           '(11.4-1) and (11.4-2)&rdquo; = <span class="eq-summary-ss"></span>',
         '</div>',
 
@@ -285,11 +308,11 @@ var Nehrp2015ReportView = function (params) {
           '<span id="equation-11-4-3"></span>',
         '</div>',
         '<div class="equation">',
-          '<label for="equation-11-4-4">Equation (11.4-3)</label>',
+          '<label for="equation-11-4-4">Equation (11.4-4)</label>',
           '<span id="equation-11-4-4"></span>',
         '</div>',
         '<div class="equation equation-summary">',
-          'S<sub>1</sub> &equiv; &ldquo;Less of values from Equations ',
+          'S<sub>1</sub> &equiv; &ldquo;Lesser of values from Equations ',
           '(11.4-3) and (11.4-4)&rdquo; = <span class="eq-summary-s1"></span>',
         '</div>',
 
@@ -303,7 +326,7 @@ var Nehrp2015ReportView = function (params) {
 
         '<h4>',
           'Table 11.4-3: Site Coefficients for Undetermined Soil Sites ',
-          '(excluding Eor F), F<sub>a</sub> and F<sub>v</sub>',
+          '(excluding E or F), F<sub>a</sub> and F<sub>v</sub>',
         '</h4>',
         '<div class="report-table-undetermined-fafv"></div>',
 
@@ -341,6 +364,9 @@ var Nehrp2015ReportView = function (params) {
           '</a>',
         '</h5>',
 
+        '<h4>',
+          'Figure 11.4-1: Design Response Spectrum',
+        '</h4>',
         '<div class="report-details-spectra-sd"></div>',
       '</section>',
 
@@ -355,7 +381,7 @@ var Nehrp2015ReportView = function (params) {
 
       '<section class="report-section section-11-8-3">',
         '<h3>',
-          'Section 11.8.3 &mdash; Additional Geotechnical Investication ',
+          'Section 11.8.3 &mdash; Additional Geotechnical Investigation ',
           'Report Requirements for Seismic Design Categories D through F',
         '</h3>',
 
@@ -392,14 +418,21 @@ var Nehrp2015ReportView = function (params) {
     _summarySmSpectrum = SpectraGraphView({
       el: el.querySelector('.report-summary-spectra-sm'),
       data: [],
-      title: 'MCE<sub>R</sub>'
+      title: 'MCE<sub>R</sub> Spectrum',
+      yAxisLabel: 'Sa (g)'
     });
 
     _summarySdSpectrum = SpectraGraphView({
       el: el.querySelector('.report-summary-spectra-sd'),
       data: [],
-      title: 'Design Response Spectrum'
+      title: 'Design Response Spectrum',
+      yAxisLabel: 'Sa (g)'
     });
+
+    _maxDirectionSs = el.querySelector('.max_direction_ss');
+    _maxDirectionS1 = el.querySelector('.max_direction_s1');
+
+    _siteClassLetter = el.querySelector('.site-class-letter');
 
     _eq11_4_1 = el.querySelector('#equation-11-4-1');
     _eq11_4_2 = el.querySelector('#equation-11-4-2');
@@ -494,8 +527,8 @@ var Nehrp2015ReportView = function (params) {
         s1uh,
         value;
 
-    cr1 = result.get('crs');
-    s1uh = result.get('ssuh');
+    cr1 = result.get('cr1');
+    s1uh = result.get('s1uh');
     value = cr1 * s1uh;
 
     _eq11_4_3.innerHTML = [
@@ -529,7 +562,7 @@ var Nehrp2015ReportView = function (params) {
     _eq11_4_5.innerHTML = [
       'S<sub>MS</sub> = F<sub>a</sub>S<sub>S</sub> = ',
       _displayNumber(fa), ' &times; ', _displayNumber(ss), ' = ',
-      _displayNumber(sms)
+      _displayNumber(sms), ' g'
     ].join('');
   };
 
@@ -543,9 +576,9 @@ var Nehrp2015ReportView = function (params) {
     fv = result.get('fv');
 
     _eq11_4_6.innerHTML = [
-      'S<sub>M1</sub> = F<sub>a</sub>S<sub>1</sub> = ',
+      'S<sub>M1</sub> = F<sub>v</sub>S<sub>1</sub> = ',
       _displayNumber(fv), ' &times; ', _displayNumber(s1), ' = ',
-      _displayNumber(sm1)
+      _displayNumber(sm1), ' g'
     ].join('');
   };
 
@@ -558,7 +591,7 @@ var Nehrp2015ReportView = function (params) {
 
     _eq11_4_7.innerHTML = [
       'S<sub>DS</sub> = &#8532 S<sub>MS</sub> = &#8532 &times; ',
-      _displayNumber(sms), ' = ', _displayNumber(sds)
+      _displayNumber(sms), ' = ', _displayNumber(sds), ' g'
     ].join('');
   };
 
@@ -571,7 +604,7 @@ var Nehrp2015ReportView = function (params) {
 
     _eq11_4_8.innerHTML = [
       'S<sub>D1</sub> = &#8532 S<sub>M1</sub> = &#8532 &times; ',
-      _displayNumber(sm1), ' = ', _displayNumber(sd1)
+      _displayNumber(sm1), ' = ', _displayNumber(sd1), ' g'
     ].join('');
   };
 
@@ -703,6 +736,7 @@ var Nehrp2015ReportView = function (params) {
     _summarySdSpectrum.destroy();
     _summarySmSpectrum.destroy();
 
+
     _detailSdSpectrum = null;
     _detailSmSpectrum = null;
     _eq11_4_1 = null;
@@ -724,7 +758,11 @@ var Nehrp2015ReportView = function (params) {
     _fpgaSummary = null;
     _fvSummary = null;
     _fvTable = null;
+    _maxDirectionS1 = null;
+    _maxDirectionSs = null;
     _pgaUnknownTable = null;
+    _siteAmplification = null;
+    _siteClassLetter = null;
     _summaryS1 = null;
     _summarySs = null;
     _summarySd1 = null;
@@ -762,7 +800,8 @@ var Nehrp2015ReportView = function (params) {
   };
 
   _this.render = function () {
-    var mode,
+    var metadata,
+        mode,
         result;
 
     mode = _this.model.get('mode');
@@ -772,17 +811,24 @@ var Nehrp2015ReportView = function (params) {
       return;
     }
 
-    _summarySs.innerHTML = result.get('ss');
-    _summarySms.innerHTML = result.get('sms');
-    _summarySds.innerHTML = result.get('sds');
+    _summarySs.innerHTML = _displayNumber(result.get('ss')) + ' g';
+    _summarySms.innerHTML = _displayNumber(result.get('sms')) + ' g';
+    _summarySds.innerHTML = _displayNumber(result.get('sds')) + ' g';
 
-    _summaryS1.innerHTML = result.get('s1');
-    _summarySm1.innerHTML = result.get('sm1');
-    _summarySd1.innerHTML = result.get('sd1');
-
+    _summaryS1.innerHTML = _displayNumber(result.get('s1')) + ' g';
+    _summarySm1.innerHTML = _displayNumber(result.get('sm1')) + ' g';
+    _summarySd1.innerHTML = _displayNumber(result.get('sd1')) + ' g';
 
     _summarySmSpectrum.model.set({data: result.get('smSpectrum')});
     _summarySdSpectrum.model.set({data: result.get('sdSpectrum')});
+
+    metadata = _this.model.get('output').get('metadata');
+    _maxDirectionSs.innerHTML = Formatter.number(
+        metadata.get('max_direction_ss'), 1);
+    _maxDirectionS1.innerHTML = Formatter.number(
+        metadata.get('max_direction_s1'), 1);
+
+    _siteClassLetter.innerHTML = result.get('site_class').get('value');
 
     _updateEquation11_4_1(result);
     _updateEquation11_4_2(result);

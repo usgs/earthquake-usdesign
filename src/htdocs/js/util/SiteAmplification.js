@@ -7,8 +7,7 @@ var Formatter = require('util/Formatter'),
 var _DEFAULTS = {
   faTitle: 'Spectral Reponse Acceleration Parameter at Short Period',
 
-  fpgaTitle: 'Mapped Maximum Considered Geometric Mean ' +
-      '(MCE<sub>G</sub>) Peak Ground Acceleration, PGA',
+  fpgaTitle: 'Mapped MCE Geometric Mean Peak Ground Acceleration, PGA',
 
   fvTitle: 'Spectral Response Acceleration Parameter at 1-Second Period',
 
@@ -385,8 +384,7 @@ var SiteAmplification = function (params) {
         '<tr>',
           '<th scope="col" rowspan="2">Site Coefficient</th>',
           '<th colspan="', len, '">',
-            'Mapped Maximum Considered Geometric Mean ',
-            '(MCE<sub>G</sub>) Peak Ground Acceleration, PGA',
+            'Mapped MCE Geometric Mean Peak Ground Acceleration, PGA',
           '</th>',
         '</tr>',
         '<tr>', headers.join(''), '</tr>',
@@ -463,12 +461,12 @@ var SiteAmplification = function (params) {
       }
 
       faHeaders.push('<th scope="col">S<sub>S</sub> ' + comparator + ' ' +
-          _ssInfo.bins[i] + '</th>');
+          Formatter.siteAmplificationHeader(_ssInfo.bins[i]) + '</th>');
       faVals.push('<td class="' + faClasses + '">' +
           _ssInfo.siteClasses.U[i] + '</td>');
 
       fvHeaders.push('<th scope="col">S<sub>1</sub> ' + comparator + ' ' +
-          _s1Info.bins[i] + '</th>');
+          Formatter.siteAmplificationHeader(_s1Info.bins[i]) + '</th>');
       fvVals.push('<td class="' + fvClasses + '">' +
           _s1Info.siteClasses.U[i] + '</td>');
     }
