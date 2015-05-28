@@ -230,8 +230,8 @@ foreach ($datasets as $id => $metadata) {
     $DB->rollBack();
     echo PHP_EOL .
         PHP_EOL .
-        'ERROR: Unable to load dataset (downloaded from ' .
-            'ftp://' . $remote_server . $remote_dataset . ')' . PHP_EOL .
+        'ERROR: Unable to load ' . $metadata['title'] . ' (downloaded from' .
+            ' ftp://' . $remote_server . $remote_dataset . ')' . PHP_EOL .
         'ERROR: ' . $e->getMessage() . PHP_EOL .
         PHP_EOL;
 
