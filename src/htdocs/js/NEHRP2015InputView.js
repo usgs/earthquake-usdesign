@@ -160,6 +160,7 @@ var NEHRP2015InputView = function (params) {
         'site_class': null,
         'risk_category': null
       });
+      _this.model.set({'mode': _CALCULATION_MODE_INPUT});
     });
 
   };
@@ -286,10 +287,10 @@ var NEHRP2015InputView = function (params) {
     riskCategory = _factory.getRiskCategory(model.get('risk_category'));
 
     // Use name instead of id for display in output mode
-    titleEl.innerHTML = title;
-    designCodeEl.innerHTML = (designCode ? designCode.get('name') : '');
-    siteClassEl.innerHTML = (siteClass ? siteClass.get('name') : '');
-    riskCategoryEl.innerHTML = (riskCategory ? riskCategory.get('name') : '');
+    titleEl.innerHTML = (title !== '' ? title : 'No Title');
+    designCodeEl.innerHTML = (designCode ? designCode.get('name') : 'No Design Code');
+    siteClassEl.innerHTML = (siteClass ? siteClass.get('name') : 'No Site Class');
+    riskCategoryEl.innerHTML = (riskCategory ? riskCategory.get('name') : 'No Risk Category');
   };
 
   // updates input view
