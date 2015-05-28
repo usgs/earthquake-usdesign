@@ -57,12 +57,13 @@ var NEHRP2015InputView = function (params) {
     _this.model.get('input').on('change', _this.render);
     _this.model.on('change', _this.render); // mode changes
 
+    // structure html
+    _buildForm();
+    _buildCollectionSelectBoxes();
+
     // Lookup data for collection select boxes
     _factory = LookupDataFactory({});
     _factory.whenReady(function () {
-      // structure html
-      _buildForm();
-      _buildCollectionSelectBoxes();
       _this.render();
       _buildLocationControl();
     });
@@ -121,45 +122,11 @@ var NEHRP2015InputView = function (params) {
             '<select name="risk-category" id="risk-category"></select>' +
             '<div class="risk-category-output"></div>' +
           '</div>' +
-        '</div>' +
-        '<div class="row">' +
-          '<div class="column one-of-one">' +
-              '<button class="toggle-mode">Toggle Mode</button>' +
-              '<button class="reset-model">Reset Model</button>' +
-          '</div>' +
         '</div>';
 
     _titleEl = _this.el.querySelector('#title');
     // Update title on change
     _titleEl.addEventListener('blur', _updateTitle);
-
-
-    // TODO, move this into an example page
-    var toggleButton = _this.el.querySelector('.toggle-mode');
-    toggleButton.addEventListener('click', function () {
-      var mode = _this.model.get('mode');
-
-      if (mode === _CALCULATION_MODE_INPUT) {
-        _this.model.set({'mode': _CALCULATION_MODE_OUTPUT});
-      } else {
-        _this.model.set({'mode': _CALCULATION_MODE_INPUT});
-      }
-    });
-
-    // TODO, move this into an example page
-    var resetButton = _this.el.querySelector('.reset-model');
-    resetButton.addEventListener('click', function () {
-      var input = _this.model.get('input');
-      input.set({
-        'title': null,
-        'latitude': null,
-        'longitude': null,
-        'design_code': null,
-        'site_class': null,
-        'risk_category': null
-      });
-      _this.model.set({'mode': _CALCULATION_MODE_INPUT});
-    });
 
   };
 

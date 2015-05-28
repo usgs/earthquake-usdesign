@@ -21,4 +21,3 @@ if (!isset($TEMPLATE)) {
 }
 ?>
 
-<div id="input-view"></div>
