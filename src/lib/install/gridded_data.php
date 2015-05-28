@@ -40,6 +40,30 @@ $datasets = array(
     'grid_spacing' => 0.10,
     'remote_dir' => '/web/earthquake-usdesign/2015nehrp/guam'
   ),
+  '2015nehrp_hv' => array(
+    'title' => '2015 NEHRP Hawaii',
+    'design_code_id' => 1,
+    'metadata_id' => 2,
+    'name' => 'Hawaii',
+    'min_latitude' => 18.00,
+    'max_latitude' => 23.00,
+    'min_longitude' => -161,
+    'max_longitude' => -154,
+    'grid_spacing' => 0.02,
+    'remote_dir' => '/web/earthquake-usdesign/2015nehrp/hi'
+  ),
+  '2015nehrp_prvi' => array(
+    'title' => '2015 NEHRP Puerto Rico/Virgin Islands',
+    'design_code_id' => 1,
+    'metadata_id' => 1,
+    'name' => 'Puerto Rico and Virgin Islands',
+    'min_latitude' => 17.50,
+    'max_latitude' => 19.00,
+    'min_longitude' => -67.50,
+    'max_longitude' => -64.50,
+    'grid_spacing' => 0.02,
+    'remote_dir' => '/web/earthquake-usdesign/2015nehrp/prvi'
+  ),
   '2015nehrp_us' => array(
     'title' => '2015 NEHRP Conterminous US',
     'design_code_id' => 1,
