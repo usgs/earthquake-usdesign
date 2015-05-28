@@ -5,6 +5,7 @@ $remote_server = 'hazards.cr.usgs.gov';
 
 $datasets = array(
   '2015nehrp_alaska' => array(
+    'title' => '2015 NEHRP Alaska',
     'design_code_id' => 1,
     'metadata_id' => 1,
     'name' => 'Alaska',
@@ -15,18 +16,8 @@ $datasets = array(
     'grid_spacing' => 0.05,
     'remote_dir' => '/web/earthquake-usdesign/2015nehrp/alaska'
   ),
-  '2015nehrp_us' => array(
-    'design_code_id' => 1,
-    'metadata_id' => 1,
-    'name' => 'Conterminous US',
-    'min_latitude' => 24.60,
-    'max_latitude' => 50.00,
-    'min_longitude' => -125.00,
-    'max_longitude' => -65.10,
-    'grid_spacing' => 0.05,
-    'remote_dir' => '/web/earthquake-usdesign/2015nehrp/us'
-  ),
   '2015nehrp_amsam' => array(
+    'title' => '2015 NEHRP American Samoa',
     'design_code_id' => 1,
     'metadata_id' => 1,
     'name' => 'American Samoa',
@@ -36,8 +27,33 @@ $datasets = array(
     'max_longitude' => -165.10,
     'grid_spacing' => 0.10,
     'remote_dir' => '/web/earthquake-usdesign/2015nehrp/amsam'
+  ),
+  '2015nehrp_guam' => array(
+    'title' => '2015 NEHRP Guam',
+    'design_code_id' => 1,
+    'metadata_id' => 1,
+    'name' => 'Guam',
+    'min_latitude' => 9.00,
+    'max_latitude' => 23.00,
+    'min_longitude' => 139,
+    'max_longitude' => 151,
+    'grid_spacing' => 0.10,
+    'remote_dir' => '/web/earthquake-usdesign/2015nehrp/guam'
+  ),
+  '2015nehrp_us' => array(
+    'title' => '2015 NEHRP Conterminous US',
+    'design_code_id' => 1,
+    'metadata_id' => 1,
+    'name' => 'Conterminous US',
+    'min_latitude' => 24.60,
+    'max_latitude' => 50.00,
+    'min_longitude' => -125.00,
+    'max_longitude' => -65.10,
+    'grid_spacing' => 0.05,
+    'remote_dir' => '/web/earthquake-usdesign/2015nehrp/us'
   )
 );
+
 
 chdir(dirname(__FILE__));
 
@@ -88,11 +104,11 @@ foreach ($datasets as $id => $metadata) {
       $metadata['design_code_id']);
   if ($region !== null) {
     // already exists, make sure user want's to replace
-    if (!promptYesNo($metadata['name'] . ' already exists,' .
+    if (!promptYesNo($metadata['title'] . ' already exists,' .
         ' replace existing data?', false)) {
       continue;
     }
-  } else if (!promptYesNo('Load ' . $metadata['name'] . '?', true)) {
+  } else if (!promptYesNo('Load ' . $metadata['title'] . '?', true)) {
     continue;
   }
 
