@@ -7,6 +7,12 @@ var iniConfig = require('ini').parse(require('fs')
 
 var rewrites = [
   {
+    from:'^' + iniConfig.MOUNT_PATH +
+    '/service/?([^/]+)?/?([^/]+)?/?([^/]+)?/?([^/]+)?/?([^/]+)?/?([^/]+)?',
+    to: '/service.php?design_code_id=$1&site_class_id=$2' +
+        '&risk_category_id=$3&longitude=$4&latitude=$5&title=$6'
+  },
+  {
     from: '^' + iniConfig.MOUNT_PATH + '/?(.*)$',
     to: '/$1'
   }
