@@ -33,13 +33,18 @@ var Nehrp2015ReportView = function (params) {
       _eq11_4_6,
       _eq11_4_7,
       _eq11_4_8,
+      _eq11_8_1,
       _eqSummaryS1,
       _eqSummarySs,
+      _eqmapped_pga,
       _faSummary,
       _faTable,
       _fafvUnknownTable,
+      _fpgaTable,
+      _fpgaSummary,
       _fvSummary,
       _fvTable,
+      _pgaUnknownTable,
       _siteAmplification,
       _summaryS1,
       _summarySs,
@@ -60,10 +65,14 @@ var Nehrp2015ReportView = function (params) {
       _updateEquation11_4_6,
       _updateEquation11_4_7,
       _updateEquation11_4_8,
+      _updateEquation11_8_1,
       _updateEquationSummaryS1,
       _updateEquationSummarySs,
+      _updateEquationMapped_Pga,
       _updateFaInfo,
       _updateFaFvUnknownTable,
+      _updateFpgaInfo,
+      _updatePgaUnknownTable,
       _updateFvInfo,
       _updateVisiblity;
 
@@ -342,6 +351,33 @@ var Nehrp2015ReportView = function (params) {
           'multiplying the design response spectrum above by 1.5.',
         '</aside>',
         '<div class="report-details-spectra-sm"></div>',
+      '</section>',
+
+      '<section class="report-section section-11-8-3">',
+        '<h3>',
+          'Section 11.8.3 &mdash; Additional Geotechnical Investication ',
+          'Report Requirements for Seismic Design Categories D through F',
+        '</h3>',
+
+        '<h4>Table 11.8-1: Site Coefficient for F<sub>PGA</sub></h4>',
+        '<div class="report-table-fpga"></div>',
+        '<p class="report-summary-fpga"></p>',
+
+        '<h4>',
+          'Table 11.8-2 Site Coefficients for Undetermined Soil Sites ',
+          '(excluding Class E or F), F<sub>PGA</sub>',
+        '</h4>',
+        '<div class="report-table-undetermined-pga"></div>',
+
+         '<div class="equation">',
+          '<label for="equation-mapped-pga">Mapped PGA</label>',
+          '<span id="equation-mapped-pga"></span>',
+        '</div>',
+
+        '<div class="equation">',
+          '<label for="equation-11-8-1">Equation (11.8-1)</label>',
+          '<span id="equation-11-8-1"></span>',
+        '</div>',
       '</section>'
     ].join('');
 
@@ -387,6 +423,9 @@ var Nehrp2015ReportView = function (params) {
     _eq11_4_7 = el.querySelector('#equation-11-4-7');
     _eq11_4_8 = el.querySelector('#equation-11-4-8');
 
+    _eqmapped_pga = el.querySelector('#equation-mapped-pga');
+    _eq11_8_1 = el.querySelector('#equation-11-8-1');
+
     _detailSdSpectrum = SpectraGraphView({
       el: el.querySelector('.report-details-spectra-sd'),
       data: [],
@@ -411,6 +450,11 @@ var Nehrp2015ReportView = function (params) {
       ssLabel: 'S<sub>MS</sub>',
       s1Label: 'S<sub>M1</sub>'
     });
+
+    _fpgaTable = el.querySelector('.report-table-fpga');
+    _fpgaSummary = el.querySelector('.report-summary-fpga');
+
+    _pgaUnknownTable = el.querySelector('.report-table-undetermined-pga');
   };
 
   _displayNumber = function (number) {
@@ -531,12 +575,31 @@ var Nehrp2015ReportView = function (params) {
     ].join('');
   };
 
+  _updateEquation11_8_1 = function (result) {
+    var fpga,
+        pga,
+        pgam;
+
+    pga = result.get('pga');
+    pgam = result.get('pgam');
+    fpga = result.get('fpga');
+
+    _eq11_8_1.innerHTML = [
+      'PGA<sub>M</sub> = F<sub>PGA</sub>PGA = ', _displayNumber(fpga),
+      ' &times; ', _displayNumber(pga), ' = ', _displayNumber(pgam)
+    ].join('');
+  };
+
   _updateEquationSummaryS1 = function (result) {
     _eqSummaryS1.innerHTML = _displayNumber(result.get('s1')) + ' g';
   };
 
   _updateEquationSummarySs = function (result) {
     _eqSummarySs.innerHTML = _displayNumber(result.get('ss')) + ' g';
+  };
+
+  _updateEquationMapped_Pga = function (result) {
+    _eqmapped_pga.innerHTML = 'PGA = ' + _displayNumber(result.get('pga')) + ' g';
   };
 
   _updateFaInfo = function (result) {
@@ -570,6 +633,23 @@ var Nehrp2015ReportView = function (params) {
         _siteAmplification.getUndeterminedSsS1Table(ss, s1, siteClass));
   };
 
+  _updateFpgaInfo = function (result) {
+    var fpga,
+        pga,
+        siteClass;
+
+    pga = result.get('pga');
+    fpga = result.get('fpga');
+    siteClass = result.get('site_class').get('value');
+
+    _fpgaTable.innerHTML = '';
+    _fpgaTable.appendChild(_siteAmplification.getFpgaTable(pga, siteClass));
+    _fpgaSummary.innerHTML = [
+      'For Site Class = ', siteClass, ' and PGA = ',
+      _displayNumber(pga), ' g, F<sub>PGA</sub> = ', _displayNumber(fpga)
+    ].join('');
+  };
+
   _updateFvInfo = function (result) {
     var fv,
         s1,
@@ -585,6 +665,18 @@ var Nehrp2015ReportView = function (params) {
       'For Site Class = ', siteClass, ' and S<sub>1</sub> = ',
       _displayNumber(s1), ' g, F<sub>v</sub> = ', _displayNumber(fv)
     ].join('');
+  };
+
+  _updatePgaUnknownTable = function (result) {
+    var pga,
+        siteClass;
+
+    pga = result.get('pga');
+    siteClass = result.get('site_class').get('value');
+
+    _pgaUnknownTable.innerHTML = '';
+    _pgaUnknownTable.appendChild(
+        _siteAmplification.getUndeterminedPgaTable(pga, siteClass));
   };
 
   _updateVisiblity = function () {
@@ -621,13 +713,18 @@ var Nehrp2015ReportView = function (params) {
     _eq11_4_6 = null;
     _eq11_4_7 = null;
     _eq11_4_8 = null;
+    _eq11_8_1 = null;
     _eqSummaryS1 = null;
     _eqSummarySs = null;
+    _eqmapped_pga = null;
     _faSummary = null;
     _faTable = null;
     _fafvUnknownTable = null;
+    _fpgaTable = null;
+    _fpgaSummary = null;
     _fvSummary = null;
     _fvTable = null;
+    _pgaUnknownTable = null;
     _summaryS1 = null;
     _summarySs = null;
     _summarySd1 = null;
@@ -648,11 +745,15 @@ var Nehrp2015ReportView = function (params) {
     _updateEquation11_4_6 = null;
     _updateEquation11_4_7 = null;
     _updateEquation11_4_8 = null;
+    _updateEquation11_8_1 = null;
     _updateEquationSummaryS1 = null;
     _updateEquationSummarySs = null;
+    _updateEquationMapped_Pga = null;
     _updateFaInfo = null;
     _updateFaFvUnknownTable = null;
+    _updateFpgaInfo = null;
     _updateFvInfo = null;
+    _updatePgaUnknownTable = null;
     _updateVisiblity = null;
 
 
@@ -711,6 +812,12 @@ var Nehrp2015ReportView = function (params) {
       ss: result.get('sms'),
       s1: result.get('sm1')
     });
+
+    _updateFpgaInfo(result);
+    _updatePgaUnknownTable(result);
+
+    _updateEquationMapped_Pga(result);
+    _updateEquation11_8_1(result);
   };
 
 
