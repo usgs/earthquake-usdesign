@@ -90,4 +90,4 @@ CREATE TABLE data (
   geomean_pgad NUMERIC
 );
 
-CREATE INDEX data_location_index ON data (region_id, latitude, longitude);
+CREATE UNIQUE INDEX data_location_index ON data (region_id, latitude, longitude);
