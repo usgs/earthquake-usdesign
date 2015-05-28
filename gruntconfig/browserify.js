@@ -13,6 +13,7 @@ var EXPORTS = [
   JSDIR + '/CalculationView.js:CalculationView',
   JSDIR + '/SpectraGraphView.js:SpectraGraphView',
   JSDIR + '/WebServiceAccessor.js:WebServiceAccessor',
+  JSDIR + '/NEHRP2015InputView.js:NEHRP2015InputView',
 
   JSDIR + '/util/D3GraphView.js:util/D3GraphView',
   JSDIR + '/util/LookupDataFactory.js:util/LookupDataFactory',
