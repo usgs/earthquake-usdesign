@@ -24,6 +24,7 @@ var NEHRP2015InputView = function (params) {
       _siteClassCollection,
       _siteClassEl,
       _titleEl,
+      _locationControl,
 
       _buildForm,
       _buildCollectionSelectBoxes,
@@ -67,18 +68,20 @@ var NEHRP2015InputView = function (params) {
       _this.render();
       _buildLocationControl();
     });
-
   };
 
 
   _buildLocationControl = function () {
+    var map,
+        natgeo,
+        input;
 
-    var map = new L.Map(_this.el.querySelector('#location-view'), {
-      center: new L.LatLng(40.0, -100.0),
+    map = L.map(_this.el.querySelector('#location-view'), {
+      center: L.latLng(40.0, -100.0),
       zoom: 3
     });
 
-    var lc = new LocationControl({
+    _locationControl = new LocationControl({
       includePointControl: true,
       includeCoordinateControl: true,
       includeGeocodeControl: true,
@@ -86,20 +89,32 @@ var NEHRP2015InputView = function (params) {
       el: _this.el.querySelector('#map')
     });
 
-    var natgeo = new L.TileLayer('http://server.arcgisonline.com' +
+    natgeo = L.tileLayer('http://server.arcgisonline.com' +
         '/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}');
 
-    // Update location
-    lc.on('location', function(/*loc*/) {
+    map.addLayer(natgeo);
+    map.addControl(_locationControl);
+
+    // set initial location
+    input = _this.model.get('input');
+    if (input.get('latitude') !== null && input.get('longitude') !== null) {
+      // update the marker on the map
+      _locationControl.setLocation({
+        'latitude': input.get('latitude'),
+        'longitude': input.get('longitude')
+      });
+    }
+
+    // bind to location change
+    _locationControl.on('location', function(/*loc*/) {
       _updateLocation(this.getLocation());
     });
 
-    map.addLayer(natgeo);
-    map.addControl(lc);
   };
 
 
   _buildForm = function () {
+
     _this.el.className = 'vertical';
     _this.el.innerHTML =
         '<label for="title">Title</label>' +
@@ -124,10 +139,9 @@ var NEHRP2015InputView = function (params) {
           '</div>' +
         '</div>';
 
-    _titleEl = _this.el.querySelector('#title');
     // Update title on change
+    _titleEl = _this.el.querySelector('#title');
     _titleEl.addEventListener('blur', _updateTitle);
-
   };
 
   _buildCollectionSelectBoxes = function () {
@@ -216,11 +230,15 @@ var NEHRP2015InputView = function (params) {
   };
 
   _updateLocation = function (location) {
-    var input = _this.model.get('input');
-    input.set({
-      'latitude': location.latitude,
-      'longitude': location.longitude
-    });
+    // update the Calculation model
+    var input;
+    if (location.latitude !== null && location.longitude !== null) {
+      input = _this.model.get('input');
+      input.set({
+        'latitude': location.latitude,
+        'longitude': location.longitude
+      });
+    }
   };
 
   // updates output view

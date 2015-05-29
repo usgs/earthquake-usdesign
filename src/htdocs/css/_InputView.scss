@@ -57,10 +57,6 @@
     margin: 8px 0 24px;
   }
 
-  .location-view {
-    margin-top: -1px;
-  }
-
   .title-output > small {
     display: block;
     font-size: 13px;
@@ -71,6 +67,13 @@
   input {
     display: none;
   }
+}
+
+.leaflet-bar > a,
+.leaflet-bar > a:hover {
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
 }
 
 @media print {
