@@ -9,5 +9,5 @@ before_install:
   - sudo apt-get install -y ruby-full
   - sudo apt-get install libgemplugin-ruby
   - sudo gem install compass
-before_script:
   - npm install -g grunt-cli
+before_script:
