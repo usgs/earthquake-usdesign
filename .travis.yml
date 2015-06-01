@@ -6,8 +6,8 @@ env:
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y php5
-  - sudo apt-get install -y ruby-full
-  # - sudo apt-get install libgemplugin-ruby
-  # - sudo gem install compass
+  - sudo apt-get install -y ruby
+  - sudo apt-get install -y rubygems
+  - rvmsudo gem install compass
+  - rvmsudo gem update --system
   - npm install -g grunt-cli
-before_script:
