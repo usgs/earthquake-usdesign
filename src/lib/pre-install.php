@@ -26,6 +26,12 @@ if ($argv[0] === './pre-install.php' || $_SERVER['PWD'] !== $OLD_PWD) {
   $LIB_DIR = getcwd();
 }
 
+if (count($argv) > 1 && $argv[1] === '--non-interactive') {
+  $NO_PROMPT = true;
+} else {
+  $NO_PROMPT = false;
+}
+
 $APP_DIR = dirname($LIB_DIR);
 $CONF_DIR = $APP_DIR . DIRECTORY_SEPARATOR . 'conf';
 
@@ -103,6 +109,6 @@ file_put_contents($APACHE_CONFIG_FILE, '
 
 // configure database
 echo "\n";
-if (promptYesNo('Would you like to setup the database or load data', true)) {
+if (promptYesNo('Would you like to setup the database or load data', false)) {
   include_once 'install/setup_database.php';
 }

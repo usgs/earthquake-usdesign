@@ -21,6 +21,11 @@
    */
   function configure ($option, $default=null, $comment='', $secure=false,
       $unknown=false) {
+    global $NO_PROMPT;
+
+    if ($NO_PROMPT) {
+      return $default;
+    }
 
     // check if windows
     static $isWindows = null;
@@ -178,6 +183,12 @@
    * @return {Boolean} true if user entered yes, false if user entered no.
    */
   function promptYesNo ($prompt='Yes or no?', $default=null) {
+    global $NO_PROMPT;
+
+    if ($NO_PROMPT) {
+      return $default;
+    }
+
     $question = $prompt . ' [' .
         ($default === true ? 'Y' : 'y') . '/' .
         ($default === false ? 'N' : 'n') . ']: ';
