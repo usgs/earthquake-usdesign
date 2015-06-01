@@ -11,6 +11,7 @@ var EXPORTS = [
   JSDIR + '/ActionsView.js:ActionsView',
   JSDIR + '/Calculation.js:Calculation',
   JSDIR + '/CalculationView.js:CalculationView',
+  JSDIR + '/NEHRPCalc2015.js:NEHRPCalc2015',
   JSDIR + '/ReportView.js:ReportView',
   JSDIR + '/SpectraGraphView.js:SpectraGraphView',
   JSDIR + '/WebServiceAccessor.js:WebServiceAccessor',
