@@ -61,7 +61,7 @@ var Nehrp2015Section_Section_11_4_6 = function (params) {
     section.appendChild(_spectrum.el);
 
     _spectrum.model.set({
-      data: result.get('smSpectrum'),
+      data: result.get('smSpectrum') || [],
       ss: result.get('sms'),
       s1: result.get('sm1')
     });

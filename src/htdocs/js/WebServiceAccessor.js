@@ -1,6 +1,8 @@
 'use strict';
 
-var Xhr = require('util/Xhr');
+var Calculation = require('Calculation'),
+
+    Xhr = require('util/Xhr');
 
 var _DEFAULTS = {
   url: 'service'
@@ -72,13 +74,28 @@ var WebServiceAccessor = function (params) {
    *         if data contains the error message, an error is thrown.
    */
   _updateCalculation = function (calculation, data) {
+    var input,
+        metadata,
+        output,
+        result;
+
     if (data.error !== undefined) {
       throw new Error(data.error +
           ' Must specify design_code, site_class, risk_category' +
           'latitude, longitude, and title; to retrive usdesign data.');
-    }
-    else {
-      calculation.set(data);
+    } else {
+      input = calculation.get('input');
+      output = calculation.get('output');
+      result = calculation.get('result');
+
+      metadata = output.get('metadata');
+
+      input.set(data.input);
+      metadata.set(data.output.metadata);
+      result.set(data.output.result);
+      output.set({tl: data.output.tl});
+
+      calculation.set({mode: Calculation.MODE_OUTPUT});
     }
     return calculation;
   };

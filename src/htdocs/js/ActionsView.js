@@ -2,6 +2,7 @@
 
 var Calculation = require('Calculation'),
     CalculationView = require('CalculationView'),
+    WebServiceAccessor = require('WebServiceAccessor'),
 
     Accordion = require('accordion/Accordion'),
 
@@ -16,6 +17,7 @@ var ActionsView = function (params) {
   var _this,
       _initialize,
 
+      _accessor,
       _accordion,
       _btnCalculate,
       _btnEdit,
@@ -41,7 +43,12 @@ var ActionsView = function (params) {
   _initialize = function (params) {
     params = params || {};
 
+    _accessor = params.accessor;
     _collection = params.collection;
+
+    if (!_accessor) {
+      _accessor = WebServiceAccessor();
+    }
 
     if (!_collection) {
       _collection = Collection([]);
@@ -69,6 +76,7 @@ var ActionsView = function (params) {
   _createViewSkeleton = function () {
     var headerMarkup;
 
+    _this.el.innerHTML = '';
     _this.el.classList.add('actions-view');
     _this.el.classList.add('actions-view-mode-input');
 
@@ -113,9 +121,9 @@ var ActionsView = function (params) {
 
   _onCalculateClick = function () {
     if (_this.model) {
-      _this.model.set({'mode': Calculation.MODE_OUTPUT});
+      //_this.model.set({'mode': Calculation.MODE_OUTPUT});
 
-      // TODO :: Run calculation ...
+      _accessor.getResults(_this.model);
     }
 
   };

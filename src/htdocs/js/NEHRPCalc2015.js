@@ -572,10 +572,27 @@ var NEHRPCalc2015 = function (params) {
    *                    takes a calculation
    */
   _this.getResult = function (calculation) {
-    var result;
+    var result,
+        resultJSON;
 
     result = calculation.get('result');
-    if (result === null) {
+    resultJSON = result ? result.toJSON() : null;
+
+    if (!result || !(
+      result.hasOwnProperty('latitude') &&
+      result.hasOwnProperty('longitude') &&
+      result.hasOwnProperty('mapped_ss') &&
+      result.hasOwnProperty('mapped_s1') &&
+      result.hasOwnProperty('mapped_pga') &&
+
+      result.hasOwnProperty('cr2') &&
+      result.hasOwnProperty('cr1') &&
+
+      result.hasOwnProperty('geomean_ssd') &&
+      result.hasOwnProperty('geomean_s1d') &&
+      result.hasOwnProperty('geomean_pgad')
+
+    )) {
       result = _this.interpolate(calculation);
       calculation.set({
         'result': result

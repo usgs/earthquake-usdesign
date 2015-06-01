@@ -1,7 +1,7 @@
 <?php
 if (!isset($TEMPLATE)) {
   // Page title. Shows up as <title> in <head> and an <h1> in content.
-  $TITLE = 'Page Title';
+  $TITLE = 'U.S. Seismic Design Maps';
 
   // True, flase, or actual navigation markup
   $NAVIGATION = true;
@@ -21,3 +21,4 @@ if (!isset($TEMPLATE)) {
 }
 ?>
 
+<div class="application"></div>

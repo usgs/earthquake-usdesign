@@ -74,7 +74,13 @@ var Nehrp2015Section_Section_11_4_3 = function (params) {
     fv = result.get('fv');
     sm1 = result.get('sm1');
 
-    siteClass = result.get('site_class').get('value');
+    siteClass = result.get('site_class');
+
+    if (!siteClass) {
+      return args;
+    }
+
+    siteClass = siteClass.get('value');
 
     faTable = document.createElement('div');
     faTable.appendChild(_siteAmplification.getFaTable(ss, siteClass));
