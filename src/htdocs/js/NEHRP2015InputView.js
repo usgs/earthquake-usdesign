@@ -87,7 +87,7 @@ var NEHRP2015InputView = function (params) {
       includeCoordinateControl: true,
       includeGeocodeControl: true,
       includeGeolocationControl: true,
-      el: _this.el.querySelector('#map')
+      el: _this.el.querySelector('#location-view')
     });
 
     natgeo = L.tileLayer('http://server.arcgisonline.com' +
@@ -116,32 +116,32 @@ var NEHRP2015InputView = function (params) {
 
   _buildForm = function () {
 
-    _this.el.className = 'vertical';
+    _this.el.className = 'vertical input-view';
     _this.el.innerHTML =
-        '<label for="title">Title</label>' +
-        '<input type="text" name="title" id="title" ' +
+        '<label for="report-title">Title</label>' +
+        '<input type="text" name="title" id="report-title" class="report-title-input" ' +
           'placeholder="Untitled Report" />' +
-        '<h1 class="title-output"></h1>' +
+        '<h1 class="report-title-output"></h1>' +
         '<div class="row">' +
           '<div class="column three-of-five">' +
             '<label for="location-view">Location</label>' +
-            '<div id="location-view"></div>' +
+            '<div id="location-view" class="location-view-input"></div>' +
           '</div>' +
           '<div class="column two-of-five">' +
             '<label for="design-code">Design Code</label>' +
-            '<select name="design-code" id="design-code"></select>' +
+            '<select name="design-code" id="design-code" class="design-code-input"></select>' +
             '<div class="design-code-output"></div>' +
             '<label for="site-class">Site Class</label>' +
-            '<select name="site-class" id="site-class"></select>' +
+            '<select name="site-class" id="site-class" class="site-class-input"></select>' +
             '<div class="site-class-output"></div>' +
             '<label for="risk-category">Risk Category</label>' +
-            '<select name="risk-category" id="risk-category"></select>' +
+            '<select name="risk-category" id="risk-category" class="risk-category-input"></select>' +
             '<div class="risk-category-output"></div>' +
           '</div>' +
         '</div>';
 
     // Update title on change
-    _titleEl = _this.el.querySelector('#title');
+    _titleEl = _this.el.querySelector('#report-title');
     _titleEl.addEventListener('blur', _updateTitle);
   };
 
@@ -253,7 +253,7 @@ var NEHRP2015InputView = function (params) {
         riskCategory,
         riskCategoryEl;
 
-    titleEl = _this.el.querySelector('.title-output');
+    titleEl = _this.el.querySelector('.report-title-output');
     designCodeEl = _this.el.querySelector('.design-code-output');
     siteClassEl = _this.el.querySelector('.site-class-output');
     riskCategoryEl = _this.el.querySelector('.risk-category-output');
