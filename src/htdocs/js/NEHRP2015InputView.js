@@ -77,13 +77,12 @@ var NEHRP2015InputView = function (params) {
 
 
   _buildLocationControl = function () {
-    var map,
-        natgeo,
+    var natgeo,
         natgeoOutput,
         input;
 
     // Input, map with LocationControl and zoom controls
-    map = L.map(_this.el.querySelector('.location-view-input'), {
+    _map = L.map(_this.el.querySelector('.location-view-input'), {
       center: L.latLng(40.0, -100.0),
       zoom: 3
     });
@@ -96,8 +95,8 @@ var NEHRP2015InputView = function (params) {
       includeGeolocationControl: true,
       el: _this.el.querySelector('.location-view-input')
     });
-    map.addLayer(natgeo);
-    map.addControl(_locationControlInput);
+    _map.addLayer(natgeo);
+    _map.addControl(_locationControlInput);
 
 
     // Output, map with marker and zoom controls
@@ -122,8 +121,8 @@ var NEHRP2015InputView = function (params) {
       _marker.addTo(_reportMap);
     }
 
+    // bind to change on location, update hidden output map
     _locationControlInput.on('location', _updateLocation);
-
   };
 
 
@@ -302,6 +301,8 @@ var NEHRP2015InputView = function (params) {
     siteClassEl.innerHTML = (siteClass ? siteClass.get('name') : 'No Site Class');
     riskCategoryEl.innerHTML = (riskCategory ? riskCategory.get('name') : 'No Risk Category');
 
+    // keeps the map from freaking out
+    _reportMap.invalidateSize();
   };
 
   // updates input view
@@ -343,6 +344,8 @@ var NEHRP2015InputView = function (params) {
       _riskCategoryCollection.selectById(model.get('risk_category'));
     }
 
+    // keeps the map from freaking out
+    _map.invalidateSize();
   };
 
 
