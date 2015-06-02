@@ -1,55 +1,71 @@
-@import 'locationview/CoordinateControl';
-@import 'locationview/GeocodeControl';
-@import 'locationview/GeolocationControl';
+
 @import 'locationview/LeafletControls';
 @import 'locationview/LocationControl';
 @import 'locationview/LocationView';
 @import 'locationview/PointControl';
+@import 'locationview/CoordinateControl';
+@import 'locationview/GeocodeControl';
+@import 'locationview/GeolocationControl';
 
-#location-view {
-  height: 400px;
-  margin: 4px 0;
-}
 
-#input-view {
-
-  select[disabled] {
-    color: #999;
-    background: #ededed;
-    border: none;
-  }
+.input-view {
 
   label {
     font-size: .8125em;
     color: #999;
   }
 
-  #title {
+  .report-title-input {
     font-size: 2em; // h1 size
     height: auto;
   }
 
-  input,
-  select {
+  // hide divs by default
+  .report-title-output,
+  .design-code-output,
+  .site-class-output,
+  .risk-category-output {
+    display: none;
+  }
+
+  // show inputs by default
+  .report-title-input,
+  .design-code-input,
+  .site-class-input,
+  .risk-category-input {
     width: 100%;
+
+    &[disabled] {
+      color: #999;
+      background: #ededed;
+      border: none;
+    }
+  }
+
+  .location-view-input {
+    height: 400px;
+    margin: 4px 0;
   }
 }
 
-/* input/output view modes */
-.title-output,
-.design-code-output,
-.site-class-output,
-.risk-category-output {
-  display: none;
-}
-
+// Change display for output mode
 .input-view-output {
+
   label {
     border-bottom: 1px solid #ccc;
     padding: 0 0 2px;
   }
 
-  .title-output,
+  // hide inputs on output mode
+  .report-title-input,
+  .design-code-input,
+  .site-class-input,
+  .risk-category-input {
+    display: none;
+  }
+
+  // display divs on output mode
+  .report-title-output,
   .design-code-output,
   .site-class-output,
   .risk-category-output {
@@ -57,18 +73,14 @@
     margin: 8px 0 24px;
   }
 
-  .title-output > small {
+  .report-title-output > small {
     display: block;
     font-size: 13px;
     color: #999;
   }
-
-  select,
-  input {
-    display: none;
-  }
 }
 
+// matches location control sizes
 .leaflet-bar > a,
 .leaflet-bar > a:hover {
   width: 30px;
@@ -77,6 +89,7 @@
 }
 
 @media print {
+  // report title is the new page header
   .page-header {
     display: none;
   }
