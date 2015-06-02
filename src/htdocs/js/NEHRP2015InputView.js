@@ -1,6 +1,7 @@
 'use strict';
 
-var LookupDataFactory = require('util/LookupDataFactory'),
+var Calculation = require('Calculation'),
+    LookupDataFactory = require('util/LookupDataFactory'),
 
     L = require('leaflet'),
     LocationControl = require('locationview/LocationControl'),
@@ -19,7 +20,7 @@ var _CALCULATION_MODE_INPUT = 'input',
  *
  * The NEHRP2015InputView expects an object with the following parameters:
  *
- * @param el {Object} HTML element that is used to display the view
+ * @param el {Object} [required] HTML element that is used to display the view
  *
  *        el: document.querySelector('div')
  *
@@ -73,7 +74,10 @@ var NEHRP2015InputView = function (params) {
   /**
    * Initialize the view.
    */
-  _initialize = function () {
+  _initialize = function (params) {
+    params = params || {};
+    _this.model = params.model || Calculation();
+
     // Three collections for the collection select boxes
     _designCodeCollection = Collection();
     _siteClassCollection = Collection();
@@ -194,7 +198,6 @@ var NEHRP2015InputView = function (params) {
    * return model.name for the option element innerHTML. 
    */
   _buildCollectionSelectBoxes = function () {
-
     _designCodeEl = _this.el.querySelector('#design-code');
     _siteClassEl = _this.el.querySelector('#site-class');
     _riskCategoryEl = _this.el.querySelector('#risk-category');
@@ -458,7 +461,6 @@ var NEHRP2015InputView = function (params) {
    *
    */
   _this.render = function () {
-
     // load design_codes
     if (_designCodeCollection.data().length === 0) {
       _resetDesignCodeCollection();
@@ -517,7 +519,7 @@ var NEHRP2015InputView = function (params) {
     _this = null;
   });
 
-  _initialize();
+  _initialize(params);
   params = null;
   return _this;
 
