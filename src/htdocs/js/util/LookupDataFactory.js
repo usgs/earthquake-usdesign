@@ -83,7 +83,9 @@ var LookupDataFactory = function (params) {
 
   _getSupported = function (collection, ids) {
     return collection.data().map(function (model) {
-      return (ids.indexOf(model.get('id')) !== -1);
+      if (ids.indexOf(model.get('id')) !== -1) {
+        return model;
+      }
     });
   };
 

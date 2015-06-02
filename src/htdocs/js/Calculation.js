@@ -12,7 +12,7 @@ var _CALCULATION_MODE_INPUT = 'input',
 var _DEFAULTS = {
   mode: _CALCULATION_MODE_INPUT,
   input: {
-    title: 'Untitled Report',
+    title: null,
     latitude: null,
     longitude: null,
     design_code: null,
@@ -85,9 +85,11 @@ var Calculation = function (params) {
     var attributes,
         id,
         input,
-        output;
+        output,
+        mode;
 
     id = _this.get('id');
+    mode = _this.get('mode') || _DEFAULTS.mode;
     attributes = _this.get();
 
     input = Util.extend({}, _DEFAULTS.input, attributes.input);
@@ -104,7 +106,8 @@ var Calculation = function (params) {
 
     attributes = {
       input: Model(input),
-      output: Model(output)
+      output: Model(output),
+      mode: mode
     };
 
 

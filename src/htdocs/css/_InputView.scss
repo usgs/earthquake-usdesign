@@ -1,0 +1,115 @@
+
+@import 'locationview/LeafletControls';
+@import 'locationview/LocationControl';
+@import 'locationview/LocationView';
+@import 'locationview/PointControl';
+@import 'locationview/CoordinateControl';
+@import 'locationview/GeocodeControl';
+@import 'locationview/GeolocationControl';
+
+
+.input-view {
+
+  label {
+    font-size: .8125em;
+    color: #999;
+  }
+
+  .report-title-input {
+    font-size: 2em; // h1 size
+    height: auto;
+  }
+
+  // hide divs by default
+  .report-title-output,
+  .design-code-output,
+  .site-class-output,
+  .risk-category-output {
+    display: none;
+  }
+
+  // show inputs by default
+  .report-title-input,
+  .design-code-input,
+  .site-class-input,
+  .risk-category-input {
+    width: 100%;
+
+    &[disabled] {
+      color: #999;
+      background: #ededed;
+      border: none;
+    }
+  }
+
+  .location-view-input,
+  .location-view-output {
+    height: 400px;
+    margin: 4px 0;
+  }
+
+  .location-view-output {
+    display: none;
+  }
+}
+
+// Change display for output mode
+.input-view-output {
+
+
+  label {
+    border-bottom: 1px solid #ccc;
+    padding: 0 0 2px;
+  }
+
+  // hide inputs on output mode
+  .report-title-input,
+  .design-code-input,
+  .site-class-input,
+  .risk-category-input {
+    display: none;
+  }
+
+  // display divs on output mode
+  .report-title-output,
+  .design-code-output,
+  .site-class-output,
+  .risk-category-output {
+    display: block;
+    margin: 8px 0 24px;
+  }
+
+  .report-title-output > small {
+    display: block;
+    font-size: 13px;
+    color: #999;
+  }
+
+  .location-view-input {
+    display: none;
+  }
+
+  .location-view-output {
+    display: block;
+    width: 100%;
+  }
+}
+
+// matches location control sizes
+.leaflet-bar > a,
+.leaflet-bar > a:hover {
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+}
+
+@media print {
+  // report title is the new page header
+  .page-header {
+    display: none;
+  }
+
+  .leaflet-bar {
+    display: none;
+  }
+}

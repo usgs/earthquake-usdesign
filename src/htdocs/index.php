@@ -13,19 +13,11 @@ if (!isset($TEMPLATE)) {
 
   // Additional tags to add to bottom of body section. Typically javascripts.
   $FOOT = '
+    <script src="lib/leaflet/leaflet.js"></script>
     <script src="js/index.js"></script>
   ';
 
   include_once 'template.inc.php';
 }
-
-// TODO, create a wrapper for data.ws.php
-try {
-  include_once '../lib/classes/data.ws.php';
-  echo '<h3>Data</h3><pre><code>' . json_encode($json, JSON_PRETTY_PRINT) .
-      '</code></pre>';
-} catch (Exception $e) {
-  echo '<h3>Error</h3><pre>' . $e->getMessage() . '</pre>';
-}
-
 ?>
+

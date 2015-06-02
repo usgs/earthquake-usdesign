@@ -3,7 +3,10 @@
 var concurrent = {
   dev: [
     'browserify:index',
+    'browserify:leaflet',
     'copy:dev',
+    'copy:leaflet',
+    'copy:locationView',
     'compass:dev'
   ],
 
