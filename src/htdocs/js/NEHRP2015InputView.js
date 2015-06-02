@@ -7,7 +7,8 @@ var LookupDataFactory = require('util/LookupDataFactory'),
 
     Collection = require('mvc/Collection'),
     CollectionSelectBox = require('mvc/CollectionSelectBox'),
-    View = require('mvc/View');
+    View = require('mvc/View'),
+    Util = require('util/Util');
 
 var _CALCULATION_MODE_INPUT = 'input',
     _CALCULATION_MODE_OUTPUT = 'output';
@@ -333,6 +334,51 @@ var NEHRP2015InputView = function (params) {
       _this.el.classList.remove('input-view-' + _CALCULATION_MODE_OUTPUT);
     }
   };
+
+  /* Cleans up the view */
+  _this.destroy = Util.compose(_this.destroy, function () {
+
+    // Remove event bindings
+    _designCodeCollection.off('select', _updateDesignCode);
+    _siteClassCollection.off('select', _updateSiteClass);
+    _riskCategoryCollection.off('select', _updateRiskCategory);
+    _this.model.get('input').off('change', _this.render);
+    _this.model.off('change', _this.render);
+
+    // remove event listeners
+    _titleEl.removeEventListener('blur', _updateTitle);
+
+    // variables
+    _factory = null;
+    _designCodeCollection = null;
+    _designCodeEl = null;
+    _riskCategoryCollection = null;
+    _riskCategoryEl = null;
+    _siteClassCollection = null;
+    _siteClassEl = null;
+    _titleEl = null;
+    _locationControl = null;
+
+    // methods
+    _buildForm = null;
+    _buildCollectionSelectBoxes = null;
+    _buildLocationControl = null;
+    _renderInputMode = null;
+    _renderOutputMode = null;
+    _resetDesignCodeCollection = null;
+    _resetSiteClassCollection = null;
+    _resetRiskCategoryCollection = null;
+    _updateDesignCode = null;
+    _updateLocation = null;
+    _updateSiteClass = null;
+    _updateRiskCategory = null;
+    _updateTitle = null;
+
+    _initialize = null;
+    _this = null;
+  });
+
+
 
   _initialize();
   params = null;
