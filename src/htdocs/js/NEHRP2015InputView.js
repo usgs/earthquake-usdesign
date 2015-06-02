@@ -257,8 +257,13 @@ var NEHRP2015InputView = function (params) {
       });
 
       // update location on output map
-      _marker.setLatLng(L.latLng(location.latitude, location.longitude));
-      _reportMap.panTo(L.latLng(location.latitude, location.longitude));
+      if (_marker) {
+        _marker.setLatLng(L.latLng(location.latitude, location.longitude));
+        _reportMap.panTo(L.latLng(location.latitude, location.longitude));
+      } else {
+        _marker = L.marker(L.latLng(location.latitude, location.longitude));
+        _marker.addTo(_reportMap);
+      }
     }
   };
 
