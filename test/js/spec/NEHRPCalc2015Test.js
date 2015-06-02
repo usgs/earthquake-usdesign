@@ -26,8 +26,9 @@ var calculate = Calculation({
       'percentile_s1': 1.8,
       'deterministic_floor_ss': 1.5,
       'deterministic_floor_s1': 0.6,
-      'deterministic_floor_pga':0.5,
-      'grid_spacing': null
+      'deterministic_floor_pga': 0.5,
+      'grid_spacing': null,
+      'interpolation_method': 'other stuff'
     },
     'tl': null,
     'data': [
@@ -49,27 +50,6 @@ var calculate = Calculation({
     ]
   }
 });
-
-// var result =  {
-//   'title': 'Los Angeles, CA',
-//   'latitude': 34,
-//   'longitude': -118,
-//   'design_code': 1,
-//   'risk_category': 1,
-//   'site_class': 4,
-//   'tl': null,
-//   'mapped_ss': 0.363,
-//   'crs': 0.87379,
-//   'geomean_ssd': 0.381840,
-//   'mapped_s1': 0.141,
-//   'cr1': 0.8569,
-//   'geomean_s1d': 0.113360,
-//   'mapped_pga': 0.180,
-//   'geomean_pgad': 0.206040
-// };
-
-// result = Model(result);
-
 
 
 describe('NEHRPCalc2015Test', function () {
@@ -96,12 +76,21 @@ describe('NEHRPCalc2015Test', function () {
   describe('Calculations', function () {
     var calc = NEHRPCalc2015();
 
-    it('interpolateValue is correct', function () {
+    it('interpolateValue is correct when interpolation_method is not linearlog',
+        function () {
       expect(calc.interpolateValue(0, 2, 1/2, 0, 1)).to.equal(1);
     });
 
+    it('interpolateValue is correct when interpolation_method is equal to' +
+        'linearlog',
+        function () {
+      expect(calc.interpolateValue(3, 2, 1/2, 0, 1, 'linearlog')).to.be.closeTo(
+          2.4494897427, EPSILISON);
+    });
+
     it('getSsuh is correct', function () {
-      expect(calc.getSsuh(calculate)).to.be.closeTo(0.39930000000000004, EPSILISON);
+      expect(calc.getSsuh(calculate)).to.be.closeTo(
+          0.39930000000000004, EPSILISON);
     });
 
     it('getS1uh is correct', function () {
@@ -139,6 +128,5 @@ describe('NEHRPCalc2015Test', function () {
     it('getPgam', function () {
       expect(calc.getPgam(calculate)).to.be.closeTo(0.25920, EPSILISON);
     });
-
   });
 });
