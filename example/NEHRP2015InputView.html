@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+
+  <title>Input View</title>
+  <link rel="stylesheet" href="site/earthquake/index.css"/>
+  <link rel="stylesheet" href="css/index.css"/>
+  <style>
+    body {
+      padding: 1em;
+    }
+    .view {
+      margin-top: 1em;
+    }
+    .button-group {
+      margin: 1em 0;
+    }
+  </style>
+</head>
+<body>
+  <a href="example.html">Examples</a>
+  <h1>Input View</h1>
+
+  <div class="button-group">
+    <button class="mode-toggle">Toggle Mode</button>
+    <button class="input-reset">Reset the Model</button>
+  </div>
+
+  <div id="input-view"></div>
+
+  <script src="lib/leaflet/leaflet.js"></script>
+  <script src="js/bundle.js"></script>
+  <script>
+    var Calculation = require('Calculation'),
+        NEHRP2015InputView = require('NEHRP2015InputView');
+
+    var _CALCULATION_MODE_INPUT = 'input',
+        _CALCULATION_MODE_OUTPUT = 'output';
+
+    var inputView = NEHRP2015InputView({
+      el: document.querySelector('#input-view'),
+      model: Calculation({
+        mode: 'input',
+        input: {
+          'title': 'My First Report',
+          'latitude': 45,
+          'longitude': -70.1,
+          'design_code': 1,
+          'site_class': 2,
+          'risk_category': 2
+        }
+      })
+    });
+
+    var toggleButton = document.querySelector('.mode-toggle');
+    var resetButton = document.querySelector('.input-reset');
+
+    // toggle between input/output modes
+    toggleButton.addEventListener('click', function () {
+      var mode = inputView.model.get('mode');
+
+      if (mode === _CALCULATION_MODE_INPUT) {
+        inputView.model.set({'mode': _CALCULATION_MODE_OUTPUT});
+      } else {
+        inputView.model.set({'mode': _CALCULATION_MODE_INPUT});
+      }
+    });
+
+    // clear the current inputs from the Calculation model
+    resetButton.addEventListener('click', function () {
+      var input = inputView.model.get('input');
+      input.set({
+        'title': null,
+        'latitude': null,
+        'longitude': null,
+        'design_code': null,
+        'site_class': null,
+        'risk_category': null
+      });
+      inputView.model.set({'mode': _CALCULATION_MODE_INPUT});
+    });
+  </script>
+</body>
+</html>

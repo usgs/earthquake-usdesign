@@ -1,7 +1,7 @@
 {
   "name": "earthquake-usdesign",
   "version": "0.0.0",
-  "description": "Web application for computing seismic design values in the United States.",
+  "description": "Web application for computing seismic design values conforming to various design codes in the United States.",
   "repository": {
     "type": "git",
     "url": "https://github.com/usgs/earthquake-usdesign.git"
@@ -10,35 +10,39 @@
     "usgs"
   ],
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "postinstall": "php src/lib/pre-install.php"
   },
   "dependencies": {},
   "devDependencies": {
-    "chai": "~1.7.0",
-    "connect-livereload": "~0.2.0",
-    "gateway": "~0.1.1",
-    "grunt": "~0.4.1",
-    "grunt-concurrent": "~0.3.0",
-    "grunt-contrib-clean": "~0.4.1",
-    "grunt-contrib-compass": "~0.2.0",
-    "grunt-contrib-connect": "~0.3.0",
-    "grunt-contrib-copy": "~0.4.1",
-    "grunt-contrib-cssmin": "~0.6.1",
-    "grunt-contrib-htmlmin": "~0.1.3",
-    "grunt-contrib-jshint": "~0.6.0",
-    "grunt-contrib-requirejs": "~0.4.1",
-    "grunt-contrib-uglify": "~0.2.2",
-    "grunt-contrib-watch": "~0.4.4",
-    "grunt-mocha-phantomjs": "~0.2.8",
-    "grunt-open": "~0.2.0",
-    "grunt-text-replace": "~0.3.6",
-    "matchdep": "~0.1.2",
-    "mocha": "~1.9.0",
-    "sinon": "~1.7.3",
-    "grunt-connect-rewrite": "~0.2.0",
-    "hazdev-template": "git+https://github.com/usgs/hazdev-template.git"
+    "chai": "^2.0.0",
+    "d3": "^3.5.5",
+    "gateway": "^1.0.0",
+    "grunt": "^0.4.5",
+    "grunt-browserify": "^3.3.0",
+    "grunt-cli": "^0.1.13",
+    "grunt-concurrent": "^1.0.0",
+    "grunt-connect-proxy": "0.1.10",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-compass": "^1.0.1",
+    "grunt-contrib-connect": "^0.9.0",
+    "grunt-contrib-copy": "^0.8.0",
+    "grunt-contrib-cssmin": "^0.12.1",
+    "grunt-contrib-jshint": "^0.11.0",
+    "grunt-contrib-uglify": "^0.7.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-mocha-phantomjs": "^0.6.0",
+    "hazdev-accordion": "git://github.com/usgs/hazdev-accordion.git",
+    "hazdev-location-view": "usgs/hazdev-location-view",
+    "hazdev-template": "usgs/hazdev-template",
+    "hazdev-webutils": "git://github.com/usgs/hazdev-webutils.git",
+    "http-rewrite-middleware": "^0.1.6",
+    "ini": "^1.3.3",
+    "leaflet": "^0.7.3",
+    "mocha": "^2.1.0",
+    "sinon": "^1.12.2"
   },
   "engines": {
-    "node": ">=0.8.0"
+    "node": ">=0.10.0"
   }
 }

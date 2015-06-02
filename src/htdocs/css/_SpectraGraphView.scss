@@ -1,0 +1,46 @@
+
+.SpectraGraphView {
+
+  .inner-frame,
+  .outer-frame {
+    fill: none;
+  }
+
+  .label {
+    font-size: 1.2em;
+  }
+
+  .plot-title {
+    font-size: 1.4em;
+  }
+
+  .x,
+  .y {
+    fill: #000;
+
+    .domain,
+    .tick > line {
+      fill: none;
+      stroke: #000;
+      stroke-width: 1px;
+    }
+  }
+
+  .spectra {
+    fill: none;
+    stroke: #000;
+    stroke-width: 2px;
+  }
+
+  .annotations {
+    stroke: #000;
+    stroke-width: 1px;
+    stroke-dasharray: 10 10;
+  }
+
+  .html-sub,
+  .html-sup {
+    font-size: .625em;
+  }
+
+}

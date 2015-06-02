@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+
+  <title>Spectra Graph View</title>
+  <link rel="stylesheet" href="site/earthquake/index.css"/>
+  <link rel="stylesheet" href="css/index.css"/>
+  <style>
+    body {
+      padding: 1em;
+    }
+  </style>
+</head>
+<body>
+  <a href="example.html">Examples</a>
+  <h1>Spectra Graph View</h1>
+
+  <div class="example-summary"></div>
+  <div class="example-detail"></div>
+
+
+  <script src="js/bundle.js"></script>
+  <script>
+    var SpectraGraphView = require('SpectraGraphView'),
+        data;
+
+    data = [
+      [0, 1.025],
+      [0.136, 2.563],
+      [0.2, 2.563],
+      [0.679, 2.563],
+      [0.7, 2.487],
+      [0.8, 2.176],
+      [0.9, 1.934],
+      [1, 1.741],
+      [1.1, 1.583],
+      [1.2, 1.451],
+      [1.3, 1.339],
+      [1.4, 1.244],
+      [1.5, 1.161],
+      [1.6, 1.088],
+      [1.7, 1.024],
+      [1.8, 0.967],
+      [1.9, 0.916],
+      [2, 0.87]
+    ];
+
+    SpectraGraphView({
+      el: document.querySelector('.example-summary'),
+      data: data,
+      title: 'Example Summary Graph'
+    }).render();
+
+    SpectraGraphView({
+      el: document.querySelector('.example-detail'),
+      data: data,
+      title: 'Example Detail Graph',
+      ss: 2.563,
+      ssLabel: 'S<sub>DS</sub>',
+      s1: 1.741,
+      s1Label: 'S<sub>D1</sub>',
+      comment:
+        'T < T<sub>0</sub> : ' +
+            'S<sub>a</sub> = S<sub>DS</sub> ( 0.4 + 0.6 T / T<sub>0</sub> )\n' +
+        'T<sub>0</sub> ≤ T ≤ T<sub>S</sub> : ' +
+            'S<sub>a</sub> = S<sub>DS</sub>\n' +
+        'T<sub>S</sub> < T ≤ T<sub>L</sub> : ' +
+            'S<sub>a</sub> = S<sub>D1</sub> / T\n' +
+        'T > T<sub>L</sub> : ' +
+            'S<sub>a</sub> = S<sub>D1</sub> T<sub>L</sub> / T<sup>2</sup>'
+    }).render();
+  </script>
+</body>
+</html>

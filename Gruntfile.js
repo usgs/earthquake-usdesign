@@ -1,326 +1,60 @@
 'use strict';
 
-var LIVE_RELOAD_PORT = 35729;
-var rewriteRulesSnippet = require('grunt-connect-rewrite/lib/utils').rewriteRequest;
-var lrSnippet = require('connect-livereload')({port: LIVE_RELOAD_PORT});
-var gateway = require('gateway');
-
-var mountFolder = function (connect, dir) {
-	return connect.static(require('path').resolve(dir));
-};
-
-var mountPHP = function (dir, options) {
-	options = options || {
-		'.php': 'php-cgi',
-		'env': {
-			'PHPRC': process.cwd() + '/node_modules/hazdev-template/src/conf/php.ini'
-		}
-	};
-
-	return gateway(require('path').resolve(dir), options);
-};
-
 module.exports = function (grunt) {
 
-	// Load grunt tasks
-	require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
+  var gruntConfig = require('./gruntconfig');
 
-	// App configuration, used throughout
-	var appConfig = {
-		src: 'src',
-		dist: 'dist',
-		test: 'test',
-		tmp: '.tmp'
-	};
 
-	// TODO :: Read this from .bowerrc
-	var bowerConfig = {
-		directory: 'bower_components'
-	};
+  // Load grunt tasks
+  gruntConfig.tasks.forEach(grunt.loadNpmTasks);
+  grunt.initConfig(gruntConfig);
 
-	grunt.initConfig({
-		app: appConfig,
-		bower: bowerConfig,
-		watch: {
-			scripts: {
-				files: ['<%= app.src %>/htdocs/js/**/*.js'],
-				tasks: ['concurrent:scripts'],
-				options: {
-					livereload: LIVE_RELOAD_PORT
-				}
-			},
-			scss: {
-				files: ['<%= app.src %>/htdocs/css/**/*.scss'],
-				tasks: ['compass:dev']
-			},
-			tests: {
-				files: ['<%= app.test %>/*.html', '<%= app.test %>/**/*.js'],
-				tasks: ['concurrent:tests']
-			},
-			livereload: {
-				options: {
-					livereload: LIVE_RELOAD_PORT
-				},
-				files: [
-					'<%= app.src %>/htdocs/**/*.html',
-					'<%= app.src %>/htdocs/*.php', /* Only watch top-level PHP files */
-					'<%= app.src %>/htdocs/css/**/*.css',
-					'<%= app.src %>/htdocs/img/**/*.{png,jpg,jpeg,gif}',
-					'.tmp/css/**/*.css'
-				]
-			},
-			gruntfile: {
-				files: ['Gruntfile.js'],
-				tasks: ['jshint:gruntfile']
-			}
-		},
-		concurrent: {
-			scripts: ['jshint:scripts', 'mocha_phantomjs'],
-			tests: ['jshint:tests', 'mocha_phantomjs'],
-			predist: [
-				'jshint:scripts',
-				'jshint:tests',
-				'compass'
-			],
-			dist: [
-				'requirejs:dist',
-				'cssmin:dist',
-				'htmlmin:dist',
-				'uglify',
-				'copy'
-			]
-		},
-		connect: {
-			options: {
-				hostname: 'localhost'
-			},
-			rules: [
-				{from:'^/template/(.*)$', to:'/hazdev-template/src/htdocs/$1'}
-			],
-			dev: {
-				options: {
-					base: '<%= app.src %>/htdocs',
-					port: 8080,
-					components: bowerConfig.directory,
-					middleware: function (connect, options) {
-						return [
-							lrSnippet,
-							mountFolder(connect, '.tmp'),
-							mountFolder(connect, options.components),
-							mountPHP(options.base),
-							mountFolder(connect, options.base),
-							rewriteRulesSnippet,
-							mountFolder(connect, 'node_modules')
-						];
-					}
-				}
-			},
-			dist: {
-				options: {
-					base: '<%= app.dist %>/htdocs',
-					port: 8081,
-					keepalive: true,
-					middleware: function (connect, options) {
-						return [
-							mountPHP(options.base),
-							mountFolder(connect, options.base)
-						];
-					}
-				}
-			},
-			test: {
-				options: {
-					base: '<%= app.test %>',
-					components: bowerConfig.directory,
-					port: 8000,
-					middleware: function (connect, options) {
-						return [
-							mountFolder(connect, '.tmp'),
-							mountFolder(connect, 'bower_components'),
-							mountFolder(connect, 'node_modules'),
-							mountFolder(connect, options.base),
-							mountFolder(connect, appConfig.src + '/htdocs/js')
-						];
-					}
-				}
-			}
-		},
-		jshint: {
-			options: {
-				jshintrc: '.jshintrc'
-			},
-			gruntfile: ['Gruntfile.js'],
-			scripts: ['<%= app.src %>/htdocs/js/**/*.js'],
-			tests: ['<%= app.test %>/**/*.js']
-		},
-		compass: {
-			dev: {
-				options: {
-					sassDir: '<%= app.src %>/htdocs/css',
-					cssDir: '<%= app.tmp %>/css',
-					environment: 'development'
-				}
-			}
-		},
-		mocha_phantomjs: {
-			all: {
-				options: {
-					urls: [
-						'http://localhost:<%= connect.test.options.port %>/index.html'
-					]
-				}
-			}
-		},
-		requirejs: {
-			dist: {
-				options: {
-					name: 'index',
-					baseUrl: appConfig.src + '/htdocs/js',
-					out: appConfig.dist + '/htdocs/js/index.js',
-					optimize: 'uglify2',
-					mainConfigFile: appConfig.src + '/htdocs/js/index.js',
-					useStrict: true,
-					wrap: true,
-					uglify2: {
-						report: 'gzip',
-						mangle: true,
-						compress: true,
-						preserveComments: 'some'
-					}
-				}
-			}
-		},
-		cssmin: {
-			dist: {
-				files: {
-					'<%= app.dist %>/htdocs/css/index.css': [
-						'<%= app.src %>/htdocs/css/**/*.css',
-						'.tmp/css/**/*.css'
-					]
-				}
-			}
-		},
-		htmlmin: {
-			dist: {
-				options: {
-					collapseWhitespace: true
-				},
-				files: [{
-					expand: true,
-					cwd: '<%= app.src %>',
-					src: '**/*.html',
-					dest: '<%= app.dist %>'
-				}]
-			}
-		},
-		uglify: {
-			options: {
-				mangle: true,
-				compress: true,
-				report: 'gzip'
-			},
-			dist: {
-				files: {
-					'<%= app.dist %>/htdocs/lib/requirejs/require.js':
-							['<%= bower.directory %>/requirejs/require.js'],
-					'<%= app.dist %>/htdocs/lib/html5shiv/html5shiv.js':
-							['<%= bower.directory %>/html5shiv-dist/html5shiv.js']
-				}
-			}
-		},
-		copy: {
-			app: {
-				expand: true,
-				cwd: '<%= app.src %>/htdocs',
-				dest: '<%= app.dist %>/htdocs',
-				src: [
-					'img/**/*.{png,gif,jpg,jpeg}',
-					'**/*.php'
-				]
-			},
-			conf: {
-				expand: true,
-				cwd: '<%= app.src %>/conf',
-				dest: '<%= app.dist/conf',
-				src: [
-					'**/*',
-					'!**/*.orig'
-				]
-			},
-			lib: {
-				expand: true,
-				cwd: '<%= app.src %>/lib',
-				dest: '<%= app.dist %>/lib',
-				src: [
-					'**/*'
-				]
-			}
-		},
-		replace: {
-			dist: {
-				src: [
-					'<%= app.dist %>/htdocs/index.html',
-					'<%= app.dist %>/**/*.php'
-				],
-				overwrite: true,
-				replacements: [
-					{
-						from: 'requirejs/require.js',
-						to: 'lib/requirejs/require.js'
-					},
-					{
-						from: 'html5shiv-dist/html5shiv.js',
-						to: 'lib/html5shiv/html5shiv.js'
-					}
-				]
-			}
-		},
-		open: {
-			dev: {
-				path: 'http://localhost:<%= connect.dev.options.port %>'
-			},
-			test: {
-				path: 'http://localhost:<%= connect.test.options.port %>'
-			},
-			dist: {
-				path: 'http://localhost:<%= connect.dist.options.port %>'
-			}
-		},
-		clean: {
-			dist: ['<%= app.dist %>'],
-			dev: ['<%= app.tmp %>', '.sass-cache']
-		}
-	});
 
-	grunt.event.on('watch', function (action, filepath) {
-		// Only lint the file that actually changed
-		grunt.config(['jshint', 'scripts'], filepath);
-	});
+  // creates distributable version of application
+  grunt.registerTask('build', [
+    'clean',
+    'dev',
+    'concurrent:dist' // uglify, copy:dist, cssmin
+  ]);
 
-	grunt.registerTask('test', [
-		'clean:dist',
-		'connect:test',
-		'mocha_phantomjs'
-	]);
+  // default task useful during development
+  grunt.registerTask('default', [
+    'dev',
 
-	grunt.registerTask('build', [
-		'clean:dist',
-		'concurrent:predist',
-		'concurrent:dist',
-		'replace',
-		'open:dist',
-		'connect:dist'
-	]);
+    'jshint:test',
+    'concurrent:test', // browserify:test, copy:test
+    'connect:test',
+    'mocha_phantomjs',
 
-	grunt.registerTask('default', [
-		'clean:dist',
-		'compass:dev',
-		'configureRewriteRules',
-		'connect:test',
-		'connect:dev',
-		'open:test',
-		'open:dev',
-		'watch'
-	]);
+    'configureProxies:dev',
+    'connect:template',
+    'connect:dev',
+    'connect:example',
 
+    'watch'
+  ]);
+
+  // builds development version of application
+  grunt.registerTask('dev', [
+    'jshint:dev',
+    'concurrent:dev' // browserify:index, copy:dev, compass:dev
+  ]);
+
+  // starts distribution server and preview
+  grunt.registerTask('dist', [
+    'build',
+    'configureProxies:dist',
+    'connect:template',
+    'connect:dist:keepAlive'
+  ]);
+
+  // runs tests against development version of library
+  grunt.registerTask('test', [
+    'dev',
+
+    'jshint:test',
+    'concurrent:test', // browserify:test, copy:test
+    'connect:test',
+    'mocha_phantomjs'
+  ]);
 };

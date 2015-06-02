@@ -1,0 +1,45 @@
+.actions-view-history {
+  display: flex;
+  flex-direction: column-reverse;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+
+  > li {
+    padding: .6em 1.5em;
+
+
+    &.selected {
+      background-color: #8BE076;
+    }
+  }
+}
+
+.actions-view {
+  > .accordion {
+    .actions-view-actions {
+      padding: .6em 2em .6em 1em;
+
+      &:before {
+        font-size: 1.5em;
+        left: auto;
+        right: 0;
+      }
+
+    }
+
+    > .accordion-content {
+      padding: 0;
+    }
+  }
+
+  &.actions-view-mode-output .actions-view-calculate {
+    display: none;
+  }
+
+  &.actions-view-mode-input .actions-view-edit,
+  &.actions-view-mode-input .actions-view-new {
+    display: none;
+  }
+}
