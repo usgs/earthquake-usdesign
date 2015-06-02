@@ -17,6 +17,8 @@ var NEHRP2015InputView = function (params) {
   var _this,
       _initialize,
 
+      _map,
+      _reportMap,
       _factory,
       _designCodeCollection,
       _designCodeEl,
@@ -25,7 +27,8 @@ var NEHRP2015InputView = function (params) {
       _siteClassCollection,
       _siteClassEl,
       _titleEl,
-      _locationControl,
+      _locationControlInput,
+      _marker,
 
       _buildForm,
       _buildCollectionSelectBoxes,
@@ -66,8 +69,8 @@ var NEHRP2015InputView = function (params) {
     // Lookup data for collection select boxes
     _factory = LookupDataFactory({});
     _factory.whenReady(function () {
-      _this.render();
       _buildLocationControl();
+      _this.render();
     });
   };
 
@@ -75,39 +78,51 @@ var NEHRP2015InputView = function (params) {
   _buildLocationControl = function () {
     var map,
         natgeo,
+        natgeoOutput,
         input;
 
-    map = L.map(_this.el.querySelector('#location-view'), {
+    // Input, map with LocationControl and zoom controls
+    map = L.map(_this.el.querySelector('.location-view-input'), {
       center: L.latLng(40.0, -100.0),
       zoom: 3
     });
-
-    _locationControl = new LocationControl({
+    natgeo = L.tileLayer('http://server.arcgisonline.com' +
+        '/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}');
+    _locationControlInput = new LocationControl({
       includePointControl: true,
       includeCoordinateControl: true,
       includeGeocodeControl: true,
       includeGeolocationControl: true,
-      el: _this.el.querySelector('#location-view')
+      el: _this.el.querySelector('.location-view-input')
     });
-
-    natgeo = L.tileLayer('http://server.arcgisonline.com' +
-        '/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}');
-
     map.addLayer(natgeo);
-    map.addControl(_locationControl);
+    map.addControl(_locationControlInput);
+
+
+    // Output, map with marker and zoom controls
+    _reportMap = L.map(_this.el.querySelector('.location-view-output'), {
+      center: L.latLng(40.0, -100.0),
+      zoom: 3
+    });
+    natgeoOutput = L.tileLayer('http://server.arcgisonline.com' +
+        '/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}');
+    _reportMap.addLayer(natgeoOutput);
+
 
     // set initial location
     input = _this.model.get('input');
     if (input.get('latitude') !== null && input.get('longitude') !== null) {
       // update the marker on the map
-      _locationControl.setLocation({
+      _locationControlInput.setLocation({
         'latitude': input.get('latitude'),
         'longitude': input.get('longitude')
       });
+      _marker = L.marker(L.latLng(input.get('latitude'), input.get('longitude')));
+      _marker.addTo(_reportMap);
     }
 
     // bind to location change
-    _locationControl.on('location', function(/*loc*/) {
+    _locationControlInput.on('location', function(/*loc*/) {
       _updateLocation(this.getLocation());
     });
 
@@ -126,6 +141,7 @@ var NEHRP2015InputView = function (params) {
           '<div class="column three-of-five">' +
             '<label for="location-view">Location</label>' +
             '<div id="location-view" class="location-view-input"></div>' +
+            '<div class="location-view-output"></div>' +
           '</div>' +
           '<div class="column two-of-five">' +
             '<label for="design-code">Design Code</label>' +
@@ -239,6 +255,10 @@ var NEHRP2015InputView = function (params) {
         'latitude': location.latitude,
         'longitude': location.longitude
       });
+
+      // update location on output map
+      _marker.setLatLng(L.latLng(location.latitude, location.longitude));
+      _reportMap.panTo(L.latLng(location.latitude, location.longitude));
     }
   };
 
@@ -275,6 +295,7 @@ var NEHRP2015InputView = function (params) {
     designCodeEl.innerHTML = (designCode ? designCode.get('name') : 'No Design Code');
     siteClassEl.innerHTML = (siteClass ? siteClass.get('name') : 'No Site Class');
     riskCategoryEl.innerHTML = (riskCategory ? riskCategory.get('name') : 'No Risk Category');
+
   };
 
   // updates input view
@@ -315,6 +336,7 @@ var NEHRP2015InputView = function (params) {
     } else {
       _riskCategoryCollection.selectById(model.get('risk_category'));
     }
+
   };
 
 
@@ -349,6 +371,7 @@ var NEHRP2015InputView = function (params) {
     _titleEl.removeEventListener('blur', _updateTitle);
 
     // variables
+    _map = null;
     _factory = null;
     _designCodeCollection = null;
     _designCodeEl = null;
@@ -357,7 +380,8 @@ var NEHRP2015InputView = function (params) {
     _siteClassCollection = null;
     _siteClassEl = null;
     _titleEl = null;
-    _locationControl = null;
+    _locationControlInput = null;
+    _marker = null;
 
     // methods
     _buildForm = null;
