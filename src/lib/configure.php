@@ -9,8 +9,12 @@
     $configure_action = '0';
   }
 
+  if ($NO_PROMPT) {
+    $configure_action = '3';
+  }
+
   while ($configure_action !== '1' && $configure_action !== '2' &&
-      $configure_action !== '3') {
+      $configure_action !== '3' && !$NO_PROMPT) {
 
     // File exists. Does user want to just go with previous configuration?
     print "Previous configuration file found. What would you like to do?\n" .
