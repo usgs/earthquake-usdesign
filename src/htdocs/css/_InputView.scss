@@ -42,14 +42,20 @@
     }
   }
 
-  .location-view-input {
+  .location-view-input,
+  .location-view-output {
     height: 400px;
     margin: 4px 0;
+  }
+
+  .location-view-output {
+    display: none;
   }
 }
 
 // Change display for output mode
 .input-view-output {
+
 
   label {
     border-bottom: 1px solid #ccc;
@@ -77,6 +83,14 @@
     display: block;
     font-size: 13px;
     color: #999;
+  }
+
+  .location-view-input {
+    display: none;
+  }
+
+  .location-view-output {
+    display: block;
   }
 }
 
