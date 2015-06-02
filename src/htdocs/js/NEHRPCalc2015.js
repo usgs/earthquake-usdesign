@@ -51,8 +51,21 @@ var NEHRPCalc2015 = function (params) {
   /**
    * Interpolates a single value
    */
-  _this.interpolateValue = function (y0, y1, x, x0, x1) {
-    return y0 + (((y1-y0)/(x1-x0))*(x-x0));
+  _this.interpolateValue = function (y0, y1, x, x0, x1, log) {
+    var value;
+
+    if (log === 'linearlog') {
+      if (y0 === 0 || y1 === 0) {
+        throw new Error('Can not get the log of 0 Y values.');
+      } else {
+        y0 = Math.log(y0);
+        y1 = Math.log(y1);
+        value = Math.exp(y0 + (((y1-y0)/(x1-x0))*(x-x0)));
+      }
+    } else {
+      value = y0 + (((y1-y0)/(x1-x0))*(x-x0));
+    }
+    return value;
   };
 
   /**
@@ -480,10 +493,6 @@ var NEHRPCalc2015 = function (params) {
     return smSpectra;
   };
 
-  _this.destroy = function () {
-    // TODO make this
-  };
-
   _this.getResult = function (calculation) {
     var result;
 
@@ -542,6 +551,13 @@ var NEHRPCalc2015 = function (params) {
     return result;
   };
 
+  _this.destroy = function () {
+    _lookupDataFactory = null;
+    _siteAmplification = null;
+    _initialize = null;
+    _this = null;
+  };
+
   _this.interpolate = function (calculation) {
     var data,
         input,
@@ -554,6 +570,8 @@ var NEHRPCalc2015 = function (params) {
         lng4,
         latInput,
         lngInput,
+        log,
+        metadata,
         output,
         result,
         resultLat1,
@@ -564,6 +582,8 @@ var NEHRPCalc2015 = function (params) {
     data = output.get('data').data();
     latInput = input.get('latitude');
     lngInput = input.get('longitude');
+    metadata = calculation.get('output').get('metadata');
+    log = metadata.get('interpolation_method');
 
     if (data.length === 1) {
       result = Util.extend({}, data[0].get());
@@ -580,7 +600,8 @@ var NEHRPCalc2015 = function (params) {
             data[1].get(),
             lngInput,
             lng1,
-            lng2);
+            lng2,
+            log);
 
       } else if (lng1 === lng2) {
         result = _this.interpolateResults(
@@ -588,7 +609,8 @@ var NEHRPCalc2015 = function (params) {
             data[1].get(),
             latInput,
             lat1,
-            lat2);
+            lat2,
+            log);
 
       } else {
         throw new Error('Lat or Lng don\'t match and only 2 data points');
@@ -607,21 +629,24 @@ var NEHRPCalc2015 = function (params) {
           data[1].get(),
           lngInput,
           lng1,
-          lng2);
+          lng2,
+          log);
 
       resultLat3 = _this.interpolateResults(
           data[0].get(),
           data[1].get(),
           lngInput,
           lng3,
-          lng4);
+          lng4,
+          log);
 
       result = _this.interpolateResults(
           resultLat1,
           resultLat3,
           latInput,
           lat1,
-          lat3);
+          lat3,
+          log);
 
     } else {
       throw new Error('Does not have 1, 2, or 4 points.');
