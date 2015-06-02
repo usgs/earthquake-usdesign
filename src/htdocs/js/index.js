@@ -4,6 +4,8 @@ var Application = require('Application'),
     LookupDataFactory = require('util/LookupDataFactory');
 
 
+window.setTimeout(function () {
+
 var lookupFactory;
 
 
@@ -17,3 +19,4 @@ lookupFactory.whenReady(function () {
     lookupFactory: lookupFactory
   });
 });
+}, 500);

@@ -1,6 +1,10 @@
 'use strict';
 
-var Formatter = require('util/Formatter');
+var NEHRPCalc2015 = require('NEHRPCalc2015'),
+
+    LookupDataFactory = require('util/LookupDataFactory'),
+
+    Formatter = require('util/Formatter');
 
 
 var Section = function (params) {
@@ -15,6 +19,9 @@ var Section = function (params) {
 
   _initialize = function (params) {
     params = params || {};
+
+    _this.calculator = params.calculator || NEHRPCalc2015();
+    _this.factor = params.lookupDataFactory || LookupDataFactory();
 
     _classes = params.classes || [];
     _nodeType = params.nodeType || 'section';

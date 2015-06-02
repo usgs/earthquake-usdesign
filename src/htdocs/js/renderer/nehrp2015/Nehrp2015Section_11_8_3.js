@@ -43,61 +43,65 @@ var Nehrp2015Section_Section_11_8_3 = function (params) {
         siteClass,
         undetermined;
 
-    model = args.model;
-    section = args.section;
+    try {
+      model = args.model;
+      section = args.section;
 
-    result = model.get('result');
+      result = model.get('result');
 
-    pga = result.get('pga');
-    fpga = result.get('fpga');
-    siteClass = result.get('site_class').get('value');
-    pgam = result.get('pgam');
+      pga = result.get('pga');
+      fpga = result.get('fpga');
+      siteClass = result.get('site_class').get('value');
+      pgam = result.get('pgam');
 
-    fpgaTable = document.createElement('div');
-    fpgaTable.appendChild(_siteAmplification.getFpgaTable(pga, siteClass));
+      fpgaTable = document.createElement('div');
+      fpgaTable.appendChild(_siteAmplification.getFpgaTable(pga, siteClass));
 
-    undetermined = document.createElement('div');
-    undetermined.appendChild(_siteAmplification.getUndeterminedPgaTable(
-        pga, siteClass));
+      undetermined = document.createElement('div');
+      undetermined.appendChild(_siteAmplification.getUndeterminedPgaTable(
+          pga, siteClass));
 
-    section.innerHTML = [
-      '<h3>',
-        'Section 11.8.3 &mdash; Additional Geotechnical Investigation ',
-        'Report Requirements for Seismic Design Categories D through F',
-      '</h3>',
+      section.innerHTML = [
+        '<h3>',
+          'Section 11.8.3 &mdash; Additional Geotechnical Investigation ',
+          'Report Requirements for Seismic Design Categories D through F',
+        '</h3>',
 
-      '<h4>Table 11.8-1: Site Coefficient for F<sub>PGA</sub></h4>',
-      '<div class="report-table-fpga">', fpgaTable.innerHTML, '</div>',
-      '<p class="report-summary-fpga">',
-        'For Site Class = ', siteClass, ' and PGA = ',
-        _this.outputNumber(pga), ' g, F<sub>PGA</sub> = ',
-        _this.outputNumber(fpga),
-      '</p>',
+        '<h4>Table 11.8-1: Site Coefficient for F<sub>PGA</sub></h4>',
+        '<div class="report-table-fpga">', fpgaTable.innerHTML, '</div>',
+        '<p class="report-summary-fpga">',
+          'For Site Class = ', siteClass, ' and PGA = ',
+          _this.outputNumber(pga), ' g, F<sub>PGA</sub> = ',
+          _this.outputNumber(fpga),
+        '</p>',
 
-      '<h4>',
-        'Table 11.8-2 Site Coefficients for Undetermined Soil Sites ',
-        '(excluding Class E or F), F<sub>PGA</sub>',
-      '</h4>',
-      '<div class="report-table-undetermined-pga">',
-        undetermined.innerHTML,
-      '</div>',
+        '<h4>',
+          'Table 11.8-2 Site Coefficients for Undetermined Soil Sites ',
+          '(excluding Class E or F), F<sub>PGA</sub>',
+        '</h4>',
+        '<div class="report-table-undetermined-pga">',
+          undetermined.innerHTML,
+        '</div>',
 
-       '<div class="equation">',
-        '<label for="equation-mapped-pga">Mapped PGA</label>',
-        '<span id="equation-mapped-pga">',
-          'PGA = ', _this.outputNumber(pga), ' g',
-        '</span>',
-      '</div>',
+         '<div class="equation">',
+          '<label for="equation-mapped-pga">Mapped PGA</label>',
+          '<span id="equation-mapped-pga">',
+            'PGA = ', _this.outputNumber(pga), ' g',
+          '</span>',
+        '</div>',
 
-      '<div class="equation">',
-        '<label for="equation-11-8-1">Equation (11.8-1)</label>',
-        '<span id="equation-11-8-1">',
-          'PGA<sub>M</sub> = F<sub>PGA</sub>PGA = ',
-          _this.outputNumber(fpga), ' &times; ', _this.outputNumber(pga),
-          ' = ', _this.outputNumber(pgam), ' g',
-        '</span>',
-      '</div>'
-    ].join('');
+        '<div class="equation">',
+          '<label for="equation-11-8-1">Equation (11.8-1)</label>',
+          '<span id="equation-11-8-1">',
+            'PGA<sub>M</sub> = F<sub>PGA</sub>PGA = ',
+            _this.outputNumber(fpga), ' &times; ', _this.outputNumber(pga),
+            ' = ', _this.outputNumber(pgam), ' g',
+          '</span>',
+        '</div>'
+      ].join('');
+    } catch (e) {
+      console.log(e);
+    }
 
     return args;
   });

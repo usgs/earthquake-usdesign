@@ -2,7 +2,10 @@
 
 var ActionsView = require('ActionsView'),
     Calculation = require('Calculation'),
+    NEHRP2015InputView = require('NEHRP2015InputView'),
     ReportView = require('ReportView'),
+
+    LookupDataFactory = require('util/LookupDataFactory'),
 
     Collection = require('mvc/Collection');
 
@@ -12,6 +15,9 @@ var Application = function (params) {
 
       _actionsView,
       _collection,
+      _destroyLookupFactory,
+      _inputView,
+      _lookupFactory,
       _model,
       _reportView,
 
@@ -36,6 +42,7 @@ var Application = function (params) {
 
     _model = params.model;
     _collection = params.collection;
+    _lookupFactory = params.lookupFactory;
 
     // Make sure we have a model
     if (!_model) {
@@ -43,7 +50,16 @@ var Application = function (params) {
         // Try to get model off the collection
         _model = _collection.getSelected();
       } else {
-        _model = Calculation();
+        _model = Calculation({
+          input: {
+            latitude: 35.0,
+            longitude: -90.0,
+            design_code: 1,
+            site_class: 4,
+            risk_category: 1,
+            title: 'Test'
+          }
+        });
       }
     }
 
@@ -61,6 +77,11 @@ var Application = function (params) {
     if (!_collection.getSelected()) {
       _collection.select(_model);
     }
+
+    if (_lookupFactory) {
+      _lookupFactory = LookupDataFactory();
+      _destroyLookupFactory = true;
+    }
   };
 
   _initializeView = function () {
@@ -72,6 +93,12 @@ var Application = function (params) {
     ].join('');
 
     // Create sub-views
+    _inputView = NEHRP2015InputView({
+      collection: _collection,
+      el: _this.el.querySelector('.input-view'),
+      model: _model
+    });
+
     _actionsView = ActionsView({
       collection: _collection,
       el: _this.el.querySelector('.actions-view'),
@@ -87,11 +114,19 @@ var Application = function (params) {
 
 
   _this.destroy = function () {
+    _inputView.destroy();
     _actionsView.destroy();
     _reportView.destroy();
 
+    if (_destroyLookupFactory) {
+      _lookupFactory.destroy();
+    }
+
 
     _actionsView = null;
+    _destroyLookupFactory = null;
+    _inputView = null;
+    _lookupFactory = null;
     _reportView = null;
 
 

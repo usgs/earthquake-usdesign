@@ -222,7 +222,7 @@ var NEHRPCalc2015 = function (params) {
    * @param Object {calculation}
    *                    takes a calculation
    */
-  _this.getSs = function (calculation) {
+  _this.getSs = function (calculation, silent) {
     var result,
         ss;
 
@@ -234,7 +234,7 @@ var NEHRPCalc2015 = function (params) {
           _this.getSsd(calculation));
       result.set({
         'ss': ss
-      });
+      }, {silent: silent});
     }
     return ss;
   };
@@ -571,7 +571,7 @@ var NEHRPCalc2015 = function (params) {
    * @param Object {calculation}
    *                    takes a calculation
    */
-  _this.getResult = function (calculation) {
+  _this.getResult = function (calculation, silent) {
     var result,
         resultJSON;
 
@@ -579,24 +579,24 @@ var NEHRPCalc2015 = function (params) {
     resultJSON = result ? result.toJSON() : null;
 
     if (!result || !(
-      result.hasOwnProperty('latitude') &&
-      result.hasOwnProperty('longitude') &&
-      result.hasOwnProperty('mapped_ss') &&
-      result.hasOwnProperty('mapped_s1') &&
-      result.hasOwnProperty('mapped_pga') &&
+      resultJSON.hasOwnProperty('latitude') &&
+      resultJSON.hasOwnProperty('longitude') &&
+      resultJSON.hasOwnProperty('mapped_ss') &&
+      resultJSON.hasOwnProperty('mapped_s1') &&
+      resultJSON.hasOwnProperty('mapped_pga') &&
 
-      result.hasOwnProperty('cr2') &&
-      result.hasOwnProperty('cr1') &&
+      resultJSON.hasOwnProperty('cr2') &&
+      resultJSON.hasOwnProperty('cr1') &&
 
-      result.hasOwnProperty('geomean_ssd') &&
-      result.hasOwnProperty('geomean_s1d') &&
-      result.hasOwnProperty('geomean_pgad')
+      resultJSON.hasOwnProperty('geomean_ssd') &&
+      resultJSON.hasOwnProperty('geomean_s1d') &&
+      resultJSON.hasOwnProperty('geomean_pgad')
 
     )) {
       result = _this.interpolate(calculation);
       calculation.set({
         'result': result
-      });
+      }, {silent: silent});
     }
     return result;
   };
@@ -635,25 +635,25 @@ var NEHRPCalc2015 = function (params) {
   _this.calculate = function (calculation) {
     var result;
 
-    result = _this.getResult(calculation);
+    result = _this.getResult(calculation, true);
 
-    _this.getSsuh(calculation);
-    _this.getS1uh(calculation);
+    _this.getSsuh(calculation, true);
+    _this.getS1uh(calculation, true);
 
-    _this.getSsd(calculation);
-    _this.getS1d(calculation);
+    _this.getSsd(calculation, true);
+    _this.getS1d(calculation, true);
 
-    _this.getSs(calculation);
-    _this.getS1(calculation);
+    _this.getSs(calculation, true);
+    _this.getS1(calculation, true);
 
-    _this.getSms(calculation);
-    _this.getSm1(calculation);
+    _this.getSms(calculation, true);
+    _this.getSm1(calculation, true);
 
-    _this.getSds(calculation);
-    _this.getSd1(calculation);
+    _this.getSds(calculation, true);
+    _this.getSd1(calculation, true);
 
-    _this.getPga(calculation);
-    _this.getPgam(calculation);
+    _this.getPga(calculation, true);
+    _this.getPgam(calculation, true);
 
     return result;
   };

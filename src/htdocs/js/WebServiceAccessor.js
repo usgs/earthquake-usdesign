@@ -54,7 +54,11 @@ var WebServiceAccessor = function (params) {
     Xhr.ajax({
         url: _buildUrl(calculation),
         success: function(data) {
-          callback(_updateCalculation(calculation, data));
+          _updateCalculation(calculation, data);
+
+          if (callback) {
+            callback(calculation);
+          }
         }
       });
   };
@@ -109,8 +113,8 @@ var WebServiceAccessor = function (params) {
         input.get('design_code') + '/' +
         input.get('site_class') + '/' +
         input.get('risk_category') + '/' +
-        input.get('latitude') + '/' +
         input.get('longitude') + '/' +
+        input.get('latitude') + '/' +
         input.get('title');
     return url;
   };
