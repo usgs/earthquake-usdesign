@@ -58,7 +58,6 @@ var _DEFAULTS = {
   },
 
   result: {
-
   }
 };
 

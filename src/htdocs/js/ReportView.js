@@ -84,10 +84,12 @@ var ReportView = function (params) {
     _this.el.innerHTML = '';
 
     if (_this.model && _this.model.get('mode') === Calculation.MODE_OUTPUT) {
+      _this.model.off('change', 'render', _this);
       renderer = _getRenderer();
       _this.el.appendChild(renderer.getReport(_this.model));
 
       renderer.contentInDom();
+      _this.model.on('change', 'render', _this);
     }
   };
 

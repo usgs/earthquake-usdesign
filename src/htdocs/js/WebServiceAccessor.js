@@ -2,6 +2,8 @@
 
 var Calculation = require('Calculation'),
 
+    Model = require('mvc/Model'),
+
     Xhr = require('util/Xhr');
 
 var _DEFAULTS = {
@@ -80,8 +82,7 @@ var WebServiceAccessor = function (params) {
   _updateCalculation = function (calculation, data) {
     var input,
         metadata,
-        output,
-        result;
+        output;
 
     if (data.error !== undefined) {
       throw new Error(data.error +
@@ -90,13 +91,12 @@ var WebServiceAccessor = function (params) {
     } else {
       input = calculation.get('input');
       output = calculation.get('output');
-      result = calculation.get('result');
 
       metadata = output.get('metadata');
 
       input.set(data.input);
       metadata.set(data.output.metadata);
-      result.set(data.output.result);
+      output.get('data').reset(data.output.data.map(Model));
       output.set({tl: data.output.tl});
 
       calculation.set({mode: Calculation.MODE_OUTPUT});

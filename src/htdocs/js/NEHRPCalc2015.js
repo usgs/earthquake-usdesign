@@ -280,7 +280,8 @@ var NEHRPCalc2015 = function (params) {
 
     if (fa === null) {
       siteClass = _this.getSiteClass(calculation);
-      fa = _siteAmplification.getFa(_this.getSs(calculation), siteClass);
+      fa = _siteAmplification.getFa(_this.getSs(calculation),
+          siteClass.get('value'));
       result.set({
         'fa': fa
       });
@@ -304,7 +305,8 @@ var NEHRPCalc2015 = function (params) {
 
     if (fv === null) {
       siteClass = _this.getSiteClass(calculation);
-      fv = _siteAmplification.getFv(_this.getS1(calculation), siteClass);
+      fv = _siteAmplification.getFv(_this.getS1(calculation),
+          siteClass.get('value'));
       result.set({
         'fv': fv
       });
@@ -449,7 +451,7 @@ var NEHRPCalc2015 = function (params) {
     if (fpga === null) {
       siteClass = _this.getSiteClass(calculation);
       fpga = _siteAmplification.getFpga(_this.getPga(calculation),
-          siteClass);
+          siteClass.get('value'));
       result.set({
         'fpga': fpga
       });
@@ -510,14 +512,15 @@ var NEHRPCalc2015 = function (params) {
     sdSpectra.push([t1, sds]);
 
     tHat = +(t1.toFixed(1));
+    tn = tHat;
 
     while (tn < 2.0) {
       tn = (0.1 * i) + tHat;
-      sdSpectra.push([ tn, sds/tn]);
+      sdSpectra.push([tn, sd1/tn]);
       i += 1;
     }
     result.set({
-      'sdSpectra': sdSpectra
+      'sdSpectrum': sdSpectra
     });
     return sdSpectra;
   };
@@ -553,14 +556,15 @@ var NEHRPCalc2015 = function (params) {
     smSpectra.push([t1, sms]);
 
     tHat = +(t1.toFixed(1));
+    tn = tHat;
 
     while (tn < 2.0) {
       tn = (0.1 * i) + tHat;
-      smSpectra.push([ tn, sms/tn]);
-      i += 1;
+      smSpectra.push([tn, sm1/tn]);
+      i +=  1;
     }
     result.set({
-      'smSpectra': smSpectra
+      'smSpectrum': smSpectra
     });
     return smSpectra;
   };
@@ -585,7 +589,7 @@ var NEHRPCalc2015 = function (params) {
       resultJSON.hasOwnProperty('mapped_s1') &&
       resultJSON.hasOwnProperty('mapped_pga') &&
 
-      resultJSON.hasOwnProperty('cr2') &&
+      resultJSON.hasOwnProperty('crs') &&
       resultJSON.hasOwnProperty('cr1') &&
 
       resultJSON.hasOwnProperty('geomean_ssd') &&
@@ -618,7 +622,7 @@ var NEHRPCalc2015 = function (params) {
     if (siteClass === null) {
       input = calculation.get('input');
       siteClass = input.get('site_class');
-      siteClass = _lookupDataFactory.getSiteClass(siteClass).get('value');
+      siteClass = _lookupDataFactory.getSiteClass(siteClass);
       result.set({
         'site_class': siteClass
       });
@@ -646,6 +650,8 @@ var NEHRPCalc2015 = function (params) {
     _this.getSs(calculation, true);
     _this.getS1(calculation, true);
 
+    _this.getSiteClass(calculation, true);
+
     _this.getSms(calculation, true);
     _this.getSm1(calculation, true);
 
@@ -654,6 +660,9 @@ var NEHRPCalc2015 = function (params) {
 
     _this.getPga(calculation, true);
     _this.getPgam(calculation, true);
+
+    _this.getSmSpectra(calculation, true);
+    _this.getSdSpectra(calculation, true);
 
     return result;
   };

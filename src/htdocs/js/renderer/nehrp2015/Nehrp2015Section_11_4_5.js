@@ -104,7 +104,7 @@ var Nehrp2015Section_Section_11_4_5 = function (params) {
     _spectrum.model.set({
       data: result.get('sdSpectrum') || [],
       ss: result.get('sds'),
-      s1: result.get('sd1'),
+      s1: result.get('sd1')
     });
 
     return args;

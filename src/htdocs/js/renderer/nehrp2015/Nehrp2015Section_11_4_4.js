@@ -50,14 +50,14 @@ var Nehrp2015Section_Section_11_4_4 = function (params) {
         '<label for="equation-11-4-7">Equation (11.4-7)</label>',
         '<span id="equation-11-4-7">',
           'S<sub>DS</sub> = &#8532; S<sub>MS</sub> = &#8532; &times; ',
-          _this.outputNumber(sms), ' = ', sds, ' g',
+          _this.outputNumber(sms), ' = ', _this.outputNumber(sds), ' g',
         '<span>',
       '</div>',
       '<div class="equation">',
         '<label for="equation-11-4-8">Equation (11.4-8)</label>',
         '<span id="equation-11-4-8">',
           'S<sub>D1</sub> = &#8532; S<sub>M1</sub> = &#8532; &times; ',
-          _this.outputNumber(sm1), ' = ', sd1, ' g',
+          _this.outputNumber(sm1), ' = ', _this.outputNumber(sd1), ' g',
         '<span>',
       '</div>'
     ].join('');
