@@ -44,7 +44,8 @@ var copy = {
     dest: config.build + '/' + config.test,
     expand: true,
     src: [
-      'test.html'
+      'test.html',
+      'usage.ws.json'
     ]
   }
 };

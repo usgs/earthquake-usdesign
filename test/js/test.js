@@ -1,4 +1,5 @@
 /* global mocha */
+'use strict';
 
 // PhantomJS is missing native bind support,
 //     https://github.com/ariya/phantomjs/issues/10522
@@ -7,8 +8,6 @@
 //         /en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind
 if (!Function.prototype.bind) {
   Function.prototype.bind = function (oThis) {
-    'use strict';
-
     if (typeof this !== 'function') {
       // closest thing possible to the ECMAScript 5 internal IsCallable
       throw new TypeError('object to be bound is not callable');
@@ -32,9 +31,27 @@ if (!Function.prototype.bind) {
   };
 }
 
-(function () {
-  'use strict';
 
+// stub test data
+(function () {
+  var Xhr = require('util/Xhr'),
+      usage = require('./usage');
+
+  var ajax = Xhr.ajax;
+
+  Xhr.ajax = function (options) {
+    if (options.url.indexOf('usage.ws.php') !== -1) {
+      console.log('Xhr.ajax(' + options.url + ') using stub,' +
+          ' see test/js/test.js');
+      options.success(usage);
+    } else {
+      ajax(options);
+    }
+  };
+})();
+
+
+(function () {
   mocha.ui('bdd');
   mocha.reporter('html');
 
@@ -55,4 +72,4 @@ if (!Function.prototype.bind) {
   } else {
     mocha.run();
   }
-})(this);
+})();
