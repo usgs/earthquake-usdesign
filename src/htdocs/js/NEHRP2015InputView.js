@@ -40,6 +40,7 @@ var NEHRP2015InputView = function (params) {
       _resetRiskCategoryCollection,
       _updateDesignCode,
       _updateLocation,
+      _removeLocation,
       _updateSiteClass,
       _updateRiskCategory,
       _updateTitle;
@@ -121,10 +122,7 @@ var NEHRP2015InputView = function (params) {
       _marker.addTo(_reportMap);
     }
 
-    // bind to location change
-    _locationControlInput.on('location', function(/*loc*/) {
-      _updateLocation(this.getLocation());
-    });
+    _locationControlInput.on('location', _updateLocation);
 
   };
 
@@ -241,14 +239,17 @@ var NEHRP2015InputView = function (params) {
     input.set({'risk_category': _riskCategoryCollection.getSelected().get('id')});
   };
 
+  // update title in the model
   _updateTitle = function () {
     var input = _this.model.get('input');
     input.set({'title': _titleEl.value});
   };
 
-  _updateLocation = function (location) {
-    // update the Calculation model
-    var input;
+  // update location on the map and in the model
+  _updateLocation = function (e) {
+    var input,
+        location = e.location;
+
     if (location.latitude !== null && location.longitude !== null) {
       input = _this.model.get('input');
       input.set({
@@ -371,6 +372,7 @@ var NEHRP2015InputView = function (params) {
     _riskCategoryCollection.off('select', _updateRiskCategory);
     _this.model.get('input').off('change', _this.render);
     _this.model.off('change', _this.render);
+    _locationControlInput.off('location', _updateLocation);
 
     // remove event listeners
     _titleEl.removeEventListener('blur', _updateTitle);
@@ -399,6 +401,7 @@ var NEHRP2015InputView = function (params) {
     _resetRiskCategoryCollection = null;
     _updateDesignCode = null;
     _updateLocation = null;
+    _removeLocation = null;
     _updateSiteClass = null;
     _updateRiskCategory = null;
     _updateTitle = null;
