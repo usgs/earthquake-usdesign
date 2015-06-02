@@ -6,9 +6,11 @@ var Model = require('mvc/Model'),
     LookupDataFactory = require('util/LookupDataFactory'),
     SiteAmplification = require('util/SiteAmplification');
 
+
 var _DEFAULTS = {
 
 };
+
 
 var NEHRPCalc2015 = function (params) {
   var _this,
@@ -32,6 +34,7 @@ var NEHRPCalc2015 = function (params) {
 
   /**
    * Interpolates results
+   * @param variable {int, int, int, int, int}
    */
   _this.interpolateResults = function (d0, d1, x, x0, x1) {
     var key,
@@ -49,14 +52,33 @@ var NEHRPCalc2015 = function (params) {
   };
 
   /**
-   * Interpolates a single value
+   * Interpolates a single value logs y values before interpolation
+   * if linerlog is passed in.
+   * @param variable {int, int, int, int, int, string}
+   *                 interpolation values
    */
-  _this.interpolateValue = function (y0, y1, x, x0, x1) {
-    return y0 + (((y1-y0)/(x1-x0))*(x-x0));
+  _this.interpolateValue = function (y0, y1, x, x0, x1, log) {
+    var value;
+
+    if (log === 'linearlog') {
+      if (y0 === 0 || y1 === 0) {
+        throw new Error('Can not get the log of 0 Y values.');
+      } else {
+        y0 = Math.log(y0);
+        y1 = Math.log(y1);
+        value = Math.exp(y0 + (((y1-y0)/(x1-x0))*(x-x0)));
+      }
+    } else {
+      value = y0 + (((y1-y0)/(x1-x0))*(x-x0));
+    }
+    return value;
   };
 
   /**
    * Factor hazard value for max direction. Period 0.2
+   *
+   * @param Object {calculation}
+   *                    takes a calculation
    */
   _this.getSsuh = function (calculation) {
     var metadata,
@@ -78,6 +100,9 @@ var NEHRPCalc2015 = function (params) {
 
   /**
    * Factor hazard value for max direction. Period 1.0
+   *
+   * @param Object {calculation}
+   *                    takes a calculation
    */
   _this.getS1uh = function (calculation) {
     var metadata,
@@ -97,8 +122,12 @@ var NEHRPCalc2015 = function (params) {
     }
     return s1uh;
   };
+
   /**
    * Convert uniform hazard to uniform risk. Period 0.2
+   *
+   * @param Object {calculation}
+   *                    takes a calculation
    */
   _this.getSsur = function (calculation) {
     var result;
@@ -110,6 +139,9 @@ var NEHRPCalc2015 = function (params) {
 
   /**
    * Convert uniform hazard to uniform risk. Period 1.0
+   *
+   * @param Object {calculation}
+   *                    takes a calculation
    */
   _this.getS1ur = function (calculation) {
     var result;
@@ -119,9 +151,13 @@ var NEHRPCalc2015 = function (params) {
     return _this.getS1uh(calculation) * result.get('cr1');
   };
 
-  /* Factor deterministic acceleration values Ssd.
+  /**
+   * Factor deterministic acceleration values Ssd.
    *  pgdv84 = 84th-Percentile Geomean Deterministic value
    *  maxD84 = Maximum Direction 84th-Percentile Deterministic value
+   *
+   * @param Object {calculation}
+   *                    takes a calculation
    */
   _this.getSsd = function (calculation) {
     var geomeanSsd,
@@ -147,9 +183,13 @@ var NEHRPCalc2015 = function (params) {
     return ssd;
   };
 
-  /* Factor deterministic acceleration values Ssd.
+  /**
+   * Factor deterministic acceleration values Ssd.
    *  pgdv841 = 84th-Percentile Geomean Deterministic value
    *  maxD841 = Maximum Direction 84th-Percentile Deterministic value
+   *
+   * @param Object {calculation}
+   *                    takes a calculation
    */
   _this.getS1d = function (calculation) {
     var geomeanS1d,
@@ -178,6 +218,9 @@ var NEHRPCalc2015 = function (params) {
   /**
    * Compare 0.2 risk-targeted probabilisic spectral acceleration
    * values with Ssd. Use minimuim value from each pair.
+   *
+   * @param Object {calculation}
+   *                    takes a calculation
    */
   _this.getSs = function (calculation) {
     var result,
@@ -199,6 +242,9 @@ var NEHRPCalc2015 = function (params) {
   /**
    * Compare 1.0 risk-targeted probabilisic spectral acceleration
    * values with S1d. Use minimuim value from each pair.
+   *
+   * @param Object {calculation}
+   *                    takes a calculation
    */
   _this.getS1 = function (calculation) {
     var result,
@@ -219,6 +265,9 @@ var NEHRPCalc2015 = function (params) {
 
   /**
    * Uses SiteAmplification tables to get fa values.
+   *
+   * @param Object {calculation}
+   *                    takes a calculation
    */
   _this.getFa = function (calculation) {
     var fa,
@@ -241,6 +290,9 @@ var NEHRPCalc2015 = function (params) {
 
   /**
    * Uses SiteAmplification tables to get fv values.
+   *
+   * @param Object {calculation}
+   *                    takes a calculation
    */
   _this.getFv = function (calculation) {
     var fv,
@@ -262,6 +314,9 @@ var NEHRPCalc2015 = function (params) {
 
   /**
    * Site-adjusted MCEr spectral acceleration values Sms.
+   *
+   * @param Object {calculation}
+   *                    takes a calculation
    */
   _this.getSms = function (calculation) {
     var result,
@@ -281,6 +336,9 @@ var NEHRPCalc2015 = function (params) {
 
   /**
   * Site-adjusted MCEr spectral acceleration values Sm1.
+  *
+  * @param Object {calculation}
+  *                    takes a calculation
   */
   _this.getSm1 = function (calculation) {
     var result,
@@ -300,6 +358,9 @@ var NEHRPCalc2015 = function (params) {
 
   /**
   * Multiply Sms by 2/3 to get the design value Sds.
+  *
+  * @param Object {calculation}
+  *                    takes a calculation
   */
   _this.getSds = function (calculation) {
     var result,
@@ -319,6 +380,9 @@ var NEHRPCalc2015 = function (params) {
 
   /**
   * Multiply Sm1 by 2/3 to get the design value Sda
+  *
+  * @param Object {calculation}
+  *                    takes a calculation
   */
   _this.getSd1 = function (calculation) {
     var result,
@@ -339,6 +403,9 @@ var NEHRPCalc2015 = function (params) {
   /**
    * Calculates the Probabilistic PGA and Deterministic PGA values to
    * get the PGA value.
+   *
+   * @param Object {calculation}
+   *                    takes a calculation
    */
   _this.getPga = function (calculation) {
     var deterministicPga,
@@ -367,6 +434,9 @@ var NEHRPCalc2015 = function (params) {
   /**
    * Fpga is pulled from a table in SiteAmplification and used to get
    * the PGAm value.
+   *
+   * @param Object {calculation}
+   *                    takes a calculation
    */
   _this.getFpga = function (calculation) {
     var fpga,
@@ -389,6 +459,9 @@ var NEHRPCalc2015 = function (params) {
 
   /**
    * Fpga is used to get the Pgam value.
+   *
+   * @param Object {calculation}
+   *                    takes a calculation
    */
   _this.getPgam = function (calculation) {
     var pgam,
@@ -406,6 +479,12 @@ var NEHRPCalc2015 = function (params) {
     return pgam;
   };
 
+  /**
+   * Calculats the Sd Spectra and returns the resulting array.
+   *
+   * @param Object {calculation}
+   *                    takes a calculation
+   */
   _this.getSdSpectra = function (calculation) {
     var i,
         result,
@@ -443,6 +522,12 @@ var NEHRPCalc2015 = function (params) {
     return sdSpectra;
   };
 
+  /**
+   * Calculats the Sm Spectra and returns ths resulting array.
+   *
+   * @param Object {calculation}
+   *                    takes a calculation
+   */
   _this.getSmSpectra = function (calculation) {
     var i,
         result,
@@ -480,10 +565,12 @@ var NEHRPCalc2015 = function (params) {
     return smSpectra;
   };
 
-  _this.destroy = function () {
-    // TODO make this
-  };
-
+  /**
+   * Puts the result on the calculation.
+   *
+   * @param Object {calculation}
+   *                    takes a calculation
+   */
   _this.getResult = function (calculation) {
     var result;
 
@@ -497,6 +584,12 @@ var NEHRPCalc2015 = function (params) {
     return result;
   };
 
+  /**
+   * Gets the site class and adds it to result.
+   *
+   * @param Object {calculation}
+   *                    takes a calculation
+   */
   _this.getSiteClass = function (calculation) {
     var input,
         result,
@@ -516,6 +609,12 @@ var NEHRPCalc2015 = function (params) {
     return siteClass;
   };
 
+  /**
+   * Calls all of the calculation methods.
+   *
+   * @param Object {calculation}
+   *                    takes a calculation
+   */
   _this.calculate = function (calculation) {
     var result;
 
@@ -542,6 +641,22 @@ var NEHRPCalc2015 = function (params) {
     return result;
   };
 
+  _this.destroy = function () {
+    _lookupDataFactory = null;
+    _siteAmplification = null;
+    _initialize = null;
+    _this = null;
+  };
+
+  /**
+   * Checks for 1, 2, or 4 data points to interpolate any other number of points
+   * will throw an error.
+   *
+   * @param Object {calculation}
+   *                    takes a calculation
+   *
+   * returns Model results
+   */
   _this.interpolate = function (calculation) {
     var data,
         input,
@@ -554,6 +669,8 @@ var NEHRPCalc2015 = function (params) {
         lng4,
         latInput,
         lngInput,
+        log,
+        metadata,
         output,
         result,
         resultLat1,
@@ -564,6 +681,8 @@ var NEHRPCalc2015 = function (params) {
     data = output.get('data').data();
     latInput = input.get('latitude');
     lngInput = input.get('longitude');
+    metadata = output.get('metadata');
+    log = metadata.get('interpolation_method');
 
     if (data.length === 1) {
       result = Util.extend({}, data[0].get());
@@ -580,7 +699,8 @@ var NEHRPCalc2015 = function (params) {
             data[1].get(),
             lngInput,
             lng1,
-            lng2);
+            lng2,
+            log);
 
       } else if (lng1 === lng2) {
         result = _this.interpolateResults(
@@ -588,7 +708,8 @@ var NEHRPCalc2015 = function (params) {
             data[1].get(),
             latInput,
             lat1,
-            lat2);
+            lat2,
+            log);
 
       } else {
         throw new Error('Lat or Lng don\'t match and only 2 data points');
@@ -607,21 +728,24 @@ var NEHRPCalc2015 = function (params) {
           data[1].get(),
           lngInput,
           lng1,
-          lng2);
+          lng2,
+          log);
 
       resultLat3 = _this.interpolateResults(
           data[0].get(),
           data[1].get(),
           lngInput,
           lng3,
-          lng4);
+          lng4,
+          log);
 
       result = _this.interpolateResults(
           resultLat1,
           resultLat3,
           latInput,
           lat1,
-          lat3);
+          lat3,
+          log);
 
     } else {
       throw new Error('Does not have 1, 2, or 4 points.');
@@ -633,7 +757,6 @@ var NEHRPCalc2015 = function (params) {
   _initialize(params);
   params = null;
   return _this;
-
 };
 
 module.exports = NEHRPCalc2015;
