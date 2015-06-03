@@ -34,6 +34,7 @@ var ActionsView = function (params) {
       _onEditClick,
       _onModelChange,
       _onNewClick,
+      _onRemove,
       _setRenderMode,
       _unbindEventHandlers;
 
@@ -56,11 +57,19 @@ var ActionsView = function (params) {
     }
 
     _this.model.off('change', 'render', _this);
+    _collection.on('remove', _onRemove);
 
     _createViewSkeleton();
     _bindEventHandlers();
   };
 
+  /**
+   * Anytime a Calculation model is removed from the collection a new
+   * blank model should be added to the collection and selected.
+   */
+  _onRemove = function () {
+    _onNewClick();
+  };
 
   _bindEventHandlers = function () {
     _btnCalculate.addEventListener('click', _onCalculateClick);
@@ -209,6 +218,7 @@ var ActionsView = function (params) {
     _onNewClick = null;
     _onModelChange = null;
     _setRenderMode = null;
+    _onRemove = null;
     _unbindEventHandlers = null;
 
     _initialize = null;
