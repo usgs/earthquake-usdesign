@@ -31,7 +31,9 @@ var _DEFAULTS = {
 
       deterministic_floor_ss: null,
       deterministic_floor_s1: null,
-      deterministic_floor_pga: null
+      deterministic_floor_pga: null,
+
+      interpolation_method: null
     },
 
     tl: null,

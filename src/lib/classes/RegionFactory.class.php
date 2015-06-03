@@ -6,6 +6,7 @@
 
   class RegionFactory extends LookupDataFactory {
 
+    protected $_insert = null;
     protected $_query = null;
     protected $_queryAll = null;
     protected $_queryById = null;
@@ -76,6 +77,42 @@
       return $result;
     }
 
+    /**
+     * Insert a region.
+     *
+     * @param $design_code_id {Integer}
+     *        primary key for design_code.
+     * @param $metadata_id {Integer}
+     *        primary key for metadata.
+     * @param $name {String}
+     *        region name.
+     * @param $min_latitude {Double}
+     *        minimum latitude for region.
+     * @param $max_latitude {Double}
+     *        maximum latitude for region.
+     * @param $min_longitude {Double}
+     *        minimum longitude for region.
+     * @param $max_longitude {Double}
+     *        maximum longitude for region.
+     * @param $grid_spacing {Double}
+     *        grid spacing for region.
+     * @throws {Exception}
+     *         if unable to insert.
+     */
+    public function insert ($design_code_id, $metadata_id, $name,
+        $min_latitude, $max_latitude, $min_longitude, $max_longitude,
+        $grid_spacing) {
+      $this->_insert->bindValue(':design_code_id', $design_code_id);
+      $this->_insert->bindValue(':metadata_id', $metadata_id);
+      $this->_insert->bindValue(':name', $name);
+      $this->_insert->bindValue(':min_latitude', $min_latitude);
+      $this->_insert->bindValue(':max_latitude', $max_latitude);
+      $this->_insert->bindValue(':min_longitude', $min_longitude);
+      $this->_insert->bindValue(':max_longitude', $max_longitude);
+      $this->_insert->bindValue(':grid_spacing', $grid_spacing);
+
+      $this->_insert->execute();
+    }
 
     /**
      * Alters the raw result such that data are of the proper type.
@@ -109,7 +146,9 @@
           'deterministic_floor_s1' =>
               safefloatval($row['deterministic_floor_s1']),
           'deterministic_floor_pga' =>
-              safefloatval($row['deterministic_floor_pga'])
+              safefloatval($row['deterministic_floor_pga']),
+
+          'interpolation_method' => $row['interpolation_method']
         );
       } else {
         return null;
@@ -142,7 +181,8 @@
             m.percentile_pga,
             m.deterministic_floor_ss,
             m.deterministic_floor_s1,
-            m.deterministic_floor_pga
+            m.deterministic_floor_pga,
+            m.interpolation_method
           FROM
             region r JOIN metadata m ON (r.metadata_id = m.id)
           ORDER BY
@@ -170,7 +210,8 @@
             m.percentile_pga,
             m.deterministic_floor_ss,
             m.deterministic_floor_s1,
-            m.deterministic_floor_pga
+            m.deterministic_floor_pga,
+            m.interpolation_method
           FROM
             region r JOIN metadata m ON (r.metadata_id = m.id)
           WHERE r.id = :id
@@ -199,7 +240,8 @@
             m.percentile_pga,
             m.deterministic_floor_ss,
             m.deterministic_floor_s1,
-            m.deterministic_floor_pga
+            m.deterministic_floor_pga,
+            m.interpolation_method
           FROM
             region r JOIN metadata m ON (r.metadata_id = m.id)
           WHERE r.design_code_id = :design_code_id
@@ -212,5 +254,29 @@
         '
       );
       $this->_query->setFetchMode(PDO::FETCH_ASSOC);
+
+      $this->_insert = $this->_db->prepare(
+        '
+          INSERT INTO region (
+            design_code_id,
+            metadata_id,
+            name,
+            min_latitude,
+            max_latitude,
+            min_longitude,
+            max_longitude,
+            grid_spacing
+          ) VALUES (
+            :design_code_id,
+            :metadata_id,
+            :name,
+            :min_latitude,
+            :max_latitude,
+            :min_longitude,
+            :max_longitude,
+            :grid_spacing
+          )
+        '
+      );
     }
   }

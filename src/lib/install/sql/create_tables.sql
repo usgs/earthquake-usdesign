@@ -60,11 +60,12 @@ CREATE TABLE metadata (
   percentile_pga NUMERIC,
   deterministic_floor_ss NUMERIC,
   deterministic_floor_s1 NUMERIC,
-  deterministic_floor_pga NUMERIC
+  deterministic_floor_pga NUMERIC,
+  interpolation_method VARCHAR(255)
 );
 
 CREATE TABLE region (
-  id INTEGER PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   design_code_id INTEGER REFERENCES design_code (id),
   metadata_id INTEGER REFERENCES metadata (id),
   name VARCHAR(255),
@@ -90,4 +91,4 @@ CREATE TABLE data (
   geomean_pgad NUMERIC
 );
 
-CREATE INDEX data_location_index ON data (region_id, latitude, longitude);
+CREATE UNIQUE INDEX data_location_index ON data (region_id, latitude, longitude);

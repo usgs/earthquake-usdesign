@@ -7,6 +7,7 @@ class DataFactory {
   private $_db = null;
   private $_query = null;
   private $_insert = null;
+  private $_delete = null;
 
 
   /**
@@ -130,6 +131,23 @@ class DataFactory {
   }
 
   /**
+   * Delete data values for a region.
+   *
+   * @param region {Array}
+   *      Associative array containing at least "id" key.
+   * @throws {Exception}
+   *         if unable to delete.
+   */
+  public function delete ($region) {
+    $regionId = $region['id'];
+
+    $this->_delete->bindValue(':region_id', safeintval($regionId),
+        PDO::PARAM_INT);
+
+    $this->_delete->execute();
+  }
+
+  /**
    * Alters the raw result such that data are of the proper type.
    *
    * @param row {Array}
@@ -219,6 +237,10 @@ class DataFactory {
           :geomean_pgad
         )
       '
+    );
+
+    $this->_delete = $this->_db->prepare(
+      'DELETE FROM data WHERE region_id = :region_id'
     );
   }
 }

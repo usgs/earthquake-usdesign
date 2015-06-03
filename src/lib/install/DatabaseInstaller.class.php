@@ -173,9 +173,9 @@ class DatabaseInstaller {
   }
 
   /**
-   * Create user with $roles
+   * Create user.
    */
-  public function createUser ($roles, $user, $password) {
+  public function createUser ($user, $password) {
     if ($this->userExists($user)) {
       throw new Exception('ERROR: The \'' . $user . '\' user already exists.');
       return;
@@ -183,6 +183,12 @@ class DatabaseInstaller {
     // create read only user
     $this->run('CREATE USER ' . $user . ' WITH PASSWORD \'' .
         $password . '\'');
+  }
+
+  /**
+   * Grant usage and roles to a user.
+   */
+  public function grantUsage($roles, $user) {
     $this->run('GRANT USAGE ON SCHEMA ' . $this->schema .' TO ' . $user);
     $this->run('GRANT ' . implode(',', $roles) .
         ' ON ALL TABLES IN SCHEMA ' . $this->schema .' TO ' . $user);
