@@ -11,6 +11,8 @@ var EXPORTS = [
   JSDIR + '/ActionsView.js:ActionsView',
   JSDIR + '/Calculation.js:Calculation',
   JSDIR + '/CalculationView.js:CalculationView',
+  JSDIR + '/NEHRPCalc2015.js:NEHRPCalc2015',
+  JSDIR + '/ReportView.js:ReportView',
   JSDIR + '/SpectraGraphView.js:SpectraGraphView',
   JSDIR + '/WebServiceAccessor.js:WebServiceAccessor',
   JSDIR + '/NEHRP2015InputView.js:NEHRP2015InputView',
@@ -21,6 +23,7 @@ var EXPORTS = [
 
   // Dependencies that need to be exported so stuff works in examples/tests
   CWD + '/node_modules/hazdev-webutils/src/mvc/Collection.js:mvc/Collection',
+  CWD + '/node_modules/hazdev-webutils/src/mvc/Model.js:mvc/Model',
   CWD + '/node_modules/hazdev-webutils/src/util/Xhr.js:util/Xhr'
 ];
 // Subsequent source files can then require "ExampleModule" with:

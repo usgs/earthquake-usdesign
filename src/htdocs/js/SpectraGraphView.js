@@ -99,7 +99,7 @@ var SpectraGraphView = function (options) {
   /**
    * Look for and replace html elements with tspan elements in an svg text node.
    *
-   * Created <tspan> elements have class "html-" + nodeName.toLowerCase().
+   * Created <tspan> elements class "html-" + nodeName.toLowerCase().
    * <sub> and <sup> elements adjust positioning, which cannot reliably be done
    * using css; this may change once baseline-shift has better support.
    *
@@ -203,9 +203,9 @@ var SpectraGraphView = function (options) {
    */
   _formatXAxis = function (x) {
     if (x === _t0) {
-      return 'T<sub>0</sub> = ' + _t0;
+      return 'T<sub>0</sub> = ' + _t0.toFixed(3);
     } else if (x === _ts) {
-      return 'T<sub>S</sub> = ' + _ts;
+      return 'T<sub>S</sub> = ' + _ts.toFixed(3);
     } else if (x === 1) {
       return '1.000';
     } else {
@@ -223,9 +223,9 @@ var SpectraGraphView = function (options) {
    */
   _formatYAxis = function (y) {
     if (y === _ss) {
-      return _this.model.get('ssLabel') + ' = ' + _ss;
+      return _this.model.get('ssLabel') + ' = ' + _ss.toFixed(3);
     } else if (y === _s1) {
-      return _this.model.get('s1Label') + ' = ' + _s1;
+      return _this.model.get('s1Label') + ' = ' + _s1.toFixed(3);
     } else {
       return y;
     }
@@ -339,6 +339,8 @@ var SpectraGraphView = function (options) {
       // convert d3 each "this" into parameter to _convertHTML.
       _convertHTML(d3.select(this));
     });
+
+    _convertHTML(d3.select(_this.el.querySelector('.plot-title')));
 
     // show comment
     _formatComment(_comment, _this.model.get('comment'));

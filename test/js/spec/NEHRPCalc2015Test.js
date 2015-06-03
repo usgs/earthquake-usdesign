@@ -166,7 +166,7 @@ describe('NEHRPCalc2015Test', function () {
     });
 
     it('getSiteClass', function () {
-      expect(calc.getSiteClass(calculate)).to.equal('D');
+      expect(calc.getSiteClass(calculate).get('value')).to.equal('D');
     });
 
     it('getSs', function () {

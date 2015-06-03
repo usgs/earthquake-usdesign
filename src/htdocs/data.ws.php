@@ -24,14 +24,17 @@ $data = $dataFactory->get($latitude, $longitude, $region);
 
 // object containing metadata from region factory
 $metadata = array(
+  'region_name' => $region['name'],
+  'region_id' => $region['id'],
   'max_direction_ss' => $region['max_direction_ss'],
   'max_direction_s1' => $region['max_direction_s1'],
   'percentile_ss' => $region['percentile_ss'],
   'percentile_s1' => $region['percentile_s1'],
+  'percentile_pga' => $region['percentile_pga'],
   'deterministic_floor_ss' => $region['deterministic_floor_ss'],
   'deterministic_floor_s1' => $region['deterministic_floor_s1'],
-  'grid_spacing' => $region['grid_spacing'],
-  'interpolation_method' => $region['interpolation_method']
+  'deterministic_floor_pga' => $region['deterministic_floor_pga'],
+  'grid_spacing' => $region['grid_spacing']
 );
 
 // object containing output from region and data factories

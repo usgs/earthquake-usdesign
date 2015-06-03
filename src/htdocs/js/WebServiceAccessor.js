@@ -1,6 +1,10 @@
 'use strict';
 
-var Xhr = require('util/Xhr');
+var Calculation = require('Calculation'),
+
+    Model = require('mvc/Model'),
+
+    Xhr = require('util/Xhr');
 
 var _DEFAULTS = {
   url: 'service'
@@ -52,7 +56,11 @@ var WebServiceAccessor = function (params) {
     Xhr.ajax({
         url: _buildUrl(calculation),
         success: function(data) {
-          callback(_updateCalculation(calculation, data));
+          _updateCalculation(calculation, data);
+
+          if (callback) {
+            callback(calculation);
+          }
         }
       });
   };
@@ -72,13 +80,26 @@ var WebServiceAccessor = function (params) {
    *         if data contains the error message, an error is thrown.
    */
   _updateCalculation = function (calculation, data) {
+    var input,
+        metadata,
+        output;
+
     if (data.error !== undefined) {
       throw new Error(data.error +
           ' Must specify design_code, site_class, risk_category' +
           'latitude, longitude, and title; to retrive usdesign data.');
-    }
-    else {
-      calculation.set(data);
+    } else {
+      input = calculation.get('input');
+      output = calculation.get('output');
+
+      metadata = output.get('metadata');
+
+      input.set(data.input);
+      metadata.set(data.output.metadata);
+      output.get('data').reset(data.output.data.map(Model));
+      output.set({tl: data.output.tl});
+
+      calculation.set({mode: Calculation.MODE_OUTPUT});
     }
     return calculation;
   };
@@ -92,8 +113,8 @@ var WebServiceAccessor = function (params) {
         input.get('design_code') + '/' +
         input.get('site_class') + '/' +
         input.get('risk_category') + '/' +
-        input.get('latitude') + '/' +
         input.get('longitude') + '/' +
+        input.get('latitude') + '/' +
         input.get('title');
     return url;
   };

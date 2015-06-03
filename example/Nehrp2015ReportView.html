@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+
+  <title>NEHRP 2015 Report View</title>
+  <link rel="stylesheet" href="site/earthquake/index.css"/>
+  <link rel="stylesheet" href="css/index.css"/>
+  <style>
+    body {
+      padding: 1em;
+    }
+    .view {
+      margin-top: 1em;
+      max-width: 768px;
+      background-color: #EEE;
+      padding: 1em;
+    }
+    @media print {
+      .view {
+        background: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="example.html">Examples</a>
+  <h1>NEHRP 2015 Report View</h1>
+
+  <div class="view"></div>
+
+  <script src="js/bundle.js"></script>
+  <script>
+    var Calculation = require('Calculation'),
+        ReportView = require('ReportView'),
+
+        Collection = require('mvc/Collection'),
+        Model = require('mvc/Model');
+
+
+    calculation = Calculation({
+      mode: Calculation.MODE_OUTPUT,
+      input: {
+        latitude: 34.000,
+        longitude: -90.000,
+        design_code: 1,
+        site_class: 4,
+        risk_cateogry: 1
+      },
+      output: {
+        region: 1,
+        metadata: {
+          max_direction_ss: 1.1,
+          max_direction_s1: 1.3
+        },
+        tl: 12,
+        data: []
+      },
+      result: {
+        crs: 0.874,
+        ssuh: 0.436,
+        ssd: 1.5,
+
+        cr1: 0.857,
+        s1uh: 0.176,
+        s1d: 0.60,
+
+        site_class: Model({
+          id: 4,
+          value: 'D',
+          name: 'Stiff Soil'
+        }),
+
+        fa: 1.496,
+        fv: 2.298,
+        fpga: 1.440,
+
+        ss: 0.381,
+        sms: 0.569,
+        sds: 0.379,
+
+        s1: 0.151,
+        sm1: 0.347,
+        sd1: 0.231,
+
+        pga: 0.180,
+        pgam: 0.259,
+
+        smSpectrum: [
+          [0.000, 0.228],
+          [0.122, 0.569],
+          [0.200, 0.569],
+          [0.610, 0.569],
+          [0.700, 0.497],
+          [0.800, 0.433],
+          [0.900, 0.386],
+          [1.000, 0.347],
+          [1.100, 0.315],
+          [1.200, 0.289],
+          [1.300, 0.267],
+          [1.400, 0.247],
+          [1.500, 0.231],
+          [1.600, 0.217],
+          [1.700, 0.204],
+          [1.800, 0.194],
+          [1.900, 0.183],
+          [2.000, 0.174]
+        ],
+
+        sdSpectrum: [
+          [0.000, 0.152],
+          [0.122, 0.379],
+          [0.200, 0.379],
+          [0.610, 0.379],
+          [0.700, 0.331],
+          [0.800, 0.289],
+          [0.900, 0.257],
+          [1.000, 0.231],
+          [1.100, 0.210],
+          [1.200, 0.193],
+          [1.300, 0.178],
+          [1.400, 0.165],
+          [1.500, 0.154],
+          [1.600, 0.145],
+          [1.700, 0.136],
+          [1.800, 0.129],
+          [1.900, 0.122],
+          [2.000, 0.116]
+        ]
+      }
+    });
+
+    ReportView({
+      el: document.querySelector('.view'),
+      model: calculation,
+      collection: Collection([calculation])
+    })
+  </script>
+</body>
+</html>

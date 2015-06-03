@@ -196,7 +196,7 @@ describe('WebServiceAccessor', function () {
         expect(stub.callCount).to.equal(1);
 
         expect(stub.getCall(0).args[0].url).to.equal(
-          'service/1/1/1/3.5/1/tmp'
+          'service/1/1/1/1/3.5/tmp'
         );
         done();
       });

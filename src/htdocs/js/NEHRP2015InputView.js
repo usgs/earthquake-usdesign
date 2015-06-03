@@ -17,6 +17,8 @@ var NEHRP2015InputView = function (params) {
   var _this,
       _initialize,
 
+      _collection,
+      _destroyCollection,
       _map,
       _reportMap,
       _factory,
@@ -33,6 +35,8 @@ var NEHRP2015InputView = function (params) {
       _buildForm,
       _buildCollectionSelectBoxes,
       _buildLocationControl,
+      _onCalculationDeselect,
+      _onCalculationSelect,
       _renderInputMode,
       _renderOutputMode,
       _resetDesignCodeCollection,
@@ -47,7 +51,8 @@ var NEHRP2015InputView = function (params) {
 
   _this = View(params);
 
-  _initialize = function () {
+  _initialize = function (params) {
+    params = params || {};
 
     // Three collections for the collection select boxes
     _designCodeCollection = Collection();
@@ -59,9 +64,23 @@ var NEHRP2015InputView = function (params) {
     _siteClassCollection.on('select', _updateSiteClass);
     _riskCategoryCollection.on('select', _updateRiskCategory);
 
-    // re-render the view with a calculation model update (for print version)
-    _this.model.get('input').on('change', _this.render);
-    _this.model.on('change', _this.render); // mode changes
+    _collection = params.collection;
+
+    if (!_collection) {
+      _collection = Collection([_this.model]);
+      _destroyCollection = true;
+    }
+
+    if (!_collection.get(_this.model.get('id'))) {
+      _collection.add(_this.model);
+    }
+
+    if (!_collection.getSelected()) {
+      _collection.select(_this.model);
+    }
+
+    _collection.on('select', _onCalculationSelect);
+    _collection.on('deselect', _onCalculationDeselect);
 
     // structure html
     _buildForm();
@@ -71,7 +90,8 @@ var NEHRP2015InputView = function (params) {
     _factory = LookupDataFactory({});
     _factory.whenReady(function () {
       _buildLocationControl();
-      _this.render();
+      // Set bindings on _this.model and perform initial rendering
+      _onCalculationSelect();
     });
   };
 
@@ -196,6 +216,38 @@ var NEHRP2015InputView = function (params) {
     });
   };
 
+  _onCalculationDeselect = function () {
+    var input;
+
+    if (_this.model) {
+      _this.model.off('change', 'render', _this);
+
+      input = _this.model.get('input');
+      if (input) {
+        input.off('change', 'render', _this);
+      }
+
+      _this.model = null;
+    }
+  };
+
+  _onCalculationSelect = function () {
+    var input;
+
+    _this.model = _collection.getSelected();
+
+    if (_this.model) {
+      _this.model.on('change', 'render', _this);
+
+      input = _this.model.get('input');
+      if (input) {
+        input.on('change', 'render', _this);
+      }
+
+      _this.render();
+    }
+  };
+
   _resetDesignCodeCollection = function (ids) {
     if (typeof ids === 'undefined') {
       _designCodeCollection.reset(_factory.getAllDesignCodes());
@@ -222,39 +274,79 @@ var NEHRP2015InputView = function (params) {
 
   // update design_code in the model
   _updateDesignCode = function () {
-    var input = _this.model.get('input');
-    input.set({'design_code': _designCodeCollection.getSelected().get('id')});
+    var input;
+
+    if (_this.model) {
+      input = _this.model.get('input');
+
+      if (input) {
+        input.set({
+          'design_code': _designCodeCollection.getSelected().get('id')
+        });
+      }
+    }
   };
 
   // update site_class in the model
   _updateSiteClass = function () {
-    var input = _this.model.get('input');
-    input.set({'site_class': _siteClassCollection.getSelected().get('id')});
+    var input;
+
+    if (_this.model) {
+      input = _this.model.get('input');
+
+      if (input) {
+        input.set({
+          'site_class': _siteClassCollection.getSelected().get('id')
+        });
+      }
+    }
   };
 
   // update risk_category in the model
   _updateRiskCategory = function () {
-    var input = _this.model.get('input');
-    input.set({'risk_category': _riskCategoryCollection.getSelected().get('id')});
+    var input;
+
+    if (_this.model) {
+      input = _this.model.get('input');
+
+      if (input) {
+        input.set({
+          'risk_category': _riskCategoryCollection.getSelected().get('id')
+        });
+      }
+    }
   };
 
   // update title in the model
   _updateTitle = function () {
-    var input = _this.model.get('input');
-    input.set({'title': _titleEl.value});
+    var input;
+
+    if (_this.model) {
+      input = _this.model.get('input');
+
+      if (input) {
+        input.set({'title': _titleEl.value});
+      }
+    }
   };
 
   // update location on the map and in the model
   _updateLocation = function (e) {
     var input,
-        location = e.location;
+        location;
 
-    if (location.latitude !== null && location.longitude !== null) {
+    location = e.location;
+
+    if (_this.model &&
+        location.latitude !== null && location.longitude !== null) {
       input = _this.model.get('input');
-      input.set({
-        'latitude': location.latitude,
-        'longitude': location.longitude
-      });
+
+      if (input) {
+        input.set({
+          'latitude': location.latitude,
+          'longitude': location.longitude
+        });
+      }
 
       // update location on output map
       if (_marker) {
@@ -296,10 +388,13 @@ var NEHRP2015InputView = function (params) {
     riskCategory = _factory.getRiskCategory(model.get('risk_category'));
 
     // Use name instead of id for display in output mode
-    titleEl.innerHTML = (title !== '' ? title : 'No Title');
-    designCodeEl.innerHTML = (designCode ? designCode.get('name') : 'No Design Code');
-    siteClassEl.innerHTML = (siteClass ? siteClass.get('name') : 'No Site Class');
-    riskCategoryEl.innerHTML = (riskCategory ? riskCategory.get('name') : 'No Risk Category');
+    titleEl.innerHTML = (title !== '') ? title : 'No Title';
+    designCodeEl.innerHTML = designCode ?
+        designCode.get('name') : 'No Design Code';
+    siteClassEl.innerHTML = siteClass ?
+        siteClass.get('name') : 'No Site Class';
+    riskCategoryEl.innerHTML = riskCategory ?
+        riskCategory.get('name') : 'No Risk Category';
 
     // keeps the map from freaking out
     _reportMap.invalidateSize();
@@ -358,11 +453,11 @@ var NEHRP2015InputView = function (params) {
     }
 
     if (_this.model.get('mode') === _CALCULATION_MODE_OUTPUT) {
-      _renderOutputMode(_this.model.get('input'));
       _this.el.classList.add('input-view-' + _CALCULATION_MODE_OUTPUT);
+      _renderOutputMode(_this.model.get('input'));
     } else if (_this.model.get('mode') === _CALCULATION_MODE_INPUT) {
-      _renderInputMode(_this.model.get('input'));
       _this.el.classList.remove('input-view-' + _CALCULATION_MODE_OUTPUT);
+      _renderInputMode(_this.model.get('input'));
     }
   };
 
@@ -370,6 +465,10 @@ var NEHRP2015InputView = function (params) {
   _this.destroy = Util.compose(_this.destroy, function () {
 
     // Remove event bindings
+    _onCalculationDeselect();
+    _collection.off('select', _onCalculationSelect);
+    _collection.off('deselect', _onCalculationDeselect);
+
     _designCodeCollection.off('select', _updateDesignCode);
     _siteClassCollection.off('select', _updateSiteClass);
     _riskCategoryCollection.off('select', _updateRiskCategory);
@@ -380,7 +479,13 @@ var NEHRP2015InputView = function (params) {
     // remove event listeners
     _titleEl.removeEventListener('blur', _updateTitle);
 
+    if (_destroyCollection) {
+      _collection.destroy();
+    }
+
     // variables
+    _collection = null;
+    _destroyCollection = null;
     _map = null;
     _factory = null;
     _designCodeCollection = null;
@@ -397,6 +502,8 @@ var NEHRP2015InputView = function (params) {
     _buildForm = null;
     _buildCollectionSelectBoxes = null;
     _buildLocationControl = null;
+    _onCalculationDeselect = null;
+    _onCalculationSelect = null;
     _renderInputMode = null;
     _renderOutputMode = null;
     _resetDesignCodeCollection = null;
@@ -415,7 +522,7 @@ var NEHRP2015InputView = function (params) {
 
 
 
-  _initialize();
+  _initialize(params);
   params = null;
   return _this;
 

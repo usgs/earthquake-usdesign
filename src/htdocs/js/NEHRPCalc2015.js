@@ -222,7 +222,7 @@ var NEHRPCalc2015 = function (params) {
    * @param Object {calculation}
    *                    takes a calculation
    */
-  _this.getSs = function (calculation) {
+  _this.getSs = function (calculation, silent) {
     var result,
         ss;
 
@@ -234,7 +234,7 @@ var NEHRPCalc2015 = function (params) {
           _this.getSsd(calculation));
       result.set({
         'ss': ss
-      });
+      }, {silent: silent});
     }
     return ss;
   };
@@ -280,7 +280,8 @@ var NEHRPCalc2015 = function (params) {
 
     if (fa === null) {
       siteClass = _this.getSiteClass(calculation);
-      fa = _siteAmplification.getFa(_this.getSs(calculation), siteClass);
+      fa = _siteAmplification.getFa(_this.getSs(calculation),
+          siteClass.get('value'));
       result.set({
         'fa': fa
       });
@@ -304,7 +305,8 @@ var NEHRPCalc2015 = function (params) {
 
     if (fv === null) {
       siteClass = _this.getSiteClass(calculation);
-      fv = _siteAmplification.getFv(_this.getS1(calculation), siteClass);
+      fv = _siteAmplification.getFv(_this.getS1(calculation),
+          siteClass.get('value'));
       result.set({
         'fv': fv
       });
@@ -449,7 +451,7 @@ var NEHRPCalc2015 = function (params) {
     if (fpga === null) {
       siteClass = _this.getSiteClass(calculation);
       fpga = _siteAmplification.getFpga(_this.getPga(calculation),
-          siteClass);
+          siteClass.get('value'));
       result.set({
         'fpga': fpga
       });
@@ -510,14 +512,15 @@ var NEHRPCalc2015 = function (params) {
     sdSpectra.push([t1, sds]);
 
     tHat = +(t1.toFixed(1));
+    tn = tHat;
 
     while (tn < 2.0) {
       tn = (0.1 * i) + tHat;
-      sdSpectra.push([ tn, sds/tn]);
+      sdSpectra.push([tn, sd1/tn]);
       i += 1;
     }
     result.set({
-      'sdSpectra': sdSpectra
+      'sdSpectrum': sdSpectra
     });
     return sdSpectra;
   };
@@ -553,14 +556,15 @@ var NEHRPCalc2015 = function (params) {
     smSpectra.push([t1, sms]);
 
     tHat = +(t1.toFixed(1));
+    tn = tHat;
 
     while (tn < 2.0) {
       tn = (0.1 * i) + tHat;
-      smSpectra.push([ tn, sms/tn]);
-      i += 1;
+      smSpectra.push([tn, sm1/tn]);
+      i +=  1;
     }
     result.set({
-      'smSpectra': smSpectra
+      'smSpectrum': smSpectra
     });
     return smSpectra;
   };
@@ -571,15 +575,32 @@ var NEHRPCalc2015 = function (params) {
    * @param Object {calculation}
    *                    takes a calculation
    */
-  _this.getResult = function (calculation) {
-    var result;
+  _this.getResult = function (calculation, silent) {
+    var result,
+        resultJSON;
 
     result = calculation.get('result');
-    if (result === null) {
+    resultJSON = result ? result.toJSON() : null;
+
+    if (!result || !(
+      resultJSON.hasOwnProperty('latitude') &&
+      resultJSON.hasOwnProperty('longitude') &&
+      resultJSON.hasOwnProperty('mapped_ss') &&
+      resultJSON.hasOwnProperty('mapped_s1') &&
+      resultJSON.hasOwnProperty('mapped_pga') &&
+
+      resultJSON.hasOwnProperty('crs') &&
+      resultJSON.hasOwnProperty('cr1') &&
+
+      resultJSON.hasOwnProperty('geomean_ssd') &&
+      resultJSON.hasOwnProperty('geomean_s1d') &&
+      resultJSON.hasOwnProperty('geomean_pgad')
+
+    )) {
       result = _this.interpolate(calculation);
       calculation.set({
         'result': result
-      });
+      }, {silent: silent});
     }
     return result;
   };
@@ -601,7 +622,7 @@ var NEHRPCalc2015 = function (params) {
     if (siteClass === null) {
       input = calculation.get('input');
       siteClass = input.get('site_class');
-      siteClass = _lookupDataFactory.getSiteClass(siteClass).get('value');
+      siteClass = _lookupDataFactory.getSiteClass(siteClass);
       result.set({
         'site_class': siteClass
       });
@@ -618,25 +639,30 @@ var NEHRPCalc2015 = function (params) {
   _this.calculate = function (calculation) {
     var result;
 
-    result = _this.getResult(calculation);
+    result = _this.getResult(calculation, true);
 
-    _this.getSsuh(calculation);
-    _this.getS1uh(calculation);
+    _this.getSsuh(calculation, true);
+    _this.getS1uh(calculation, true);
 
-    _this.getSsd(calculation);
-    _this.getS1d(calculation);
+    _this.getSsd(calculation, true);
+    _this.getS1d(calculation, true);
 
-    _this.getSs(calculation);
-    _this.getS1(calculation);
+    _this.getSs(calculation, true);
+    _this.getS1(calculation, true);
 
-    _this.getSms(calculation);
-    _this.getSm1(calculation);
+    _this.getSiteClass(calculation, true);
 
-    _this.getSds(calculation);
-    _this.getSd1(calculation);
+    _this.getSms(calculation, true);
+    _this.getSm1(calculation, true);
 
-    _this.getPga(calculation);
-    _this.getPgam(calculation);
+    _this.getSds(calculation, true);
+    _this.getSd1(calculation, true);
+
+    _this.getPga(calculation, true);
+    _this.getPgam(calculation, true);
+
+    _this.getSmSpectra(calculation, true);
+    _this.getSdSpectra(calculation, true);
 
     return result;
   };

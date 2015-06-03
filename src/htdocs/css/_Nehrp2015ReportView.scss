@@ -1,0 +1,148 @@
+.overbar {
+  text-decoration: overline;
+}
+
+.report-view {
+  aside {
+    color: #666;
+    font-size: smaller;
+  }
+}
+
+.report-summary-values {
+  margin: 0 0 1em;
+  overflow: hidden;
+
+  > dt,
+  > dd {
+    float: left;
+    margin: 0;
+    padding: 0;
+
+    &.break {
+      clear: left;
+    }
+  }
+
+  > dt {
+    max-width: 4em;
+    min-width: 2em;
+    width: 10%;
+  }
+
+  > dd {
+    max-width: 10em;
+    width: 20%;
+  }
+}
+
+.report-summary-spectra {
+  margin-top: 1em;
+}
+
+@media screen and (min-width: 560px) {
+  .report-summary-values > dt:after {
+    content: ' = ';
+  }
+}
+
+.report-site-class-reference {
+  border-collapse: collapse;
+  font-size: smaller;
+  margin-top: 1em;
+  width: 100%;
+
+  > thead {
+    > tr > th {
+      text-align: center;
+
+      &:first-child {
+        text-align: left;
+      }
+    }
+  }
+
+  > tbody {
+    > tr {
+
+      > th,
+      > td {
+        border-top: 1px solid #999;
+        padding: 3px 2px;
+      }
+
+      &:first-child {
+        > th,
+        > td {
+          border-top: 1px solid #000;
+        }
+      }
+
+      > th {
+        font-weight: normal;
+        max-width: 18em;
+        text-align: left;
+      }
+
+      > td {
+        text-align: center;
+      }
+
+      &.site-class-e-subtext {
+        > th,
+        > td {
+          border-top: none;
+        }
+
+        > td {
+          text-align: left;
+
+          > ul {
+            margin: 0;
+          }
+        }
+      }
+    }
+  }
+
+  > tfoot > tr > td {
+    font-size: smaller;
+    text-align: center;
+  }
+}
+
+.equation {
+  border-bottom: 1px solid #999;
+  overflow: hidden;
+  padding: .5em;
+
+  &.equation-summary {
+    border-bottom: 2px solid #333;
+    margin-bottom: 1em;
+    text-align: right;
+
+    > span {
+      float: none;
+    }
+  }
+
+  > span {
+    float: right;
+  }
+}
+
+.site-amplification-table {
+  margin-top: .5em;
+}
+
+.report-summary-fa,
+.report-summary-fv,
+.report-summary-fpga {
+  color: #333;
+  font-weight: bold;
+  text-align: center;
+}
+
+.report-table-undetermined-fafv {
+  margin-bottom: 1em;
+}

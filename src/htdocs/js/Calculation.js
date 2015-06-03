@@ -55,6 +55,9 @@ var _DEFAULTS = {
         geomean_pgad: null
       }
     ]
+  },
+
+  result: {
   }
 };
 
@@ -87,8 +90,9 @@ var Calculation = function (params) {
     var attributes,
         id,
         input,
+        mode,
         output,
-        mode;
+        result;
 
     id = _this.get('id');
     mode = _this.get('mode') || _DEFAULTS.mode;
@@ -96,6 +100,7 @@ var Calculation = function (params) {
 
     input = Util.extend({}, _DEFAULTS.input, attributes.input);
     output = Util.extend({}, _DEFAULTS.output, attributes.output);
+    result = Util.extend({}, _DEFAULTS.result, attributes.result);
 
     output.metadata = Model(Util.extend({}, _DEFAULTS.output.metadata,
         output.metadata));
@@ -109,6 +114,7 @@ var Calculation = function (params) {
     attributes = {
       input: Model(input),
       output: Model(output),
+      result: Model(result),
       mode: mode
     };
 
