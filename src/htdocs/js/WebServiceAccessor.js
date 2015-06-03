@@ -80,9 +80,12 @@ var WebServiceAccessor = function (params) {
    *         if data contains the error message, an error is thrown.
    */
   _updateCalculation = function (calculation, data) {
-    var input,
+    var clearResult,
+        field,
+        input,
         metadata,
-        output;
+        output,
+        result;
 
     if (data.error !== undefined) {
       throw new Error(data.error +
@@ -91,6 +94,7 @@ var WebServiceAccessor = function (params) {
     } else {
       input = calculation.get('input');
       output = calculation.get('output');
+      result = calculation.get('result');
 
       metadata = output.get('metadata');
 
@@ -98,6 +102,15 @@ var WebServiceAccessor = function (params) {
       metadata.set(data.output.metadata);
       output.get('data').reset(data.output.data.map(Model));
       output.set({tl: data.output.tl});
+
+      // Clear results so they are recalculated
+      clearResult = result.get();
+      for (field in clearResult) {
+        if (clearResult.hasOwnProperty(field)) {
+          clearResult[field] = null;
+        }
+      }
+      result.set(clearResult);
 
       calculation.set({mode: Calculation.MODE_OUTPUT});
     }
