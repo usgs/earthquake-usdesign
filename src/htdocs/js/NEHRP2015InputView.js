@@ -1,6 +1,7 @@
 'use strict';
 
-var LookupDataFactory = require('util/LookupDataFactory'),
+var Calculation = require('Calculation'),
+    LookupDataFactory = require('util/LookupDataFactory'),
 
     L = require('leaflet'),
     LocationControl = require('locationview/LocationControl'),
@@ -50,10 +51,12 @@ var NEHRP2015InputView = function (params) {
       _designCodeCollection,
       _designCodeEl,
       _destroyCollection,
+      _destroyModel,
       _factory,
       _locationControlInput,
       _map,
       _marker,
+      _model,
       _outputMap,
       _riskCategoryCollection,
       _riskCategoryEl,
@@ -97,19 +100,26 @@ var NEHRP2015InputView = function (params) {
     _siteClassCollection.on('select', _updateSiteClass);
     _riskCategoryCollection.on('select', _updateRiskCategory);
 
+    _model = params.model;
+
+    if (!_model) {
+      _model = Calculation();
+      _destroyModel = true;
+    }
+
     _collection = params.collection;
 
     if (!_collection) {
-      _collection = Collection([_this.model]);
+      _collection = Collection([_model]);
       _destroyCollection = true;
     }
 
-    if (!_collection.get(_this.model.get('id'))) {
-      _collection.add(_this.model);
+    if (!_collection.get(_model.get('id'))) {
+      _collection.add(_model);
     }
 
     if (!_collection.getSelected()) {
-      _collection.select(_this.model);
+      _collection.select(_model);
     }
 
     _collection.on('select', _onCalculationSelect);
@@ -124,7 +134,7 @@ var NEHRP2015InputView = function (params) {
     _factory = LookupDataFactory({});
     _factory.whenReady(function () {
       _buildLocationControl();
-      // Set bindings on _this.model and perform initial rendering
+      // Set bindings on _model and perform initial rendering
       _onCalculationSelect();
     });
   };
@@ -171,7 +181,7 @@ var NEHRP2015InputView = function (params) {
 
 
     // set initial location
-    input = _this.model.get('input');
+    input = _model.get('input');
     if (input.get('latitude') !== null && input.get('longitude') !== null) {
       // update the marker on the map
       _locationControlInput.setLocation({
@@ -281,15 +291,15 @@ var NEHRP2015InputView = function (params) {
   _onCalculationDeselect = function () {
     var input;
 
-    if (_this.model) {
-      _this.model.off('change', 'render', _this);
+    if (_model) {
+      _model.off('change', 'render', _this);
 
-      input = _this.model.get('input');
+      input = _model.get('input');
       if (input) {
         input.off('change', 'render', _this);
       }
 
-      _this.model = null;
+      _model = null;
     }
   };
 
@@ -300,12 +310,12 @@ var NEHRP2015InputView = function (params) {
   _onCalculationSelect = function () {
     var input;
 
-    _this.model = _collection.getSelected();
+    _model = _collection.getSelected();
 
-    if (_this.model) {
-      _this.model.on('change', 'render', _this);
+    if (_model) {
+      _model.on('change', 'render', _this);
 
-      input = _this.model.get('input');
+      input = _model.get('input');
       if (input) {
         input.on('change', 'render', _this);
       }
@@ -381,8 +391,8 @@ var NEHRP2015InputView = function (params) {
   _updateDesignCode = function () {
     var input;
 
-    if (_this.model) {
-      input = _this.model.get('input');
+    if (_model) {
+      input = _model.get('input');
 
       if (input) {
         input.set({
@@ -399,8 +409,8 @@ var NEHRP2015InputView = function (params) {
   _updateSiteClass = function () {
     var input;
 
-    if (_this.model) {
-      input = _this.model.get('input');
+    if (_model) {
+      input = _model.get('input');
 
       if (input) {
         input.set({
@@ -417,8 +427,8 @@ var NEHRP2015InputView = function (params) {
   _updateRiskCategory = function () {
     var input;
 
-    if (_this.model) {
-      input = _this.model.get('input');
+    if (_model) {
+      input = _model.get('input');
 
       if (input) {
         input.set({
@@ -434,8 +444,8 @@ var NEHRP2015InputView = function (params) {
   _updateTitle = function () {
     var input;
 
-    if (_this.model) {
-      input = _this.model.get('input');
+    if (_model) {
+      input = _model.get('input');
 
       if (input) {
         input.set({'title': _titleEl.value});
@@ -457,9 +467,9 @@ var NEHRP2015InputView = function (params) {
 
     location = e.location;
 
-    if (_this.model &&
+    if (_model &&
         location.latitude !== null && location.longitude !== null) {
-      input = _this.model.get('input');
+      input = _model.get('input');
 
       if (input) {
         input.set({
@@ -599,12 +609,12 @@ var NEHRP2015InputView = function (params) {
       _resetDesignCodeCollection();
     }
 
-    if (_this.model.get('mode') === _CALCULATION_MODE_OUTPUT) {
+    if (_model.get('mode') === _CALCULATION_MODE_OUTPUT) {
       _this.el.classList.add('input-view-' + _CALCULATION_MODE_OUTPUT);
-      _renderOutputMode(_this.model.get('input'));
-    } else if (_this.model.get('mode') === _CALCULATION_MODE_INPUT) {
+      _renderOutputMode(_model.get('input'));
+    } else if (_model.get('mode') === _CALCULATION_MODE_INPUT) {
       _this.el.classList.remove('input-view-' + _CALCULATION_MODE_OUTPUT);
-      _renderInputMode(_this.model.get('input'));
+      _renderInputMode(_model.get('input'));
     }
   };
 
@@ -621,8 +631,8 @@ var NEHRP2015InputView = function (params) {
     _designCodeCollection.off('select', _updateDesignCode);
     _siteClassCollection.off('select', _updateSiteClass);
     _riskCategoryCollection.off('select', _updateRiskCategory);
-    _this.model.get('input').off('change', _this.render);
-    _this.model.off('change', _this.render);
+    _model.get('input').off('change', _this.render);
+    _model.off('change', _this.render);
     _locationControlInput.off('location', _updateLocation);
 
     // remove event listeners
@@ -632,15 +642,21 @@ var NEHRP2015InputView = function (params) {
       _collection.destroy();
     }
 
+    if (_destroyModel) {
+      _model.destroy();
+    }
+
     // variables
     _collection = null;
     _designCodeCollection = null;
     _designCodeEl = null;
     _destroyCollection = null;
+    _destroyModel = null;
     _factory = null;
     _locationControlInput = null;
     _map = null;
     _marker = null;
+    _model = null;
     _outputMap = null;
     _riskCategoryCollection = null;
     _riskCategoryEl = null;
