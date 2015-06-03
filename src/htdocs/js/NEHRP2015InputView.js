@@ -35,6 +35,7 @@ var NEHRP2015InputView = function (params) {
       _buildForm,
       _buildCollectionSelectBoxes,
       _buildLocationControl,
+      _onCalculationAdd,
       _onCalculationDeselect,
       _onCalculationSelect,
       _renderInputMode,
@@ -81,6 +82,7 @@ var NEHRP2015InputView = function (params) {
 
     _collection.on('select', _onCalculationSelect);
     _collection.on('deselect', _onCalculationDeselect);
+    _collection.on('add', _onCalculationAdd);
 
     // structure html
     _buildForm();
@@ -214,6 +216,17 @@ var NEHRP2015InputView = function (params) {
         return model.get('name');
       }
     });
+  };
+
+  /**
+   * Remove marker from the map when a new calculation is added
+   * to the collection.
+   */
+  _onCalculationAdd = function () {
+    _locationControlInput.setLocation({
+      'type': 'location',
+      'location': null
+    },{'silent': true});
   };
 
   _onCalculationDeselect = function () {
@@ -512,6 +525,7 @@ var NEHRP2015InputView = function (params) {
     _buildForm = null;
     _buildCollectionSelectBoxes = null;
     _buildLocationControl = null;
+    _onCalculationAdd = null;
     _onCalculationDeselect = null;
     _onCalculationSelect = null;
     _renderInputMode = null;
