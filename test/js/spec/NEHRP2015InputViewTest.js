@@ -1,8 +1,7 @@
 /* global chai, describe, it */
 'use strict';
 
-var Calculation = require('Calculation'),
-    NEHRP2015InputView = require('NEHRP2015InputView');
+var NEHRP2015InputView = require('NEHRP2015InputView');
 
 var expect = chai.expect;
 
@@ -21,9 +20,7 @@ describe('NEHRP2015InputView', function () {
     });
 
     it('responds to the appropriate methods', function () {
-      var view = NEHRP2015InputView({
-        model: Calculation()
-      });
+      var view = NEHRP2015InputView();
 
       expect(view).to.respondTo('render');
       expect(view).to.respondTo('destroy');
