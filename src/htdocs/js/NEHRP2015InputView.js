@@ -67,10 +67,9 @@ var NEHRP2015InputView = function (params) {
       _buildCollectionSelectBoxes,
       _buildForm,
       _buildLocationControl,
-      _onCalculationAdd,
       _onCalculationDeselect,
       _onCalculationSelect,
-      _removeLocation,
+      _removeLocationFromMap,
       _renderInputMode,
       _renderOutputMode,
       _resetDesignCodeCollection,
@@ -124,7 +123,7 @@ var NEHRP2015InputView = function (params) {
 
     _collection.on('select', _onCalculationSelect);
     _collection.on('deselect', _onCalculationDeselect);
-    _collection.on('add', _onCalculationAdd);
+    _collection.on('deselect', _removeLocationFromMap);
 
     // structure html
     _buildForm();
@@ -136,7 +135,9 @@ var NEHRP2015InputView = function (params) {
       _buildLocationControl();
       // Set bindings on _model and perform initial rendering
       _onCalculationSelect();
+      _removeLocationFromMap();
     });
+
   };
 
   /**
@@ -274,14 +275,20 @@ var NEHRP2015InputView = function (params) {
   };
 
   /**
-   * Remove marker from the map when a new calculation is added
-   * to the collection.
+   * Remove marker from the LocationControl
    */
-  _onCalculationAdd = function () {
-    _locationControlInput.setLocation({
-      'type': 'location',
-      'location': null
-    },{'silent': true});
+  _removeLocationFromMap = function () {
+    var input;
+
+    input = _model.get('input');
+
+    if (input &&
+          input.get('latitude') === null && input.get('longitude') === null) {
+      _locationControlInput.setLocation({
+        'type': 'location',
+        'location': null
+      },{'silent': true});
+    }
   };
 
   /**
@@ -668,10 +675,9 @@ var NEHRP2015InputView = function (params) {
     _buildCollectionSelectBoxes = null;
     _buildForm = null;
     _buildLocationControl = null;
-    _onCalculationAdd = null;
     _onCalculationDeselect = null;
     _onCalculationSelect = null;
-    _removeLocation = null;
+    _removeLocationFromMap = null;
     _renderInputMode = null;
     _renderOutputMode = null;
     _resetDesignCodeCollection = null;
