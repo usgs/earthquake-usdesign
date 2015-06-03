@@ -365,6 +365,8 @@ var NEHRP2015InputView = function (params) {
         titleEl,
         designCode,
         designCodeEl,
+        latitude,
+        longitude,
         siteClass,
         siteClassEl,
         riskCategory,
@@ -375,11 +377,19 @@ var NEHRP2015InputView = function (params) {
     siteClassEl = _this.el.querySelector('.site-class-output');
     riskCategoryEl = _this.el.querySelector('.risk-category-output');
 
+    latitude = model.get('latitude');
+    longitude = model.get('longitude');
+
     title = model.get('title') || '';
 
-    if (model.get('latitude') !== null && model.get('latitude') !== null) {
-      title = title + '<small>(' + model.get('latitude') + ', ' +
-        model.get('longitude') + ')</small>';
+    if (latitude !== null && longitude !== null) {
+      title = title + '<small>(' + latitude + ', ' + longitude + ')</small>';
+
+      // update marker position on map
+      _updateLocation({location: {latitude: latitude, longitude: longitude}});
+    } else if (_marker && _marker._map) {
+      _marker._map.removeLayer(_marker);
+      _marker = null;
     }
 
     // use factory to grab model
