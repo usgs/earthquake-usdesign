@@ -24,7 +24,8 @@
   <script src="js/bundle.js"></script>
   <script>
     var SpectraGraphView = require('SpectraGraphView'),
-        data;
+        data,
+        simple;
 
     data = [
       [0, 1.025],
@@ -47,11 +48,26 @@
       [2, 0.87]
     ];
 
-    SpectraGraphView({
+    // Create simple graph initially with annotations and then remove them,
+    // this is a visual test to show that annotations are in fact removed
+    simple = SpectraGraphView({
       el: document.querySelector('.example-summary'),
       data: data,
-      title: 'Example Summary Graph'
-    }).render();
+      title: 'Example Summary Graph',
+      ss: 2.563,
+      s1: 1.741,
+      ssLabel: 'S<sub>DS</sub>',
+      s1Label: 'S<sub>D1</sub>'
+    });
+
+    simple.render();
+
+    simple.model.set({
+      ss: null,
+      s1: null,
+      ssLabel: '',
+      s1Label: ''
+    });
 
     SpectraGraphView({
       el: document.querySelector('.example-detail'),

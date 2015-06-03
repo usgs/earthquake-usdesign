@@ -326,7 +326,7 @@ var SpectraGraphView = function (options) {
       lines.push([[0, _s1], [1, _s1]]);
     }
     // always do this, in case annotations are removed
-    annotations = _annotations.selectAll('line')
+    annotations = _annotations.selectAll('path')
         .data(lines);
     annotations.enter()
         .append('path');
