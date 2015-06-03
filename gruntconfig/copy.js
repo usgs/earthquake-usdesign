@@ -28,6 +28,7 @@ var copy = {
 
       'htdocs/css/images/**/*',
       'htdocs/images/**/*',
+      'htdocs/lib/**/*',
       'htdocs/*.html',
       'htdocs/*.php',
 
