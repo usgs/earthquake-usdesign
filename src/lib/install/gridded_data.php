@@ -61,7 +61,7 @@ $datasets = array(
     'max_latitude' => 19.00,
     'min_longitude' => -67.50,
     'max_longitude' => -64.50,
-    'grid_spacing' => 0.02,
+    'grid_spacing' => 0.01,
     'remote_dir' => '/web/earthquake-usdesign/2015nehrp/prvi'
   ),
   '2015nehrp_us' => array(
