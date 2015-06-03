@@ -32,6 +32,9 @@ var ReportView = function (params) {
       _destroyCollection = true;
     }
 
+    _collection.on('deselect', _onCollectionDeselect);
+    _collection.on('select', _onCollectionSelect);
+
     if (!_collection.get(_this.model.get('id'))) {
       _collection.add(_this.model);
     }
@@ -76,7 +79,24 @@ var ReportView = function (params) {
 
 
   _this.destroy = function () {
+    _onCollectionDeselect();
 
+    _collection.off('deselect', _onCollectionDeselect);
+    _collection.off('select', _onCollectionSelect);
+
+    if (_destroyCollection) {
+      _collection.destroy();
+    }
+
+    _collection = null;
+
+    _getRenderer = null;
+    _initializeRenderers = null;
+    _onCollectionDeselect = null;
+    _onCollectionSelect = null;
+
+    _initialize = null;
+    _this = null;
   };
 
   _this.render = function () {
