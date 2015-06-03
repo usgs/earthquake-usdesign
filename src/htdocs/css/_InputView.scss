@@ -115,4 +115,8 @@
   .leaflet-bar {
     display: none;
   }
+
+  .input-view > .row > .column {
+    overflow: hidden;
+  }
 }
