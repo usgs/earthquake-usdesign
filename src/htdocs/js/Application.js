@@ -52,12 +52,12 @@ var Application = function (params) {
       } else {
         _model = Calculation({
           input: {
-            latitude: 35.0,
-            longitude: -90.0,
-            design_code: 1,
-            site_class: 4,
-            risk_category: 1,
-            title: 'Test'
+            latitude: null,
+            longitude: null,
+            design_code: null,
+            site_class: null,
+            risk_category: null,
+            title: null,
           }
         });
       }
