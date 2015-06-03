@@ -116,6 +116,7 @@ if (!is_dir($local_dir)) {
 // connect to ftp server
 $ftp = ftp_connect($remote_server);
 ftp_login($ftp, 'anonymous', 'earthquake-usdesign@usgs.gov');
+ftp_pasv($ftp, true);
 
 
 // loop over editions
