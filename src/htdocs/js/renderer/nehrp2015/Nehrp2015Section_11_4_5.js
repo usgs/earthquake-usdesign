@@ -13,8 +13,18 @@ var _DEFAULTS = {
   baseUrl: 'http://earthquake.usgs.gov/hazards/designmaps/downloads/pdfs',
 
   figures: {
+    // CONUS
+    1: '2009_NEHRP_Figure_22-7-page1.pdf',
+    // American Samoa
+    2: null,
+    // Guam
+    3: null,
+    // Hawaii
+    4: '2009_NEHRP_Figure_22-7-page2.pdf',
+    // Puerto Rico
+    5: '2009_NEHRP_Figure_22-7-page2.pdf',
     // Alaska
-    1: '2009_NEHRP_Figure_22-7-page2.pdf'
+    6: '2009_NEHRP_Figure_22-7-page2.pdf'
   }
 };
 
@@ -61,7 +71,7 @@ var Nehrp2015Section_Section_11_4_5 = function (params) {
 
 
   _getFigure = function (region) {
-    if (_figures && _figures.hasOwnProperty(region)) {
+    if (_figures && _figures[region]) {
       return _baseUrl + '/' + _figures[region];
     } else {
       return '#';
@@ -83,7 +93,7 @@ var Nehrp2015Section_Section_11_4_5 = function (params) {
     section = args.section;
 
     result = model.get('result');
-    region = model.get('output').get('region');
+    region = model.get('output').get('metadata').get('region_id');
 
     section.innerHTML = [
       '<h3>Section 11.4.5 &mdash; Design Response Spectrum</h3>',

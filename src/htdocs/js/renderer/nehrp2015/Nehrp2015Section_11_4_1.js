@@ -21,16 +21,40 @@ var _DEFAULTS = {
       '22-4': '2009_NEHRP_Figure_22-4-page1.pdf',
       '22-5': '2009_NEHRP_Figure_22-5-page1.pdf',
       '22-6': '2009_NEHRP_Figure_22-6-page1.pdf'
-    }
+    },
+    // American Samoa
+    2: {
+    },
+    // Guam
+    3: {
+    },
+    // Hawaii
+    4: {
+      '22-1': '2009_NEHRP_Figure_22-1-page2.pdf',
+      '22-2': '2009_NEHRP_Figure_22-2-page2.pdf',
+      '22-3': '2009_NEHRP_Figure_22-3-page2.pdf',
+      '22-4': '2009_NEHRP_Figure_22-4-page2.pdf',
+      '22-5': '2009_NEHRP_Figure_22-5-page2.pdf',
+      '22-6': '2009_NEHRP_Figure_22-6-page2.pdf'
+    },
+    // Puerto Rico
+    5: {
+      '22-1': '2009_NEHRP_Figure_22-1-page2.pdf',
+      '22-2': '2009_NEHRP_Figure_22-2-page2.pdf',
+      '22-3': '2009_NEHRP_Figure_22-3-page2.pdf',
+      '22-4': '2009_NEHRP_Figure_22-4-page2.pdf',
+      '22-5': '2009_NEHRP_Figure_22-5-page2.pdf',
+      '22-6': '2009_NEHRP_Figure_22-6-page2.pdf'
+    },
     // Alaska
-    // '???': {
-    //   '22-1': '2009_NEHRP_Figure_22-1-page2.pdf',
-    //   '22-2': '2009_NEHRP_Figure_22-2-page2.pdf',
-    //   '22-3': '2009_NEHRP_Figure_22-3-page2.pdf',
-    //   '22-4': '2009_NEHRP_Figure_22-4-page2.pdf',
-    //   '22-5': '2009_NEHRP_Figure_22-5-page2.pdf',
-    //   '22-6': '2009_NEHRP_Figure_22-6-page2.pdf'
-    // }
+    6: {
+      '22-1': '2009_NEHRP_Figure_22-1-page2.pdf',
+      '22-2': '2009_NEHRP_Figure_22-2-page2.pdf',
+      '22-3': '2009_NEHRP_Figure_22-3-page2.pdf',
+      '22-4': '2009_NEHRP_Figure_22-4-page2.pdf',
+      '22-5': '2009_NEHRP_Figure_22-5-page2.pdf',
+      '22-6': '2009_NEHRP_Figure_22-6-page2.pdf'
+    }
   }
 };
 
