@@ -45,7 +45,7 @@ module.exports = function (grunt) {
     'build',
     'configureProxies:dist',
     'connect:template',
-    'connect:dist:keepAlive'
+    'connect:dist:keepalive'
   ]);
 
   // runs tests against development version of library
