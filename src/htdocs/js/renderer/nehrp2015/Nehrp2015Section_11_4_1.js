@@ -11,17 +11,26 @@ var _DEFAULTS = {
   classes: ['section-11-4-1'],
   nodeType: 'section',
   baseUrl: 'http://earthquake.usgs.gov/hazards/designmaps/downloads/pdfs',
-
+// 1 = conus, 2 = amsam, 3 = guam, 5 = pr
   figures: {
-    // Alaska
+    // CONUS
     1: {
-      '22-1': '2009_NEHRP_Figure_22-1-page2.pdf',
-      '22-2': '2009_NEHRP_Figure_22-2-page2.pdf',
-      '22-3': '2009_NEHRP_Figure_22-3-page2.pdf',
-      '22-4': '2009_NEHRP_Figure_22-4-page2.pdf',
-      '22-5': '2009_NEHRP_Figure_22-5-page2.pdf',
-      '22-6': '2009_NEHRP_Figure_22-6-page2.pdf'
+      '22-1': '2009_NEHRP_Figure_22-1-page1.pdf',
+      '22-2': '2009_NEHRP_Figure_22-2-page1.pdf',
+      '22-3': '2009_NEHRP_Figure_22-3-page1.pdf',
+      '22-4': '2009_NEHRP_Figure_22-4-page1.pdf',
+      '22-5': '2009_NEHRP_Figure_22-5-page1.pdf',
+      '22-6': '2009_NEHRP_Figure_22-6-page1.pdf'
     }
+    // Alaska
+    // '???': {
+    //   '22-1': '2009_NEHRP_Figure_22-1-page2.pdf',
+    //   '22-2': '2009_NEHRP_Figure_22-2-page2.pdf',
+    //   '22-3': '2009_NEHRP_Figure_22-3-page2.pdf',
+    //   '22-4': '2009_NEHRP_Figure_22-4-page2.pdf',
+    //   '22-5': '2009_NEHRP_Figure_22-5-page2.pdf',
+    //   '22-6': '2009_NEHRP_Figure_22-6-page2.pdf'
+    // }
   }
 };
 
@@ -68,7 +77,7 @@ var Nehrp2015Section_Section_11_4_1 = function (params) {
     section = args.section;
 
     metadata = output.get('metadata');
-    region = output.get('region');
+    region = metadata.get('region_id');
 
     section.innerHTML = [
       '<h3>',
