@@ -5,13 +5,17 @@
   margin: 0;
   padding: 0;
 
-
   > li {
-    padding: .6em 1.5em;
+    border-top: 1px solid #e2e2e2;
+    padding: 1em 1.5em;
+
+    &:last-child {
+      border:none;
+    }
 
 
     &.selected {
-      background-color: #8BE076;
+      background-color: #EAF4FF;
     }
   }
 }
@@ -26,7 +30,6 @@
         left: auto;
         right: 0;
       }
-
     }
 
     > .accordion-content {
@@ -42,4 +45,8 @@
   &.actions-view-mode-input .actions-view-new {
     display: none;
   }
+}
+
+.accordion > .actions-view-actions:hover {
+  background: #f4f4f4;
 }
