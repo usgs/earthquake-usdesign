@@ -504,7 +504,7 @@ var NEHRPCalc2015 = function (params) {
 
     tl = result.get('tl');
     sdSpectra = [];
-    i = 0;
+    i = 1;
     t1 = sd1 / sds;
 
     sdSpectra.push([0, 0.4 * sds]);
@@ -512,7 +512,7 @@ var NEHRPCalc2015 = function (params) {
     sdSpectra.push([t1, sds]);
 
     tHat = +(t1.toFixed(1));
-    tn = tHat;
+    tn = 0.1 + tHat;
 
     while (tn < 2.0) {
       tn = (0.1 * i) + tHat;
@@ -548,7 +548,7 @@ var NEHRPCalc2015 = function (params) {
 
     tl = result.get('tl');
     smSpectra = [];
-    i = 0;
+    i = 1;
     t1 = sm1 / sms;
 
     smSpectra.push([0, 0.4 * sms]);
@@ -556,7 +556,7 @@ var NEHRPCalc2015 = function (params) {
     smSpectra.push([t1, sms]);
 
     tHat = +(t1.toFixed(1));
-    tn = tHat;
+    tn = 0.1 + tHat;
 
     while (tn < 2.0) {
       tn = (0.1 * i) + tHat;
