@@ -1,8 +1,11 @@
 .site-amplification-table {
-  width: 100%;
   border-top: 3px double #333;
   border-bottom: 1px solid #333;
   border-collapse: collapse;
+  display: block;
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
 
   thead > tr > th {
     border-bottom: 1px solid #333;
