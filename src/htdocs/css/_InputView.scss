@@ -56,7 +56,6 @@
 // Change display for output mode
 .input-view-output {
 
-
   label {
     border-bottom: 1px solid #ccc;
     padding: 0 0 2px;
@@ -79,10 +78,14 @@
     margin: 8px 0 24px;
   }
 
-  .report-title-output > small {
-    display: block;
-    font-size: 13px;
-    color: #999;
+  .report-title-output {
+    margin: 10px 0 11px;
+
+    > small {
+      display: block;
+      font-size: 13px;
+      color: #999;
+    }
   }
 
   .location-view-input {
@@ -111,5 +114,9 @@
 
   .leaflet-bar {
     display: none;
+  }
+
+  .input-view > .row > .column {
+    overflow: hidden;
   }
 }
