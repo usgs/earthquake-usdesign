@@ -512,10 +512,10 @@ var NEHRPCalc2015 = function (params) {
     sdSpectra.push([t1, sds]);
 
     tHat = +(t1.toFixed(1));
-    tn = 0.1 + tHat;
+    tn = 0.05 + tHat;
 
     while (tn < 2.0) {
-      tn = (0.1 * i) + tHat;
+      tn = (0.05 * i) + tHat;
       sdSpectra.push([tn, sd1/tn]);
       i += 1;
     }
@@ -556,10 +556,10 @@ var NEHRPCalc2015 = function (params) {
     smSpectra.push([t1, sms]);
 
     tHat = +(t1.toFixed(1));
-    tn = 0.1 + tHat;
+    tn = 0.05 + tHat;
 
     while (tn < 2.0) {
-      tn = (0.1 * i) + tHat;
+      tn = (0.05 * i) + tHat;
       smSpectra.push([tn, sm1/tn]);
       i +=  1;
     }
@@ -584,18 +584,27 @@ var NEHRPCalc2015 = function (params) {
 
     if (!result || !(
       resultJSON.hasOwnProperty('latitude') &&
+      resultJSON.latitude !== null &&
       resultJSON.hasOwnProperty('longitude') &&
+      resultJSON.longitude !== null &&
       resultJSON.hasOwnProperty('mapped_ss') &&
+      resultJSON.mapped_ss !== null &&
       resultJSON.hasOwnProperty('mapped_s1') &&
+      resultJSON.mapped_s1 !== null &&
       resultJSON.hasOwnProperty('mapped_pga') &&
+      resultJSON.mapped_pga !== null &&
 
       resultJSON.hasOwnProperty('crs') &&
+      resultJSON.crs !== null &&
       resultJSON.hasOwnProperty('cr1') &&
+      resultJSON.cr1 !== null &&
 
       resultJSON.hasOwnProperty('geomean_ssd') &&
+      resultJSON.geomean_ssd !== null &&
       resultJSON.hasOwnProperty('geomean_s1d') &&
-      resultJSON.hasOwnProperty('geomean_pgad')
-
+      resultJSON.geomean_s1d !== null &&
+      resultJSON.hasOwnProperty('geomean_pgad') &&
+      resultJSON.geomean_pgad !== null
     )) {
       result = _this.interpolate(calculation);
       calculation.set({
