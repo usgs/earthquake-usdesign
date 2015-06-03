@@ -1,0 +1,27 @@
+.input-view, .actions-view {
+  margin-bottom: 1em;
+}
+
+.input-view.input-view-output {
+
+}
+
+@media print {
+  .actions-view {
+    display: none;
+  }
+
+  .input-view.input-view-output {
+    .report-title-output {
+      margin-bottom: 0;
+    }
+    label[for="report-title"] {
+      display: none;
+    }
+  }
+
+  .report-section,
+  .report-table-fa {
+    page-break-after: always;
+  }
+}
