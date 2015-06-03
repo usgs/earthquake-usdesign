@@ -69,11 +69,7 @@ var browerify = {
   // the bundle of test suites
   test: {
     src: [config.test + '/js/test.js'],
-    dest: config.build + '/' + config.test + '/js/test.js',
-    options: {
-      external: EXPORTS.concat(CWD + '/node_modules/leaflet/dist/leaflet-src.js:leaflet'
-      )
-    }
+    dest: config.build + '/' + config.test + '/js/test.js'
   },
 
   // bundle leaflet externally
