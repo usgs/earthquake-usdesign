@@ -76,7 +76,8 @@ INSERT INTO design_code_site_class (
   (2, 1, 2),
   (3, 1, 3),
   (4, 1, 4),
-  (5, 1, 5);
+  (5, 1, 5),
+  (6, 1, 6);
 
 -- Risk category-design code relations
 INSERT INTO design_code_risk_category (
