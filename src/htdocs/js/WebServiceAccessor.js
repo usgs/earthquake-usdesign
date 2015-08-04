@@ -48,20 +48,28 @@ var WebServiceAccessor = function (params) {
    *          A Calculation Model with the input parameters set.
    * @param callback {function}
    *          The callback function that getResults will call on success.
-   *
+   * @param errback {function}
+   *          Callback function in case there are errors.
    * @return: {Calculation}
    *          Calculation Model filled with the input/output data.
    */
-  _this.getResults = function (calculation, callback) {
+  _this.getResults = function (calculation, callback, errback) {
     Xhr.ajax({
         url: _buildUrl(calculation),
         success: function(data) {
-          _updateCalculation(calculation, data);
+          try {
+            _updateCalculation(calculation, data);
 
-          if (callback) {
-            callback(calculation);
+            if (callback) {
+              callback(calculation);
+            }
+          } catch (e) {
+            if (errback) {
+              errback(e);
+            }
           }
-        }
+        },
+        error: errback
       });
   };
 

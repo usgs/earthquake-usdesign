@@ -146,7 +146,7 @@ var Application = function (params) {
         // there aren't too many active requests
         sent.length < _concurrentRequests) {
       next = ready.shift();
-      _service.getResults(next, _onCalculate);
+      _service.getResults(next, _onCalculate, _onCalculate);
       next.set({
         'status': Calculation.STATUS_SENT
       });
