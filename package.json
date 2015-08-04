@@ -31,7 +31,7 @@
     "grunt-contrib-jshint": "^0.11.0",
     "grunt-contrib-uglify": "^0.7.0",
     "grunt-contrib-watch": "^0.6.1",
-    "grunt-mocha-phantomjs": "^0.6.0",
+    "grunt-mocha-phantomjs": "0.6.0",
     "hazdev-accordion": "git://github.com/usgs/hazdev-accordion.git",
     "hazdev-location-view": "usgs/hazdev-location-view",
     "hazdev-template": "usgs/hazdev-template",
