@@ -88,9 +88,12 @@ var WebServiceAccessor = function (params) {
         result;
 
     if (data.error !== undefined) {
+      calculation.set({
+        status: Calculation.STATUS_INVALID
+      });
       throw new Error(data.error +
-          ' Must specify design_code, site_class, risk_category' +
-          'latitude, longitude, and title; to retrive usdesign data.');
+          ' Must specify design_code, site_class, risk_category,' +
+          ' latitude, longitude, and title; to retreive usdesign data.');
     } else {
       input = calculation.get('input');
       output = calculation.get('output');
@@ -112,7 +115,10 @@ var WebServiceAccessor = function (params) {
       }
       result.set(clearResult);
 
-      calculation.set({mode: Calculation.MODE_OUTPUT});
+      calculation.set({
+        mode: Calculation.MODE_OUTPUT,
+        status: Calculation.STATUS_COMPLETE
+      });
     }
     return calculation;
   };
