@@ -86,6 +86,8 @@ var Calculation = function (params) {
   var _this,
       _initialize,
 
+      _input,
+
       _generateId,
       _updateStatus;
 
@@ -104,10 +106,12 @@ var Calculation = function (params) {
         input,
         mode,
         output,
-        result;
+        result,
+        status;
 
     id = _this.get('id');
     mode = _this.get('mode') || _DEFAULTS.mode;
+    status = _this.get('status') || _DEFAULTS.status;
     attributes = _this.get();
 
     input = Util.extend({}, _DEFAULTS.input, attributes.input);
@@ -127,7 +131,8 @@ var Calculation = function (params) {
       input: Model(input),
       output: Model(output),
       result: Model(result),
-      mode: mode
+      mode: mode,
+      status: status
     };
 
 
@@ -137,7 +142,8 @@ var Calculation = function (params) {
       attributes.id = _generateId();
     }
 
-    _this.on('change', _updateStatus);
+    _input = attributes.input;
+    _input.on('change', _updateStatus);
     _this.set(attributes);
   };
 
@@ -156,7 +162,11 @@ var Calculation = function (params) {
    *
    */
   _this.destroy = Util.compose(_this.destroy, function () {
+    _input.off('change', _updateStatus);
+    _input = null;
+
     _generateId = null;
+    _updateStatus = null;
 
     _initialize = null;
     _this = null;
