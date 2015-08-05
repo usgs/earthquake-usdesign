@@ -11,8 +11,6 @@ var Calculation = require('Calculation'),
     View = require('mvc/View'),
     Util = require('util/Util');
 
-var _CALCULATION_MODE_INPUT = 'input',
-    _CALCULATION_MODE_OUTPUT = 'output';
 
 /**
  * This is a view that displays the the input object from the
@@ -609,11 +607,11 @@ var NEHRP2015InputView = function (params) {
       _resetDesignCodeCollection();
     }
 
-    if (_model.get('mode') === _CALCULATION_MODE_OUTPUT) {
-      _this.el.classList.add('input-view-' + _CALCULATION_MODE_OUTPUT);
+    if (_model.get('mode') === Calculation.MODE_OUTPUT) {
+      _this.el.classList.add('input-view-' + Calculation.MODE_OUTPUT);
       _renderOutputMode(_model.get('input'));
-    } else if (_model.get('mode') === _CALCULATION_MODE_INPUT) {
-      _this.el.classList.remove('input-view-' + _CALCULATION_MODE_OUTPUT);
+    } else if (_model.get('mode') === Calculation.MODE_INPUT) {
+      _this.el.classList.remove('input-view-' + Calculation.MODE_OUTPUT);
       _renderInputMode(_model.get('input'));
     }
   };

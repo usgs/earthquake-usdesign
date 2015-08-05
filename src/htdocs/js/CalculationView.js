@@ -26,6 +26,7 @@ var CalculationView = function (params) {
       _destroyCollection,
       _destroyLookupFactory,
       _destroyModel,
+      _input,
       _lookupFactory,
       _model,
 
@@ -66,6 +67,7 @@ var CalculationView = function (params) {
       _model = Calculation();
       _destroyModel = true;
     }
+    _input = _model.get('input');
 
     if (!_collection) {
       _collection = Collection([_model]);
@@ -90,6 +92,7 @@ var CalculationView = function (params) {
    */
   _bindEventListeners = function () {
     _this.el.addEventListener('click', _onViewClick);
+    _input.on('change', _this.render);
   };
 
   /**
@@ -205,6 +208,7 @@ var CalculationView = function (params) {
    */
   _unbindEventListeners = function () {
     _this.el.removeEventListener('click', _onViewClick);
+    _input.off('change', _this.render);
   };
 
 
@@ -234,6 +238,7 @@ var CalculationView = function (params) {
     _destroyModel = null;
     _lookupFactory = null;
     _model = null;
+    _input = null;
 
     _bindEventListeners = null;
     _onDeleteClick = null;

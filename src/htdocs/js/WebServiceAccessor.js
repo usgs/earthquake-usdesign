@@ -48,20 +48,28 @@ var WebServiceAccessor = function (params) {
    *          A Calculation Model with the input parameters set.
    * @param callback {function}
    *          The callback function that getResults will call on success.
-   *
+   * @param errback {function}
+   *          Callback function in case there are errors.
    * @return: {Calculation}
    *          Calculation Model filled with the input/output data.
    */
-  _this.getResults = function (calculation, callback) {
+  _this.getResults = function (calculation, callback, errback) {
     Xhr.ajax({
         url: _buildUrl(calculation),
         success: function(data) {
-          _updateCalculation(calculation, data);
+          try {
+            _updateCalculation(calculation, data);
 
-          if (callback) {
-            callback(calculation);
+            if (callback) {
+              callback(calculation);
+            }
+          } catch (e) {
+            if (errback) {
+              errback(e);
+            }
           }
-        }
+        },
+        error: errback
       });
   };
 
@@ -88,9 +96,12 @@ var WebServiceAccessor = function (params) {
         result;
 
     if (data.error !== undefined) {
+      calculation.set({
+        status: Calculation.STATUS_INVALID
+      });
       throw new Error(data.error +
-          ' Must specify design_code, site_class, risk_category' +
-          'latitude, longitude, and title; to retrive usdesign data.');
+          ' Must specify design_code, site_class, risk_category,' +
+          ' latitude, longitude, and title; to retreive usdesign data.');
     } else {
       input = calculation.get('input');
       output = calculation.get('output');
@@ -112,7 +123,10 @@ var WebServiceAccessor = function (params) {
       }
       result.set(clearResult);
 
-      calculation.set({mode: Calculation.MODE_OUTPUT});
+      calculation.set({
+        mode: Calculation.MODE_OUTPUT,
+        status: Calculation.STATUS_COMPLETE
+      });
     }
     return calculation;
   };

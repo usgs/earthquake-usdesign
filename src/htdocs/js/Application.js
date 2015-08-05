@@ -4,6 +4,7 @@ var ActionsView = require('ActionsView'),
     Calculation = require('Calculation'),
     NEHRP2015InputView = require('NEHRP2015InputView'),
     ReportView = require('ReportView'),
+    WebServiceAccessor = require('WebServiceAccessor'),
 
     LookupDataFactory = require('util/LookupDataFactory'),
 
@@ -15,14 +16,17 @@ var Application = function (params) {
 
       _actionsView,
       _collection,
+      _concurrentRequests,
       _destroyLookupFactory,
       _inputView,
       _lookupFactory,
       _model,
       _reportView,
+      _service,
 
       _initializeAttributes,
-      _initializeView;
+      _initializeView,
+      _onCalculate;
 
 
   _this = {
@@ -42,7 +46,9 @@ var Application = function (params) {
 
     _model = params.model;
     _collection = params.collection;
+    _concurrentRequests = params.concurrentRequests || 3;
     _lookupFactory = params.lookupFactory;
+    _service = params.service || WebServiceAccessor();
 
     // Make sure we have a model
     if (!_model) {
@@ -104,6 +110,7 @@ var Application = function (params) {
       el: _this.el.querySelector('.actions-view'),
       model: _model
     });
+    _actionsView.on('calculate', _onCalculate);
 
     _reportView = ReportView({
       collection: _collection,
@@ -112,6 +119,40 @@ var Application = function (params) {
     });
   };
 
+  /**
+   * "Calculate" event handler.
+   *
+   * Requests calculation for any models that have STATUS_READY.
+   */
+  _onCalculate = function () {
+    var next,
+        ready,
+        sent;
+
+    ready = [];
+    sent = [];
+    _collection.data().forEach(function (calc) {
+      var status = calc.get('status');
+      if (status === Calculation.STATUS_READY) {
+        ready.push(calc);
+      } else if (status === Calculation.STATUS_SENT) {
+        sent.push(calc);
+      }
+    });
+
+    while (
+        // there are calculations ready to send
+        ready.length > 0 &&
+        // there aren't too many active requests
+        sent.length < _concurrentRequests) {
+      next = ready.shift();
+      _service.getResults(next, _onCalculate, _onCalculate);
+      next.set({
+        'status': Calculation.STATUS_SENT
+      });
+      sent.push(next);
+    }
+  };
 
   _this.destroy = function () {
     _inputView.destroy();

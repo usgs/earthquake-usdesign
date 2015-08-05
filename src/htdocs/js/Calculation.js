@@ -6,11 +6,22 @@ var Collection = require('mvc/Collection'),
     Util = require('util/Util');
 
 
-var _CALCULATION_MODE_INPUT = 'input',
-    _CALCULATION_MODE_OUTPUT = 'output';
+var _MODE_INPUT = 'input',
+    _MODE_OUTPUT = 'output';
+
+
+var _STATUS_NEW = 'new',
+    _STATUS_INVALID = 'invalid',
+    _STATUS_READY = 'ready',
+    _STATUS_SENT = 'sent',
+    _STATUS_COMPLETE = 'complete';
+
 
 var _DEFAULTS = {
-  mode: _CALCULATION_MODE_INPUT,
+  mode: _MODE_INPUT,
+
+  status: _STATUS_NEW,
+
   input: {
     title: null,
     latitude: null,
@@ -75,7 +86,10 @@ var Calculation = function (params) {
   var _this,
       _initialize,
 
-      _generateId;
+      _input,
+
+      _generateId,
+      _updateStatus;
 
 
   _this = Model(params);
@@ -92,10 +106,12 @@ var Calculation = function (params) {
         input,
         mode,
         output,
-        result;
+        result,
+        status;
 
     id = _this.get('id');
     mode = _this.get('mode') || _DEFAULTS.mode;
+    status = _this.get('status') || _DEFAULTS.status;
     attributes = _this.get();
 
     input = Util.extend({}, _DEFAULTS.input, attributes.input);
@@ -115,7 +131,8 @@ var Calculation = function (params) {
       input: Model(input),
       output: Model(output),
       result: Model(result),
-      mode: mode
+      mode: mode,
+      status: status
     };
 
 
@@ -125,7 +142,9 @@ var Calculation = function (params) {
       attributes.id = _generateId();
     }
 
-    _this.set(attributes, {silent: true});
+    _input = attributes.input;
+    _input.on('change', _updateStatus);
+    _this.set(attributes);
   };
 
 
@@ -143,19 +162,73 @@ var Calculation = function (params) {
    *
    */
   _this.destroy = Util.compose(_this.destroy, function () {
+    _input.off('change', _updateStatus);
+    _input = null;
+
     _generateId = null;
+    _updateStatus = null;
 
     _initialize = null;
     _this = null;
   });
 
+  /**
+   * Check current input parameters and set calculation status.
+   *
+   * Does nothing when status is STATUS_COMPLETE or STATUS_SENT.
+   * Verifies all input parameters are specified and:
+   *   - if not null, sets STATUS_READY
+   *   - otherwise, sets STATUS_INVALID
+   */
+  _updateStatus = function () {
+    var input,
+        status;
+
+    status = _this.get('status');
+    if (status === _STATUS_COMPLETE || status === _STATUS_SENT) {
+      return;
+    }
+
+    input = _this.get('input').get();
+    if (input.title === null ||
+        input.latitude === null ||
+        input.longitude === null ||
+        input.design_code === null ||
+        input.risk_category === null ||
+        input.site_class === null) {
+      // if any are null, not ready
+      status = _STATUS_INVALID;
+      if (input.title === null &&
+          input.latitude === null &&
+          input.longitude === null &&
+          input.design_code === null &&
+          input.risk_category === null &&
+          input.site_class === null) {
+        // if all are null, new
+        status = _STATUS_NEW;
+      }
+    } else {
+      // otherwise, ready
+      status = _STATUS_READY;
+    }
+
+    _this.set({
+      status: status
+    });
+  };
 
   _initialize(params);
   params = null;
   return _this;
 };
 
-Calculation.MODE_INPUT = _CALCULATION_MODE_INPUT;
-Calculation.MODE_OUTPUT = _CALCULATION_MODE_OUTPUT;
+Calculation.MODE_INPUT = _MODE_INPUT;
+Calculation.MODE_OUTPUT = _MODE_OUTPUT;
+
+Calculation.STATUS_NEW = _STATUS_NEW;
+Calculation.STATUS_INVALID = _STATUS_INVALID;
+Calculation.STATUS_READY = _STATUS_READY;
+Calculation.STATUS_SENT = _STATUS_SENT;
+Calculation.STATUS_COMPLETE = _STATUS_COMPLETE;
 
 module.exports = Calculation;
