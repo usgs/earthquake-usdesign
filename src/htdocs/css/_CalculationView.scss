@@ -66,3 +66,12 @@
     color: #C00;
   }
 }
+
+.calculation-status {
+  bottom: 0.5em;
+  color: #999;
+  font-style: italic;
+  position: absolute;
+  right: 1em;
+  text-transform: capitalize;
+}
