@@ -29,6 +29,7 @@ var CalculationView = function (params) {
       _input,
       _lookupFactory,
       _model,
+      _statusClass,
 
       _bindEventListeners,
       _onDeleteClick,
@@ -62,6 +63,7 @@ var CalculationView = function (params) {
     _model = params.model;
     _collection = params.collection;
     _lookupFactory = params.lookupFactory;
+    _statusClass = null;
 
     if (!_model) {
       _model = Calculation();
@@ -146,6 +148,7 @@ var CalculationView = function (params) {
         markup,
         riskCategory,
         siteClass,
+        status,
         subtitle,
         title;
 
@@ -194,6 +197,19 @@ var CalculationView = function (params) {
         '<dd class="calculation-risk-category">', riskCategory, '</dd>',
       '</dl>'
     ];
+
+    status = _model.get('status');
+    // set status class on view
+    if (_statusClass !== null) {
+      _this.el.classList.remove(_statusClass);
+    }
+    _statusClass = 'status-' + status;
+    _this.el.classList.add(_statusClass);
+    // display status
+    markup.push(
+        '<span class="calculation-status ' + _statusClass + '">' +
+          status +
+        '</span>');
 
     if (_collection.get(_model.get('id')) !== null) {
       markup.push('<button class="calculation-delete">Delete</button>');
