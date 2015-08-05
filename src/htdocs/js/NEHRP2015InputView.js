@@ -258,7 +258,7 @@ var NEHRP2015InputView = function (params) {
       el: _siteClassEl,
       includeBlankOption: true,
       format: function (model) {
-        return model.get('name');
+        return model.get('value') + ': ' + model.get('name');
       }
     });
 
