@@ -204,7 +204,7 @@ var NEHRPCalc2015 = function (params) {
     if (s1d === null) {
       metadata = calculation.get('output').get('metadata');
       geomeanS1d = result.get('geomean_s1d');
-      pgdv841 = metadata.get('percentil_s1') * geomeanS1d;
+      pgdv841 = metadata.get('percentile_s1') * geomeanS1d;
       maxD841 = metadata.get('max_direction_s1') * pgdv841;
 
       s1d = Math.max(maxD841, metadata.get('deterministic_floor_s1'));
