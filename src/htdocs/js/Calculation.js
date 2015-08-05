@@ -179,21 +179,32 @@ var Calculation = function (params) {
       return;
     }
 
-    input = _this.get('input');
+    input = _this.get('input').get();
     if (input.title === null ||
         input.latitude === null ||
         input.longitude === null ||
         input.design_code === null ||
         input.risk_category === null ||
         input.site_class === null) {
-      _this.set({
-        status: _STATUS_INVALID
-      });
+      // if any are null, not ready
+      status = _STATUS_INVALID;
+      if (input.title === null &&
+          input.latitude === null &&
+          input.longitude === null &&
+          input.design_code === null &&
+          input.risk_category === null &&
+          input.site_class === null) {
+        // if all are null, new
+        status = _STATUS_NEW;
+      }
     } else {
-      _this.set({
-        status: _STATUS_READY
-      });
+      // otherwise, ready
+      status = _STATUS_READY;
     }
+
+    _this.set({
+      status: status
+    });
   };
 
   _initialize(params);
