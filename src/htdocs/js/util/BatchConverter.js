@@ -12,6 +12,10 @@ var __strip_tags = function (str) {
   return str.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 };
 
+var __format_float = function (float) {
+  return float.toFixed(5);
+};
+
 var _DEFAULTS = {
   greedyTitle: true, // title is all remaining columns
   headers: {
@@ -96,7 +100,7 @@ var BatchConverter = function (params) {
       }
     });
 
-    if (_headers.title.index === fields.length) {
+    if (_headers.title.index === (fields.length - 1)) {
       _greedyTitle = true;
     } else {
       _greedyTitle = false;
@@ -105,9 +109,11 @@ var BatchConverter = function (params) {
 
   _toCalculation = function (csv) {
     var fields,
-        input;
+        input,
+        numFields;
 
     fields = csv.split(',');
+    numFields = fields.length;
 
     input = {
       latitude: null,
@@ -130,13 +136,15 @@ var BatchConverter = function (params) {
         index = header.index;
         format = header.format;
 
-        if (_greedyTitle && column === 'title') {
-          value = format(fields.slice(index).join(', '));
+        if (numFields <= index) {
+          throw new Error('Input missing field "' + column + '".');
+        } else if (_greedyTitle && column === 'title') {
+          value = format(fields.slice(index).join(','));
         } else {
           value = format(header.format(fields[index]));
         }
 
-        if (format && typeof format === 'functin') {
+        if (format && typeof format === 'function') {
           value = format(value);
         }
 
@@ -152,12 +160,15 @@ var BatchConverter = function (params) {
         csv,
         input,
         meta,
-        output;
+        output,
+        result;
 
     calc = _getCalculator(model);
 
+    result = model.get('result');
     input = model.get('input');
     output = model.get('output');
+
     meta = output.get('metadata');
 
     csv = [
@@ -167,20 +178,39 @@ var BatchConverter = function (params) {
       '"' + input.get('title').replace(/"/g, '\\"') + '"',
 
       // Outputs
-      meta.get('crs'), meta.get('cr1'),
-      calc.getSsuh(model), calc.getS1uh(model),
-      calc.getSsd(model), calc.getS1d(model),
+      __format_float(result.get('crs')), __format_float(result.get('cr1')),
+      __format_float(calc.getSsuh(model)), __format_float(calc.getS1uh(model)),
+      __format_float(calc.getSsd(model)), __format_float(calc.getS1d(model)),
 
-      calc.getSs(model), calc.getS1(model), calc.getPga(model),
+      __format_float(calc.getSs(model)), __format_float(calc.getS1(model)),
+      __format_float(calc.getPga(model)),
 
-      calc.getFa(model), calc.getFv(model), calc.getFpga(model),
-      calc.getSms(model), calc.getSm1(model), calc.getPgam(model),
-      calc.getSds(model), calc.getSd1(model), output.get('tl')
+      __format_float(calc.getFa(model)), __format_float(calc.getFv(model)),
+      __format_float(calc.getFpga(model)),
+
+      __format_float(calc.getSms(model)), __format_float(calc.getSm1(model)),
+      __format_float(calc.getPgam(model)),
+
+      __format_float(calc.getSds(model)), __format_float(calc.getSd1(model)),
+      output.get('tl')
     ];
+
+    return csv.join(',');
   };
 
 
   _this.destroy = function () {
+    _greedyTitle = null;
+    _headers = null;
+
+    _getCalculator = null;
+    _getHeaders = null;
+    _isHeaderLine = null;
+    _setHeaders = null;
+    _toCalculation = null;
+    _toCSV = null;
+
+
     _initialize = null;
     _this = null;
   };
@@ -199,9 +229,10 @@ var BatchConverter = function (params) {
         lines,
         result;
 
+    result = [];
     lines = content.split('\n');
 
-    lines.forEach(function (line) {
+    lines.forEach(function (line, lineNum) {
       line = line.trim();
 
       if (!line) {
@@ -213,12 +244,17 @@ var BatchConverter = function (params) {
           calculation = _toCalculation(line);
           if (calculation) {
             result.push(calculation);
+          } else {
+            throw new Error('Failed to parse calculation for line #' +
+                lineNum + '.');
           }
         } catch (e) {
           _this.trigger('error', e.message);
         }
       }
     });
+
+    return result;
   };
 
 
