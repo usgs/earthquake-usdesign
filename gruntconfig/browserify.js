@@ -35,6 +35,7 @@ var browerify = {
     browserifyOptions: {
       debug: true,
       paths: [
+        CWD,
         JSDIR,
         CWD + '/node_modules/hazdev-webutils/src',
         CWD + '/node_modules/hazdev-accordion/src',
@@ -70,7 +71,10 @@ var browerify = {
   // the bundle of test suites
   test: {
     src: [config.test + '/js/test.js'],
-    dest: config.build + '/' + config.test + '/js/test.js'
+    dest: config.build + '/' + config.test + '/js/test.js',
+    options: {
+      external: EXPORTS
+    }
   },
 
   // bundle leaflet externally
