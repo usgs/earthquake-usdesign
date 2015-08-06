@@ -17,6 +17,7 @@ var EXPORTS = [
   JSDIR + '/WebServiceAccessor.js:WebServiceAccessor',
   JSDIR + '/NEHRP2015InputView.js:NEHRP2015InputView',
 
+  JSDIR + '/util/BatchConverter.js:util/BatchConverter',
   JSDIR + '/util/D3GraphView.js:util/D3GraphView',
   JSDIR + '/util/LookupDataFactory.js:util/LookupDataFactory',
   JSDIR + '/util/SiteAmplification.js:util/SiteAmplification',
