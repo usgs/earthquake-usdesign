@@ -122,8 +122,8 @@ var Nehrp2015Section_Summary = function (params) {
     spectraDiv.appendChild(_smSpectrum.el);
     spectraDiv.appendChild(_sdSpectrum.el);
 
-    _smSpectrum.model.set({data: result.get('smSpectrum')||[]});
-    _sdSpectrum.model.set({data: result.get('sdSpectrum')||[]});
+    _smSpectrum.model.set({data: result.get('smSpectrum')||[]}, {silent: true});
+    _sdSpectrum.model.set({data: result.get('sdSpectrum')||[]}, {silent: true});
 
     return args;
   });

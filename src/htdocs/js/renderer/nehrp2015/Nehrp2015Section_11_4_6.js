@@ -64,7 +64,7 @@ var Nehrp2015Section_Section_11_4_6 = function (params) {
       data: result.get('smSpectrum') || [],
       ss: result.get('sms'),
       s1: result.get('sm1')
-    });
+    }, {silent: true});
 
     return args;
   });
