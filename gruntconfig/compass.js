@@ -10,7 +10,8 @@ var compass = {
       environment: 'development',
       importPath: [
         'node_modules/hazdev-accordion/src',
-        'node_modules/hazdev-location-view/src'
+        'node_modules/hazdev-location-view/src',
+        'node_modules/hazdev-webutils/src'
       ]
     }
   }
