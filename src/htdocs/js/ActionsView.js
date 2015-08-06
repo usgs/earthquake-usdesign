@@ -25,6 +25,7 @@ var ActionsView = function (params) {
       _btnCalculate,
       _btnEdit,
       _btnNew,
+      _btnPrint,
       _collection,
       _collectionView,
       _converter,
@@ -40,6 +41,7 @@ var ActionsView = function (params) {
       _onEditClick,
       _onModelChange,
       _onNewClick,
+      _onPrintClick,
       _setRenderMode,
       _unbindEventHandlers;
 
@@ -73,6 +75,14 @@ var ActionsView = function (params) {
     _btnEdit.addEventListener('click', _onEditClick);
     _btnNew.addEventListener('click', _onNewClick);
     _btnBatch.addEventListener('click', _onBatchClick);
+    _btnPrint.addEventListener('click', _onPrintClick);
+
+    // Update _btnPrint title attribute to be OS specfic (cmd-p vs ctrl-p)
+    if (navigator.userAgent.indexOf('Mac OS X') !== -1) {
+      _btnPrint.setAttribute('title', 'Cmd-p');
+    } else {
+      _btnPrint.setAttribute('title', 'Ctrl-p');
+    }
 
     _collection.on('select', _onCollectionSelect);
     _collection.on('deselect', _onCollectionDeselect);
@@ -99,7 +109,8 @@ var ActionsView = function (params) {
           '>New</button>',
       '<button class="actions-view-batch" ',
           'title="Click to upload a CSV batch file."',
-          '>Upload Batch</button>'
+          '>Upload Batch</button>',
+      '<button class="actions-view-print">Print</button>'
     ].join('');
 
     _collectionView = CollectionView({
@@ -128,6 +139,7 @@ var ActionsView = function (params) {
     _btnEdit = _this.el.querySelector('.actions-view-edit');
     _btnNew = _this.el.querySelector('.actions-view-new');
     _btnBatch = _this.el.querySelector('.actions-view-batch');
+    _btnPrint = _this.el.querySelector('.actions-view-print');
   };
 
   _onBatchClick = function () {
@@ -200,6 +212,13 @@ var ActionsView = function (params) {
     _collection.select(calculation);
   };
 
+  /**
+   * Shows the browser's print dialog, triggered on "print" button click.
+   */
+  _onPrintClick = function () {
+    window.print();
+  };
+
   _setRenderMode = function (mode) {
     var classList;
 
@@ -219,6 +238,7 @@ var ActionsView = function (params) {
     _btnEdit.removeEventListener('click', _onEditClick);
     _btnNew.removeEventListener('click', _onNewClick);
     _btnBatch.removeEventListener('click', _onBatchClick);
+    _btnPrint.removeEventListener('click', _onPrintClick);
 
     _collection.off('select', _onCollectionSelect);
     _collection.off('deselect', _onCollectionDeselect);
