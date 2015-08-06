@@ -64,6 +64,7 @@ if (!Function.prototype.bind) {
   require('./spec/CalculationViewTest');
   require('./spec/NEHRP2015InputViewTest');
 
+  require('./spec/util/BatchConverterTest');
   require('./spec/util/D3GraphView');
   require('./spec/util/LookupDataFactoryTest');
   require('./spec/util/SiteAmplificationTest');
