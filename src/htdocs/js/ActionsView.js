@@ -3,6 +3,8 @@
 var Calculation = require('Calculation'),
     CalculationView = require('CalculationView'),
 
+    BatchConverter = require('util/BatchConverter'),
+
     Accordion = require('accordion/Accordion'),
 
     Collection = require('mvc/Collection'),
@@ -25,6 +27,7 @@ var ActionsView = function (params) {
       _btnNew,
       _collection,
       _collectionView,
+      _converter,
       _destroyCollection,
 
       _bindEventHandlers,
@@ -50,6 +53,8 @@ var ActionsView = function (params) {
     _batchLoader = FileInputView({
       uploadCallback: _onBatchUpload
     });
+
+    _converter = BatchConverter();
 
     if (!_collection) {
       _collection = Collection([]);
@@ -130,9 +135,6 @@ var ActionsView = function (params) {
   };
 
   _onBatchUpload = function (files) {
-    var content,
-        lines;
-
     // Clean up the grabage
     _collection.data().slice(0).forEach(function (calculation) {
       var status = calculation.get('status');
@@ -143,40 +145,20 @@ var ActionsView = function (params) {
       }
     });
 
-    // TODO :: Use batch parser to parse each file into calculations,
-    //         add each calculation as it is parsed into the collection
     files.forEach(function (file) {
+      var calculations,
+          content;
+
       content = file.get('content');
-      lines = content.split('\n');
+      calculations = _converter.toCalculation(content);
 
-      lines.map(function (line) {
-        if (line.trim() === '') {
-          return null;
-        }
-
-        console.log(line);
-        var info;
-
-        info = line.split(',');
-
-        return Calculation({
-          status: Calculation.STATUS_READY,
-          input: {
-            title: info[4],
-            latitude: info[0],
-            longitude: info[1],
-            design_code: 1,
-            site_class: info[2],
-            risk_category: info[3]
-          }
-        });
-      }).forEach(function (calculation) {
-        if (calculation !== null) {
-          _collection.add(calculation);
-          _collection.select(calculation);
-        }
-      });
+      if (calculations.length) {
+        _collection.add.apply(_collection, calculations);
+        _collection.select(calculations[calculations.length -1]);
+      }
     });
+
+    _onCalculateClick();
   };
 
   _onCalculateClick = function () {
