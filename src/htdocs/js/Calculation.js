@@ -102,6 +102,7 @@ var Calculation = function (params) {
    */
   _initialize = function (/*params*/) {
     var attributes,
+        computeStatus,
         id,
         input,
         mode,
@@ -111,8 +112,13 @@ var Calculation = function (params) {
 
     id = _this.get('id');
     mode = _this.get('mode') || _DEFAULTS.mode;
-    status = _this.get('status') || _DEFAULTS.status;
+    status = _this.get('status');
     attributes = _this.get();
+
+    if (status === null) {
+      status = _DEFAULTS.status;
+      computeStatus = true;
+    }
 
     input = Util.extend({}, _DEFAULTS.input, attributes.input);
     output = Util.extend({}, _DEFAULTS.output, attributes.output);
@@ -145,6 +151,10 @@ var Calculation = function (params) {
     _input = attributes.input;
     _input.on('change', _updateStatus);
     _this.set(attributes);
+
+    if (computeStatus) {
+      _updateStatus();
+    }
   };
 
 
