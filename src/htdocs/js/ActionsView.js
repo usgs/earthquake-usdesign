@@ -77,13 +77,6 @@ var ActionsView = function (params) {
     _btnBatch.addEventListener('click', _onBatchClick);
     _btnPrint.addEventListener('click', _onPrintClick);
 
-    // Update _btnPrint title attribute to be OS specfic (cmd-p vs ctrl-p)
-    if (navigator.userAgent.indexOf('Mac OS X') !== -1) {
-      _btnPrint.setAttribute('title', 'Cmd-p');
-    } else {
-      _btnPrint.setAttribute('title', 'Ctrl-p');
-    }
-
     _collection.on('select', _onCollectionSelect);
     _collection.on('deselect', _onCollectionDeselect);
 
@@ -134,12 +127,18 @@ var ActionsView = function (params) {
     _this.el.querySelector('.accordion-toggle').classList.add(
         'actions-view-actions');
 
-
     _btnCalculate = _this.el.querySelector('.actions-view-calculate');
     _btnEdit = _this.el.querySelector('.actions-view-edit');
     _btnNew = _this.el.querySelector('.actions-view-new');
     _btnBatch = _this.el.querySelector('.actions-view-batch');
     _btnPrint = _this.el.querySelector('.actions-view-print');
+
+    // Update _btnPrint title attribute to be OS specfic (cmd-p vs ctrl-p)
+    if (navigator.userAgent.toUpperCase().indexOf('MAC') !== -1) {
+      _btnPrint.setAttribute('title', 'Cmd-p');
+    } else {
+      _btnPrint.setAttribute('title', 'Ctrl-p');
+    }
   };
 
   _onBatchClick = function () {
