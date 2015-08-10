@@ -42,7 +42,8 @@
   }
 
   &.actions-view-mode-input .actions-view-edit,
-  &.actions-view-mode-input .actions-view-new {
+  &.actions-view-mode-input .actions-view-new,
+  &.actions-view-mode-input .actions-view-print {
     display: none;
   }
 }
