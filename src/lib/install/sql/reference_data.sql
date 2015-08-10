@@ -58,7 +58,7 @@ INSERT INTO site_class (
   (3, 'C', 'Very Dense Soil and Soft Rock', 3),
   (4, 'D', 'Stiff Soil', 4),
   (5, 'E', 'Soft Clay Soil', 5),
-  (6, 'U', 'Undeterminded', 6);
+  (6, 'U', 'Undetermined', 6);
 
 -- Risk category reference data
 INSERT INTO risk_category (
