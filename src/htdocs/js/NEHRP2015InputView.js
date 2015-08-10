@@ -537,7 +537,7 @@ var NEHRP2015InputView = function (params) {
     designCodeEl.innerHTML = designCode ?
         designCode.get('name') : 'No Design Code';
     siteClassEl.innerHTML = siteClass ?
-        siteClass.get('name') : 'No Site Class';
+        siteClass.get('value') + ': ' + siteClass.get('name') : 'No Site Class';
     riskCategoryEl.innerHTML = riskCategory ?
         riskCategory.get('name') : 'No Risk Category';
 
