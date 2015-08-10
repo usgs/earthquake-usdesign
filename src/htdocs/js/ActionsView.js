@@ -260,6 +260,7 @@ var ActionsView = function (params) {
     _btnCalculate = null;
     _btnEdit = null;
     _btnNew = null;
+    _btnPrint = null;
     _collection = null;
     _destroyCollection = null;
 
@@ -272,6 +273,7 @@ var ActionsView = function (params) {
     _onCollectionSelect = null;
     _onEditClick = null;
     _onNewClick = null;
+    _onPrintClick = null;
     _onModelChange = null;
     _setRenderMode = null;
     _unbindEventHandlers = null;
