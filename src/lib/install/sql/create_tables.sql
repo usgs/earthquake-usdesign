@@ -11,6 +11,7 @@
  *  - metadata
  *  - region
  *  - data
+ *  - tl
  */
 
 CREATE TABLE hazard_basis (
@@ -91,4 +92,11 @@ CREATE TABLE data (
   geomean_pgad NUMERIC
 );
 
+CREATE TABLE tl (
+  id INTEGER PRIMARY KEY,
+  value INTEGER,
+  shape GEOGRAPHY(GEOMETRY, 4326)
+);
+
 CREATE UNIQUE INDEX data_location_index ON data (region_id, latitude, longitude);
+CREATE INDEX tl_shape_index ON tl USING GIST (shape);
