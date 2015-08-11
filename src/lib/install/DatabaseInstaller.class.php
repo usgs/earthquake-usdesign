@@ -76,8 +76,8 @@ class DatabaseInstaller {
   public function run ($statements) {
     // make sure connected
     $this->connect();
+    $this->dbh->exec('SET search_path TO ' . $this->schema. ',public');
 
-    // Remove /* */ comments
     $statements = preg_replace('#/\*.*\*/#', '', $statements);
     // split on semicolons that are outside of single quotes
     // http://stackoverflow.com/questions/21105360/regex-find-comma-not-inside-quotes
