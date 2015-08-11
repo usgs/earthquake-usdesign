@@ -215,7 +215,6 @@ var Nehrp2015Section_Section_11_4_1 = function (params) {
       _baseUrl,
       _figures,
 
-      _getFigure,
       _getFigures;
 
 
@@ -225,19 +224,6 @@ var Nehrp2015Section_Section_11_4_1 = function (params) {
   _initialize = function (params) {
     _baseUrl = params.baseUrl;
     _figures = params.figures;
-  };
-
-
-  _getFigure = function (region, figure) {
-    var figures;
-
-    figures = _figures[region];
-
-    if (figures && figures.hasOwnProperty(figure)) {
-      return _baseUrl + '/' + figures[figure];
-    } else {
-      return '#';
-    }
   };
 
   _getFigures = function (region) {
