@@ -9,6 +9,7 @@ var Calculation = require('Calculation'),
 
     Collection = require('mvc/Collection'),
     CollectionView = require('mvc/CollectionView'),
+    DownloadView = require('mvc/DownloadView'),
     FileInputView = require('mvc/FileInputView'),
     View = require('mvc/View'),
 
@@ -23,6 +24,7 @@ var ActionsView = function (params) {
       _batchLoader,
       _btnBatch,
       _btnCalculate,
+      _btnDownload,
       _btnEdit,
       _btnNew,
       _btnPrint,
@@ -38,6 +40,7 @@ var ActionsView = function (params) {
       _onCalculateClick,
       _onCollectionDeselect,
       _onCollectionSelect,
+      _onDownloadClick,
       _onEditClick,
       _onModelChange,
       _onNewClick,
@@ -75,6 +78,7 @@ var ActionsView = function (params) {
     _btnEdit.addEventListener('click', _onEditClick);
     _btnNew.addEventListener('click', _onNewClick);
     _btnBatch.addEventListener('click', _onBatchClick);
+    _btnDownload.addEventListener('click', _onDownloadClick);
     _btnPrint.addEventListener('click', _onPrintClick);
 
     _collection.on('select', _onCollectionSelect);
@@ -103,6 +107,9 @@ var ActionsView = function (params) {
       '<button class="actions-view-batch" ',
           'title="Click to upload a CSV batch file."',
           '>Upload Batch</button>',
+      '<button class="actions-view-download" ',
+          'title="Click to donwload results as CSV"',
+          '>Download Results</button>',
       '<button class="actions-view-print">Print</button>'
     ].join('');
 
@@ -131,6 +138,7 @@ var ActionsView = function (params) {
     _btnEdit = _this.el.querySelector('.actions-view-edit');
     _btnNew = _this.el.querySelector('.actions-view-new');
     _btnBatch = _this.el.querySelector('.actions-view-batch');
+    _btnDownload = _this.el.querySelector('.actions-view-download');
     _btnPrint = _this.el.querySelector('.actions-view-print');
 
     // Update _btnPrint title attribute to be OS specfic (cmd-p vs ctrl-p)
@@ -192,6 +200,16 @@ var ActionsView = function (params) {
     }
   };
 
+  _onDownloadClick = function () {
+    DownloadView({
+      collection: _collection,
+      format: function (collection) {
+        return _converter.toCSV(collection.data().slice(0));
+      },
+      title: 'Download Results'
+    }).show();
+  };
+
   _onEditClick = function () {
     if (_this.model) {
       _this.model.set({'mode': Calculation.MODE_INPUT});
@@ -237,6 +255,7 @@ var ActionsView = function (params) {
     _btnEdit.removeEventListener('click', _onEditClick);
     _btnNew.removeEventListener('click', _onNewClick);
     _btnBatch.removeEventListener('click', _onBatchClick);
+    _btnDownload.removeEventListener('click', _onDownloadClick);
     _btnPrint.removeEventListener('click', _onPrintClick);
 
     _collection.off('select', _onCollectionSelect);
