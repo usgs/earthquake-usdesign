@@ -41,13 +41,59 @@
     display: none;
   }
 
-  &.actions-view-mode-input .actions-view-edit,
-  &.actions-view-mode-input .actions-view-new,
-  &.actions-view-mode-input .actions-view-print {
+  &.actions-view-mode-input .actions-view-edit {
     display: none;
   }
 }
 
 .accordion > .actions-view-actions:hover {
   background: #f4f4f4;
+}
+
+.actions-view-calculate,
+.actions-view-edit {
+  width: 7em;
+}
+
+.actions-view-new {
+  margin-left: 4em;
+}
+
+/**
+ * Make the link look like a button. Normally, no; but the link has it's
+ * advantages in this case.
+ */
+.actions-view-download {
+  display: inline-block;
+  padding: 0 1em;
+  margin: 4px 2px;
+  color: #333;
+  background: #f8f8f8;
+  background-image: linear-gradient(to bottom,rgba(255,255,255,.05) 0,rgba(0,0,0,.05) 100%);
+  text-align: center;
+  text-shadow: 0 1px 1px #fff;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 2px;
+  border: 0;
+  box-shadow: rgba(0,0,0,0.15) 0 0 0 1px inset;
+  font-size: .8125em;
+  vertical-align: top;
+  font-family: 'helvetica neue', aria, sans-serif;
+  line-height: 3rem;
+  height: 3rem;
+
+  &:hover {
+    background-image: linear-gradient(to bottom, rgba(255,255,255,0.1) 0, rgba(0,0,0,0.1) 100%);
+    text-shadow: none;
+    color: #000;
+  }
+
+  &.disabled {
+    background: #e8e8e8;
+    color: #999;
+    text-shadow: none;
+    cursor: text;
+    box-shadow: none;
+  }
 }

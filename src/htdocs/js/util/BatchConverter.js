@@ -41,7 +41,8 @@ var BatchConverter = function (params) {
       _isHeaderLine,
       _setHeaders,
       _toCalculation,
-      _toCSV;
+      _toDelimitedValue,
+      _toDelimitedValues;
 
 
   _this = Events();
@@ -157,9 +158,9 @@ var BatchConverter = function (params) {
     return Calculation({input: input});
   };
 
-  _toCSV = function (model) {
+  _toDelimitedValue = function (model, delimiter) {
     var calc,
-        csv,
+        value,
         input,
         meta,
         output,
@@ -173,7 +174,7 @@ var BatchConverter = function (params) {
 
     meta = output.get('metadata');
 
-    csv = [
+    value = [
       // Inputs
       input.get('latitude'), input.get('longitude'), input.get('site_class'),
       input.get('risk_category'), input.get('design_code'),
@@ -197,7 +198,25 @@ var BatchConverter = function (params) {
       output.get('tl')
     ];
 
-    return csv.join(',');
+    return value.join(delimiter);
+  };
+
+  _toDelimitedValues = function (calculations, delimiter) {
+    var values;
+
+    values = [_getHeaders()];
+    delimiter = delimiter || ',';
+
+    calculations.forEach(function (calculation) {
+      if (calculation.get('status') !== Calculation.STATUS_COMPLETE) {
+        // TODO :: Trigger an error ?
+        return; // Skip calculations that are not complete
+      }
+
+      values.push(_toDelimitedValue(calculation, delimiter));
+    });
+
+    return values.join('\n');
   };
 
 
@@ -211,7 +230,8 @@ var BatchConverter = function (params) {
     _isHeaderLine = null;
     _setHeaders = null;
     _toCalculation = null;
-    _toCSV = null;
+    _toDelimitedValue = null;
+    _toDelimitedValues = null;
 
 
     _initialize = null;
@@ -262,20 +282,11 @@ var BatchConverter = function (params) {
 
 
   _this.toCSV = function (calculations) {
-    var csv;
+    return _toDelimitedValues(calculations, ',');
+  };
 
-    csv = [_getHeaders()];
-
-    calculations.forEach(function (calculation) {
-      if (calculation.get('status') !== Calculation.STATUS_COMPLETE) {
-        // TODO :: Trigger an error ?
-        return; // Skip calculations that are not complete
-      }
-
-      csv.push(_toCSV(calculation));
-    });
-
-    return csv.join('\n');
+  _this.toTSV = function (calculations) {
+    return _toDelimitedValues(calculations, '\t');
   };
 
 

@@ -9,8 +9,8 @@ var Calculation = require('Calculation'),
 
     Collection = require('mvc/Collection'),
     CollectionView = require('mvc/CollectionView'),
-    DownloadView = require('mvc/DownloadView'),
     FileInputView = require('mvc/FileInputView'),
+    ModalView = require('mvc/ModalView'),
     View = require('mvc/View'),
 
     Util = require('util/Util');
@@ -104,12 +104,12 @@ var ActionsView = function (params) {
       '<button class="actions-view-new" ',
           'title="Click to create a new calculation."',
           '>New</button>',
-      '<button class="actions-view-batch" ',
+      '<button class="actions-view-upload" ',
           'title="Click to upload a CSV batch file."',
-          '>Upload Batch</button>',
-      '<button class="actions-view-download" ',
+          '>Upload</button>',
+      '<a href="#" class="actions-view-download" ',
           'title="Click to donwload results as CSV"',
-          '>Download Results</button>',
+          '>Download</a>',
       '<button class="actions-view-print">Print</button>'
     ].join('');
 
@@ -137,7 +137,7 @@ var ActionsView = function (params) {
     _btnCalculate = _this.el.querySelector('.actions-view-calculate');
     _btnEdit = _this.el.querySelector('.actions-view-edit');
     _btnNew = _this.el.querySelector('.actions-view-new');
-    _btnBatch = _this.el.querySelector('.actions-view-batch');
+    _btnBatch = _this.el.querySelector('.actions-view-upload');
     _btnDownload = _this.el.querySelector('.actions-view-download');
     _btnPrint = _this.el.querySelector('.actions-view-print');
 
@@ -200,14 +200,26 @@ var ActionsView = function (params) {
     }
   };
 
-  _onDownloadClick = function () {
-    DownloadView({
-      collection: _collection,
-      format: function (collection) {
-        return _converter.toCSV(collection.data().slice(0));
-      },
-      title: 'Download Results'
-    }).show();
+  _onDownloadClick = function (evt) {
+    var results;
+
+    results = _collection.data().filter(function (calculation) {
+      return calculation.get('status') === Calculation.STATUS_COMPLETE;
+    });
+
+    if (results.length === 0) {
+      // Some calculations, but none ready for download; show error and quit
+      ModalView('<p>No calculations ready for download.</p>', {
+        title: 'Download Error',
+        classes: ['modal-warning']
+      }).show();
+
+      evt.preventDefault();
+      return false;
+    }
+
+    _btnDownload.setAttribute('href', 'data:text/csv,' +
+        window.escape(_converter.toCSV(results)));
   };
 
   _onEditClick = function () {
