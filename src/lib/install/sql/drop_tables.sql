@@ -1,6 +1,6 @@
 /* drop table statements for schema */
 
-/* 
+/*
  * Tables:
  *  - hazard_basis
  *  - design_code
@@ -17,6 +17,7 @@
 DROP INDEX IF EXISTS data_location_index;
 
 /* Tables */
+DROP TABLE IF EXISTS tl;
 DROP TABLE IF EXISTS data;
 DROP TABLE IF EXISTS region;
 DROP TABLE IF EXISTS metadata;
