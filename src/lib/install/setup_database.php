@@ -32,6 +32,7 @@ $defaultScriptDir = implode(DIRECTORY_SEPARATOR, array(
 
 $dbInstaller = new DatabaseInstaller($DB_DSN, $username, $password,
     $CONFIG['DB_SCHEMA']);
+$dbInstaller->enablePostgis();
 
 try {
   echo PHP_EOL;
@@ -60,6 +61,11 @@ try {
       $dbInstaller->runScript($createTablesScript);
       echo ' success!' . PHP_EOL . PHP_EOL;
 
+      // Enable postgis
+      $answer = promptYesNo('Would you like to enable postgis?', false);
+      if ($answer) {
+        $dbInstaller->enablePostgis();
+      }
 
       // ----------------------------------------------------------------------
       // Load Reference Data
