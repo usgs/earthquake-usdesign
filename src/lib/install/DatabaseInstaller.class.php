@@ -76,7 +76,7 @@ class DatabaseInstaller {
   public function run ($statements) {
     // make sure connected
     $this->connect();
-    $this->dbh->exec('SET search_path TO ' . $this->schema. ',public');
+    $this->dbh->exec('SET search_path TO ' . $this->schema . ',public');
 
     $statements = preg_replace('#/\*.*\*/#', '', $statements);
     // split on semicolons that are outside of single quotes
