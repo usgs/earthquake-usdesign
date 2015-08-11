@@ -119,7 +119,7 @@ var BatchConverter = function (params) {
       latitude: null,
       longitude: null,
       site_class: null,
-      risk_cateogory: null,
+      risk_category: null,
       design_code: null,
       title: null
     };
