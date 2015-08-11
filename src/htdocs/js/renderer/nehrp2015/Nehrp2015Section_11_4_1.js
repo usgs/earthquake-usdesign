@@ -10,51 +10,200 @@ var Section = require('renderer/Section'),
 var _DEFAULTS = {
   classes: ['section-11-4-1'],
   nodeType: 'section',
-  baseUrl: 'http://earthquake.usgs.gov/hazards/designmaps/downloads/pdfs',
-// 1 = conus, 2 = amsam, 3 = guam, 5 = pr
+  baseUrl: 'ftp://ftpint.cr.usgs.gov/pub/cr/co/golden/Luco/2015nehrp/maps',
+  // 1 = conus, 2 = amsam, 3 = guam, 5 = pr
   figures: {
     // CONUS
-    1: {
-      '22-1': '2009_NEHRP_Figure_22-1-page1.pdf',
-      '22-2': '2009_NEHRP_Figure_22-2-page1.pdf',
-      '22-3': '2009_NEHRP_Figure_22-3-page1.pdf',
-      '22-4': '2009_NEHRP_Figure_22-4-page1.pdf',
-      '22-5': '2009_NEHRP_Figure_22-5-page1.pdf',
-      '22-6': '2009_NEHRP_Figure_22-6-page1.pdf'
-    },
+    1: [
+      {
+        'pdf': 'Figure22-1(2_pages).pdf',
+        'text': 'FIGURE 22-1 S<sub>S</sub> Risk-Targeted Maximum Considered ' +
+                'Earthquake (MCE<sub>R</sub>) Ground Motion Parameter for ' +
+                'the Conterminous United States for 0.2 s Spectral Response ' +
+                'Acceleration (5% of Critical Damping), Site Class B.'
+      },
+      {
+        'pdf': 'Figure22-2(2_pages).pdf',
+        'text': 'FIGURE 22-2 S<sub>1</sub> Risk-Targeted Maximum Considered ' +
+                'Earthquake (MCE<sub>R</sub>) Ground Motion Parameter for ' +
+                'the Conterminous United States for 1.0 s Spectral Response ' +
+                'Acceleration (5% of Critical Damping), Site Class B.'
+      },
+      {
+        'pdf': 'Figure22-9(2_pages).pdf',
+        'text': 'FIGURE 22-9 Maximum Considered Earthquake Geometric Mean ' +
+                '(MCE<sub>G</sub>) PGA, %g, Site Class B for the ' +
+                'Conterminous United States.'
+      },
+      {
+        'pdf': 'Figure22-14(2_pages).pdf',
+        'text': 'FIGURE 22-14 Mapped Long-Period Transition Period, ' +
+                'T<sub>L</sub> (s), for the Conterminous United States.'
+      },
+      {
+        'pdf': 'Figure22-18(3_pages).pdf',
+        'text': 'FIGURE 22-18 Mapped Risk Coefficient at 0.2 s Spectral ' +
+                'Response Period, C<sub>RS</sub>.'
+      },
+      {
+        'pdf': 'Figure22-19(3_pages).pdf',
+        'text': 'FIGURE 22-19 Mapped Risk Coefficient at 1.0 s Spectral ' +
+                'Response Period, C<sub>R1</sub>'
+      }
+    ],
     // American Samoa
-    2: {
-    },
+    2: [
+      {
+        'pdf': 'Figure22-8.pdf',
+        'text': 'FIGURE 22-8 S<sub>S</sub> and S<sub>1</sub> Risk-Targeted ' +
+                'Maximum Considered Earthquake (MCE<sub>R</sub>) Ground ' +
+                'Motion Parameter for American Samoa for 0.2 and 1.0 s ' +
+                'Spectral Response Acceleration (5% of Critical Damping), ' +
+                'Site Class B.'
+      },
+      {
+        'pdf': 'Figure22-13(2_pages).pdf',
+        'text': 'FIGURE 22-13 Maximum Considered Earthquake Geometric Mean ' +
+                '(MCEG) PGA, %g, Site Class B for Guam and the Northern ' +
+                'Mariana Islands and for American Samoa.'
+      },
+      {
+        'pdf': 'Figure22-18(3_pages).pdf',
+        'text': 'FIGURE 22-18 Mapped Risk Coefficient at 0.2 s Spectral ' +
+                'Response Period, C<sub>RS</sub>.'
+      },
+      {
+        'pdf': 'Figure22-19(3_pages).pdf',
+        'text': 'FIGURE 22-19 Mapped Risk Coefficient at 1.0 s Spectral ' +
+                'Response Period, C<sub>R1</sub>'
+      }
+    ],
     // Guam
-    3: {
-    },
+    3: [
+      {
+        'pdf': 'Figure22-7.pdf',
+        'text': 'FIGURE 22-7 S<sub>S</sub> and S<sub>1</sub> Risk-Targeted ' +
+                'Maximum Considered Earthquake (MCE<sub>R</sub>) Ground ' +
+                'Motion Parameter for Guam and the Northern Mariana Islands ' +
+                'for 0.2 and 1.0 s Spectral Response Acceleration (5% of ' +
+                'Critical Damping), Site Class B.'
+      },
+      {
+        'pdf': 'Figure22-13(2_pages).pdf',
+        'text': 'FIGURE 22-13 Maximum Considered Earthquake Geometric Mean ' +
+                '(MCEG) PGA, %g, Site Class B for Guam and the Northern ' +
+                'Mariana Islands and for American Samoa.'
+      },
+      {
+        'pdf': 'Figure22-18(3_pages).pdf',
+        'text': 'FIGURE 22-18 Mapped Risk Coefficient at 0.2 s Spectral ' +
+                'Response Period, C<sub>RS</sub>.'
+      },
+      {
+        'pdf': 'Figure22-19(3_pages).pdf',
+        'text': 'FIGURE 22-19 Mapped Risk Coefficient at 1.0 s Spectral ' +
+                'Response Period, C<sub>R1</sub>'
+      }
+    ],
     // Hawaii
-    4: {
-      '22-1': '2009_NEHRP_Figure_22-1-page2.pdf',
-      '22-2': '2009_NEHRP_Figure_22-2-page2.pdf',
-      '22-3': '2009_NEHRP_Figure_22-3-page2.pdf',
-      '22-4': '2009_NEHRP_Figure_22-4-page2.pdf',
-      '22-5': '2009_NEHRP_Figure_22-5-page2.pdf',
-      '22-6': '2009_NEHRP_Figure_22-6-page2.pdf'
-    },
+    4: [
+      {
+        'pdf': 'Figure22-5.pdf',
+        'text': 'FIGURE 22-5 S<sub>S</sub> and S<sub>1</sub> Risk-Targeted ' +
+                'Maximum Considered Earthquake (MCE<sub>R</sub>) Ground ' +
+                'Motion Parameter for Hawaii for 0.2 and 1.0 s Spectral ' +
+                'Response Acceleration (5% of Critical Damping), Site Class B.'
+      },
+      {
+        'pdf': 'Figure22-10andFigure22-11.pdf',
+        'text': 'FIGURE 22-11 Maximum Considered Earthquake Geometric Mean ' +
+                '(MCE<sub>G</sub>) PGA, %g, Site Class B for Hawaii. '
+      },
+      {
+        'pdf': 'Figure22-15andFigure22-16.pdf',
+        'text': 'FIGURE 22-16 Mapped Long-Period Transition Period, ' +
+                'T<sub>L</sub> (s), for Hawaii.'
+      },
+      {
+        'pdf': 'Figure22-18(3_pages).pdf',
+        'text': 'FIGURE 22-18 Mapped Risk Coefficient at 0.2 s Spectral ' +
+                'Response Period, C<sub>RS</sub>.'
+      },
+      {
+        'pdf': 'Figure22-19(3_pages).pdf',
+        'text': 'FIGURE 22-19 Mapped Risk Coefficient at 1.0 s Spectral ' +
+                'Response Period, C<sub>R1</sub>'
+      }
+    ],
     // Puerto Rico
-    5: {
-      '22-1': '2009_NEHRP_Figure_22-1-page2.pdf',
-      '22-2': '2009_NEHRP_Figure_22-2-page2.pdf',
-      '22-3': '2009_NEHRP_Figure_22-3-page2.pdf',
-      '22-4': '2009_NEHRP_Figure_22-4-page2.pdf',
-      '22-5': '2009_NEHRP_Figure_22-5-page2.pdf',
-      '22-6': '2009_NEHRP_Figure_22-6-page2.pdf'
-    },
+    5: [
+      {
+        'pdf': 'Figure22-6.pdf',
+        'text': 'FIGURE 22-6 S<sub>S</sub> and S<sub>1</sub> Risk-Targeted ' +
+                'Maximum Considered Earthquake (MCE<sub>R</sub>) Ground ' +
+                'Motion Parameter for Puerto Rico and the Unites States ' +
+                'Virgin Islands for 0.2 and 1.0 s Spectral Response ' +
+                'Acceleration (5% of Critical Damping), Site Class B.'
+      },
+      {
+        'pdf': 'Figure22-12.pdf',
+        'text': 'FIGURE 22-12 Maximum Considered Earthquake Geometric Mean ' +
+                '(MCEG) PGA, %g, Site Class B for Puerto Rico and the Unites States Virgin Islands'
+      },
+      {
+        'pdf': 'Figure22-17.pdf',
+        'text': 'FIGURE 22-17 Mapped Long-Period Transition Period, ' +
+                'T<sub>L</sub> (s), for Puerto Rico and the United States ' +
+                'Virgin Islands.'
+      },
+      {
+        'pdf': 'Figure22-18(3_pages).pdf',
+        'text': 'FIGURE 22-18 Mapped Risk Coefficient at 0.2 s Spectral ' +
+                'Response Period, C<sub>RS</sub>.'
+      },
+      {
+        'pdf': 'Figure22-19(3_pages).pdf',
+        'text': 'FIGURE 22-19 Mapped Risk Coefficient at 1.0 s Spectral ' +
+                'Response Period, C<sub>R1</sub>'
+      }
+    ],
     // Alaska
-    6: {
-      '22-1': '2009_NEHRP_Figure_22-1-page2.pdf',
-      '22-2': '2009_NEHRP_Figure_22-2-page2.pdf',
-      '22-3': '2009_NEHRP_Figure_22-3-page2.pdf',
-      '22-4': '2009_NEHRP_Figure_22-4-page2.pdf',
-      '22-5': '2009_NEHRP_Figure_22-5-page2.pdf',
-      '22-6': '2009_NEHRP_Figure_22-6-page2.pdf'
-    }
+    6: [
+      {
+        'pdf': 'Figure22-3.pdf',
+        'text': 'FIGURE 22-3 S<sub>S</sub> Risk-Targeted Maximum Considered ' +
+                'Earthquake (MCE<sub>R</sub>) Ground Motion Parameter for ' +
+                'Alaska for 0.2 s Spectral Response Acceleration (5% of ' +
+                'Critical Damping), Site Class B.'
+      },
+      {
+        'pdf': 'Figure22-4.pdf',
+        'text': 'FIGURE 22-4 S<sub>1</sub> Risk-Targeted Maximum Considered ' +
+                'Earthquake (MCE<sub>R</sub>) Ground Motion Parameter for ' +
+                'Alaska for 1.0 s Spectral Response Acceleration (5% of ' +
+                'Critical Damping), Site Class B.'
+      },
+      {
+        'pdf': 'Figure22-10andFigure22-11.pdf',
+        'text': 'FIGURE 22-10 Maximum Considered Earthquake Geometric Mean ' +
+                '(MCE<sub>G</sub>) PGA, %g, Site Class B for Alaska.'
+      },
+      {
+        'pdf': 'Figure22-15andFigure22-16.pdf',
+        'text': 'FIGURE 22-15 Mapped Long-Period Transition Period, ' +
+                'T<sub>L</sub> (s), for Alaska.'
+      },
+      {
+        'pdf': 'Figure22-18(3_pages).pdf',
+        'text': 'FIGURE 22-18 Mapped Risk Coefficient at 0.2 s Spectral ' +
+                'Response Period, C<sub>RS</sub>.'
+      },
+      {
+        'pdf': 'Figure22-19(3_pages).pdf',
+        'text': 'FIGURE 22-19 Mapped Risk Coefficient at 1.0 s Spectral ' +
+                'Response Period, C<sub>R1</sub>'
+      }
+    ]
   }
 };
 
@@ -66,7 +215,8 @@ var Nehrp2015Section_Section_11_4_1 = function (params) {
       _baseUrl,
       _figures,
 
-      _getFigure;
+      _getFigure,
+      _getFigures;
 
 
   params = Util.extend({}, _DEFAULTS, params);
@@ -90,6 +240,21 @@ var Nehrp2015Section_Section_11_4_1 = function (params) {
     }
   };
 
+  _getFigures = function (region) {
+    var figures,
+        markup;
+
+    figures = Array();
+    figures = _figures[region];
+    markup = Array();
+
+    for (var i = 0; i < figures.length; i++) {
+      markup[i] = '<li><a href="' + _baseUrl + '/' + figures[i].pdf +
+          '" target="_blank">' + figures[i].text + '</a></li>';
+    }
+
+    return markup.join('');
+  };
 
   _this.getSection = Util.compose(_this.getSection, function (args) {
     var metadata,
@@ -122,46 +287,9 @@ var Nehrp2015Section_Section_11_4_1 = function (params) {
         'Adjustments for other Site Classes are made, ad needed, in Section ',
         '11.4.3.',
       '</p>',
-      '<h5>',
-        '<a href="', _getFigure(region, '22-1'), '">',
-          'Figure 22-1: Uniform-Hazard (2% in 50-Year) Ground Motions of ',
-          '0.2-Second Spectral Response Acceleration (5% of Critical ',
-          'Damping), Site Class B',
-        '</a>',
-      '</h5>',
-      '<h5>',
-        '<a href="', _getFigure(region, '22-2'), '">',
-          'Figure 22-2: Uniform-Hazard (2% in 50-Year) Ground Motions of ',
-          '1.0-Second Spectral Response Acceleration (5% of Critical ',
-          'Damping), Site Class B',
-        '</a>',
-      '</h5>',
-
-      '<h5>',
-        '<a href="', _getFigure(region, '22-3'), '">',
-          'Figure 22-3: Risk Coefficient at 0.2-Second Spectral Response ',
-          'Period',
-        '</a>',
-      '</h5>',
-      '<h5>',
-        '<a href="', _getFigure(region, '22-4'), '">',
-          'Figure 22-4: Risk Coefficient at 1.0-Second Spectral Response ',
-          'Period',
-        '</a>',
-      '</h5>',
-
-      '<h5>',
-        '<a href="', _getFigure(region, '22-5'), '">',
-          'Figure 22-5: Deterministic Ground Motions of 0.2-Second Spectral ',
-          'Response Acceleration (5% of Critical Damping), Site Class B',
-        '</a>',
-      '</h5>',
-      '<h5>',
-        '<a href="', _getFigure(region, '22-6'), '">',
-          'Figure 22-6: Deterministic Ground Motions of 1.0-Second Spectral ',
-          'Response Acceleration (5% of Critical Damping), Site Class B',
-        '</a>',
-      '</h5>'
+      '<ul class="figures">',
+        _getFigures(region),
+      '</ul>'
     ].join('');
 
     return args;
