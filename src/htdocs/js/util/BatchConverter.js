@@ -34,6 +34,7 @@ var BatchConverter = function (params) {
 
       _greedyTitle,
       _headers,
+      _nehrp2015DataCalc,
 
       _getCalculator,
       _getHeaders,
@@ -50,13 +51,14 @@ var BatchConverter = function (params) {
 
     _greedyTitle = params.greedyTitle;
     _headers = params.headers;
+    _nehrp2015DataCalc = NEHRPCalc2015();
   };
 
 
   _getCalculator = function (/*calculation*/) {
     // TODO :: Look at design code on calculation and choose an appropriate
     //         calculator.
-    return NEHRPCalc2015();
+    return _nehrp2015DataCalc;
   };
 
   _getHeaders = function () {
@@ -165,7 +167,7 @@ var BatchConverter = function (params) {
 
     calc = _getCalculator(model);
 
-    result = model.get('result');
+    result = calc.getResult(model, true);
     input = model.get('input');
     output = model.get('output');
 
@@ -202,6 +204,7 @@ var BatchConverter = function (params) {
   _this.destroy = function () {
     _greedyTitle = null;
     _headers = null;
+    _nehrp2015DataCalc = null;
 
     _getCalculator = null;
     _getHeaders = null;
