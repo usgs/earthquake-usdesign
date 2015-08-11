@@ -76,7 +76,6 @@ class DatabaseInstaller {
   public function run ($statements) {
     // make sure connected
     $this->connect();
-    $this->dbh->exec('SET search_path TO ' . $this->schema);
 
     // Remove /* */ comments
     $statements = preg_replace('#/\*.*\*/#', '', $statements);
@@ -132,6 +131,7 @@ class DatabaseInstaller {
   public function createSchema ($schema) {
     if (!$this->schemaExists($schema)) {
       $this->run('CREATE SCHEMA ' . $this->schema);
+      $this->run('SET search_path = ' . $this->schema . ', public');
     }
   }
 
@@ -155,7 +155,7 @@ class DatabaseInstaller {
    * Enable postgis extension
    */
   public function enablePostgis () {
-    $this->run('CREATE EXTENSION postgis');
+    $this->run('CREATE EXTENSION IF NOT EXISTS postgis');
   }
 
   /**
