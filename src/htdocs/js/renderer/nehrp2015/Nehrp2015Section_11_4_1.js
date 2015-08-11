@@ -11,34 +11,38 @@ var _DEFAULTS = {
   classes: ['section-11-4-1'],
   nodeType: 'section',
   baseUrl: 'ftp://ftpint.cr.usgs.gov/pub/cr/co/golden/Luco/2015nehrp/maps',
-  // 1 = conus, 2 = amsam, 3 = guam, 5 = pr
+  // 1 = Alaska,
+  // 2 = American Samoa,
+  // 3 = Guam,
+  // 4 = Hawaii,
+  // 5 = Puerto Rico and Virgin Islands,
+  // 6 = Conterminous US
   figures: {
-    // CONUS
+    // Alaska
     1: [
       {
-        'pdf': 'Figure22-1(2_pages).pdf',
-        'text': 'FIGURE 22-1 S<sub>S</sub> Risk-Targeted Maximum Considered ' +
+        'pdf': 'Figure22-3.pdf',
+        'text': 'FIGURE 22-3 S<sub>S</sub> Risk-Targeted Maximum Considered ' +
                 'Earthquake (MCE<sub>R</sub>) Ground Motion Parameter for ' +
-                'the Conterminous United States for 0.2 s Spectral Response ' +
-                'Acceleration (5% of Critical Damping), Site Class B.'
+                'Alaska for 0.2 s Spectral Response Acceleration (5% of ' +
+                'Critical Damping), Site Class B.'
       },
       {
-        'pdf': 'Figure22-2(2_pages).pdf',
-        'text': 'FIGURE 22-2 S<sub>1</sub> Risk-Targeted Maximum Considered ' +
+        'pdf': 'Figure22-4.pdf',
+        'text': 'FIGURE 22-4 S<sub>1</sub> Risk-Targeted Maximum Considered ' +
                 'Earthquake (MCE<sub>R</sub>) Ground Motion Parameter for ' +
-                'the Conterminous United States for 1.0 s Spectral Response ' +
-                'Acceleration (5% of Critical Damping), Site Class B.'
+                'Alaska for 1.0 s Spectral Response Acceleration (5% of ' +
+                'Critical Damping), Site Class B.'
       },
       {
-        'pdf': 'Figure22-9(2_pages).pdf',
-        'text': 'FIGURE 22-9 Maximum Considered Earthquake Geometric Mean ' +
-                '(MCE<sub>G</sub>) PGA, %g, Site Class B for the ' +
-                'Conterminous United States.'
+        'pdf': 'Figure22-10andFigure22-11.pdf',
+        'text': 'FIGURE 22-10 Maximum Considered Earthquake Geometric Mean ' +
+                '(MCE<sub>G</sub>) PGA, %g, Site Class B for Alaska.'
       },
       {
-        'pdf': 'Figure22-14(2_pages).pdf',
-        'text': 'FIGURE 22-14 Mapped Long-Period Transition Period, ' +
-                'T<sub>L</sub> (s), for the Conterminous United States.'
+        'pdf': 'Figure22-15andFigure22-16.pdf',
+        'text': 'FIGURE 22-15 Mapped Long-Period Transition Period, ' +
+                'T<sub>L</sub> (s), for Alaska.'
       },
       {
         'pdf': 'Figure22-18(3_pages).pdf',
@@ -62,7 +66,7 @@ var _DEFAULTS = {
                 'Site Class B.'
       },
       {
-        'pdf': 'Figure22-13(2_pages).pdf',
+        'pdf': 'Figure22-13.pdf',
         'text': 'FIGURE 22-13 Maximum Considered Earthquake Geometric Mean ' +
                 '(MCEG) PGA, %g, Site Class B for Guam and the Northern ' +
                 'Mariana Islands and for American Samoa.'
@@ -89,7 +93,7 @@ var _DEFAULTS = {
                 'Critical Damping), Site Class B.'
       },
       {
-        'pdf': 'Figure22-13(2_pages).pdf',
+        'pdf': 'Figure22-13.pdf',
         'text': 'FIGURE 22-13 Maximum Considered Earthquake Geometric Mean ' +
                 '(MCEG) PGA, %g, Site Class B for Guam and the Northern ' +
                 'Mariana Islands and for American Samoa.'
@@ -170,28 +174,29 @@ var _DEFAULTS = {
     // Alaska
     6: [
       {
-        'pdf': 'Figure22-3.pdf',
-        'text': 'FIGURE 22-3 S<sub>S</sub> Risk-Targeted Maximum Considered ' +
+        'pdf': 'Figure22-1(2_pages).pdf',
+        'text': 'FIGURE 22-1 S<sub>S</sub> Risk-Targeted Maximum Considered ' +
                 'Earthquake (MCE<sub>R</sub>) Ground Motion Parameter for ' +
-                'Alaska for 0.2 s Spectral Response Acceleration (5% of ' +
-                'Critical Damping), Site Class B.'
+                'the Conterminous United States for 0.2 s Spectral Response ' +
+                'Acceleration (5% of Critical Damping), Site Class B.'
       },
       {
-        'pdf': 'Figure22-4.pdf',
-        'text': 'FIGURE 22-4 S<sub>1</sub> Risk-Targeted Maximum Considered ' +
+        'pdf': 'Figure22-2(2_pages).pdf',
+        'text': 'FIGURE 22-2 S<sub>1</sub> Risk-Targeted Maximum Considered ' +
                 'Earthquake (MCE<sub>R</sub>) Ground Motion Parameter for ' +
-                'Alaska for 1.0 s Spectral Response Acceleration (5% of ' +
-                'Critical Damping), Site Class B.'
+                'the Conterminous United States for 1.0 s Spectral Response ' +
+                'Acceleration (5% of Critical Damping), Site Class B.'
       },
       {
-        'pdf': 'Figure22-10andFigure22-11.pdf',
-        'text': 'FIGURE 22-10 Maximum Considered Earthquake Geometric Mean ' +
-                '(MCE<sub>G</sub>) PGA, %g, Site Class B for Alaska.'
+        'pdf': 'Figure22-9(2_pages).pdf',
+        'text': 'FIGURE 22-9 Maximum Considered Earthquake Geometric Mean ' +
+                '(MCE<sub>G</sub>) PGA, %g, Site Class B for the ' +
+                'Conterminous United States.'
       },
       {
-        'pdf': 'Figure22-15andFigure22-16.pdf',
-        'text': 'FIGURE 22-15 Mapped Long-Period Transition Period, ' +
-                'T<sub>L</sub> (s), for Alaska.'
+        'pdf': 'Figure22-14(2_pages).pdf',
+        'text': 'FIGURE 22-14 Mapped Long-Period Transition Period, ' +
+                'T<sub>L</sub> (s), for the Conterminous United States.'
       },
       {
         'pdf': 'Figure22-18(3_pages).pdf',
