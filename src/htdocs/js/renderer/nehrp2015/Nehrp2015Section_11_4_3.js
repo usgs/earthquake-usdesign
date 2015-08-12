@@ -87,9 +87,8 @@ var Nehrp2015Section_Section_11_4_3 = function (params) {
 
       section.innerHTML = [
         '<h3>',
-          'Section 11.4.3 &mdash; Site Coefficients, Risk Coefficients, and ',
-          'Risk-Targeted Maximum Considered Earthquake (MCE<sub>R</sub>) ',
-          'Spectral Response Acceleration Parameters',
+          'Site Coefficients and Risk-Targeted Maximum Considered Earthquake ',
+          '(MCER) Spectral Response Acceleration Parameters',
         '</h3>',
 
         '<div class="equation">',

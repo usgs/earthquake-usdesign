@@ -105,7 +105,7 @@ var Nehrp2015Section_Section_11_4_1 = function (params) {
 
     section.innerHTML = [
       '<h3>',
-        'Section 11.4.1 &mdash; Mapped Acceleration Parameters and ',
+        'Mapped Acceleration Parameters, Long-Period Transition Periods, and ',
         'Risk Coefficients',
       '</h3>',
       '<p>',

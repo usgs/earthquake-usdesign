@@ -63,8 +63,8 @@ var Nehrp2015Section_Section_11_8_3 = function (params) {
 
       section.innerHTML = [
         '<h3>',
-          'Section 11.8.3 &mdash; Additional Geotechnical Investigation ',
-          'Report Requirements for Seismic Design Categories D through F',
+          'Additional Geotechnical Investigation Report Requirements for ',
+          'Seismic Design Categories D through F',
         '</h3>',
 
         '<h4>Table 11.8-1: Site Coefficient for F<sub>PGA</sub></h4>',
