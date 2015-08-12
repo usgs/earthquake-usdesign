@@ -54,7 +54,7 @@ try {
 
       echo 'Loading schema ...';
       // run create schema
-      $dbInstaller->createSchema($CONFIG['DB_SCHEMA']);
+      $dbInstaller->createSchema();
       // drop tables
       $dbInstaller->runScript($dropTablesScript);
       // create tables
