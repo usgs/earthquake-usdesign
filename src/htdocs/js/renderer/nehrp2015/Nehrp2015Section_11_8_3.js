@@ -91,7 +91,7 @@ var Nehrp2015Section_Section_11_8_3 = function (params) {
         '</div>',
 
         '<div class="equation">',
-          '<label for="equation-11-8-1">Equation (11.8-1)</label>',
+          '<label for="equation-11-8-1">Site-adjusted MCE<sub>G</sub></label>',
           '<span id="equation-11-8-1">',
             'PGA<sub>M</sub> = F<sub>PGA</sub>PGA = ',
             _this.outputNumber(fpga), ' &times; ', _this.outputNumber(pga),
