@@ -187,7 +187,7 @@ var CalculationView = function (params) {
         '<small class="calculation-subtitle">', subtitle, '</small>',
       '</h3>',
       '<dl class="calculation-inputs">',
-        '<dt class="calculation-design-code">Design Code</dt>',
+        '<dt class="calculation-design-code">Reference Document</dt>',
         '<dd class="calculation-design-code">', designCode, '</dd>',
 
         '<dt class="calculation-site-class">Site Class</dt>',
