@@ -81,14 +81,6 @@ var Nehrp2015Section_Section_11_8_3 = function (params) {
           'than 1.2.',
         '</aside>',
 
-        '<h4>',
-          'Table 11.8-2 Site Coefficients for Undetermined Soil Sites ',
-          '(excluding Class E or F), F<sub>PGA</sub>',
-        '</h4>',
-        '<div class="report-table-undetermined-pga">',
-          undetermined.innerHTML,
-        '</div>',
-
          '<div class="equation">',
           '<label for="equation-mapped-pga">Mapped MCE<sub>G</sub></label>',
           '<span id="equation-mapped-pga">',
