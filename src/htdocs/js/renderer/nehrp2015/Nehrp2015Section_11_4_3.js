@@ -88,7 +88,7 @@ var Nehrp2015Section_Section_11_4_3 = function (params) {
       section.innerHTML = [
         '<h3>',
           'Site Coefficients and Risk-Targeted Maximum Considered Earthquake ',
-          '(MCER) Spectral Response Acceleration Parameters',
+          '(MCE<sub>R</sub>) Spectral Response Acceleration Parameters',
         '</h3>',
 
         '<div class="equation">',
@@ -144,7 +144,7 @@ var Nehrp2015Section_Section_11_4_3 = function (params) {
 
         '<aside>',
           'Note: Where Site Class B is selected, but site-specific velocity ',
-          'measurements are not made, the values of F<sub>a</sub> shall not ',
+          'measurements are not made, the values of F<sub>a</sub> shall ',
           'be taken as 1.0.',
         '</aside>',
 
@@ -160,6 +160,12 @@ var Nehrp2015Section_Section_11_4_3 = function (params) {
           'For Site Class = ', siteClass, ' and S<sub>1</sub> = ',
           _this.outputNumber(s1), ' g, F<sub>v</sub> = ', _this.outputNumber(fv),
         '</p>',
+
+        '<aside>',
+          'Note: Where Site Class B is selected, but site-specific velocity ',
+          'measurements are not made, the values of F<sub>v</sub> shall ',
+          'be taken as 1.0.',
+        '</aside>',
 
         '<div class="equation">',
           '<label for="equation-11-4-5">Site-adjusted MCE<sub>R</sub></label>',
