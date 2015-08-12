@@ -161,14 +161,6 @@ var Nehrp2015Section_Section_11_4_3 = function (params) {
           _this.outputNumber(s1), ' g, F<sub>v</sub> = ', _this.outputNumber(fv),
         '</p>',
 
-        '<h4>',
-          'Table 11.4-3: Site Coefficients for Undetermined Soil Sites ',
-          '(excluding E or F), F<sub>a</sub> and F<sub>v</sub>',
-        '</h4>',
-        '<div class="report-table-undetermined-fafv">',
-          undetermined.innerHTML,
-        '</div>',
-
         '<div class="equation">',
           '<label for="equation-11-4-5">Site-adjusted MCE<sub>R</sub></label>',
           '<span id="equation-11-4-5">',
