@@ -90,7 +90,7 @@ var Nehrp2015Section_Section_11_8_3 = function (params) {
         '</div>',
 
          '<div class="equation">',
-          '<label for="equation-mapped-pga">Mapped PGA</label>',
+          '<label for="equation-mapped-pga">Mapped MCE<sub>G</sub></label>',
           '<span id="equation-mapped-pga">',
             'PGA = ', _this.outputNumber(pga), ' g',
           '</span>',
