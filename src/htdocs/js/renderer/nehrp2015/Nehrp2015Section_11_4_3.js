@@ -142,6 +142,18 @@ var Nehrp2015Section_Section_11_4_3 = function (params) {
           _this.outputNumber(ss), ' g, F<sub>a</sub> = ', _this.outputNumber(fa),
         '</p>',
 
+        '<aside>',
+          'Note: Where Site Class B is selected, but site-specific velocity ',
+          'measurements are not made, the values of F<sub>a</sub> shall not ',
+          'be taken as 1.0.',
+        '</aside>',
+
+        '<aside>',
+          'Note: Where Site Class D is selected as the default site class per ',
+          'Section 11.4.2, the values of F<sub>a</sub> shall not be less ',
+          'than 1.2.',
+        '</aside>',
+
         '<h4>Table 11.4-2: Site Coefficient F<sub>v</sub></h4>',
         '<div class="report-table-fv">', fvTable.innerHTML, '</div>',
         '<p class="report-summary-fv">',

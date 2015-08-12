@@ -75,6 +75,12 @@ var Nehrp2015Section_Section_11_8_3 = function (params) {
           _this.outputNumber(fpga),
         '</p>',
 
+        '<aside>',
+          'Note: Where Site Class D is selected as the default site class per ',
+          'Section 11.4.2, the values of F<sub>a</sub> shall not be less ',
+          'than 1.2.',
+        '</aside>',
+
         '<h4>',
           'Table 11.8-2 Site Coefficients for Undetermined Soil Sites ',
           '(excluding Class E or F), F<sub>PGA</sub>',
