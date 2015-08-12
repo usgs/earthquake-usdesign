@@ -244,12 +244,6 @@ foreach ($datasets as $id => $metadata) {
   }
 }
 
-if ($anyErrors) {
-  echo PHP_EOL . 'There were errors loading datasets,' .
-      ' check the output above for more information.' . PHP_EOL;
-  exit(-1);
-}
-
 /**
  * Check whether to load TL data
  */
@@ -267,4 +261,10 @@ if (promptYesNo('Load TsubL Data?', true)) {
   ftp_get($ftp, $local_tl, $T_SUB_L, FTP_BINARY);
 
   $DB->exec('COPY tl FROM \'' . $local_tl . '\' NULL AS \'\' CSV HEADER');
+}
+
+if ($anyErrors) {
+  echo PHP_EOL . 'There were errors loading datasets,' .
+      ' check the output above for more information.' . PHP_EOL;
+  exit(-1);
 }
