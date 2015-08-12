@@ -108,8 +108,8 @@ var Nehrp2015Section_Section_11_4_3 = function (params) {
           '</span>',
         '</div>',
         '<div class="equation equation-summary">',
-          'S<sub>S</sub> &equiv; &ldquo;Lesser of values from Equations ',
-          '(11.4-1) and (11.4-2)&rdquo; = ',
+          'S<sub>S</sub> &equiv; &ldquo;Lesser of ',
+          'C<sub>RS</sub>S<sub>SUH</sub> and S<sub>SD</sub>&rdquo; = ',
           _this.outputNumber(ss), ' g',
         '</div>',
 
@@ -130,8 +130,8 @@ var Nehrp2015Section_Section_11_4_3 = function (params) {
           '</span>',
         '</div>',
         '<div class="equation equation-summary">',
-          'S<sub>1</sub> &equiv; &ldquo;Lesser of values from Equations ',
-          '(11.4-3) and (11.4-4)&rdquo; = ',
+          'S<sub>1</sub> &equiv; &ldquo;Lesser of ',
+          'C<sub>R1</sub>S<sub>1UH</sub> and S<sub>1D</sub>&rdquo; = ',
           _this.outputNumber(s1), ' g',
         '</div>',
 
