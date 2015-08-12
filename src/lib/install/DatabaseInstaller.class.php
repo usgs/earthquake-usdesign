@@ -21,7 +21,7 @@ class DatabaseInstaller {
     $this->dsn = $dsn;
     $this->user = $user;
     $this->pass = $pass;
-    $this->schema = $schema;
+    $this->setSchema($schema);
     // get dbname
     preg_match('/dbname=([^;]+)/', $dsn, $matches);
     if (count($matches) < 2) {
@@ -76,9 +76,8 @@ class DatabaseInstaller {
   public function run ($statements) {
     // make sure connected
     $this->connect();
-    $this->dbh->exec('SET search_path TO ' . $this->schema);
+    $this->dbh->exec('SET search_path TO ' . $this->schema . ',public');
 
-    // Remove /* */ comments
     $statements = preg_replace('#/\*.*\*/#', '', $statements);
     // split on semicolons that are outside of single quotes
     // http://stackoverflow.com/questions/21105360/regex-find-comma-not-inside-quotes
@@ -129,19 +128,26 @@ class DatabaseInstaller {
   /**
    * Create $schema if it doesn't already exist.
    */
-  public function createSchema ($schema) {
-    if (!$this->schemaExists($schema)) {
+  public function createSchema () {
+    if (!$this->schemaExists($this->schema)) {
       $this->run('CREATE SCHEMA ' . $this->schema);
+      $this->run('SET search_path = ' . $this->schema . ', public');
     }
   }
 
   /**
    * Drop the $schema if it already exist.
    */
-  public function dropSchema ($schema) {
-    if ($this->schemaExists($schema)) {
+  public function dropSchema () {
+    if ($this->schemaExists($this->schema)) {
       $this->run('DROP SCHEMA ' . $this->schema . ' CASCADE');
     }
+  }
+  /**
+   * sets schema
+   */
+  public function setSchema($schema) {
+    $this->schema = $schema;
   }
 
   /**
@@ -155,7 +161,7 @@ class DatabaseInstaller {
    * Enable postgis extension
    */
   public function enablePostgis () {
-    $this->run('CREATE EXTENSION postgis');
+    $this->run('CREATE EXTENSION IF NOT EXISTS postgis');
   }
 
   /**

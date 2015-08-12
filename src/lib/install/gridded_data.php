@@ -78,6 +78,8 @@ $datasets = array(
   )
 );
 
+$T_SUB_L = '/web/earthquake-usdesign/tsubl.dat';
+
 
 chdir(dirname(__FILE__));
 
@@ -240,6 +242,25 @@ foreach ($datasets as $id => $metadata) {
 
     $anyErrors = true;
   }
+}
+
+/**
+ * Check whether to load TL data
+ */
+if (promptYesNo('Load TsubL Data?', true)) {
+  /**
+   * Download tl data
+   */
+  $local_tl = $local_dir . '/tsubl/';
+  if (!is_dir($local_tl)) {
+    mkdir($local_tl);
+  }
+  $local_tl .= 'tsubl.dat';
+
+  echo "\t" . 'downloading ...';
+  ftp_get($ftp, $local_tl, $T_SUB_L, FTP_BINARY);
+
+  $DB->exec('COPY tl FROM \'' . $local_tl . '\' NULL AS \'\' CSV HEADER');
 }
 
 if ($anyErrors) {
