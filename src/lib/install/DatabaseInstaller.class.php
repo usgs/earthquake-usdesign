@@ -21,7 +21,7 @@ class DatabaseInstaller {
     $this->dsn = $dsn;
     $this->user = $user;
     $this->pass = $pass;
-    $this->schema = $schema;
+    $this->setSchema($schema);
     // get dbname
     preg_match('/dbname=([^;]+)/', $dsn, $matches);
     if (count($matches) < 2) {
@@ -128,8 +128,8 @@ class DatabaseInstaller {
   /**
    * Create $schema if it doesn't already exist.
    */
-  public function createSchema ($schema) {
-    if (!$this->schemaExists($schema)) {
+  public function createSchema () {
+    if (!$this->schemaExists($this->schema)) {
       $this->run('CREATE SCHEMA ' . $this->schema);
       $this->run('SET search_path = ' . $this->schema . ', public');
     }
@@ -138,10 +138,16 @@ class DatabaseInstaller {
   /**
    * Drop the $schema if it already exist.
    */
-  public function dropSchema ($schema) {
-    if ($this->schemaExists($schema)) {
+  public function dropSchema () {
+    if ($this->schemaExists($this->schema)) {
       $this->run('DROP SCHEMA ' . $this->schema . ' CASCADE');
     }
+  }
+  /**
+   * sets schema
+   */
+  public function setSchema($schema) {
+    $this->schema = $schema;
   }
 
   /**
