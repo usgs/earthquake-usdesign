@@ -245,7 +245,7 @@ var SiteAmplification = function (params) {
     return markup.join('') + '<tr class="site-class-F">' +
       '<th scope="row">F</th>' +
       '<td colspan="' + data[siteClass].length + '">' +
-        'See Section 11.4.7 of ASCE 7' +
+        'See Section 11.4.7' +
       '</td>';
   };
 
