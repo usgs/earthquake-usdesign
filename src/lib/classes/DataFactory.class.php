@@ -263,7 +263,6 @@ class DataFactory {
 
     $sql .= ' SELECT' .
         ' ST_AsGeoJSON(shape) as shape';
-    }
 
     $sql .= ' FROM search, tl' .
         ' WHERE search.point && shape' .
@@ -271,5 +270,5 @@ class DataFactory {
         ' ORDER BY ST_Area(shape) DEC';
 
     return $this->execute($sql, $params);
-  };
+  }
 }
