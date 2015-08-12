@@ -172,7 +172,12 @@ var Nehrp2015Section_Section_11_4_3 = function (params) {
             _this.outputNumber(fv), ' &times; ', _this.outputNumber(s1), ' = ',
             _this.outputNumber(sm1), ' g',
           '<span>',
-        '</div>'
+        '</div>',
+
+        '<aside>',
+          'Note: S<sub>MS</sub> shall not be taken less than S<sub>M1</sub> ',
+          'except when determining Seismic Design Category.',
+        '</aside>'
       ].join('');
     } catch (e) {
       console.log(e);
