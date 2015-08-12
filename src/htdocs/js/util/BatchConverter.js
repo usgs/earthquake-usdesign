@@ -34,13 +34,15 @@ var BatchConverter = function (params) {
 
       _greedyTitle,
       _headers,
+      _nehrp2015DataCalc,
 
       _getCalculator,
       _getHeaders,
       _isHeaderLine,
       _setHeaders,
       _toCalculation,
-      _toCSV;
+      _toDelimitedValue,
+      _toDelimitedValues;
 
 
   _this = Events();
@@ -50,13 +52,14 @@ var BatchConverter = function (params) {
 
     _greedyTitle = params.greedyTitle;
     _headers = params.headers;
+    _nehrp2015DataCalc = NEHRPCalc2015();
   };
 
 
   _getCalculator = function (/*calculation*/) {
     // TODO :: Look at design code on calculation and choose an appropriate
     //         calculator.
-    return NEHRPCalc2015();
+    return _nehrp2015DataCalc;
   };
 
   _getHeaders = function () {
@@ -119,7 +122,7 @@ var BatchConverter = function (params) {
       latitude: null,
       longitude: null,
       site_class: null,
-      risk_cateogory: null,
+      risk_category: null,
       design_code: null,
       title: null
     };
@@ -155,9 +158,9 @@ var BatchConverter = function (params) {
     return Calculation({input: input});
   };
 
-  _toCSV = function (model) {
+  _toDelimitedValue = function (model, delimiter) {
     var calc,
-        csv,
+        value,
         input,
         meta,
         output,
@@ -165,13 +168,13 @@ var BatchConverter = function (params) {
 
     calc = _getCalculator(model);
 
-    result = model.get('result');
+    result = calc.getResult(model, true);
     input = model.get('input');
     output = model.get('output');
 
     meta = output.get('metadata');
 
-    csv = [
+    value = [
       // Inputs
       input.get('latitude'), input.get('longitude'), input.get('site_class'),
       input.get('risk_category'), input.get('design_code'),
@@ -195,20 +198,40 @@ var BatchConverter = function (params) {
       output.get('tl')
     ];
 
-    return csv.join(',');
+    return value.join(delimiter);
+  };
+
+  _toDelimitedValues = function (calculations, delimiter) {
+    var values;
+
+    values = [_getHeaders()];
+    delimiter = delimiter || ',';
+
+    calculations.forEach(function (calculation) {
+      if (calculation.get('status') !== Calculation.STATUS_COMPLETE) {
+        // TODO :: Trigger an error ?
+        return; // Skip calculations that are not complete
+      }
+
+      values.push(_toDelimitedValue(calculation, delimiter));
+    });
+
+    return values.join('\n');
   };
 
 
   _this.destroy = function () {
     _greedyTitle = null;
     _headers = null;
+    _nehrp2015DataCalc = null;
 
     _getCalculator = null;
     _getHeaders = null;
     _isHeaderLine = null;
     _setHeaders = null;
     _toCalculation = null;
-    _toCSV = null;
+    _toDelimitedValue = null;
+    _toDelimitedValues = null;
 
 
     _initialize = null;
@@ -259,20 +282,11 @@ var BatchConverter = function (params) {
 
 
   _this.toCSV = function (calculations) {
-    var csv;
+    return _toDelimitedValues(calculations, ',');
+  };
 
-    csv = [_getHeaders()];
-
-    calculations.forEach(function (calculation) {
-      if (calculation.get('status') !== Calculation.STATUS_COMPLETE) {
-        // TODO :: Trigger an error ?
-        return; // Skip calculations that are not complete
-      }
-
-      csv.push(_toCSV(calculation));
-    });
-
-    return csv.join('\n');
+  _this.toTSV = function (calculations) {
+    return _toDelimitedValues(calculations, '\t');
   };
 
 
