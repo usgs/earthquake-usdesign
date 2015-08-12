@@ -243,4 +243,33 @@ class DataFactory {
       'DELETE FROM data WHERE region_id = :region_id'
     );
   }
+
+  public function computeTL ($latitude, $longitude) {
+    // Check for latitude and longitude
+    if ($latitude == null || $longitude == null) {
+      throw new Exception('"latitude", and "longitude" are required');
+    }
+
+    // Create sql
+    $sql = 'WITH search as (SELECT' .
+        ' ST_SetSRID(ST_MakePoint(:longitude,:latitude),4326)::geography' .
+        ' AS point' .
+        ')';
+    // Bound parameters
+    $params = array(
+      ':latitude' => $latitude,
+      ':longitude' => $longitude
+    );
+
+    $sql .= ' SELECT' .
+        ' ST_AsGeoJSON(shape) as shape';
+    }
+
+    $sql .= ' FROM search, tl' .
+        ' WHERE search.point && shape' .
+        ' AND ST_Intersects(search.point, shape)' .
+        ' ORDER BY ST_Area(shape) DEC';
+
+    return $this->execute($sql, $params);
+  };
 }
