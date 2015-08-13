@@ -21,6 +21,7 @@ include_once '../conf/config.inc.php';
 
 $region = $regionFactory->get($latitude, $longitude, $design_code_id);
 $data = $dataFactory->get($latitude, $longitude, $region);
+$tl = $dataFactory->computeTL($latitude, $longitude);
 
 // object containing metadata from region factory
 $metadata = array(

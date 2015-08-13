@@ -8,6 +8,7 @@ class DataFactory {
   private $_query = null;
   private $_insert = null;
   private $_delete = null;
+  private $_tlQuery = null;
 
 
   /**
@@ -208,6 +209,26 @@ class DataFactory {
       '
     );
 
+    $this->_tlQuery = $this->_db->prepare(
+      '
+        With search AS (SELECT
+          ST_SetSRID(ST_MakePoint(:longitude, :latitude),
+              4326)::geography
+          AS point
+        )
+        SELECT
+          value
+        FROM
+          search, tl
+        WHERE
+          search.point && shape
+        AND
+          ST_Intersects(search.point, shape)
+        ORDER BY
+          value DESC
+      '
+    );
+
     $this->_insert = $this->_db->prepare(
       '
         INSERT INTO data
@@ -242,5 +263,27 @@ class DataFactory {
     $this->_delete = $this->_db->prepare(
       'DELETE FROM data WHERE region_id = :region_id'
     );
+  }
+
+
+  public function computeTL ($latitude, $longitude) {
+    $result = null;
+
+    if ($latitude == null || $longitude == null) {
+      throw new Exception('"latitude", and "longitude" are required');
+    }
+
+    try {
+      $this->_tlQuery->bindValue(':latitude', $latitude);
+      $this->_tlQuery->bindValue(':longitude', $longitude);
+      $this->_tlQuery->execute();
+      $row = $this->_tlQuery->fetch(PDO::FETCH_ASSOC);
+      if ($row && isset($row['value'])) {
+        $result = floatval($row['value']);
+      }
+    } finally {
+      $this->_tlQuery->closeCursor();
+    }
+    return $result;
   }
 }
