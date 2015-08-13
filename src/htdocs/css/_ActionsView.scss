@@ -22,14 +22,14 @@
 
 .actions-view {
   > .accordion {
-    .actions-view-actions {
-      padding: .6em 2em .6em 1em;
+    > .accordion-toggle:hover {
+      text-decoration: none;
+    }
 
-      &:before {
-        font-size: 1.5em;
-        left: auto;
-        right: 0;
-      }
+    .actions-view-actions:before {
+      font-size: 1.5em;
+      color: #777;
+      font-family: monospace;
     }
 
     > .accordion-content {
@@ -105,6 +105,7 @@
 }
 
 .actions-view-actions {
+  flex-wrap: wrap;
 
   > button {
     color: #666;
@@ -113,6 +114,7 @@
     line-height: 3rem;
     min-width: 72px;
     margin-right: -4px;
+    flex: none;
 
     &:before {
       display: block;
