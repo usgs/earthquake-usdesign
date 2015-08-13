@@ -210,24 +210,24 @@ class DataFactory {
     );
 
     $this->_tlQuery = $this->_db->prepare(
-     '
-       With search AS (SELECT
-         ST_SetSRID(ST_MakePoint(:latitude, :longitude),
-             4326)::geography
-         AS point
-       )
-       SELECT
-         value
-       FROM
-         search, tl
-       WHERE
-         search.point && shape
-       AND
-         ST_Intersects(search.point, shape)
-       ORDER BY
-         value DESC
-     '
-   );
+      '
+        With search AS (SELECT
+          ST_SetSRID(ST_MakePoint(:longitude, :latitude),
+              4326)::geography
+          AS point
+        )
+        SELECT
+          value
+        FROM
+          search, tl
+        WHERE
+          search.point && shape
+        AND
+          ST_Intersects(search.point, shape)
+        ORDER BY
+          value DESC
+      '
+    );
 
     $this->_insert = $this->_db->prepare(
       '
@@ -272,7 +272,6 @@ class DataFactory {
     if ($latitude == null || $longitude == null) {
       throw new Exception('"latitude", and "longitude" are required');
     }
-
 
     try {
       $this->_tlQuery->bindValue(':latitude', $latitude);
