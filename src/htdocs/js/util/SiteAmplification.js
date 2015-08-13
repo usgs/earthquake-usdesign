@@ -7,7 +7,8 @@ var Formatter = require('util/Formatter'),
 var _DEFAULTS = {
   faTitle: 'Spectral Reponse Acceleration Parameter at Short Period',
 
-  fpgaTitle: 'Mapped MCE Geometric Mean Peak Ground Acceleration, PGA',
+  fpgaTitle: 'Mapped MCE Geometric Mean (MCE<sub>G</sub>) Peak Ground ' +
+      'Acceleration',
 
   fvTitle: 'Spectral Response Acceleration Parameter at 1-Second Period',
 
