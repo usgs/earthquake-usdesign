@@ -87,13 +87,21 @@ var Nehrp2015Section_Section_11_4_5 = function (params) {
     var model,
         region,
         result,
-        section;
+        section,
+        tSubL;
 
     model = args.model;
     section = args.section;
 
     result = model.get('result');
     region = model.get('output').get('metadata').get('region_id');
+    tSubL = model.get('output').get('tl');
+
+    if (tSubL === null) {
+      tSubL = '&ndash;';
+    } else {
+      tSubL += ' s';
+    }
 
     section.innerHTML = [
       '<h3>Section 11.4.5 &mdash; Design Response Spectrum</h3>',
@@ -103,7 +111,10 @@ var Nehrp2015Section_Section_11_4_5 = function (params) {
           'Figure 22-7: Long-period Transition Period, T<sub>L</sub> (s)',
         '</a>',
       '</h5>',
-
+      '<div class="equation equation-summary">',
+        'Long-Period Transition Period = T<sub>L</sub> = ',
+        tSubL,
+      '</div>',
       '<h4>',
         'Figure 11.4-1: Design Response Spectrum',
       '</h4>'
