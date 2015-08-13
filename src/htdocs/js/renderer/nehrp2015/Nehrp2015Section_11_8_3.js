@@ -69,17 +69,16 @@ var Nehrp2015Section_Section_11_8_3 = function (params) {
 
         '<h4>Table 11.8-1: Site Coefficient for F<sub>PGA</sub></h4>',
         '<div class="report-table-fpga">', fpgaTable.innerHTML, '</div>',
-        '<p class="report-summary-fpga">',
-          'For Site Class = ', siteClass, ' and PGA = ',
-          _this.outputNumber(pga), ' g, F<sub>PGA</sub> = ',
-          _this.outputNumber(fpga),
-        '</p>',
-
         '<aside>',
           'Note: Where Site Class D is selected as the default site class per ',
           'Section 11.4.2, the values of F<sub>a</sub> shall not be less ',
           'than 1.2.',
         '</aside>',
+        '<p class="report-summary-fpga">',
+          'For Site Class = ', siteClass, ' and PGA = ',
+          _this.outputNumber(pga), ' g, F<sub>PGA</sub> = ',
+          _this.outputNumber(fpga),
+        '</p>',
 
          '<div class="equation">',
           '<label for="equation-mapped-pga">Mapped MCE<sub>G</sub></label>',
