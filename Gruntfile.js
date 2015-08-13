@@ -14,7 +14,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build', [
     'clean',
     'dev',
-    'concurrent:dist' // uglify, copy:dist, cssmin
+    'concurrent:dist' // uglify, copy:dist, postcss:dist
   ]);
 
   // default task useful during development
