@@ -195,9 +195,6 @@ var Calculation = function (params) {
         status;
 
     status = _this.get('status');
-    if (status === _STATUS_COMPLETE || status === _STATUS_SENT) {
-      return;
-    }
 
     input = _this.get('input').get();
     if (input.title === null ||
