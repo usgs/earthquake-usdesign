@@ -21,36 +21,36 @@ var _DEFAULTS = {
     // Alaska
     1: [
       {
-        'pdf': 'Figure22-3.pdf',
+        'pdf': 'NEHRP_2015_Figure22-3.pdf',
         'text': 'FIGURE 22-3 S<sub>S</sub> Risk-Targeted Maximum Considered ' +
                 'Earthquake (MCE<sub>R</sub>) Ground Motion Parameter for ' +
                 'Alaska for 0.2 s Spectral Response Acceleration (5% of ' +
                 'Critical Damping), Site Class B.'
       },
       {
-        'pdf': 'Figure22-4.pdf',
+        'pdf': 'NEHRP_2015_Figure22-4.pdf',
         'text': 'FIGURE 22-4 S<sub>1</sub> Risk-Targeted Maximum Considered ' +
                 'Earthquake (MCE<sub>R</sub>) Ground Motion Parameter for ' +
                 'Alaska for 1.0 s Spectral Response Acceleration (5% of ' +
                 'Critical Damping), Site Class B.'
       },
       {
-        'pdf': 'Figure22-10.pdf',
+        'pdf': 'NEHRP_2015_Figure22-10.pdf',
         'text': 'FIGURE 22-10 Maximum Considered Earthquake Geometric Mean ' +
                 '(MCE<sub>G</sub>) PGA, %g, Site Class B for Alaska.'
       },
       {
-        'pdf': 'Figure22-15.pdf',
+        'pdf': 'NEHRP_2015_Figure22-15.pdf',
         'text': 'FIGURE 22-15 Mapped Long-Period Transition Period, ' +
                 'T<sub>L</sub> (s), for Alaska.'
       },
       {
-        'pdf': 'Figure22-18.pdf',
+        'pdf': 'NEHRP_2015_Figure22-18.pdf',
         'text': 'FIGURE 22-18 Mapped Risk Coefficient at 0.2 s Spectral ' +
                 'Response Period, C<sub>RS</sub>.'
       },
       {
-        'pdf': 'Figure22-19.pdf',
+        'pdf': 'NEHRP_2015_Figure22-19.pdf',
         'text': 'FIGURE 22-19 Mapped Risk Coefficient at 1.0 s Spectral ' +
                 'Response Period, C<sub>R1</sub>'
       }
@@ -58,7 +58,7 @@ var _DEFAULTS = {
     // American Samoa
     2: [
       {
-        'pdf': 'Figure22-8.pdf',
+        'pdf': 'NEHRP_2015_Figure22-8.pdf',
         'text': 'FIGURE 22-8 S<sub>S</sub> and S<sub>1</sub> Risk-Targeted ' +
                 'Maximum Considered Earthquake (MCE<sub>R</sub>) Ground ' +
                 'Motion Parameter for American Samoa for 0.2 and 1.0 s ' +
@@ -66,18 +66,18 @@ var _DEFAULTS = {
                 'Site Class B.'
       },
       {
-        'pdf': 'Figure22-13.pdf',
+        'pdf': 'NEHRP_2015_Figure22-13.pdf',
         'text': 'FIGURE 22-13 Maximum Considered Earthquake Geometric Mean ' +
                 '(MCEG) PGA, %g, Site Class B for Guam and the Northern ' +
                 'Mariana Islands and for American Samoa.'
       },
       {
-        'pdf': 'Figure22-18.pdf',
+        'pdf': 'NEHRP_2015_Figure22-18.pdf',
         'text': 'FIGURE 22-18 Mapped Risk Coefficient at 0.2 s Spectral ' +
                 'Response Period, C<sub>RS</sub>.'
       },
       {
-        'pdf': 'Figure22-19.pdf',
+        'pdf': 'NEHRP_2015_Figure22-19.pdf',
         'text': 'FIGURE 22-19 Mapped Risk Coefficient at 1.0 s Spectral ' +
                 'Response Period, C<sub>R1</sub>'
       }
@@ -85,7 +85,7 @@ var _DEFAULTS = {
     // Guam
     3: [
       {
-        'pdf': 'Figure22-7.pdf',
+        'pdf': 'NEHRP_2015_Figure22-7.pdf',
         'text': 'FIGURE 22-7 S<sub>S</sub> and S<sub>1</sub> Risk-Targeted ' +
                 'Maximum Considered Earthquake (MCE<sub>R</sub>) Ground ' +
                 'Motion Parameter for Guam and the Northern Mariana Islands ' +
@@ -93,18 +93,18 @@ var _DEFAULTS = {
                 'Critical Damping), Site Class B.'
       },
       {
-        'pdf': 'Figure22-13.pdf',
+        'pdf': 'NEHRP_2015_Figure22-13.pdf',
         'text': 'FIGURE 22-13 Maximum Considered Earthquake Geometric Mean ' +
                 '(MCEG) PGA, %g, Site Class B for Guam and the Northern ' +
                 'Mariana Islands and for American Samoa.'
       },
       {
-        'pdf': 'Figure22-18.pdf',
+        'pdf': 'NEHRP_2015_Figure22-18.pdf',
         'text': 'FIGURE 22-18 Mapped Risk Coefficient at 0.2 s Spectral ' +
                 'Response Period, C<sub>RS</sub>.'
       },
       {
-        'pdf': 'Figure22-19.pdf',
+        'pdf': 'NEHRP_2015_Figure22-19.pdf',
         'text': 'FIGURE 22-19 Mapped Risk Coefficient at 1.0 s Spectral ' +
                 'Response Period, C<sub>R1</sub>'
       }
@@ -112,29 +112,29 @@ var _DEFAULTS = {
     // Hawaii
     4: [
       {
-        'pdf': 'Figure22-5.pdf',
+        'pdf': 'NEHRP_2015_Figure22-5.pdf',
         'text': 'FIGURE 22-5 S<sub>S</sub> and S<sub>1</sub> Risk-Targeted ' +
                 'Maximum Considered Earthquake (MCE<sub>R</sub>) Ground ' +
                 'Motion Parameter for Hawaii for 0.2 and 1.0 s Spectral ' +
                 'Response Acceleration (5% of Critical Damping), Site Class B.'
       },
       {
-        'pdf': 'Figure22-11.pdf',
+        'pdf': 'NEHRP_2015_Figure22-11.pdf',
         'text': 'FIGURE 22-11 Maximum Considered Earthquake Geometric Mean ' +
                 '(MCE<sub>G</sub>) PGA, %g, Site Class B for Hawaii. '
       },
       {
-        'pdf': 'Figure22-16.pdf',
+        'pdf': 'NEHRP_2015_Figure22-16.pdf',
         'text': 'FIGURE 22-16 Mapped Long-Period Transition Period, ' +
                 'T<sub>L</sub> (s), for Hawaii.'
       },
       {
-        'pdf': 'Figure22-18.pdf',
+        'pdf': 'NEHRP_2015_Figure22-18.pdf',
         'text': 'FIGURE 22-18 Mapped Risk Coefficient at 0.2 s Spectral ' +
                 'Response Period, C<sub>RS</sub>.'
       },
       {
-        'pdf': 'Figure22-19.pdf',
+        'pdf': 'NEHRP_2015_Figure22-19.pdf',
         'text': 'FIGURE 22-19 Mapped Risk Coefficient at 1.0 s Spectral ' +
                 'Response Period, C<sub>R1</sub>'
       }
@@ -142,7 +142,7 @@ var _DEFAULTS = {
     // Puerto Rico
     5: [
       {
-        'pdf': 'Figure22-6.pdf',
+        'pdf': 'NEHRP_2015_Figure22-6.pdf',
         'text': 'FIGURE 22-6 S<sub>S</sub> and S<sub>1</sub> Risk-Targeted ' +
                 'Maximum Considered Earthquake (MCE<sub>R</sub>) Ground ' +
                 'Motion Parameter for Puerto Rico and the Unites States ' +
@@ -150,24 +150,24 @@ var _DEFAULTS = {
                 'Acceleration (5% of Critical Damping), Site Class B.'
       },
       {
-        'pdf': 'Figure22-12.pdf',
+        'pdf': 'NEHRP_2015_Figure22-12.pdf',
         'text': 'FIGURE 22-12 Maximum Considered Earthquake Geometric Mean ' +
                 '(MCEG) PGA, %g, Site Class B for Puerto Rico and the Unites ' +
                 'States Virgin Islands'
       },
       {
-        'pdf': 'Figure22-17.pdf',
+        'pdf': 'NEHRP_2015_Figure22-17.pdf',
         'text': 'FIGURE 22-17 Mapped Long-Period Transition Period, ' +
                 'T<sub>L</sub> (s), for Puerto Rico and the United States ' +
                 'Virgin Islands.'
       },
       {
-        'pdf': 'Figure22-18.pdf',
+        'pdf': 'NEHRP_2015_Figure22-18.pdf',
         'text': 'FIGURE 22-18 Mapped Risk Coefficient at 0.2 s Spectral ' +
                 'Response Period, C<sub>RS</sub>.'
       },
       {
-        'pdf': 'Figure22-19.pdf',
+        'pdf': 'NEHRP_2015_Figure22-19.pdf',
         'text': 'FIGURE 22-19 Mapped Risk Coefficient at 1.0 s Spectral ' +
                 'Response Period, C<sub>R1</sub>'
       }
@@ -175,37 +175,37 @@ var _DEFAULTS = {
     // Conterminous US
     6: [
       {
-        'pdf': 'Figure22-1.pdf',
+        'pdf': 'NEHRP_2015_Figure22-1.pdf',
         'text': 'FIGURE 22-1 S<sub>S</sub> Risk-Targeted Maximum Considered ' +
                 'Earthquake (MCE<sub>R</sub>) Ground Motion Parameter for ' +
                 'the Conterminous United States for 0.2 s Spectral Response ' +
                 'Acceleration (5% of Critical Damping), Site Class B.'
       },
       {
-        'pdf': 'Figure22-2.pdf',
+        'pdf': 'NEHRP_2015_Figure22-2.pdf',
         'text': 'FIGURE 22-2 S<sub>1</sub> Risk-Targeted Maximum Considered ' +
                 'Earthquake (MCE<sub>R</sub>) Ground Motion Parameter for ' +
                 'the Conterminous United States for 1.0 s Spectral Response ' +
                 'Acceleration (5% of Critical Damping), Site Class B.'
       },
       {
-        'pdf': 'Figure22-9.pdf',
+        'pdf': 'NEHRP_2015_Figure22-9.pdf',
         'text': 'FIGURE 22-9 Maximum Considered Earthquake Geometric Mean ' +
                 '(MCE<sub>G</sub>) PGA, %g, Site Class B for the ' +
                 'Conterminous United States.'
       },
       {
-        'pdf': 'Figure22-14.pdf',
+        'pdf': 'NEHRP_2015_Figure22-14.pdf',
         'text': 'FIGURE 22-14 Mapped Long-Period Transition Period, ' +
                 'T<sub>L</sub> (s), for the Conterminous United States.'
       },
       {
-        'pdf': 'Figure22-18.pdf',
+        'pdf': 'NEHRP_2015_Figure22-18.pdf',
         'text': 'FIGURE 22-18 Mapped Risk Coefficient at 0.2 s Spectral ' +
                 'Response Period, C<sub>RS</sub>.'
       },
       {
-        'pdf': 'Figure22-19.pdf',
+        'pdf': 'NEHRP_2015_Figure22-19.pdf',
         'text': 'FIGURE 22-19 Mapped Risk Coefficient at 1.0 s Spectral ' +
                 'Response Period, C<sub>R1</sub>'
       }
