@@ -185,15 +185,7 @@ var SiteAmplification = function (params) {
       '</thead>',
       '<tbody>',
         _getTableBody(info.siteClasses, siteClass, bounds),
-      '</tbody>',
-      '<tfoot>',
-        '<tr>',
-          '<td colspan="', (info.bins.length + 1), '">',
-            'Note: Use straight-line interpolation for intermediate values ',
-            'of ', unit,
-          '</td>',
-        '</tr>',
-      '</tfoot>'
+      '</tbody>'
     ].join('');
 
     return table;
