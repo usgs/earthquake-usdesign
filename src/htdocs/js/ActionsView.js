@@ -95,10 +95,10 @@ var ActionsView = function (params) {
     _this.el.classList.add('actions-view-mode-input');
 
     headerMarkup = [
-      '<button class="actions-view-calculate" ',
+      '<button class="actions-view-calculate blue" ',
           'title="Click to run calculation for currently selected options."',
           '>Calculate</button>',
-      '<button class="actions-view-edit" ',
+      '<button class="actions-view-edit blue" ',
           'title="Click to edit the currently selected calculation inputs."',
           '>Edit</button>',
       '<button class="actions-view-new" ',

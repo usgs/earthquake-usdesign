@@ -22,14 +22,14 @@
 
 .actions-view {
   > .accordion {
-    .actions-view-actions {
-      padding: .6em 2em .6em 1em;
+    > .accordion-toggle:hover {
+      text-decoration: none;
+    }
 
-      &:before {
-        font-size: 1.5em;
-        left: auto;
-        right: 0;
-      }
+    .actions-view-actions:before {
+      font-size: 1.5em;
+      color: #777;
+      font-family: monospace;
     }
 
     > .accordion-content {
@@ -55,8 +55,11 @@
   width: 7em;
 }
 
-.actions-view-new {
-  margin-left: 4em;
+.actions-view-actions > .actions-view-edit,
+.actions-view-actions > .actions-view-calculate {
+  margin-right: 16px;
+  color: #fff;
+  font-size: 0.8125em;
 }
 
 /**
@@ -67,7 +70,7 @@
   display: inline-block;
   padding: 0 1em;
   margin: 4px 2px;
-  color: #333;
+  color: #666;
   background: #f8f8f8;
   background-image: linear-gradient(to bottom,rgba(255,255,255,.05) 0,rgba(0,0,0,.05) 100%);
   text-align: center;
@@ -86,14 +89,83 @@
   &:hover {
     background-image: linear-gradient(to bottom, rgba(255,255,255,0.1) 0, rgba(0,0,0,0.1) 100%);
     text-shadow: none;
-    color: #000;
   }
 
   &.disabled {
-    background: #e8e8e8;
+    background: #D3D3D3;
     color: #999;
     text-shadow: none;
     cursor: text;
     box-shadow: none;
+
+    &:before {
+      color: #999;
+    }
+  }
+}
+
+.actions-view-actions {
+  flex-wrap: wrap;
+
+  > button {
+    color: #666;
+    font-size: 11px;
+    height: 4.5rem;
+    line-height: 3rem;
+    min-width: 72px;
+    margin-right: -4px;
+    flex: none;
+
+    &:before {
+      display: block;
+      font-family: monospace;
+      font-size: 18px;
+      line-height: 0;
+      padding-top: 16px;
+    }
+  }
+
+  > .actions-view-new:before {
+    content: '\002B';
+  }
+
+  > .actions-view-upload:before {
+    content: '\21e7';
+    font-size: 16px;
+  }
+
+  > .actions-view-print:before {
+    content: '\2399';
+  }
+}
+
+.actions-view-download {
+  color: #666;
+  font-size: 11px;
+  height: 4.5rem;
+  line-height: 6.3rem;
+  margin-right: -4px;
+  min-width: 72px;
+
+  &:visited {
+    color: #666;
+  }
+
+  &.disabled:visited {
+    color: #999;
+  }
+
+  &:before {
+    color: #666;
+    content: '\21e7';
+    font-family: monospace;
+    font-size: 16px;
+    display: block;
+    line-height: 0;
+    position: relative;
+    top: 15px;
+    -webkit-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    transform: rotate(180deg);
   }
 }

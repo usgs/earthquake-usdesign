@@ -7,13 +7,14 @@ var concurrent = {
     'copy:dev',
     'copy:leaflet',
     'copy:locationView',
-    'compass:dev'
+    'compass:dev',
+    'postcss:build'
   ],
 
   dist: [
     'copy:dist',
     'uglify',
-    'cssmin'
+    'postcss:dist'
   ],
 
   test: [
