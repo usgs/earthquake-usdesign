@@ -9,44 +9,21 @@ var Section = require('renderer/Section'),
 
 var _DEFAULTS = {
   classes: ['section-11-4-5'],
-  nodeType: 'section',
-  baseUrl: 'http://earthquake.usgs.gov/hazards/designmaps/downloads/pdfs',
-
-  figures: {
-    // CONUS
-    1: '2009_NEHRP_Figure_22-7-page1.pdf',
-    // American Samoa
-    2: null,
-    // Guam
-    3: null,
-    // Hawaii
-    4: '2009_NEHRP_Figure_22-7-page2.pdf',
-    // Puerto Rico
-    5: '2009_NEHRP_Figure_22-7-page2.pdf',
-    // Alaska
-    6: '2009_NEHRP_Figure_22-7-page2.pdf'
-  }
+  nodeType: 'section'
 };
 
 var Nehrp2015Section_Section_11_4_5 = function (params) {
   var _this,
       _initialize,
 
-      _baseUrl,
-      _figures,
-      _spectrum,
-
-      _getFigure;
+      _spectrum;
 
 
   params = Util.extend({}, _DEFAULTS, params);
   _this = Section(params);
 
-  _initialize = function (params) {
+  _initialize = function () {
     var spectrumEl;
-
-    _baseUrl = params.baseUrl;
-    _figures = params.figures;
 
     spectrumEl = document.createElement('div');
     spectrumEl.classList.add('report-details-spectra-sd');
@@ -68,16 +45,6 @@ var Nehrp2015Section_Section_11_4_5 = function (params) {
             'S<sub>a</sub> = S<sub>D1</sub> T<sub>L</sub> / T<sup>2</sup>'
     });
   };
-
-
-  _getFigure = function (region) {
-    if (_figures && _figures[region]) {
-      return _baseUrl + '/' + _figures[region];
-    } else {
-      return '#';
-    }
-  };
-
 
   _this.contentInDom = function () {
     _spectrum.render();
@@ -105,12 +72,6 @@ var Nehrp2015Section_Section_11_4_5 = function (params) {
 
     section.innerHTML = [
       '<h3>Design Response Spectrum</h3>',
-
-      '<h5>',
-        '<a href="', _getFigure(region), '">',
-          'Figure 22-7: Long-period Transition Period, T<sub>L</sub> (s)',
-        '</a>',
-      '</h5>',
       '<div class="equation">',
         '<span id="tl">',
           'Long-Period Transition Period = T<sub>L</sub> = ',
