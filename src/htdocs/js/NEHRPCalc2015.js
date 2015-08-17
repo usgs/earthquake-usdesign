@@ -36,7 +36,7 @@ var NEHRPCalc2015 = function (params) {
    * Interpolates results
    * @param variable {int, int, int, int, int}
    */
-  _this.interpolateResults = function (d0, d1, x, x0, x1) {
+  _this.interpolateResults = function (d0, d1, x, x0, x1, log) {
     var key,
         result;
 
@@ -45,7 +45,7 @@ var NEHRPCalc2015 = function (params) {
     for (key in d0) {
       if (d0.hasOwnProperty(key) && d1.hasOwnProperty(key)) {
         result[key] =
-            _this.interpolateValue(d0[key], d1[key], x, x0, x1);
+            _this.interpolateValue(d0[key], d1[key], x, x0, x1, log);
       }
     }
     return result;
@@ -767,8 +767,8 @@ var NEHRPCalc2015 = function (params) {
           log);
 
       resultLat3 = _this.interpolateResults(
-          data[0].get(),
-          data[1].get(),
+          data[2].get(),
+          data[3].get(),
           lngInput,
           lng3,
           lng4,

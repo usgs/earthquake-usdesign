@@ -35,7 +35,8 @@ $metadata = array(
   'deterministic_floor_ss' => $region['deterministic_floor_ss'],
   'deterministic_floor_s1' => $region['deterministic_floor_s1'],
   'deterministic_floor_pga' => $region['deterministic_floor_pga'],
-  'grid_spacing' => $region['grid_spacing']
+  'grid_spacing' => $region['grid_spacing'],
+  'interpolation_method' => $region['interpolation_method']
 );
 
 // object containing output from region and data factories

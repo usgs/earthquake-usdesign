@@ -224,7 +224,7 @@ describe('NEHRPCalc2015Test', function () {
       calculateTwoPoints = Calculation({
         'input': {
           'latitude': 34.4,
-          'longitude': -118,
+          'longitude': -180,
         },
         'output': {
           'metadata': {
@@ -247,13 +247,11 @@ describe('NEHRPCalc2015Test', function () {
 
       interpolate = calc.interpolate(calculateTwoPoints);
 
-      expect(JSON.stringify(interpolate)).to.equal(
-          JSON.stringify({
-            'latitude': 34.4,
-            'longitude': -180,
-            'mapped_ss': 13.999999999999986
-          })
-      );
+      expect(interpolate.get('latitude')).to.be.closeTo(34.396524915060375,
+          EPSILION);
+
+      expect(interpolate.get('mapped_ss')).to.be.closeTo(13.195079107728928,
+          EPSILION);
     });
 
     it('interpolates four points correctly', function () {
@@ -296,13 +294,11 @@ describe('NEHRPCalc2015Test', function () {
 
       interpolate = calc.interpolate(calculateFourPoints);
 
-      expect(JSON.stringify(interpolate)).to.equal(
-          JSON.stringify({
-            'latitude': 34,
-            'longitude': -174,
-            'mapped_ss': 16
-          })
-      );
+      expect(interpolate.get('latitude')).to.be.closeTo(34.396524915060375,
+          EPSILION);
+
+      expect(interpolate.get('mapped_ss')).to.be.closeTo(14.339552480158279,
+          EPSILION);
     });
   });
 });
