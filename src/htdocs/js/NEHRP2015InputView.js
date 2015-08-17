@@ -1,6 +1,7 @@
 'use strict';
 
 var Calculation = require('Calculation'),
+    Formatter = require('util/Formatter'),
     LookupDataFactory = require('util/LookupDataFactory'),
 
     L = require('leaflet'),
@@ -518,8 +519,8 @@ var NEHRP2015InputView = function (params) {
     title = model.get('title') || '';
 
     if (latitude !== null && longitude !== null) {
-      title = title + '<small>(Latitude = ' + latitude + ', Longitude = ' +
-          longitude + ')</small>';
+      title = title + '<small>Latitude = ' + Formatter.latitude(latitude) +
+          ', Longitude = ' + Formatter.longitude(longitude) + '</small>';
 
       // update marker position on map
       _updateLocation({location: {latitude: latitude, longitude: longitude}});
