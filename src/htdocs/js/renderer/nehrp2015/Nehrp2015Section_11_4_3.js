@@ -153,7 +153,7 @@ var Nehrp2015Section_Section_11_4_3 = function (params) {
             'less than 1.2.',
           '</li>',
         '</ul>',
-        '<p class="report-summary-fa">',
+        '<p class="report-summary-fa page-break-after">',
           'For Site Class = ', siteClass, ' and S<sub>S</sub> = ',
           _this.outputNumber(ss), ' g, F<sub>a</sub> = ', _this.outputNumber(fa),
         '</p>',
