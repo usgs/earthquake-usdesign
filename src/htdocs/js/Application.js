@@ -137,6 +137,8 @@ var Application = function (params) {
         ready.push(calc);
       } else if (status === Calculation.STATUS_SENT) {
         sent.push(calc);
+      } else if (status === Calculation.STATUS_COMPLETE) {
+        calc.set({mode: Calculation.MODE_OUTPUT});
       }
     });
 

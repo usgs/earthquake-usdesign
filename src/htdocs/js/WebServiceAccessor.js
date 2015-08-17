@@ -57,8 +57,14 @@ var WebServiceAccessor = function (params) {
     Xhr.ajax({
         url: _buildUrl(calculation),
         success: function(data) {
+          var status;
+
           try {
-            _updateCalculation(calculation, data);
+            status = calculation.get('status');
+
+            if (status === Calculation.STATUS_SENT) {
+              _updateCalculation(calculation, data);
+            }
 
             if (callback) {
               callback(calculation);

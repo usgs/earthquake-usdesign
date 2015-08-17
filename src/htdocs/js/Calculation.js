@@ -89,6 +89,7 @@ var Calculation = function (params) {
       _input,
 
       _generateId,
+      _onInputChange,
       _updateStatus;
 
 
@@ -149,7 +150,7 @@ var Calculation = function (params) {
     }
 
     _input = attributes.input;
-    _input.on('change', _updateStatus);
+    _input.on('change', _onInputChange);
     _this.set(attributes);
 
     if (computeStatus) {
@@ -166,21 +167,26 @@ var Calculation = function (params) {
     return 'Calculation-' + ((new Date()).getTime()) + '-' + (_ID_SEQUENCE++);
   };
 
+  _onInputChange = function () {
+    var field,
+        fields,
+        result;
 
-  /**
-   * Calls parent destroy method then frees local allocations.
-   *
-   */
-  _this.destroy = Util.compose(_this.destroy, function () {
-    _input.off('change', _updateStatus);
-    _input = null;
+    // Clear any previous results
+    result = _this.get('result');
+    if (result) {
+      fields = result.get();
 
-    _generateId = null;
-    _updateStatus = null;
+      for (field in fields) {
+        fields[field] = null;
+      }
 
-    _initialize = null;
-    _this = null;
-  });
+      result.set(fields);
+    }
+
+    // Update status
+    _updateStatus();
+  };
 
   /**
    * Check current input parameters and set calculation status.
@@ -195,9 +201,6 @@ var Calculation = function (params) {
         status;
 
     status = _this.get('status');
-    if (status === _STATUS_COMPLETE || status === _STATUS_SENT) {
-      return;
-    }
 
     input = _this.get('input').get();
     if (input.title === null ||
@@ -226,6 +229,23 @@ var Calculation = function (params) {
       status: status
     });
   };
+
+
+  /**
+   * Calls parent destroy method then frees local allocations.
+   *
+   */
+  _this.destroy = Util.compose(_this.destroy, function () {
+    _input.off('change', _onInputChange);
+    _input = null;
+
+    _generateId = null;
+    _onInputChange = null;
+    _updateStatus = null;
+
+    _initialize = null;
+    _this = null;
+  });
 
   _initialize(params);
   params = null;
