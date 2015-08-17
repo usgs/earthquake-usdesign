@@ -2,15 +2,23 @@
   text-decoration: overline;
 }
 
-.report-view {
-  aside {
-    color: #666;
-    font-size: smaller;
-  }
+.report-view aside,
+.footnotes {
+  margin: 8px 0 0;
+}
+
+.footnotes > li {
+  margin: 4px 0 0;
+}
+
+.report-view aside,
+.footnotes > li {
+  color: #888;
+  font-size: smaller;
+  line-height: 1.3;
 }
 
 .report-summary-values {
-  margin: 0 0 1em;
   overflow: hidden;
 
   > dt,
@@ -106,7 +114,6 @@
   }
 
   > tfoot > tr > td {
-    font-size: smaller;
     text-align: center;
   }
 }

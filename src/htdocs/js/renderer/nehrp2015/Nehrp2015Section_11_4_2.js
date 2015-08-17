@@ -32,7 +32,7 @@ var Nehrp2015Section_Section_11_4_2 = function (params) {
     result = model.get('result');
 
     section.innerHTML = [
-      '<h3>Section 11.4.2 &mdash; Site Class</h3>',
+      '<h3>Site Class</h3>',
       '<p>',
         'The authority having jurisdiction (not the USGS), site-specific ',
         'geotechnical data, and/or the default has classified the site ',

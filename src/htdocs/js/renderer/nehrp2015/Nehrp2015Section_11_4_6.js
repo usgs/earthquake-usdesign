@@ -51,7 +51,7 @@ var Nehrp2015Section_Section_11_4_6 = function (params) {
     result = model.get('result');
 
     section.innerHTML = [
-      '<h3>Section 11.4.6 &mdash; MCE<sub>R</sub> Response Spectrum</h3>',
+      '<h3>MCE<sub>R</sub> Response Spectrum</h3>',
       '<aside>',
         'The MCE<sub>R</sub> response spectrum is determined by ',
         'multiplying the design response spectrum above by 1.5.',

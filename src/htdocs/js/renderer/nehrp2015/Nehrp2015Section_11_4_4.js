@@ -43,23 +43,28 @@ var Nehrp2015Section_Section_11_4_4 = function (params) {
 
     section.innerHTML = [
       '<h3>',
-        'Section 11.4.4 &mdash; Design Spectral Acceleration Parameters',
+        'Design Spectral Acceleration Parameters',
       '</h3>',
 
       '<div class="equation">',
-        '<label for="equation-11-4-7">Equation (11.4-7)</label>',
+        '<label for="equation-11-4-7">Design Ground Motion</label>',
         '<span id="equation-11-4-7">',
           'S<sub>DS</sub> = &#8532; S<sub>MS</sub> = &#8532; &times; ',
           _this.outputNumber(sms), ' = ', _this.outputNumber(sds), ' g',
         '<span>',
       '</div>',
       '<div class="equation">',
-        '<label for="equation-11-4-8">Equation (11.4-8)</label>',
+        '<label for="equation-11-4-8">Design Ground Motion</label>',
         '<span id="equation-11-4-8">',
           'S<sub>D1</sub> = &#8532; S<sub>M1</sub> = &#8532; &times; ',
           _this.outputNumber(sm1), ' = ', _this.outputNumber(sd1), ' g',
         '<span>',
-      '</div>'
+      '</div>',
+
+      '<aside>',
+        'Note: S<sub>DS</sub> shall not be taken less than S<sub>D1</sub> ',
+        'except when determining Seismic Design Category.',
+      '</aside>'
     ].join('');
 
     return args;

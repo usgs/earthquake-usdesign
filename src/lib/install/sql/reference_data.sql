@@ -65,7 +65,7 @@ INSERT INTO risk_category (
   id, name, display_order
 ) VALUES
   (1, 'I or II or III', 1),
-  (2, 'IV e.g. Essential Facilities:', 2);
+  (2, 'IV e.g. (Essential Facilities)', 2);
 
 
 -- Site class-design code relations

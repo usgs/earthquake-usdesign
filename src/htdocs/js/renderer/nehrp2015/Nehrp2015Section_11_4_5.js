@@ -104,7 +104,7 @@ var Nehrp2015Section_Section_11_4_5 = function (params) {
     }
 
     section.innerHTML = [
-      '<h3>Section 11.4.5 &mdash; Design Response Spectrum</h3>',
+      '<h3>Design Response Spectrum</h3>',
 
       '<h5>',
         '<a href="', _getFigure(region), '">',

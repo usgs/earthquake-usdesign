@@ -7,7 +7,8 @@ var Formatter = require('util/Formatter'),
 var _DEFAULTS = {
   faTitle: 'Spectral Reponse Acceleration Parameter at Short Period',
 
-  fpgaTitle: 'Mapped MCE Geometric Mean Peak Ground Acceleration, PGA',
+  fpgaTitle: 'Mapped MCE Geometric Mean (MCE<sub>G</sub>) Peak Ground ' +
+      'Acceleration',
 
   fvTitle: 'Spectral Response Acceleration Parameter at 1-Second Period',
 
@@ -184,15 +185,7 @@ var SiteAmplification = function (params) {
       '</thead>',
       '<tbody>',
         _getTableBody(info.siteClasses, siteClass, bounds),
-      '</tbody>',
-      '<tfoot>',
-        '<tr>',
-          '<td colspan="', (info.bins.length + 1), '">',
-            'Note: Use straight-line interpolation for intermediate values ',
-            'of ', unit,
-          '</td>',
-        '</tr>',
-      '</tfoot>'
+      '</tbody>'
     ].join('');
 
     return table;
@@ -245,7 +238,7 @@ var SiteAmplification = function (params) {
     return markup.join('') + '<tr class="site-class-F">' +
       '<th scope="row">F</th>' +
       '<td colspan="' + data[siteClass].length + '">' +
-        'See Section 11.4.7 of ASCE 7' +
+        'See Section 11.4.7' +
       '</td>';
   };
 

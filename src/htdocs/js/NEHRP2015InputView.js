@@ -213,7 +213,7 @@ var NEHRP2015InputView = function (params) {
             '<div class="location-view-output"></div>' +
           '</div>' +
           '<div class="column two-of-five">' +
-            '<label for="design-code">Design Code</label>' +
+            '<label for="design-code">Reference Document</label>' +
             '<select name="design-code" id="design-code" class="design-code-input"></select>' +
             '<div class="design-code-output"></div>' +
             '<label for="site-class">Site Class</label>' +
@@ -518,7 +518,8 @@ var NEHRP2015InputView = function (params) {
     title = model.get('title') || '';
 
     if (latitude !== null && longitude !== null) {
-      title = title + '<small>(' + latitude + ', ' + longitude + ')</small>';
+      title = title + '<small>(Latitude = ' + latitude + ', Longitude = ' +
+          longitude + ')</small>';
 
       // update marker position on map
       _updateLocation({location: {latitude: latitude, longitude: longitude}});
