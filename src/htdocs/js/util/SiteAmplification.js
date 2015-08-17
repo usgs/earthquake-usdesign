@@ -17,10 +17,11 @@ var _DEFAULTS = {
     siteClasses: {
       'A': [0.8, 0.8, 0.8, 0.8, 0.8, 0.8],
       'B': [0.9, 0.9, 0.9, 0.9, 0.9, 0.9],
+      'B-U': [1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
       'C': [1.3, 1.3, 1.2, 1.2, 1.2, 1.2],
       'D': [1.6, 1.4, 1.2, 1.1, 1.0, 1.0],
-      'E': [2.4, 1.7, 1.3, 1.1, 1.0, 0.8],
-      'U': [1.6, 1.4, 1.2, 1.2, 1.2, 1.2]
+      // 'E': [2.4, 1.7, 1.3, 1.1, 1.0, 0.8],
+      'U-D': [1.6, 1.4, 1.2, 1.2, 1.2, 1.2]
     }
   },
   s1Info: {
@@ -28,10 +29,11 @@ var _DEFAULTS = {
     siteClasses: {
       'A': [0.8, 0.8, 0.8, 0.8, 0.8, 0.8],
       'B': [0.8, 0.8, 0.8, 0.8, 0.8, 0.8],
+      'B-U': [1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
       'C': [1.5, 1.5, 1.5, 1.5, 1.5, 1.4],
       'D': [2.4, 2.2, 2.0, 1.9, 1.8, 1.7],
-      'E': [4.2, 3.3, 2.8, 2.4, 2.2, 2.0],
-      'U': [2.4, 2.2, 2.0, 1.9, 1.8, 1.7]
+      // 'E': [4.2, 3.3, 2.8, 2.4, 2.2, 2.0],
+      'U-D': [2.4, 2.2, 2.0, 1.9, 1.8, 1.7]
     }
   },
   pgaInfo: {
@@ -39,10 +41,11 @@ var _DEFAULTS = {
     siteClasses: {
       'A': [0.8, 0.8, 0.8, 0.8, 0.8, 0.8],
       'B': [0.9, 0.9, 0.9, 0.9, 0.9, 0.9],
+      'B-U': [1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
       'C': [1.3, 1.2, 1.2, 1.2, 1.2, 1.2],
       'D': [1.6, 1.4, 1.3, 1.2, 1.1, 1.1],
-      'E': [2.4, 1.9, 1.6, 1.4, 1.2, 1.1],
-      'U': [1.6, 1.4, 1.3, 1.2, 1.2, 1.2]
+      // 'E': [2.4, 1.9, 1.6, 1.4, 1.2, 1.1],
+      'U-D': [1.6, 1.4, 1.3, 1.2, 1.2, 1.2]
     }
   }
 };
@@ -74,8 +77,8 @@ var SiteAmplification = function (params) {
     'getFpgaTable': null,
     'getFv': null,
     'getFvTable': null,
-    'getUndeterminedPgaTable': null,
-    'getUndeterminedSsS1Table': null,
+    // 'getUndeterminedPgaTable': null,
+    // 'getUndeterminedSsS1Table': null,
 
     'destroy': null
   };
@@ -202,11 +205,6 @@ var SiteAmplification = function (params) {
     markup = [];
 
     for (label in data) {
-      if (label === 'U') {
-        // Skip undetermined site class for this table
-        continue;
-      }
-
       values = data[label];
 
       markup.push('<tr class="site-class-' + label + '">' +
@@ -319,173 +317,173 @@ var SiteAmplification = function (params) {
     return _getTable(acceleration, siteClass, _pgaInfo, _fpgaTitle, 'PGA');
   };
 
-  _this.getUndeterminedPgaTable = function (pga, siteClass) {
-    var comparator,
+  // _this.getUndeterminedPgaTable = function (pga, siteClass) {
+  //   var comparator,
 
-        bounds,
-        classes,
-        headers,
-        vals,
+  //       bounds,
+  //       classes,
+  //       headers,
+  //       vals,
 
-        i,
-        len,
-        table;
+  //       i,
+  //       len,
+  //       table;
 
-    headers =[];
-    vals = [];
+  //   headers =[];
+  //   vals = [];
 
-    len = _pgaInfo.bins.length;
+  //   len = _pgaInfo.bins.length;
 
-    bounds = _getBounds(_pgaInfo.bins, pga);
+  //   bounds = _getBounds(_pgaInfo.bins, pga);
 
-    for (i = 0; i < len; i++) {
-      classes = '';
+  //   for (i = 0; i < len; i++) {
+  //     classes = '';
 
-      if (siteClass === 'U') {
-        if (i === bounds.lower || i === bounds.upper) {
-          classes = 'bound';
+  //     if (siteClass === 'U-D') {
+  //       if (i === bounds.lower || i === bounds.upper) {
+  //         classes = 'bound';
 
-          if (i === bounds.lower) {
-            classes += ' lower';
-          }
-          if (i === bounds.upper) {
-            classes += ' upper';
-          }
-        }
-      }
+  //         if (i === bounds.lower) {
+  //           classes += ' lower';
+  //         }
+  //         if (i === bounds.upper) {
+  //           classes += ' upper';
+  //         }
+  //       }
+  //     }
 
-      if (i === 0) {
-        comparator = '&le;';
-      } else if (i === (len - 1)) {
-        comparator = '&ge;';
-      } else {
-        comparator = '=';
-      }
+  //     if (i === 0) {
+  //       comparator = '&le;';
+  //     } else if (i === (len - 1)) {
+  //       comparator = '&ge;';
+  //     } else {
+  //       comparator = '=';
+  //     }
 
-      headers.push('<th scope="col">PGA ' + comparator + ' ' +
-          _pgaInfo.bins[i] + '</th>');
-      vals.push('<td class="' + classes + '">' +
-          _pgaInfo.siteClasses.U[i] + '</td>');
-    }
+  //     headers.push('<th scope="col">PGA ' + comparator + ' ' +
+  //         _pgaInfo.bins[i] + '</th>');
+  //     vals.push('<td class="' + classes + '">' +
+  //         _pgaInfo.siteClasses.U[i] + '</td>');
+  //   }
 
-    table = document.createElement('table');
-    table.classList.add('site-amplification-table');
-    table.classList.add('site-amplification-table-undetermined');
+  //   table = document.createElement('table');
+  //   table.classList.add('site-amplification-table');
+  //   table.classList.add('site-amplification-table-undetermined');
 
-    table.innerHTML = [
-      '<thead>',
-        '<tr>',
-          '<th scope="col" rowspan="2">Site Coefficient</th>',
-          '<th colspan="', len, '">',
-            'Mapped MCE Geometric Mean Peak Ground Acceleration, PGA',
-          '</th>',
-        '</tr>',
-        '<tr>', headers.join(''), '</tr>',
-      '</thead>',
-      '<tbody>',
-        '<tr><th scope="row">F<sub>PGA</sub></th>', vals.join(''), '</tr>',
-      '</tbody>'
-    ].join('');
+  //   table.innerHTML = [
+  //     '<thead>',
+  //       '<tr>',
+  //         '<th scope="col" rowspan="2">Site Coefficient</th>',
+  //         '<th colspan="', len, '">',
+  //           'Mapped MCE Geometric Mean Peak Ground Acceleration, PGA',
+  //         '</th>',
+  //       '</tr>',
+  //       '<tr>', headers.join(''), '</tr>',
+  //     '</thead>',
+  //     '<tbody>',
+  //       '<tr><th scope="row">F<sub>PGA</sub></th>', vals.join(''), '</tr>',
+  //     '</tbody>'
+  //   ].join('');
 
-    return table;
-  };
+  //   return table;
+  // };
 
-  _this.getUndeterminedSsS1Table = function (ss, s1, siteClass) {
-    var comparator,
+  // _this.getUndeterminedSsS1Table = function (ss, s1, siteClass) {
+  //   var comparator,
 
-        faBounds,
-        faClasses,
-        faHeaders,
-        faVals,
+  //       faBounds,
+  //       faClasses,
+  //       faHeaders,
+  //       faVals,
 
-        fvBounds,
-        fvClasses,
-        fvHeaders,
-        fvVals,
+  //       fvBounds,
+  //       fvClasses,
+  //       fvHeaders,
+  //       fvVals,
 
-        i,
-        len,
-        table;
+  //       i,
+  //       len,
+  //       table;
 
-    faHeaders = [];
-    fvHeaders = [];
-    faVals = [];
-    fvVals = [];
+  //   faHeaders = [];
+  //   fvHeaders = [];
+  //   faVals = [];
+  //   fvVals = [];
 
-    len = _ssInfo.bins.length;
+  //   len = _ssInfo.bins.length;
 
-    faBounds = _getBounds(_ssInfo.bins, ss);
-    fvBounds = _getBounds(_s1Info.bins, s1);
+  //   faBounds = _getBounds(_ssInfo.bins, ss);
+  //   fvBounds = _getBounds(_s1Info.bins, s1);
 
-    for (i = 0; i < len; i++) {
-      faClasses = '';
-      fvClasses = '';
+  //   for (i = 0; i < len; i++) {
+  //     faClasses = '';
+  //     fvClasses = '';
 
-      if (siteClass === 'U') {
-        if (i === faBounds.lower || i === faBounds.upper) {
-          faClasses += 'bound';
+  //     if (siteClass === 'U-D') {
+  //       if (i === faBounds.lower || i === faBounds.upper) {
+  //         faClasses += 'bound';
 
-          if (i === faBounds.lower) {
-            faClasses += ' lower';
-          }
-          if (i === faBounds.upper) {
-            faClasses += ' upper';
-          }
-        }
+  //         if (i === faBounds.lower) {
+  //           faClasses += ' lower';
+  //         }
+  //         if (i === faBounds.upper) {
+  //           faClasses += ' upper';
+  //         }
+  //       }
 
-        if (i === fvBounds.lower || i === fvBounds.upper) {
-          fvClasses = 'bound';
+  //       if (i === fvBounds.lower || i === fvBounds.upper) {
+  //         fvClasses = 'bound';
 
-          if (i === fvBounds.lower) {
-            fvClasses += ' lower';
-          }
-          if (i === fvBounds.upper) {
-            fvClasses += ' upper';
-          }
-        }
-      }
+  //         if (i === fvBounds.lower) {
+  //           fvClasses += ' lower';
+  //         }
+  //         if (i === fvBounds.upper) {
+  //           fvClasses += ' upper';
+  //         }
+  //       }
+  //     }
 
-      if (i === 0) {
-        comparator = '&le;';
-      } else if (i === (len - 1)) {
-        comparator = '&ge;';
-      } else {
-        comparator = '=';
-      }
+  //     if (i === 0) {
+  //       comparator = '&le;';
+  //     } else if (i === (len - 1)) {
+  //       comparator = '&ge;';
+  //     } else {
+  //       comparator = '=';
+  //     }
 
-      faHeaders.push('<th scope="col">S<sub>S</sub> ' + comparator + ' ' +
-          Formatter.siteAmplificationHeader(_ssInfo.bins[i]) + '</th>');
-      faVals.push('<td class="' + faClasses + '">' +
-          _ssInfo.siteClasses.U[i] + '</td>');
+  //     faHeaders.push('<th scope="col">S<sub>S</sub> ' + comparator + ' ' +
+  //         Formatter.siteAmplificationHeader(_ssInfo.bins[i]) + '</th>');
+  //     faVals.push('<td class="' + faClasses + '">' +
+  //         _ssInfo.siteClasses.U[i] + '</td>');
 
-      fvHeaders.push('<th scope="col">S<sub>1</sub> ' + comparator + ' ' +
-          Formatter.siteAmplificationHeader(_s1Info.bins[i]) + '</th>');
-      fvVals.push('<td class="' + fvClasses + '">' +
-          _s1Info.siteClasses.U[i] + '</td>');
-    }
+  //     fvHeaders.push('<th scope="col">S<sub>1</sub> ' + comparator + ' ' +
+  //         Formatter.siteAmplificationHeader(_s1Info.bins[i]) + '</th>');
+  //     fvVals.push('<td class="' + fvClasses + '">' +
+  //         _s1Info.siteClasses.U[i] + '</td>');
+  //   }
 
-    table = document.createElement('table');
-    table.classList.add('site-amplification-table');
-    table.classList.add('site-amplification-table-undetermined');
-    table.innerHTML = [
-        '<thead>',
-          '<tr>',
-            '<th scope="col" rowspan="2">Site Coefficient</th>',
-            '<th colspan="', len, '">',
-              'Spectral Response Acceleration Parameters',
-            '</th>',
-          '</tr>',
-          '<tr>', faHeaders.join(''), '</tr>',
-        '</thead>',
-        '<tbody>',
-          '<tr><th scope="row">F<sub>a</sub></th>', faVals.join(''), '</tr>',
-          '<tr class="header"><th>&nbsp;</th>', fvHeaders.join(''), '</tr>',
-          '<tr><th scope="row">F<sub>v</sub></th>', fvVals.join(''), '</tr>',
-        '</tbody>'
-    ].join('');
+  //   table = document.createElement('table');
+  //   table.classList.add('site-amplification-table');
+  //   table.classList.add('site-amplification-table-undetermined');
+  //   table.innerHTML = [
+  //       '<thead>',
+  //         '<tr>',
+  //           '<th scope="col" rowspan="2">Site Coefficient</th>',
+  //           '<th colspan="', len, '">',
+  //             'Spectral Response Acceleration Parameters',
+  //           '</th>',
+  //         '</tr>',
+  //         '<tr>', faHeaders.join(''), '</tr>',
+  //       '</thead>',
+  //       '<tbody>',
+  //         '<tr><th scope="row">F<sub>a</sub></th>', faVals.join(''), '</tr>',
+  //         '<tr class="header"><th>&nbsp;</th>', fvHeaders.join(''), '</tr>',
+  //         '<tr><th scope="row">F<sub>v</sub></th>', fvVals.join(''), '</tr>',
+  //       '</tbody>'
+  //   ].join('');
 
-    return table;
-  };
+  //   return table;
+  // };
 
   _this.destroy = function () {
     _faTitle = null;
