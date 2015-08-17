@@ -58,8 +58,8 @@ var Nehrp2015Section_Section_11_8_3 = function (params) {
       fpgaTable.appendChild(_siteAmplification.getFpgaTable(pga, siteClass));
 
       undetermined = document.createElement('div');
-      undetermined.appendChild(_siteAmplification.getUndeterminedPgaTable(
-          pga, siteClass));
+      // undetermined.appendChild(_siteAmplification.getUndeterminedPgaTable(
+      //     pga, siteClass));
 
       section.innerHTML = [
         '<h3>',

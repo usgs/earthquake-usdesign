@@ -82,8 +82,8 @@ var Nehrp2015Section_Section_11_4_3 = function (params) {
       fvTable.appendChild(_siteAmplification.getFvTable(s1, siteClass));
 
       undetermined = document.createElement('div');
-      undetermined.appendChild(_siteAmplification.getUndeterminedSsS1Table(
-          ss, s1, siteClass));
+      // undetermined.appendChild(_siteAmplification.getUndeterminedSsS1Table(
+      //     ss, s1, siteClass));
 
       section.innerHTML = [
         '<h3>',
