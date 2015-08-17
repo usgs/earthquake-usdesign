@@ -767,8 +767,8 @@ var NEHRPCalc2015 = function (params) {
           log);
 
       resultLat3 = _this.interpolateResults(
-          data[0].get(),
-          data[1].get(),
+          data[2].get(),
+          data[3].get(),
           lngInput,
           lng3,
           lng4,
