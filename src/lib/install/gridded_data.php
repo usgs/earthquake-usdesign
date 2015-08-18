@@ -135,9 +135,13 @@ if (promptYesNo('Load TsubL Data?', true)) {
 
   echo "\t" . 'downloading ...';
   ftp_get($ftp, $local_tl, $T_SUB_L, FTP_BINARY);
+  echo ' complete!' . PHP_EOL;
 
+  echo "\tdeleting old data ...";
   $DB->exec('DELETE FROM tl');
+  echo ' complete!' . PHP_EOL . "\tloading new data ...";
   $DB->exec('COPY tl FROM \'' . $local_tl . '\' NULL AS \'\' CSV HEADER');
+  echo ' complete!' . PHP_EOL;
 }
 
 // loop over editions
