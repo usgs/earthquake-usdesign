@@ -4,17 +4,29 @@
 $remote_server = 'hazards.cr.usgs.gov';
 
 $datasets = array(
-  '2015nehrp_alaska' => array(
-    'title' => '2015 NEHRP Alaska',
+  '2015nehrp_guam' => array(
+    'title' => '2015 NEHRP Guam',
+    'design_code_id' => 1,
+    'metadata_id' => 2,
+    'name' => 'Guam',
+    'min_latitude' => 9.00,
+    'max_latitude' => 23.00,
+    'min_longitude' => 139,
+    'max_longitude' => 151,
+    'grid_spacing' => 0.10,
+    'remote_dir' => '/web/earthquake-usdesign/2015nehrp/guam'
+  ),
+  '2015nehrp_prvi' => array(
+    'title' => '2015 NEHRP Puerto Rico/Virgin Islands',
     'design_code_id' => 1,
     'metadata_id' => 1,
-    'name' => 'Alaska',
-    'min_latitude' => 48.00,
-    'max_latitude' => 72.00,
-    'min_longitude' => -200.00,
-    'max_longitude' => -125.10,
-    'grid_spacing' => 0.05,
-    'remote_dir' => '/web/earthquake-usdesign/2015nehrp/alaska'
+    'name' => 'Puerto Rico and Virgin Islands',
+    'min_latitude' => 17.50,
+    'max_latitude' => 19.00,
+    'min_longitude' => -67.50,
+    'max_longitude' => -64.50,
+    'grid_spacing' => 0.01,
+    'remote_dir' => '/web/earthquake-usdesign/2015nehrp/prvi'
   ),
   '2015nehrp_amsam' => array(
     'title' => '2015 NEHRP American Samoa',
@@ -28,18 +40,6 @@ $datasets = array(
     'grid_spacing' => 0.10,
     'remote_dir' => '/web/earthquake-usdesign/2015nehrp/amsam'
   ),
-  '2015nehrp_guam' => array(
-    'title' => '2015 NEHRP Guam',
-    'design_code_id' => 1,
-    'metadata_id' => 2,
-    'name' => 'Guam',
-    'min_latitude' => 9.00,
-    'max_latitude' => 23.00,
-    'min_longitude' => 139,
-    'max_longitude' => 151,
-    'grid_spacing' => 0.10,
-    'remote_dir' => '/web/earthquake-usdesign/2015nehrp/guam'
-  ),
   '2015nehrp_hv' => array(
     'title' => '2015 NEHRP Hawaii',
     'design_code_id' => 1,
@@ -52,17 +52,17 @@ $datasets = array(
     'grid_spacing' => 0.02,
     'remote_dir' => '/web/earthquake-usdesign/2015nehrp/hi'
   ),
-  '2015nehrp_prvi' => array(
-    'title' => '2015 NEHRP Puerto Rico/Virgin Islands',
+  '2015nehrp_alaska' => array(
+    'title' => '2015 NEHRP Alaska',
     'design_code_id' => 1,
     'metadata_id' => 1,
-    'name' => 'Puerto Rico and Virgin Islands',
-    'min_latitude' => 17.50,
-    'max_latitude' => 19.00,
-    'min_longitude' => -67.50,
-    'max_longitude' => -64.50,
-    'grid_spacing' => 0.01,
-    'remote_dir' => '/web/earthquake-usdesign/2015nehrp/prvi'
+    'name' => 'Alaska',
+    'min_latitude' => 48.00,
+    'max_latitude' => 72.00,
+    'min_longitude' => -200.00,
+    'max_longitude' => -125.10,
+    'grid_spacing' => 0.05,
+    'remote_dir' => '/web/earthquake-usdesign/2015nehrp/alaska'
   ),
   '2015nehrp_us' => array(
     'title' => '2015 NEHRP Conterminous US',
@@ -120,6 +120,29 @@ $ftp = ftp_connect($remote_server);
 ftp_login($ftp, 'anonymous', 'earthquake-usdesign@usgs.gov');
 ftp_pasv($ftp, true);
 
+/**
+ * Check whether to load TL data
+ */
+if (promptYesNo('Load TsubL Data?', true)) {
+  /**
+   * Download tl data
+   */
+  $local_tl = $local_dir . '/tsubl/';
+  if (!is_dir($local_tl)) {
+    mkdir($local_tl);
+  }
+  $local_tl .= 'tsubl.dat';
+
+  echo "\t" . 'downloading ...';
+  ftp_get($ftp, $local_tl, $T_SUB_L, FTP_BINARY);
+  echo ' complete!' . PHP_EOL;
+
+  echo "\tdeleting old data ...";
+  $DB->exec('DELETE FROM tl');
+  echo ' complete!' . PHP_EOL . "\tloading new data ...";
+  $DB->exec('COPY tl FROM \'' . $local_tl . '\' NULL AS \'\' CSV HEADER');
+  echo ' complete!' . PHP_EOL;
+}
 
 // loop over editions
 $anyErrors = false;
@@ -265,25 +288,6 @@ if ($droppedIndexes) {
   $DB->exec('ALTER TABLE data ADD PRIMARY KEY (id)');
   $DB->exec('SET CONSTRAINTS ALL IMMEDIATE');
   echo ' done!' . PHP_EOL;
-}
-
-/**
- * Check whether to load TL data
- */
-if (promptYesNo('Load TsubL Data?', true)) {
-  /**
-   * Download tl data
-   */
-  $local_tl = $local_dir . '/tsubl/';
-  if (!is_dir($local_tl)) {
-    mkdir($local_tl);
-  }
-  $local_tl .= 'tsubl.dat';
-
-  echo "\t" . 'downloading ...';
-  ftp_get($ftp, $local_tl, $T_SUB_L, FTP_BINARY);
-
-  $DB->exec('COPY tl FROM \'' . $local_tl . '\' NULL AS \'\' CSV HEADER');
 }
 
 if ($anyErrors) {
