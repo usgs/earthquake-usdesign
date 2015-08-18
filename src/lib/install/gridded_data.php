@@ -198,10 +198,10 @@ foreach ($datasets as $id => $metadata) {
     // check that files exist
     $cr1 = $local_dataset . '/mapped_cr1.txt';
     $crs = $local_dataset . '/mapped_crs.txt';
-    $pga = $local_dataset . '/mapped_pgauh.txt';
+    $pga = $local_dataset . '/mapped_pga.txt';
     $pgad = $local_dataset . '/mapped_pgad.txt';
-    $s1 = $local_dataset . '/mapped_s1uh.txt';
-    $ss = $local_dataset . '/mapped_ssuh.txt';
+    $s1 = $local_dataset . '/mapped_s1.txt';
+    $ss = $local_dataset . '/mapped_ss.txt';
     $s1d = $local_dataset . '/mapped_s1d.txt';
     $ssd = $local_dataset . '/mapped_ssd.txt';
 
