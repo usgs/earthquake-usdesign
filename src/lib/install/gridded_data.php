@@ -73,7 +73,7 @@ $datasets = array(
     'max_latitude' => 50.00,
     'min_longitude' => -125.00,
     'max_longitude' => -65.10,
-    'grid_spacing' => 0.05,
+    'grid_spacing' => 0.01,
     'remote_dir' => '/web/earthquake-usdesign/2015nehrp/us'
   )
 );
@@ -123,6 +123,7 @@ ftp_pasv($ftp, true);
 
 // loop over editions
 $anyErrors = false;
+$droppedIndexes = false;
 foreach ($datasets as $id => $metadata) {
   // check whether to load dataset
   $region = $regionFactory->get(
@@ -137,6 +138,16 @@ foreach ($datasets as $id => $metadata) {
     }
   } else if (!promptYesNo('Load ' . $metadata['title'] . '?', true)) {
     continue;
+  }
+
+  if (!$droppedIndexes) {
+    // Drop constraints/indexes so data loads faster
+    $DB->exec('ALTER TABLE data DROP CONSTRAINT data_pkey');
+    $DB->exec('DROP INDEX IF EXISTS data_location_index');
+    $DB->exec('ALTER TABLE data DROP CONSTRAINT data_region_id_fkey');
+    $DB->exec('SET CONSTRAINTS ALL DEFERRED');
+
+    $droppedIndexes = true;
   }
 
   $DB->beginTransaction();
@@ -187,10 +198,10 @@ foreach ($datasets as $id => $metadata) {
     // check that files exist
     $cr1 = $local_dataset . '/mapped_cr1.txt';
     $crs = $local_dataset . '/mapped_crs.txt';
-    $pga = $local_dataset . '/mapped_pga.txt';
+    $pga = $local_dataset . '/mapped_pgauh.txt';
     $pgad = $local_dataset . '/mapped_pgad.txt';
-    $s1 = $local_dataset . '/mapped_s1.txt';
-    $ss = $local_dataset . '/mapped_ss.txt';
+    $s1 = $local_dataset . '/mapped_s1uh.txt';
+    $ss = $local_dataset . '/mapped_ssuh.txt';
     $s1d = $local_dataset . '/mapped_s1d.txt';
     $ssd = $local_dataset . '/mapped_ssd.txt';
 
@@ -242,6 +253,18 @@ foreach ($datasets as $id => $metadata) {
 
     $anyErrors = true;
   }
+}
+
+if ($droppedIndexes) {
+  // Add constraints/indexes back
+  echo 'Indexing gridded data ...';
+  $DB->exec('ALTER TABLE data ADD CONSTRAINT ' .
+      'data_region_id_fkey FOREIGN KEY (region_id) REFERENCES region (id)');
+  $DB->exec('CREATE UNIQUE INDEX ' .
+      'data_location_index ON data USING btree (region_id, latitude, longitude)');
+  $DB->exec('ALTER TABLE data ADD PRIMARY KEY (id)');
+  $DB->exec('SET CONSTRAINTS ALL IMMEDIATE');
+  echo ' done!' . PHP_EOL;
 }
 
 /**
