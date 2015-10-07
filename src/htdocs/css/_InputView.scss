@@ -1,11 +1,11 @@
 
-@import 'locationview/LeafletControls';
-@import 'locationview/LocationControl';
-@import 'locationview/LocationView';
-@import 'locationview/PointControl';
-@import 'locationview/CoordinateControl';
-@import 'locationview/GeocodeControl';
-@import 'locationview/GeolocationControl';
+@import 'locationview/LeafletControls.scss';
+@import 'locationview/LocationControl.scss';
+@import 'locationview/LocationView.scss';
+@import 'locationview/PointControl.scss';
+@import 'locationview/CoordinateControl.scss';
+@import 'locationview/GeocodeControl.scss';
+@import 'locationview/GeolocationControl.scss';
 
 
 .input-view {
@@ -16,7 +16,7 @@
   }
 
   .report-title-input {
-    font-size: 2em; // h1 size
+    font-size: 2em;
     height: auto;
   }
 
