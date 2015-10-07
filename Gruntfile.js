@@ -22,7 +22,7 @@ module.exports = function (grunt) {
     'dev',
 
     'jshint:test',
-    'concurrent:test', // browserify:test, copy:test
+    'concurrent:test', // browserify:test browserify:bundle copy:test
     'connect:test',
     'mocha_phantomjs',
 
@@ -37,7 +37,7 @@ module.exports = function (grunt) {
   // builds development version of application
   grunt.registerTask('dev', [
     'jshint:dev',
-    'concurrent:dev' // browserify:index, copy:dev, compass:dev
+    'concurrent:dev' // browserify:index browserify:leaflet copy:dev copy:leaflet copy:locationView postcss:dev
   ]);
 
   // starts distribution server and preview

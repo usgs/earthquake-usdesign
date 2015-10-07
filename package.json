@@ -17,7 +17,7 @@
   "devDependencies": {
     "autoprefixer-core": "^5.2.1",
     "chai": "^2.0.0",
-    "cssnano": "^2.2.0",
+    "cssnano": "^3.2.0",
     "d3": "^3.5.5",
     "gateway": "^1.0.0",
     "grunt": "^0.4.5",
@@ -26,14 +26,13 @@
     "grunt-concurrent": "^1.0.0",
     "grunt-connect-proxy": "0.1.10",
     "grunt-contrib-clean": "^0.6.0",
-    "grunt-contrib-compass": "^1.0.1",
     "grunt-contrib-connect": "^0.9.0",
     "grunt-contrib-copy": "^0.8.0",
     "grunt-contrib-jshint": "^0.11.0",
     "grunt-contrib-uglify": "^0.7.0",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-mocha-phantomjs": "0.6.0",
-    "grunt-postcss": "^0.5.5",
+    "grunt-postcss": "^0.6.0",
     "hazdev-accordion": "git://github.com/usgs/hazdev-accordion.git",
     "hazdev-location-view": "usgs/hazdev-location-view",
     "hazdev-template": "usgs/hazdev-template",
@@ -42,6 +41,8 @@
     "ini": "^1.3.3",
     "leaflet": "^0.7.3",
     "mocha": "^2.1.0",
+    "postcss-import": "^7.0.0",
+    "precss": "^1.2.3",
     "sinon": "^1.12.2"
   },
   "engines": {
