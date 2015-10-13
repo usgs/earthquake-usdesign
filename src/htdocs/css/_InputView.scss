@@ -1,11 +1,11 @@
 
-@import 'locationview/LeafletControls';
-@import 'locationview/LocationControl';
-@import 'locationview/LocationView';
-@import 'locationview/PointControl';
-@import 'locationview/CoordinateControl';
-@import 'locationview/GeocodeControl';
-@import 'locationview/GeolocationControl';
+@import 'locationview/LeafletControls.scss';
+@import 'locationview/LocationControl.scss';
+@import 'locationview/LocationView.scss';
+@import 'locationview/PointControl.scss';
+@import 'locationview/CoordinateControl.scss';
+@import 'locationview/GeocodeControl.scss';
+@import 'locationview/GeolocationControl.scss';
 
 
 .input-view {
@@ -16,11 +16,11 @@
   }
 
   .report-title-input {
-    font-size: 2em; // h1 size
+    font-size: 2em;
     height: auto;
   }
 
-  // hide divs by default
+  /* hide divs by default */
   .report-title-output,
   .design-code-output,
   .site-class-output,
@@ -28,7 +28,7 @@
     display: none;
   }
 
-  // show inputs by default
+  /* show inputs by default */
   .report-title-input,
   .design-code-input,
   .site-class-input,
@@ -53,7 +53,7 @@
   }
 }
 
-// Change display for output mode
+/* Change display for output mode */
 .input-view-output {
 
   label {
@@ -61,7 +61,7 @@
     padding: 0 0 2px;
   }
 
-  // hide inputs on output mode
+  /* hide inputs on output mode */
   .report-title-input,
   .design-code-input,
   .site-class-input,
@@ -69,7 +69,7 @@
     display: none;
   }
 
-  // display divs on output mode
+  /* display divs on output mode */
   .report-title-output,
   .design-code-output,
   .site-class-output,
@@ -98,7 +98,7 @@
   }
 }
 
-// matches location control sizes
+/* matches location control sizes */
 .leaflet-bar > a,
 .leaflet-bar > a:hover {
   width: 30px;
@@ -107,7 +107,7 @@
 }
 
 @media print {
-  // report title is the new page header
+  /* report title is the new page header */
   .page-header {
     display: none;
   }

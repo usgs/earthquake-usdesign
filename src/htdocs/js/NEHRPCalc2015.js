@@ -421,9 +421,13 @@ var NEHRPCalc2015 = function (params) {
 
     if (pga === null) {
       metadata = calculation.get('output').get('metadata');
+
       probabilisticPga = result.get('mapped_pga');
-      deterministicPga = Math.max(result.get('geomean_pgad'),
-          metadata.get('deterministic_flor_pga'));
+
+      deterministicPga = result.get('geomean_pgad')  *
+          metadata.get('percentile_pga');
+      deterministicPga = Math.max(deterministicPga,
+          metadata.get('deterministic_floor_pga'));
 
       pga = Math.min(probabilisticPga, deterministicPga);
       result.set({

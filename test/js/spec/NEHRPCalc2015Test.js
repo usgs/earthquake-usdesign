@@ -98,7 +98,7 @@ describe('NEHRPCalc2015Test', function () {
     });
 
     it('getPga', function () {
-      expect(calc.getPga(calculate)).to.be.closeTo(0.5670918, EPSILION);
+      expect(calc.getPga(calculate)).to.be.closeTo(0.819108, EPSILION);
     });
 
     it('getFpga', function () {
@@ -107,7 +107,7 @@ describe('NEHRPCalc2015Test', function () {
 
     it('getPgam', function () {
       expect(calc.getPgam(calculate)).to.be.closeTo(
-          0.6238009800000001, EPSILION);
+          0.9010188, EPSILION);
     });
 
     it('getSdSpectra', function () {
@@ -162,10 +162,6 @@ describe('NEHRPCalc2015Test', function () {
     it('getSd1', function () {
       expect(calc.getSd1(calculate)).to.be.closeTo(
           0.757872903255, EPSILION);
-    });
-
-    it('getPga', function () {
-      expect(calc.getPga(calculate)).to.be.closeTo(0.5670918, EPSILION);
     });
   });
 

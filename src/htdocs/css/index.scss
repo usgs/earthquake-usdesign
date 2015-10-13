@@ -10,18 +10,18 @@ provide SCSS alternatives.
 This file probably has only a minimal ammount of selectors/styles.
 */
 
-@import '_ActionsView';
-@import '_Application';
-@import '_CalculationView';
-@import '_InputView';
-@import '_Nehrp2015ReportView';
-@import '_SpectraGraphView';
+@import '_ActionsView.scss';
+@import '_Application.scss';
+@import '_CalculationView.scss';
+@import '_InputView.scss';
+@import '_Nehrp2015ReportView.scss';
+@import '_SpectraGraphView.scss';
 
-@import 'util/_SiteAmplification';
+@import 'util/_SiteAmplification.scss';
 
-@import 'accordion/Accordion';
+@import 'accordion/Accordion.scss';
 
-@import 'mvc/FileInputView';
-@import 'mvc/ModalView';
+@import 'mvc/FileInputView.scss';
+@import 'mvc/ModalView.scss';
 
-@import '../lib/leaflet/leaflet.css';
+@import 'leaflet.css';

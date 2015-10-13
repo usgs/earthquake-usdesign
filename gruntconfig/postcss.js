@@ -1,20 +1,38 @@
 'use strict';
 
-var autoprefixer = require('autoprefixer-core'),
-    cssnano = require('cssnano');
+var autoprefixer = require('autoprefixer'),
+    cssnano = require('cssnano'),
+    precss = require('precss'),
+    postcssImport = require('postcss-import');
 
-var config = require('./config');
+var config = require('./config'),
+    CWD = '.';
 
 var postcss = {
 
-  build: {
+  dev: {
     options: {
       processors: [
-        autoprefixer({'browsers': 'last 2 versions'}), // vendor prefix as needed
+        postcssImport({
+          path: [
+            CWD + '/' + config.src + '/htdocs/css',
+            CWD + '/node_modules/hazdev-accordion/src',
+            CWD + '/node_modules/hazdev-location-view/src',
+            CWD + '/node_modules/hazdev-template/src/htdocs',
+            CWD + '/node_modules/hazdev-webutils/src',
+            CWD + '/node_modules/leaflet/dist'
+          ]
+        }),
+        precss(),
+        autoprefixer({'browsers': 'last 2 versions'})
       ]
     },
-    src: config.build + '/' + config.src + '/htdocs/css/index.css',
-    dest: config.build + '/' + config.src + '/htdocs/css/index.css'
+    expand: true,
+    cwd: config.src + '/htdocs',
+    src: 'css/index.scss',
+    dest: config.build + '/' + config.src + '/htdocs',
+    ext: '.css',
+    extDot: 'last'
   },
 
   dist: {

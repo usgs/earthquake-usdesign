@@ -7,8 +7,7 @@ var concurrent = {
     'copy:dev',
     'copy:leaflet',
     'copy:locationView',
-    'compass:dev',
-    'postcss:build'
+    'postcss:dev'
   ],
 
   dist: [
