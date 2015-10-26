@@ -1,21 +1,33 @@
-.overbar {
-  text-decoration: overline;
+.equation {
+  border-bottom: 1px solid #999;
+  padding: .5em;
+  overflow: hidden;
+
+  &.equation-summary {
+    border-bottom: 2px solid #333;
+    margin-bottom: 1em;
+    text-align: right;
+
+    > span {
+      float: none;
+    }
+  }
+
+  > span {
+    float: right;
+  }
 }
 
-.report-view aside,
-.footnotes {
-  margin: 8px 0 0;
+.figures > li {
+  margin: 1em 0 0;
 }
 
 .footnotes > li {
   margin: 4px 0 0;
 }
 
-.report-view aside,
-.footnotes > li {
-  color: #888;
-  font-size: smaller;
-  line-height: 1.3;
+.overbar {
+  text-decoration: overline;
 }
 
 .report-summary-values {
@@ -118,28 +130,16 @@
   }
 }
 
-.equation {
-  border-bottom: 1px solid #999;
-  overflow: hidden;
-  padding: .5em;
-
-  &.equation-summary {
-    border-bottom: 2px solid #333;
-    margin-bottom: 1em;
-    text-align: right;
-
-    > span {
-      float: none;
-    }
-  }
-
-  > span {
-    float: right;
-  }
+.report-view aside,
+.footnotes {
+  margin: 8px 0 0;
 }
 
-.figures > li {
-  margin: 1em 0 0;
+.report-view aside,
+.footnotes > li {
+  color: #888;
+  font-size: smaller;
+  line-height: 1.3;
 }
 
 .site-amplification-table {
