@@ -1,23 +1,5 @@
-.actions-view-history {
-  display: flex;
-  flex-direction: column-reverse;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-
-  > li {
-    border-top: 1px solid #e2e2e2;
-    padding: 1em 1.5em;
-
-    &:last-child {
-      border:none;
-    }
-
-
-    &.selected {
-      background-color: #EAF4FF;
-    }
-  }
+.accordion > .actions-view-actions:hover {
+  background: #f4f4f4;
 }
 
 .actions-view {
@@ -46,70 +28,11 @@
   }
 }
 
-.accordion > .actions-view-actions:hover {
-  background: #f4f4f4;
-}
-
-.actions-view-calculate,
-.actions-view-edit {
-  width: 7em;
-}
-
-.actions-view-actions > .actions-view-edit,
-.actions-view-actions > .actions-view-calculate {
-  margin-right: 16px;
-  color: #fff;
-  font-size: 0.8125em;
-}
-
-/**
- * Make the link look like a button. Normally, no; but the link has it's
- * advantages in this case.
- */
-.actions-view-download {
-  display: inline-block;
-  padding: 0 1em;
-  margin: 4px 2px;
-  color: #666;
-  background: #f8f8f8;
-  background-image: linear-gradient(to bottom,rgba(255,255,255,.05) 0,rgba(0,0,0,.05) 100%);
-  text-align: center;
-  text-shadow: 0 1px 1px #fff;
-  text-decoration: none;
-  cursor: pointer;
-  border-radius: 2px;
-  border: 0;
-  box-shadow: rgba(0,0,0,0.15) 0 0 0 1px inset;
-  font-size: .8125em;
-  vertical-align: top;
-  font-family: 'helvetica neue', aria, sans-serif;
-  line-height: 3rem;
-  height: 3rem;
-
-  &:hover {
-    background-image: linear-gradient(to bottom, rgba(255,255,255,0.1) 0, rgba(0,0,0,0.1) 100%);
-    text-shadow: none;
-  }
-
-  &.disabled {
-    background: #D3D3D3;
-    color: #999;
-    text-shadow: none;
-    cursor: text;
-    box-shadow: none;
-
-    &:before {
-      color: #999;
-    }
-  }
-}
-
 .actions-view-actions {
   flex-wrap: wrap;
 
   > button {
     color: #666;
-    font-size: 11px;
     height: 4.5rem;
     line-height: 3rem;
     min-width: 72px;
@@ -121,7 +44,8 @@
       font-family: monospace;
       font-size: 18px;
       line-height: 0;
-      padding-top: 16px;
+      top: 15px;
+      margin-top: 6px;
     }
   }
 
@@ -139,24 +63,63 @@
   }
 }
 
+.actions-view-actions > .actions-view-edit,
+.actions-view-actions > .actions-view-calculate {
+  margin-right: 16px;
+  color: #fff;
+  line-height: 1;
+}
+
+.actions-view-calculate,
+.actions-view-edit {
+  width: 8em;
+}
+
+/**
+ * Make the link look like a button. Normally, no; but the link has it's
+ * advantages in this case.
+ */
 .actions-view-download {
+  background: #f8f8f8;
+  background-image: linear-gradient(to bottom,rgba(255,255,255,.05) 0,
+      rgba(0,0,0,.05) 100%);
+  border-radius: 2px;
+  border: 0;
+  box-shadow: rgba(0,0,0,0.15) 0 0 0 1px inset;
   color: #666;
-  font-size: 11px;
+  cursor: pointer;
+  display: inline-block;
+  font-size: .8125em;
   height: 4.5rem;
   line-height: 6.3rem;
+  margin: 4px 2px;
   margin-right: -4px;
   min-width: 72px;
+  padding: 0 1em;
+  text-align: center;
+  text-shadow: 0 1px 1px #fff;
+  text-decoration: none;
+  vertical-align: top;
+
+  &:hover {
+    background-image: linear-gradient(to bottom, rgba(255,255,255,0.1) 0,
+        rgba(0,0,0,0.1) 100%);
+    text-shadow: none;
+  }
+
+  &.disabled {
+    background: #D3D3D3;
+    color: #999;
+    text-shadow: none;
+    cursor: text;
+    box-shadow: none;
+  }
 
   &:visited {
     color: #666;
   }
 
-  &.disabled:visited {
-    color: #999;
-  }
-
   &:before {
-    color: #666;
     content: '\21e7';
     font-family: monospace;
     font-size: 16px;
@@ -167,5 +130,27 @@
     -webkit-transform: rotate(180deg);
     -ms-transform: rotate(180deg);
     transform: rotate(180deg);
+  }
+}
+
+.actions-view-history {
+  display: flex;
+  flex-direction: column-reverse;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  > li {
+    border-top: 1px solid #e2e2e2;
+    padding: 1em 1.5em;
+
+    &:last-child {
+      border:none;
+    }
+
+
+    &.selected {
+      background-color: #EAF4FF;
+    }
   }
 }
