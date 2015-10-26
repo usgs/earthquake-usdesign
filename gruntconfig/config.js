@@ -2,16 +2,16 @@
 
 var config = {
   build: '.build',
-  buildPort: 8510,
+  buildPort: 9020,
   dist: 'dist',
-  distPort: 8513,
+  distPort: 9023,
   example: 'example',
-  examplePort: 8512,
-  liveReloadPort: 8519,
+  examplePort: 9022,
+  liveReloadPort: 9029,
   src: 'src',
-  templatePort: 8518,
+  templatePort: 9028,
   test: 'test',
-  testPort: 8511
+  testPort: 9021
 };
 
 module.exports = config;
