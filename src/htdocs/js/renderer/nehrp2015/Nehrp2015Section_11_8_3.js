@@ -40,8 +40,7 @@ var Nehrp2015Section_Section_11_8_3 = function (params) {
         pgam,
         result,
         section,
-        siteClass,
-        undetermined;
+        siteClass;
 
     try {
       model = args.model;
@@ -57,10 +56,6 @@ var Nehrp2015Section_Section_11_8_3 = function (params) {
       fpgaTable = document.createElement('div');
       fpgaTable.appendChild(_siteAmplification.getFpgaTable(pga, siteClass));
 
-      undetermined = document.createElement('div');
-      // undetermined.appendChild(_siteAmplification.getUndeterminedPgaTable(
-      //     pga, siteClass));
-
       section.innerHTML = [
         '<h3>',
           'Additional Geotechnical Investigation Report Requirements for ',
@@ -68,7 +63,9 @@ var Nehrp2015Section_Section_11_8_3 = function (params) {
         '</h3>',
 
         '<h4>Table 11.8-1: Site Coefficient for F<sub>PGA</sub></h4>',
-        '<div class="report-table-fpga">', fpgaTable.innerHTML, '</div>',
+        '<div class="report-table-fpga horizontal-scrolling">',
+          fpgaTable.innerHTML,
+        '</div>',
         '<ul class="footnotes no-style">',
           '<li>',
             'Note: Use straight-line interpolation for intermediate values ',

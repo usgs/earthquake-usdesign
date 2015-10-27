@@ -50,8 +50,7 @@ var Nehrp2015Section_Section_11_4_3 = function (params) {
         sms,
         ss,
         ssd,
-        ssuh,
-        undetermined;
+        ssuh;
 
     try {
       model = args.model;
@@ -80,10 +79,6 @@ var Nehrp2015Section_Section_11_4_3 = function (params) {
 
       fvTable = document.createElement('div');
       fvTable.appendChild(_siteAmplification.getFvTable(s1, siteClass));
-
-      undetermined = document.createElement('div');
-      // undetermined.appendChild(_siteAmplification.getUndeterminedSsS1Table(
-      //     ss, s1, siteClass));
 
       section.innerHTML = [
         '<h3>',
@@ -136,7 +131,9 @@ var Nehrp2015Section_Section_11_4_3 = function (params) {
         '</div>',
 
         '<h4>Table 11.4-1: Site Coefficient F<sub>a</sub></h4>',
-        '<div class="report-table-fa">', faTable.innerHTML, '</div>',
+        '<div class="report-table-fa horizontal-scrolling">',
+          faTable.innerHTML,
+        '</div>',
         '<ul class="footnotes no-style">',
           '<li>',
             'Note: Use straight-line interpolation for intermediate values ',
@@ -159,7 +156,9 @@ var Nehrp2015Section_Section_11_4_3 = function (params) {
         '</p>',
 
         '<h4>Table 11.4-2: Site Coefficient F<sub>v</sub></h4>',
-        '<div class="report-table-fv">', fvTable.innerHTML, '</div>',
+        '<div class="report-table-fv horizontal-scrolling">',
+          fvTable.innerHTML,
+        '</div>',
         '<ul class="footnotes no-style">',
           '<li>',
             'Note: Use straight-line interpolation for intermediate values of ',
