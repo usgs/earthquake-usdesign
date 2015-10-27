@@ -104,13 +104,13 @@ var ActionsView = function (params) {
       '<button class="actions-view-new" ',
           'title="Click to create a new calculation."',
           '>New</button>',
-      '<button class="actions-view-upload" ',
-          'title="Click to upload a CSV batch file."',
-          '>Upload</button>',
+      '<button class="actions-view-print">Print</button>',
       '<a href="#" class="actions-view-download" ',
           'title="Click to donwload results as CSV"',
           '>Download</a>',
-      '<button class="actions-view-print">Print</button>'
+      '<button class="actions-view-upload" ',
+          'title="Click to upload a CSV batch file."',
+          '>Upload</button>'
     ].join('');
 
     _collectionView = CollectionView({
