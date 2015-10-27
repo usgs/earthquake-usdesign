@@ -131,6 +131,17 @@ var connect = {
   template: {
     options: {
       base: ['node_modules/hazdev-template/dist/htdocs'],
+      middleware: function (connect, options, middlewares) {
+        middlewares.unshift(require('gateway')(
+          options.base[0], {
+            '.php': 'php-cgi',
+            'env': {
+              'PHPRC': 'node_modules/hazdev-template/dist/conf/php.ini'
+            }
+          })
+        );
+        return middlewares;
+      },
       port: config.templatePort
     }
   }
