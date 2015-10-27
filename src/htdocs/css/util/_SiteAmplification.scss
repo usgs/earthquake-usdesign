@@ -15,9 +15,9 @@
   > tbody > tr > th,
   > tbody > tr > td {
     color: #333;
-    text-align: center;
     min-width: 95px;
     padding: 3px;
+    text-align: center;
 
     &.bound {
       background-color: yellow;
@@ -36,8 +36,8 @@
   }
 
   th {
-    font-weight: normal;
     color: #000;
+    font-weight: normal;
   }
 
   > tfoot > tr > td {
@@ -50,8 +50,8 @@
   border-bottom: 3px double #333;
 
   tr.header > th {
-    border-top: 1px solid #333;
     border-bottom: 1px solid #333;
+    border-top: 1px solid #333;
   }
 }
 

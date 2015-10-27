@@ -11,10 +11,10 @@
     }
 
     .actions-view-actions:before {
+      float: left;
       font-size: 1.5em;
       color: #777;
       padding-top: .6275em;
-      float: left;
     }
 
     > .accordion-content {
@@ -35,16 +35,16 @@
   flex-wrap: wrap;
 
   > button {
+    border-radius: 0;
     color: #666;
     flex: none;
     float: left;
     height: 4.5rem;
     line-height: 3rem;
     margin-right: -4px;
-    min-width: 72px;
     max-width: 300px;
+    min-width: 72px;
     width: 40%;
-    border-radius: 0;
 
     &:before {
       display: block;
@@ -76,7 +76,6 @@
 
 .actions-view-actions > .actions-view-edit,
 .actions-view-actions > .actions-view-calculate {
-  /*margin-right: 16px;*/
   clear: none;
   color: #fff;
   line-height: 1;
@@ -94,7 +93,6 @@
   background: #f8f8f8;
   background-image: linear-gradient(to bottom,rgba(255,255,255,.05) 0,
       rgba(0,0,0,.05) 100%);
-  border-radius: 2px;
   border: 0;
   box-shadow: rgba(0,0,0,0.15) 0 0 0 1px inset;
   clear: both;
@@ -105,17 +103,15 @@
   font-size: 1em;
   height: 4.5rem;
   line-height: 6.3rem;
-  margin: 4px 2px;
-  margin-right: -4px;
-  margin-left: 41px;
-  min-width: 72px;
+  margin: 4px -4px 2px 41px;
   max-width: 300px;
-  width: 40%;
+  min-width: 72px;
   padding: 0 1em;
   text-align: center;
-  text-shadow: 0 1px 1px #fff;
   text-decoration: none;
+  text-shadow: 0 1px 1px #fff;
   vertical-align: top;
+  width: 40%;
 
   &:hover {
     background-image: linear-gradient(to bottom, rgba(255,255,255,0.1) 0,
@@ -125,10 +121,10 @@
 
   &.disabled {
     background: #D3D3D3;
-    color: #999;
-    text-shadow: none;
-    cursor: text;
     box-shadow: none;
+    color: #999;
+    cursor: text;
+    text-shadow: none;
   }
 
   &:visited {
