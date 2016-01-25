@@ -47,6 +47,35 @@ var _DEFAULTS = {
       // 'E': [2.4, 1.9, 1.6, 1.4, 1.2, 1.1],
       'U-D': [1.6, 1.4, 1.3, 1.2, 1.2, 1.2]
     }
+  },
+  supInfo: {
+    fa: {
+      'A': ['', '', '', '', '', ''],
+      'B': ['', '', '', '', '', ''],
+      'B-U': ['', '', '', '', '', ''],
+      'C': ['', '', '', '', '', ''],
+      'D': ['', '', '', '', '', ''],
+      // 'E': ['', '', '', '<sup>1</sup>', '<sup>1</sup>', '<sup>1</sup>'],
+      'U-D': ['', '', '', '', '', '']
+    },
+    fv: {
+      'A': ['', '', '', '', '', ''],
+      'B': ['', '', '', '', '', ''],
+      'B-U': ['', '', '', '', '', ''],
+      'C': ['', '', '', '', '', ''],
+      'D': ['', ' <sup>1</sup>', ' <sup>1</sup>', ' <sup>1</sup>', ' <sup>1</sup>', ' <sup>1</sup>'],
+      // 'E': ['', '', '', '<sup>1</sup>', '<sup>1</sup>', '<sup>1</sup>'],
+      'U-D': ['', ' <sup>1</sup>', ' <sup>1</sup>', ' <sup>1</sup>', ' <sup>1</sup>', ' <sup>1</sup>']
+    },
+    fpga: {
+      'A': ['', '', '', '', '', ''],
+      'B': ['', '', '', '', '', ''],
+      'B-U': ['', '', '', '', '', ''],
+      'C': ['', '', '', '', '', ''],
+      'D': ['', '', '', '', '', ''],
+      // 'E': ['', '', '', '<sup>1</sup>', '<sup>1</sup>', '<sup>1</sup>'],
+      'U-D': ['', '', '', '', '', '']
+    }
   }
 };
 
@@ -61,6 +90,7 @@ var SiteAmplification = function (params) {
       _pgaInfo,
       _s1Info,
       _ssInfo,
+      _supInfo,
 
       _getBounds,
       _getFactor,
@@ -92,6 +122,7 @@ var SiteAmplification = function (params) {
 
     _ssInfo = params.ssInfo;
     _s1Info = params.s1Info;
+    _supInfo = params.supInfo;
     _pgaInfo = params.pgaInfo;
   };
 
@@ -174,7 +205,7 @@ var SiteAmplification = function (params) {
     }
   };
 
-  _getTable = function (acceleration, siteClass, info, title, unit) {
+  _getTable = function (acceleration, siteClass, info, title, unit, supInfo) {
     var bounds,
         table;
 
@@ -187,25 +218,27 @@ var SiteAmplification = function (params) {
         _getTableHeader(title, unit, info.bins),
       '</thead>',
       '<tbody>',
-        _getTableBody(info.siteClasses, siteClass, bounds),
+        _getTableBody(info.siteClasses, siteClass, bounds, supInfo),
       '</tbody>'
     ].join('');
 
     return table;
   };
 
-  _getTableBody = function (data, siteClass, bounds) {
+  _getTableBody = function (data, siteClass, bounds, supInfo) {
     var classes,
         i,
         label,
         len,
         markup,
+        superscripts,
         values;
 
     markup = [];
 
     for (label in data) {
       values = data[label];
+      superscripts = supInfo[label];
 
       markup.push('<tr class="site-class-' + label + '">' +
           '<th scope="row">' + label + '</th>');
@@ -227,6 +260,7 @@ var SiteAmplification = function (params) {
 
         markup.push('<td class="' + classes + '">' +
           Formatter.siteAmplificationValue(values[i]) +
+          superscripts[i] +
         '</td>');
       }
 
@@ -295,7 +329,7 @@ var SiteAmplification = function (params) {
 
   _this.getFaTable = function (acceleration, siteClass) {
     return _getTable(acceleration, siteClass, _ssInfo, _faTitle,
-        'S<sub>S</sub>');
+        'S<sub>S</sub>', _supInfo.fa);
   };
 
   _this.getFv = function (acceleration, siteClass) {
@@ -305,7 +339,7 @@ var SiteAmplification = function (params) {
 
   _this.getFvTable = function (acceleration, siteClass) {
     return _getTable(acceleration, siteClass, _s1Info, _fvTitle,
-        'S<sub>1</sub>');
+        'S<sub>1</sub>', _supInfo.fv);
   };
 
   _this.getFpga = function (acceleration, siteClass) {
@@ -314,7 +348,7 @@ var SiteAmplification = function (params) {
   };
 
   _this.getFpgaTable = function (acceleration, siteClass) {
-    return _getTable(acceleration, siteClass, _pgaInfo, _fpgaTitle, 'PGA');
+    return _getTable(acceleration, siteClass, _pgaInfo, _fpgaTitle, 'PGA', _supInfo.fpga);
   };
 
   // _this.getUndeterminedPgaTable = function (pga, siteClass) {
@@ -492,6 +526,7 @@ var SiteAmplification = function (params) {
 
     _ssInfo = null;
     _s1Info = null;
+    _supInfo = null;
     _pgaInfo = null;
 
     _getBounds = null;
