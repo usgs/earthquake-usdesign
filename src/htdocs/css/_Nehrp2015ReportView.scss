@@ -60,7 +60,7 @@
   margin-top: 1em;
 }
 
-@media screen and (min-width: 560px) {
+@media print, screen and (min-width: 560px) {
   .report-summary-values > dt:after {
     content: ' = ';
   }
