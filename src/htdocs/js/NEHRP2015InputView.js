@@ -280,6 +280,59 @@ var NEHRP2015InputView = function (params) {
   };
 
   /**
+   * Update the Calculation model with the deselected Design Code value
+   */
+  _deselectDesignCode = function () {
+    var input;
+
+    if (_model) {
+      input = _model.get('input');
+
+      if (input) {
+        input.set({
+          'design_code': null
+        });
+        _deselectRiskCategory();
+        _deselectSiteClass();
+      }
+    }
+  };
+
+  /**
+   * Update the Calculation model with the deselected Risk Category value
+   */
+  _deselectRiskCategory = function () {
+    var input;
+
+    if (_model) {
+      input = _model.get('input');
+
+      if (input) {
+        input.set({
+          'risk_category': null
+        });
+      }
+    }
+  };
+
+  /**
+   * Update the Calculation model with the deselected Site Class value
+   */
+  _deselectSiteClass = function () {
+    var input;
+
+    if (_model) {
+      input = _model.get('input');
+
+      if (input) {
+        input.set({
+          'site_class': null
+        });
+      }
+    }
+  };
+
+  /**
    * Remove marker from the map when a new calculation is added
    * to the collection.
    */
@@ -409,25 +462,6 @@ var NEHRP2015InputView = function (params) {
   };
 
   /**
-   * Update the Calculation model with the deselected Design Code value
-   */
-  _deselectDesignCode = function () {
-    var input;
-
-    if (_model) {
-      input = _model.get('input');
-
-      if (input) {
-        input.set({
-          'design_code': null
-        });
-        _deselectRiskCategory();
-        _deselectSiteClass();
-      }
-    }
-  };
-
-  /**
    * Use the selected "site class" from the _siteClassCollection to update
    * the input parameters on the Calculation model.
    */
@@ -446,23 +480,6 @@ var NEHRP2015InputView = function (params) {
   };
 
   /**
-   * Update the Calculation model with the deselected Site Class value
-   */
-  _deselectSiteClass = function () {
-    var input;
-
-    if (_model) {
-      input = _model.get('input');
-
-      if (input) {
-        input.set({
-          'site_class': null
-        });
-      }
-    }
-  };
-
-  /**
    * Use the selected "risk category" from the _riskCategoryCollection
    * to update the input parameters on the Calculation model.
    */
@@ -475,23 +492,6 @@ var NEHRP2015InputView = function (params) {
       if (input) {
         input.set({
           'risk_category': _riskCategoryCollection.getSelected().get('id')
-        });
-      }
-    }
-  };
-
-  /**
-   * Update the Calculation model with the deselected Risk Category value
-   */
-  _deselectRiskCategory = function () {
-    var input;
-
-    if (_model) {
-      input = _model.get('input');
-
-      if (input) {
-        input.set({
-          'risk_category': null
         });
       }
     }
