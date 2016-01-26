@@ -71,14 +71,14 @@
     var ampUtil = SiteAmplification();
 
     document.querySelector('.example-1-table').appendChild(
-        ampUtil.getFaTable(0.25, 'D'));
+        ampUtil.getFaTable(0.25, 'D (determined)'));
     document.querySelector('.example-1-value').innerHTML =
-        ampUtil.getFa(0.25, 'D').toFixed(1);
+        ampUtil.getFa(0.25, 'D (determined)').toFixed(1);
 
     document.querySelector('.example-2-table').appendChild(
-        ampUtil.getFvTable(0.60, 'B'));
+        ampUtil.getFvTable(0.60, 'B (measured)'));
     document.querySelector('.example-2-value').innerHTML =
-        ampUtil.getFv(0.60, 'B').toFixed(1);
+        ampUtil.getFv(0.60, 'B (measured)').toFixed(1);
 
     document.querySelector('.example-3-table').appendChild(
         ampUtil.getUndeterminedSsS1Table(0.20, 0.70, 'U'));
@@ -88,9 +88,9 @@
         ampUtil.getFv(0.70, 'U').toFixed(1);
 
     document.querySelector('.example-4-table').appendChild(
-        ampUtil.getFpgaTable(0.15, 'D'));
+        ampUtil.getFpgaTable(0.15, 'D (determined)'));
     document.querySelector('.example-4-value').innerHTML =
-        ampUtil.getFpga(0.15, 'D').toFixed(1);
+        ampUtil.getFpga(0.15, 'D (determined)').toFixed(1);
 
     document.querySelector('.example-5-table').appendChild(
         ampUtil.getUndeterminedPgaTable(0.15, 'U'));
