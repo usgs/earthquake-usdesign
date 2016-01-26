@@ -56,16 +56,20 @@ var _DEFAULTS = {
       'C': ['', '', '', '', '', ''],
       'D (determined)': ['', '', '', '', '', ''],
       'E': ['', '', '', ' <sup>1</sup>', ' <sup>1</sup>', ' <sup>1</sup>'],
-      'D (default)': ['', '', '', ' <sup>1</sup>', ' <sup>1</sup>', ' <sup>1</sup>']
+      'D (default)': ['', '', '', ' <sup>1</sup>', ' <sup>1</sup>',
+          ' <sup>1</sup>']
     },
     fv: {
       'A': ['', '', '', '', '', ''],
       'B (measured)': ['', '', '', '', '', ''],
       'B (unmeasured)': ['', '', '', '', '', ''],
       'C': ['', '', '', '', '', ''],
-      'D (determined)': ['', ' <sup>1</sup>', ' <sup>1</sup>', ' <sup>1</sup>', ' <sup>1</sup>', ' <sup>1</sup>'],
-      'E': ['', ' <sup>1</sup>', ' <sup>1</sup>', ' <sup>1</sup>', ' <sup>1</sup>', ' <sup>1</sup>'],
-      'D (default)': ['', ' <sup>1</sup>', ' <sup>1</sup>', ' <sup>1</sup>', ' <sup>1</sup>', ' <sup>1</sup>']
+      'D (determined)': ['', ' <sup>1</sup>', ' <sup>1</sup>', ' <sup>1</sup>',
+          ' <sup>1</sup>', ' <sup>1</sup>'],
+      'E': ['', ' <sup>1</sup>', ' <sup>1</sup>', ' <sup>1</sup>',
+          ' <sup>1</sup>', ' <sup>1</sup>'],
+      'D (default)': ['', ' <sup>1</sup>', ' <sup>1</sup>', ' <sup>1</sup>',
+          ' <sup>1</sup>', ' <sup>1</sup>']
     },
     fpga: {
       'A': ['', '', '', '', '', ''],
@@ -348,7 +352,8 @@ var SiteAmplification = function (params) {
   };
 
   _this.getFpgaTable = function (acceleration, siteClass) {
-    return _getTable(acceleration, siteClass, _pgaInfo, _fpgaTitle, 'PGA', _supInfo.fpga);
+    return _getTable(acceleration, siteClass, _pgaInfo, _fpgaTitle, 'PGA',
+        _supInfo.fpga);
   };
 
   // _this.getUndeterminedPgaTable = function (pga, siteClass) {
