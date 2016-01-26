@@ -30,28 +30,15 @@ var Nehrp2015Section_Summary = function (params) {
 
 
   _createSpectra = function () {
-    var sdEl,
-        smEl;
-
-    smEl = document.createElement('div');
-    smEl.classList.add('report-summary-spectra-sm');
-    smEl.classList.add('column');
-    smEl.classList.add('one-of-two');
-
-    sdEl = document.createElement('div');
-    sdEl.classList.add('report-summary-spectra-sd');
-    sdEl.classList.add('column');
-    sdEl.classList.add('one-of-two');
-
     _smSpectrum = SpectraGraphView({
-      el: smEl,
+      el: document.createElement('div'),
       data: [],
       title: 'MCE<sub>R</sub> Spectrum',
       yAxisLabel: 'Sa (g)'
     });
 
     _sdSpectrum = SpectraGraphView({
-      el: sdEl,
+      el: document.createElement('div'),
       data: [],
       title: 'Design Response Spectrum',
       yAxisLabel: 'Sa (g)'
@@ -69,7 +56,8 @@ var Nehrp2015Section_Summary = function (params) {
         result,
         section,
         siteClass,
-        spectraDiv;
+        sdSpectraWrapper,
+        smSpectraWrapper;
 
     model = args.model;
     section = args.section;
@@ -125,9 +113,10 @@ var Nehrp2015Section_Summary = function (params) {
 
     section.innerHTML = markup.join('');
 
-    spectraDiv = section.querySelector('.report-summary-spectra');
-    spectraDiv.appendChild(_smSpectrum.el);
-    spectraDiv.appendChild(_sdSpectrum.el);
+    smSpectraWrapper = section.querySelector('.report-summary-spectra-sm');
+    sdSpectraWrapper = section.querySelector('.report-summary-spectra-sd');
+    smSpectraWrapper.appendChild(_smSpectrum.el);
+    sdSpectraWrapper.appendChild(_sdSpectrum.el);
 
     _smSpectrum.model.set({data: result.get('smSpectrum')||[]}, {silent: true});
     _sdSpectrum.model.set({data: result.get('sdSpectrum')||[]}, {silent: true});
