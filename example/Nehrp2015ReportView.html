@@ -38,6 +38,8 @@
         Collection = require('mvc/Collection'),
         Model = require('mvc/Model');
 
+    var calculation,
+        collection;
 
     calculation = Calculation({
       mode: Calculation.MODE_OUTPUT,
@@ -164,9 +166,8 @@
       }
     });
 
-    var collection = Collection([calculation]);
+    collection = Collection([calculation]);
     collection.select(calculation);
-    console.log(calculation.toJSON());
 
     ReportView({
       el: document.querySelector('.view'),
