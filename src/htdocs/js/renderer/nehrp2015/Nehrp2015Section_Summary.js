@@ -64,17 +64,20 @@ var Nehrp2015Section_Summary = function (params) {
   };
 
   _this.getSection = Util.compose(_this.getSection, function (args) {
-    var model,
+    var markup,
+        model,
         result,
         section,
+        siteClass,
         spectraDiv;
 
     model = args.model;
     section = args.section;
 
     result = model.get('result');
+    siteClass = result.get('site_class').get('value').slice(0, 1).toUpperCase();
 
-    section.innerHTML = [
+    markup = [
       '<dl class="report-summary-values">',
         '<dt>S<sub>S</sub></dt>',
         '<dd class="report-summary-value-ss">',
@@ -105,18 +108,22 @@ var Nehrp2015Section_Summary = function (params) {
         '<dd class="report-summary-value-sd1">',
           _this.outputNumber(result.get('sd1')),
         ' g</dd>',
-      '</dl>',
-      '<aside>',
-        'See below for information on how the S<sub>S</sub> and ',
-        'S<sub>1</sub> values above have been calculated from probabilistic ',
-        '(risk-targeted) and deterministic ground motions in the direction ',
-        'of maximum horizontal response.',
-      '</aside>',
-      '<div class="report-summary-spectra row">',
-        '<div class="report-summary-spectra-sm column one-of-two"></div>',
-        '<div class="report-summary-spectra-sd column one-of-two"></div>',
-      '</div>'
-    ].join('');
+      '</dl>'
+    ];
+
+    if (siteClass === 'D' || siteClass === 'E') {
+      markup.push('<aside>',
+        'Since Site Class ', siteClass, ' has been selected, see the ',
+        'requirements for site-specific ground motions in Section 11.4.7.',
+      '</aside>');
+    }
+
+    markup.push('<div class="report-summary-spectra row">',
+      '<div class="report-summary-spectra-sm column one-of-two"></div>',
+      '<div class="report-summary-spectra-sd column one-of-two"></div>',
+    '</div>');
+
+    section.innerHTML = markup.join('');
 
     spectraDiv = section.querySelector('.report-summary-spectra');
     spectraDiv.appendChild(_smSpectrum.el);

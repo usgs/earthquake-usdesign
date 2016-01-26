@@ -1,6 +1,8 @@
 earthquake-usdesign
 ==============
 
+![Travis Build Status](https://api.travis-ci.org/usgs/earthquake-usdesign.svg)
+
 Web application for computing seismic design values conforming to various design codes in the United States.
 
 [License](License.md)
