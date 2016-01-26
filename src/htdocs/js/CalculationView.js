@@ -193,7 +193,7 @@ var CalculationView = function (params) {
         '<dt class="calculation-site-class">Site Class</dt>',
         '<dd class="calculation-site-class">', siteClass, '</dd>',
 
-        '<dt class="calculation-risk-cateogry">Risk Category</dt>',
+        '<dt class="calculation-risk-category">Risk Category</dt>',
         '<dd class="calculation-risk-category">', riskCategory, '</dd>',
       '</dl>'
     ];

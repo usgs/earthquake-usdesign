@@ -41,23 +41,56 @@
 
     calculation = Calculation({
       mode: Calculation.MODE_OUTPUT,
+      status: Calculation.STATUS_COMPLETE,
       input: {
         latitude: 34.000,
         longitude: -90.000,
         design_code: 1,
         site_class: 4,
-        risk_cateogry: 1
+        risk_category: 1,
+        title: 'Example Location'
       },
       output: {
-        region: 1,
         metadata: {
+          deterministic_floor_pga: 0.5,
+          deterministic_floor_s1: 0.6,
+          deterministic_floor_ss: 1.5,
+          grid_spacing: 0.01,
+          interpolation_method: 'linearlog',
+          max_direction_s1: 1.3,
           max_direction_ss: 1.1,
-          max_direction_s1: 1.3
+          percentile_pga: 1.8,
+          percentile_s1: 1.8,
+          percentile_ss: 1.8,
+          region_id: 6,
+          region_name: 'Conterminous US'
         },
         tl: 12,
-        data: []
+        data: [{
+          cr1: 0.8569,
+          cr2: 0.87379,
+          geomean_pgad: 0.20604,
+          geomean_s1d: 0.11336,
+          geomean_ssd: 0.38184,
+          latitude: 34.000,
+          longitude: -90.000,
+          mapped_pga: 0.179977,
+          mapped_s1: 0.140808,
+          mapped_ss: 0.363472
+        }]
       },
       result: {
+        cr1: 0.8569,
+        cr2: 0.87379,
+        geomean_pgad: 0.20604,
+        geomean_s1d: 0.11336,
+        geomean_ssd: 0.38184,
+        latitude: 34.000,
+        longitude: -90.000,
+        mapped_pga: 0.179977,
+        mapped_s1: 0.140808,
+        mapped_ss: 0.363472,
+
         crs: 0.874,
         ssuh: 0.436,
         ssd: 1.5,
@@ -131,10 +164,14 @@
       }
     });
 
+    var collection = Collection([calculation]);
+    collection.select(calculation);
+    console.log(calculation.toJSON());
+
     ReportView({
       el: document.querySelector('.view'),
       model: calculation,
-      collection: Collection([calculation])
+      collection: collection
     })
   </script>
 </body>

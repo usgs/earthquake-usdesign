@@ -26,6 +26,7 @@ var ReportView = function (params) {
   _initialize = function (params) {
     params = params || {};
 
+    _initializeRenderers();
     _collection = params.collection;
 
     if (!_collection) {
@@ -48,8 +49,6 @@ var ReportView = function (params) {
       // None previously selected, select this model
       _collection.select(_this.model);
     }
-
-    _initializeRenderers();
 
     _this.render();
   };
