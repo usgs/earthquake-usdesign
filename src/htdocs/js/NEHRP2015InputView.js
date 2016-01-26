@@ -691,6 +691,11 @@ var NEHRP2015InputView = function (params) {
     _designCodeCollection.off('select', _updateDesignCode);
     _siteClassCollection.off('select', _updateSiteClass);
     _riskCategoryCollection.off('select', _updateRiskCategory);
+
+    _designCodeCollection.off('deselect', _deselectDesignCode);
+    _siteClassCollection.off('deselect', _deselectSiteClass);
+    _riskCategoryCollection.off('deselect', _deselectRiskCategory);
+
     _model.get('input').off('change', _this.render);
     _model.off('change', _this.render);
     _locationControlInput.off('location', _updateLocation);
