@@ -66,6 +66,9 @@ var NEHRP2015InputView = function (params) {
       _buildCollectionSelectBoxes,
       _buildForm,
       _buildLocationControl,
+      _deselectDesignCode,
+      _deselectRiskCategory,
+      _deselectSiteClass,
       _onCalculationAdd,
       _onCalculationDeselect,
       _onCalculationSelect,
@@ -98,6 +101,10 @@ var NEHRP2015InputView = function (params) {
     _designCodeCollection.on('select', _updateDesignCode);
     _siteClassCollection.on('select', _updateSiteClass);
     _riskCategoryCollection.on('select', _updateRiskCategory);
+
+    _designCodeCollection.on('deselect', _deselectDesignCode);
+    _siteClassCollection.on('deselect', _deselectSiteClass);
+    _riskCategoryCollection.on('deselect', _deselectRiskCategory);
 
     _model = params.model;
 
@@ -270,6 +277,59 @@ var NEHRP2015InputView = function (params) {
         return model.get('name');
       }
     });
+  };
+
+  /**
+   * Update the Calculation model with the deselected Design Code value
+   */
+  _deselectDesignCode = function () {
+    var input;
+
+    if (_model) {
+      input = _model.get('input');
+
+      if (input) {
+        input.set({
+          'design_code': null
+        });
+        _deselectRiskCategory();
+        _deselectSiteClass();
+      }
+    }
+  };
+
+  /**
+   * Update the Calculation model with the deselected Risk Category value
+   */
+  _deselectRiskCategory = function () {
+    var input;
+
+    if (_model) {
+      input = _model.get('input');
+
+      if (input) {
+        input.set({
+          'risk_category': null
+        });
+      }
+    }
+  };
+
+  /**
+   * Update the Calculation model with the deselected Site Class value
+   */
+  _deselectSiteClass = function () {
+    var input;
+
+    if (_model) {
+      input = _model.get('input');
+
+      if (input) {
+        input.set({
+          'site_class': null
+        });
+      }
+    }
   };
 
   /**
@@ -631,6 +691,11 @@ var NEHRP2015InputView = function (params) {
     _designCodeCollection.off('select', _updateDesignCode);
     _siteClassCollection.off('select', _updateSiteClass);
     _riskCategoryCollection.off('select', _updateRiskCategory);
+
+    _designCodeCollection.off('deselect', _deselectDesignCode);
+    _siteClassCollection.off('deselect', _deselectSiteClass);
+    _riskCategoryCollection.off('deselect', _deselectRiskCategory);
+
     _model.get('input').off('change', _this.render);
     _model.off('change', _this.render);
     _locationControlInput.off('location', _updateLocation);
@@ -668,6 +733,9 @@ var NEHRP2015InputView = function (params) {
     _buildCollectionSelectBoxes = null;
     _buildForm = null;
     _buildLocationControl = null;
+    _deselectDesignCode = null;
+    _deselectRiskCategory = null;
+    _deselectSiteClass = null;
     _onCalculationAdd = null;
     _onCalculationDeselect = null;
     _onCalculationSelect = null;
