@@ -106,7 +106,7 @@ module.exports = {
       'id': 2,
       'name': 'Rock',
       'display_order': 2,
-      'value': 'B'
+      'value': 'B (measured)'
     },
     {
       'id': 3,
@@ -118,7 +118,7 @@ module.exports = {
       'id': 4,
       'name': 'Stiff Soil',
       'display_order': 4,
-      'value': 'D'
+      'value': 'D (determined)'
     },
     {
       'id': 5,

@@ -37,11 +37,11 @@ describe('SiteAmplification', function () {
       var ss = 0.20;
 
       expect(amp.getFa(ss, 'A')).to.be.closeTo(0.8, EPSILON);
-      expect(amp.getFa(ss, 'B')).to.be.closeTo(0.9, EPSILON);
+      expect(amp.getFa(ss, 'B (measured)')).to.be.closeTo(0.9, EPSILON);
       expect(amp.getFa(ss, 'C')).to.be.closeTo(1.3, EPSILON);
-      expect(amp.getFa(ss, 'D')).to.be.closeTo(1.6, EPSILON);
+      expect(amp.getFa(ss, 'D (determined)')).to.be.closeTo(1.6, EPSILON);
       // expect(amp.getFa(ss, 'E')).to.be.closeTo(2.4, EPSILON);
-      expect(amp.getFa(ss, 'U-D')).to.be.closeTo(1.6, EPSILON);
+      expect(amp.getFa(ss, 'D (default)')).to.be.closeTo(1.6, EPSILON);
     });
 
 
@@ -49,22 +49,22 @@ describe('SiteAmplification', function () {
       var ss = 1.6;
 
       expect(amp.getFa(ss, 'A')).to.be.closeTo(0.8, EPSILON);
-      expect(amp.getFa(ss, 'B')).to.be.closeTo(0.9, EPSILON);
+      expect(amp.getFa(ss, 'B (measured)')).to.be.closeTo(0.9, EPSILON);
       expect(amp.getFa(ss, 'C')).to.be.closeTo(1.2, EPSILON);
-      expect(amp.getFa(ss, 'D')).to.be.closeTo(1.0, EPSILON);
+      expect(amp.getFa(ss, 'D (determined)')).to.be.closeTo(1.0, EPSILON);
       // expect(amp.getFa(ss, 'E')).to.be.closeTo(0.8, EPSILON);
-      expect(amp.getFa(ss, 'U-D')).to.be.closeTo(1.2, EPSILON);
+      expect(amp.getFa(ss, 'D (default)')).to.be.closeTo(1.2, EPSILON);
     });
 
     it('computes properly when the input is interpolated', function () {
       var ss = 0.625;
 
       expect(amp.getFa(ss, 'A')).to.be.closeTo(0.8, EPSILON);
-      expect(amp.getFa(ss, 'B')).to.be.closeTo(0.9, EPSILON);
+      expect(amp.getFa(ss, 'B (measured)')).to.be.closeTo(0.9, EPSILON);
       expect(amp.getFa(ss, 'C')).to.be.closeTo(1.25, EPSILON);
-      expect(amp.getFa(ss, 'D')).to.be.closeTo(1.3, EPSILON);
+      expect(amp.getFa(ss, 'D (determined)')).to.be.closeTo(1.3, EPSILON);
       // expect(amp.getFa(ss, 'E')).to.be.closeTo(1.5, EPSILON);
-      expect(amp.getFa(ss, 'U-D')).to.be.closeTo(1.3, EPSILON);
+      expect(amp.getFa(ss, 'D (default)')).to.be.closeTo(1.3, EPSILON);
     });
   });
 
@@ -73,33 +73,33 @@ describe('SiteAmplification', function () {
       var s1 = 0.09;
 
       expect(amp.getFv(s1, 'A')).to.be.closeTo(0.8, EPSILON);
-      expect(amp.getFv(s1, 'B')).to.be.closeTo(0.8, EPSILON);
+      expect(amp.getFv(s1, 'B (measured)')).to.be.closeTo(0.8, EPSILON);
       expect(amp.getFv(s1, 'C')).to.be.closeTo(1.5, EPSILON);
-      expect(amp.getFv(s1, 'D')).to.be.closeTo(2.4, EPSILON);
+      expect(amp.getFv(s1, 'D (determined)')).to.be.closeTo(2.4, EPSILON);
       // expect(amp.getFv(s1, 'E')).to.be.closeTo(4.2, EPSILON);
-      expect(amp.getFv(s1, 'U-D')).to.be.closeTo(2.4, EPSILON);
+      expect(amp.getFv(s1, 'D (default)')).to.be.closeTo(2.4, EPSILON);
     });
 
     it('computes properly when the input is above range', function () {
       var s1 = 0.7;
 
       expect(amp.getFv(s1, 'A')).to.be.closeTo(0.8, EPSILON);
-      expect(amp.getFv(s1, 'B')).to.be.closeTo(0.8, EPSILON);
+      expect(amp.getFv(s1, 'B (measured)')).to.be.closeTo(0.8, EPSILON);
       expect(amp.getFv(s1, 'C')).to.be.closeTo(1.4, EPSILON);
-      expect(amp.getFv(s1, 'D')).to.be.closeTo(1.7, EPSILON);
+      expect(amp.getFv(s1, 'D (determined)')).to.be.closeTo(1.7, EPSILON);
       // expect(amp.getFv(s1, 'E')).to.be.closeTo(2.0, EPSILON);
-      expect(amp.getFv(s1, 'U-D')).to.be.closeTo(1.7, EPSILON);
+      expect(amp.getFv(s1, 'D (default)')).to.be.closeTo(1.7, EPSILON);
     });
 
     it('computes properly when the input is interpolated', function () {
       var s1 = 0.45;
 
       expect(amp.getFv(s1, 'A')).to.be.closeTo(0.8, EPSILON);
-      expect(amp.getFv(s1, 'B')).to.be.closeTo(0.8, EPSILON);
+      expect(amp.getFv(s1, 'B (measured)')).to.be.closeTo(0.8, EPSILON);
       expect(amp.getFv(s1, 'C')).to.be.closeTo(1.5, EPSILON);
-      expect(amp.getFv(s1, 'D')).to.be.closeTo(1.85, EPSILON);
+      expect(amp.getFv(s1, 'D (determined)')).to.be.closeTo(1.85, EPSILON);
       // expect(amp.getFv(s1, 'E')).to.be.closeTo(2.3, EPSILON);
-      expect(amp.getFv(s1, 'U-D')).to.be.closeTo(1.85, EPSILON);
+      expect(amp.getFv(s1, 'D (default)')).to.be.closeTo(1.85, EPSILON);
     });
   });
 
@@ -108,33 +108,33 @@ describe('SiteAmplification', function () {
       var pga = 0.09;
 
       expect(amp.getFpga(pga, 'A')).to.be.closeTo(0.8, EPSILON);
-      expect(amp.getFpga(pga, 'B')).to.be.closeTo(0.9, EPSILON);
+      expect(amp.getFpga(pga, 'B (measured)')).to.be.closeTo(0.9, EPSILON);
       expect(amp.getFpga(pga, 'C')).to.be.closeTo(1.3, EPSILON);
-      expect(amp.getFpga(pga, 'D')).to.be.closeTo(1.6, EPSILON);
+      expect(amp.getFpga(pga, 'D (determined)')).to.be.closeTo(1.6, EPSILON);
       // expect(amp.getFpga(pga, 'E')).to.be.closeTo(2.4, EPSILON);
-      expect(amp.getFpga(pga, 'U-D')).to.be.closeTo(1.6, EPSILON);
+      expect(amp.getFpga(pga, 'D (default)')).to.be.closeTo(1.6, EPSILON);
     });
 
     it('computes properly when the input is above range', function () {
       var pga = 0.7;
 
       expect(amp.getFpga(pga, 'A')).to.be.closeTo(0.8, EPSILON);
-      expect(amp.getFpga(pga, 'B')).to.be.closeTo(0.9, EPSILON);
+      expect(amp.getFpga(pga, 'B (measured)')).to.be.closeTo(0.9, EPSILON);
       expect(amp.getFpga(pga, 'C')).to.be.closeTo(1.2, EPSILON);
-      expect(amp.getFpga(pga, 'D')).to.be.closeTo(1.1, EPSILON);
+      expect(amp.getFpga(pga, 'D (determined)')).to.be.closeTo(1.1, EPSILON);
       // expect(amp.getFpga(pga, 'E')).to.be.closeTo(1.1, EPSILON);
-      expect(amp.getFpga(pga, 'U-D')).to.be.closeTo(1.2, EPSILON);
+      expect(amp.getFpga(pga, 'D (default)')).to.be.closeTo(1.2, EPSILON);
     });
 
     it('computes properly when the input is interpolated', function () {
       var pga = 0.45;
 
       expect(amp.getFpga(pga, 'A')).to.be.closeTo(0.8, EPSILON);
-      expect(amp.getFpga(pga, 'B')).to.be.closeTo(0.9, EPSILON);
+      expect(amp.getFpga(pga, 'B (measured)')).to.be.closeTo(0.9, EPSILON);
       expect(amp.getFpga(pga, 'C')).to.be.closeTo(1.2, EPSILON);
-      expect(amp.getFpga(pga, 'D')).to.be.closeTo(1.15, EPSILON);
+      expect(amp.getFpga(pga, 'D (determined)')).to.be.closeTo(1.15, EPSILON);
       // expect(amp.getFpga(pga, 'E')).to.be.closeTo(1.3, EPSILON);
-      expect(amp.getFpga(pga, 'U-D')).to.be.closeTo(1.2, EPSILON);
+      expect(amp.getFpga(pga, 'D (default)')).to.be.closeTo(1.2, EPSILON);
     });
   });
 
@@ -159,7 +159,7 @@ describe('SiteAmplification', function () {
       expect(lower.innerHTML).to.equal('0.8');
 
 
-      table = amp.getFaTable(1.6, 'B');
+      table = amp.getFaTable(1.6, 'B (measured)');
       lower = table.querySelector('.lower');
       upper = table.querySelector('.upper');
 
@@ -167,7 +167,7 @@ describe('SiteAmplification', function () {
       expect(lower.innerHTML).to.equal('0.9');
 
 
-      table = amp.getFaTable(0.8, 'D');
+      table = amp.getFaTable(0.8, 'D (determined)');
       lower = table.querySelector('.lower');
       upper = table.querySelector('.upper');
 

@@ -54,11 +54,12 @@ INSERT INTO site_class (
   name, display_order
 ) VALUES
   (1, 'A', 'Hard Rock', 1),
-  (2, 'B', 'Rock', 2),
-  (3, 'B-U', 'Rock, but unmeasured', 3),
+  (2, 'B (measured)', 'Rock', 2),
+  (3, 'B (unmeasured)', 'Rock', 3),
   (4, 'C', 'Very Dense Soil and Soft Rock', 4),
-  (5, 'D', 'Stiff Soil', 5),
-  (6, 'U-D', 'Undetermined (the default)', 6);
+  (5, 'D (determined)', 'Stiff Soil', 5),
+  (6, 'D (default)', 'Stiff Soil', 6),
+  (7, 'E', 'Soft Clay Soil', 7);
 
 -- Risk category reference data
 INSERT INTO risk_category (
@@ -77,7 +78,8 @@ INSERT INTO design_code_site_class (
   (3, 1, 3),
   (4, 1, 4),
   (5, 1, 5),
-  (6, 1, 6);
+  (6, 1, 6),
+  (7, 1, 7);
 
 -- Risk category-design code relations
 INSERT INTO design_code_risk_category (
