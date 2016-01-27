@@ -512,7 +512,7 @@ var NEHRP2015InputView = function (params) {
       input = _model.get('input');
 
       if (input) {
-        input.set({'title': _titleEl.value});
+        input.set({'title': _titleEl.value || null});
       }
     }
   };
