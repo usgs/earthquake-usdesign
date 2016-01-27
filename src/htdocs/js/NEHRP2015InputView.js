@@ -194,7 +194,8 @@ var NEHRP2015InputView = function (params) {
         'latitude': input.get('latitude'),
         'longitude': input.get('longitude')
       });
-      _marker = L.marker(L.latLng(input.get('latitude'), input.get('longitude')));
+      _marker = L.marker(L.latLng(input.get('latitude'),
+          input.get('longitude')));
       _marker.addTo(_outputMap);
     }
 
@@ -211,8 +212,9 @@ var NEHRP2015InputView = function (params) {
     _this.el.className = 'vertical input-view';
     _this.el.innerHTML =
         '<label for="report-title">Title</label>' +
-        '<input type="text" name="title" id="report-title" class="report-title-input" ' +
-          'placeholder="Untitled Report" />' +
+        '<input type="text" name="title" id="report-title" ' +
+            'class="report-title-input" ' +
+            'placeholder="Enter a title for this report..." />' +
         '<h1 class="report-title-output"></h1>' +
         '<div class="row">' +
           '<div class="column three-of-five">' +
@@ -222,13 +224,16 @@ var NEHRP2015InputView = function (params) {
           '</div>' +
           '<div class="column two-of-five">' +
             '<label for="design-code">Reference Document</label>' +
-            '<select name="design-code" id="design-code" class="design-code-input"></select>' +
+            '<select name="design-code" id="design-code" '
+                'class="design-code-input"></select>' +
             '<div class="design-code-output"></div>' +
             '<label for="site-class">Site Class</label>' +
-            '<select name="site-class" id="site-class" class="site-class-input"></select>' +
+            '<select name="site-class" id="site-class" ' +
+                'class="site-class-input"></select>' +
             '<div class="site-class-output"></div>' +
             '<label for="risk-category">Risk Category</label>' +
-            '<select name="risk-category" id="risk-category" class="risk-category-input"></select>' +
+            '<select name="risk-category" id="risk-category" ' +
+                'class="risk-category-input"></select>' +
             '<div class="risk-category-output"></div>' +
           '</div>' +
         '</div>';
