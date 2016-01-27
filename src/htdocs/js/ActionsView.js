@@ -184,7 +184,12 @@ var ActionsView = function (params) {
     var input,
         markup;
 
-    if (_this.model && _this.model.get('status') === Calculation.STATUS_READY) {
+    if (_this.model &&
+        (
+          _this.model.get('status') === Calculation.STATUS_READY ||
+          _this.model.get('status') === Calculation.STATUS_COMPLETE
+        )
+    ) {
       // notify application user requested calculation
       _this.trigger('calculate');
     } else {
