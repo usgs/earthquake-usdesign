@@ -181,8 +181,54 @@ var ActionsView = function (params) {
   };
 
   _onCalculateClick = function () {
-    // notify application user requested calculation
-    _this.trigger('calculate');
+    var input,
+        markup;
+
+    if (_this.model && _this.model.get('status') === Calculation.STATUS_READY) {
+      // notify application user requested calculation
+      _this.trigger('calculate');
+    } else {
+      if (!_this.model) {
+        markup = [
+          '<p class="alert error">',
+            'No calculation selected. Please select a calculation and try ',
+            'again.',
+          '</p>'
+        ];
+      } else {
+        input = _this.model.get('input');
+        markup = [
+          '<p>',
+            'All input fields are required. The following input fields are ',
+            'currently not set:',
+          '</p>',
+          '<ul>'
+        ];
+
+        if (input.get('title') === null) {
+          markup.push('<li>Title</li>');
+        }
+        if (input.get('latitude') === null || input.get('longitude') === null) {
+          markup.push('<li>Location (latitude/longitude)</li>');
+        }
+        if (input.get('design_code') === null) {
+          markup.push('<li>Reference Document</li>');
+        }
+        if (input.get('risk_category') === null) {
+          markup.push('<li>Risk Category</li>');
+        }
+        if (input.get('site_class') === null) {
+          markup.push('<li>Site Class</li>');
+        }
+
+        markup.push('</ul><p>Please correct these errors and try again.</p>');
+      }
+
+      ModalView(markup.join(''), {
+        title: 'Invalid Inputs',
+        classes: ['modal-error']
+      }).show();
+    }
   };
 
   _onCollectionDeselect = function () {
