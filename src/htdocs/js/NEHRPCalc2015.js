@@ -506,6 +506,10 @@ var NEHRPCalc2015 = function (params) {
     sds =_this.getSds(calculation);
     sd1 = _this.getSd1(calculation);
 
+    if (sd1 > sds) {
+      sds = sd1;
+    }
+
     tl = result.get('tl');
     sdSpectra = [];
     i = 1;
@@ -549,6 +553,10 @@ var NEHRPCalc2015 = function (params) {
     result = _this.getResult(calculation);
     sms = _this.getSms(calculation);
     sm1 = _this.getSm1(calculation);
+
+    if (sm1 > sms) {
+      sms = sm1;
+    }
 
     tl = result.get('tl');
     smSpectra = [];
