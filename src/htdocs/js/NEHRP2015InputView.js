@@ -224,7 +224,7 @@ var NEHRP2015InputView = function (params) {
           '</div>' +
           '<div class="column two-of-five">' +
             '<label for="design-code">Reference Document</label>' +
-            '<select name="design-code" id="design-code" '
+            '<select name="design-code" id="design-code" ' +
                 'class="design-code-input"></select>' +
             '<div class="design-code-output"></div>' +
             '<label for="site-class">Site Class</label>' +
