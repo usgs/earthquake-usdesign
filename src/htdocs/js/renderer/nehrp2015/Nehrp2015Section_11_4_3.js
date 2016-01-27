@@ -151,7 +151,7 @@ var Nehrp2015Section_Section_11_4_3 = function (params) {
           '</li>',
           '<li>',
             'Note: Where Site Class D is selected as the default site class ',
-            'per Section 11.4.2, the values of F<sub>a</sub> shall not be ',
+            'per Section 11.4.2, the value of F<sub>a</sub> shall not be ',
             'less than 1.2 per Section 11.4.3.',
           '</li>',
         '</ul>',
