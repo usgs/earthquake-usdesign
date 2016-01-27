@@ -269,7 +269,7 @@ class DataFactory {
   public function computeTL ($latitude, $longitude) {
     $result = null;
 
-    if ($latitude == null || $longitude == null) {
+    if ($latitude === null || $longitude === null) {
       throw new Exception('"latitude", and "longitude" are required');
     }
 

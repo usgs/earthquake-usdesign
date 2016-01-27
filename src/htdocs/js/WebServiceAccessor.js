@@ -2,6 +2,7 @@
 
 var Calculation = require('Calculation'),
 
+    ModalView = require('mvc/ModalView'),
     Model = require('mvc/Model'),
 
     Xhr = require('util/Xhr');
@@ -95,19 +96,27 @@ var WebServiceAccessor = function (params) {
    */
   _updateCalculation = function (calculation, data) {
     var clearResult,
+        errorMessage,
         field,
         input,
         metadata,
         output,
         result;
 
-    if (data.error !== undefined) {
+    if (data.error !== undefined || data.output.data.length === 0) {
       calculation.set({
         status: Calculation.STATUS_INVALID
       });
-      throw new Error(data.error +
-          ' Must specify design_code, site_class, risk_category,' +
-          ' latitude, longitude, and title; to retreive usdesign data.');
+
+      errorMessage = data.error ? data.error :
+          'Server failed to return results. Check your inputs and try again.';
+
+      ModalView('<p>' + errorMessage + '</p>', {
+        classes: ['modal-error'],
+        title: 'Server Error'
+      }).show();
+
+      throw new Error('Server error: ' + errorMessage);
     } else {
       input = calculation.get('input');
       output = calculation.get('output');
