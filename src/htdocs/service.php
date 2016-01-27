@@ -43,6 +43,7 @@ checkParamExists($longitude, 'longitude');
 checkParamExists($latitude, 'latitude');
 checkParamExists($title, 'title');
 
+
 // Only convert values if we're not missing values.
 if ($param_count > 5) {
   $design_code_id = safeintval($design_code_id);

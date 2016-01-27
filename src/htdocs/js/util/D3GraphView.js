@@ -87,6 +87,7 @@ var D3GraphView = function (options) {
       _margin,
       _outerFrame,
       _padding,
+      _plotAreaClip,
       _plotTitle,
       _svg,
       _tooltip,
@@ -140,6 +141,11 @@ var D3GraphView = function (options) {
 
     el.innerHTML =
     '<svg xmlns="http://www.w3.org/2000/svg">' +
+      '<defs>' +
+        '<clipPath id="plotAreaClip">' +
+          '<rect x="0" y="0"></rect>' +
+        '</clipPath>' +
+      '</defs>' +
       '<g class="margin">' +
         '<rect class="outer-frame"></rect>' +
         '<text class="plot-title" text-anchor="middle"></text>' +
@@ -161,6 +167,7 @@ var D3GraphView = function (options) {
     '</svg>';
 
     _svg = el.querySelector('svg');
+    _plotAreaClip = _svg.querySelector('#plotAreaClip > rect');
 
     _outerFrame = _svg.querySelector('.outer-frame');
     _innerFrame = _svg.querySelector('.inner-frame');
@@ -190,6 +197,7 @@ var D3GraphView = function (options) {
     _innerFrame = null;
     _margin = null;
     _plotTitle = null;
+    _plotAreaClip = null;
     _padding = null;
     _xAxis = null;
     _xAxisEl = null;
@@ -289,6 +297,8 @@ var D3GraphView = function (options) {
       innerHeight = outerHeight - paddingTop - paddingBottom;
       // update elements
       _svg.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
+      _plotAreaClip.setAttribute('width', innerWidth);
+      _plotAreaClip.setAttribute('height', innerHeight);
       actualWidth = _this.el.clientWidth;
       relativeHeight = (height / width) * actualWidth;
       _svg.setAttribute('width', actualWidth);
