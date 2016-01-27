@@ -25,8 +25,9 @@
     font-size: 1.2em;
   }
 
-  .plot-title {
-    font-size: 1.4em;
+  .plot-title,
+  .plot-title > .html-text {
+    font-size: 1.2em;
   }
 
   .x,
