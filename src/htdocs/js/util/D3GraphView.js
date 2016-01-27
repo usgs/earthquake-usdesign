@@ -87,7 +87,6 @@ var D3GraphView = function (options) {
       _margin,
       _outerFrame,
       _padding,
-      _plotAreaClip,
       _plotTitle,
       _svg,
       _tooltip,
@@ -137,37 +136,32 @@ var D3GraphView = function (options) {
     }, options), {silent: true});
 
     el = _this.el;
-    el.innerHTML = '<div class="graph">' +
-          '<svg xmlns="http://www.w3.org/2000/svg" class="D3GraphView">' +
-            '<defs>' +
-              '<clipPath id="plotAreaClip">' +
-                '<rect x="0" y="0"></rect>' +
-              '</clipPath>' +
-            '</defs>' +
-            '<g class="margin">' +
-              '<rect class="outer-frame"></rect>' +
-              '<text class="plot-title" text-anchor="middle"></text>' +
-              '<g class="padding">' +
-                '<rect class="inner-frame"></rect>' +
-                '<g class="x">' +
-                  '<g class="axis"></g>' +
-                  '<text class="label" text-anchor="middle"></text>' +
-                '</g>' +
-                '<g class="y">' +
-                  '<g class="axis"></g>' +
-                  '<text class="label" text-anchor="middle"' +
-                      ' transform="rotate(-90)"></text>' +
-                '</g>' +
-                '<g class="data"></g>' +
-                '<g class="tooltip"></g>' +
-              '</g>' +
-            '</g>' +
-          '</svg>' +
-        '</div>' +
-        '<div class="controls"></div>';
+    el.classList.add('D3GraphView');
+
+    el.innerHTML =
+    '<svg xmlns="http://www.w3.org/2000/svg">' +
+      '<g class="margin">' +
+        '<rect class="outer-frame"></rect>' +
+        '<text class="plot-title" text-anchor="middle"></text>' +
+        '<g class="padding">' +
+          '<rect class="inner-frame"></rect>' +
+          '<g class="x">' +
+            '<g class="axis"></g>' +
+            '<text class="label" text-anchor="middle"></text>' +
+          '</g>' +
+          '<g class="y">' +
+            '<g class="axis"></g>' +
+            '<text class="label" text-anchor="middle"' +
+                ' transform="rotate(-90)"></text>' +
+          '</g>' +
+          '<g class="data"></g>' +
+          '<g class="tooltip"></g>' +
+        '</g>' +
+      '</g>' +
+    '</svg>';
 
     _svg = el.querySelector('svg');
-    _plotAreaClip = _svg.querySelector('#plotAreaClip > rect');
+
     _outerFrame = _svg.querySelector('.outer-frame');
     _innerFrame = _svg.querySelector('.inner-frame');
     _margin = _svg.querySelector('.margin');
@@ -192,7 +186,6 @@ var D3GraphView = function (options) {
    */
   _this.destroy = Util.compose(function () {
     _svg = null;
-    _plotAreaClip = null;
     _outerFrame = null;
     _innerFrame = null;
     _margin = null;
@@ -218,7 +211,8 @@ var D3GraphView = function (options) {
    *        list of properties that have changed.
    */
   _this.render = function (changed) {
-    var height,
+    var actualWidth,
+        height,
         innerWidth,
         innerHeight,
         marginBottom,
@@ -233,6 +227,7 @@ var D3GraphView = function (options) {
         paddingLeft,
         paddingRight,
         paddingTop,
+        relativeHeight,
         width,
         xAxisScale,
         xAxisTicks,
@@ -294,8 +289,10 @@ var D3GraphView = function (options) {
       innerHeight = outerHeight - paddingTop - paddingBottom;
       // update elements
       _svg.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
-      _plotAreaClip.setAttribute('width', innerWidth);
-      _plotAreaClip.setAttribute('height', innerHeight);
+      actualWidth = _this.el.clientWidth;
+      relativeHeight = (height / width) * actualWidth;
+      _svg.setAttribute('width', actualWidth);
+      _svg.setAttribute('height', relativeHeight);
       _margin.setAttribute('transform',
           'translate(' + marginLeft + ',' + marginTop + ')');
       _outerFrame.setAttribute('height', outerHeight);

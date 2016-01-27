@@ -4,6 +4,7 @@ var Calculation = require('Calculation'),
     Nehrp2015Renderer = require('renderer/nehrp2015/Nehrp2015Renderer'),
 
     Collection = require('mvc/Collection'),
+    Util = require('util/Util'),
     View = require('mvc/View');
 
 var ReportView = function (params) {
@@ -25,6 +26,7 @@ var ReportView = function (params) {
   _initialize = function (params) {
     params = params || {};
 
+    _initializeRenderers();
     _collection = params.collection;
 
     if (!_collection) {
@@ -47,8 +49,6 @@ var ReportView = function (params) {
       // None previously selected, select this model
       _collection.select(_this.model);
     }
-
-    _initializeRenderers();
 
     _this.render();
   };
@@ -101,7 +101,7 @@ var ReportView = function (params) {
 
   _this.render = function () {
     var renderer;
-    _this.el.innerHTML = '';
+    Util.empty(_this.el);
 
     if (_this.model && _this.model.get('mode') === Calculation.MODE_OUTPUT) {
       _this.model.off('change', 'render', _this);
