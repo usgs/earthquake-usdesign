@@ -24,7 +24,12 @@
 
 .footnotes > li {
   margin: 4px 0 0;
+
+  &.sectioning {
+    margin-bottom: 1em;
+  }
 }
+
 
 .overbar {
   text-decoration: overline;
