@@ -54,8 +54,16 @@ var Nehrp2015Section_Summary = function (params) {
     var markup,
         model,
         result,
+        s1,
+        sd1,
+        sds,
         section,
         siteClass,
+        sm1,
+        sms,
+        ss,
+        supOne,
+        supStar,
         sdSpectraWrapper,
         smSpectraWrapper;
 
@@ -65,44 +73,80 @@ var Nehrp2015Section_Summary = function (params) {
     result = model.get('result');
     siteClass = result.get('site_class').get('value').slice(0, 1).toUpperCase();
 
+    s1 = result.get('s1');
+    sd1 = result.get('sd1');
+    sds = result.get('sds');
+    sm1 = result.get('sm1');
+    sms = result.get('sms');
+    ss = result.get('ss');
+
+    supStar = '';
+    supOne = '';
+
+    if (siteClass === 'E' && _this.outputNumber(ss) >= 1.0) {
+      supStar = '<sup>*</sup>';
+    }
+
+    if (siteClass === 'E' || siteClass === 'D' &&
+        _this.outputNumber(s1) >= 0.2) {
+      supOne = '<sup>1</sup>';
+    }
+
     markup = [
       '<dl class="report-summary-values">',
         '<dt>S<sub>S</sub></dt>',
         '<dd class="report-summary-value-ss">',
-          _this.outputNumber(result.get('ss')),
+          _this.outputNumber(ss),
         ' g</dd>',
 
         '<dt>S<sub>MS</sub></dt>',
         '<dd class="report-summary-value-sms">',
-          _this.outputNumber(result.get('sms')),
-        ' g</dd>',
+          _this.outputNumber(sms),
+          ' g',
+          supStar,
+        '</dd>',
 
         '<dt>S<sub>DS</sub></dt>',
         '<dd class="report-summary-value-sds">',
-          _this.outputNumber(result.get('sds')),
-        ' g</dd>',
+          _this.outputNumber(sds),
+          ' g',
+          supStar,
+        '</dd>',
 
         '<dt class="break">S<sub>1</sub></dt>',
         '<dd class="report-summary-value-s1">',
-          _this.outputNumber(result.get('s1')),
+          _this.outputNumber(s1),
         ' g</dd>',
 
         '<dt>S<sub>M1</sub></dt>',
         '<dd class="report-summary-value-sm1">',
-          _this.outputNumber(result.get('sm1')),
-        ' g</dd>',
+          _this.outputNumber(sm1),
+          ' g',
+          supOne,
+        '</dd>',
 
         '<dt>S<sub>D1</sub></dt>',
         '<dd class="report-summary-value-sd1">',
-          _this.outputNumber(result.get('sd1')),
-        ' g</dd>',
+          _this.outputNumber(sd1),
+          ' g',
+          supOne,
+        '</dd>',
       '</dl>'
     ];
 
-    if (siteClass === 'D' || siteClass === 'E') {
+    if (supStar !== '') {
       markup.push('<aside>',
-        'Since Site Class ', siteClass, ' has been selected, see the ',
-        'requirements for site-specific ground motions in Section 11.4.7.',
+        '<sup>*</sup> Since the Site Class is {X} and SS ≥ 1.0 g, see the ',
+        'requirements for site-specific ground motions in Section 11.4.7. ',
+        'Here the exception allowing use of the F<sub>a</sub> values for ',
+        'Site Class C has been invoked.',
+      '</aside>');
+    }
+
+    if (supOne !== '') {
+      markup.push('<aside>',
+        '<sup>1</sup> Since the Site Class is {X} and S<sub>1</sub> ≥ 0.2 g, ',
+        'site-specific ground motions might be required. See Section 11.4.7. ',
       '</aside>');
     }
 
