@@ -569,11 +569,8 @@ var NEHRP2015InputView = function (params) {
       {
         silent: true
       });
-      // remove mask and information view (HACKY)
-      if (document.getElementById('location-view')) {
-        document.getElementById('location-view').classList.remove(
-            'location-location-control-enabled');
-      }
+      // remove information view
+      _locationControlInput.disable();
     } else {
        // reset location
       _onCalculationAdd();
