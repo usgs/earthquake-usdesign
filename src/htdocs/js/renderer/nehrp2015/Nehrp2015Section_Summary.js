@@ -57,10 +57,12 @@ var Nehrp2015Section_Summary = function (params) {
         s1,
         sd1,
         sds,
+        sdsAside,
         section,
         siteClass,
         sm1,
         sms,
+        smsAside,
         ss,
         supOne,
         supStar,
@@ -163,8 +165,8 @@ var Nehrp2015Section_Summary = function (params) {
     sdSpectraWrapper.appendChild(_sdSpectrum.el);
 
     if (_this.outputNumber(sms) < _this.outputNumber(sm1)) {
-      var smsAside = document.createElement('smsAside');
-      var sdsAside = document.createElement('sdsAside');
+      smsAside = document.createElement('smsAside');
+      sdsAside = document.createElement('sdsAside');
 
       smsAside.innerHTML = '<aside>' +
           'Since S<sub>MS</sub> < S<sub>M1</sub>, for this ' +
