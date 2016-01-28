@@ -538,6 +538,7 @@ var NEHRP2015InputView = function (params) {
         location.longitude !== null) {
 
       input = _model.get('input');
+
       if (input) {
         input.set({
           'latitude': location.latitude,
@@ -546,12 +547,14 @@ var NEHRP2015InputView = function (params) {
       }
 
       // update location on output map
-      if (_marker) {
-        _marker.setLatLng(L.latLng(location.latitude, location.longitude));
-        _outputMap.panTo(L.latLng(location.latitude, location.longitude));
-      } else {
-        _marker = L.marker(L.latLng(location.latitude, location.longitude));
-        _marker.addTo(_outputMap);
+      if (_model.get('mode') === Calculation.MODE_OUTPUT) {
+        if (_marker) {
+          _marker.setLatLng(L.latLng(location.latitude, location.longitude));
+          _outputMap.panTo(L.latLng(location.latitude, location.longitude));
+        } else {
+          _marker = L.marker(L.latLng(location.latitude, location.longitude));
+          _marker.addTo(_outputMap);
+        }
       }
     }
 
@@ -682,6 +685,7 @@ var NEHRP2015InputView = function (params) {
 
     if (!model || model.get('latitude') === null || model.get('longitude') === null) {
       _updateLocation({
+        type: 'location',
         location: {
           latitude: null,
           longitude: null
@@ -689,6 +693,7 @@ var NEHRP2015InputView = function (params) {
       });
     } else {
       _updateLocation({
+        type: 'location',
         location: {
           latitude: model.get('latitude'),
           longitude: model.get('longitude')
