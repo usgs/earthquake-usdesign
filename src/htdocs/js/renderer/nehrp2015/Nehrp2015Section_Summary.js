@@ -162,6 +162,27 @@ var Nehrp2015Section_Summary = function (params) {
     smSpectraWrapper.appendChild(_smSpectrum.el);
     sdSpectraWrapper.appendChild(_sdSpectrum.el);
 
+    if (_this.outputNumber(sms) < _this.outputNumber(sm1)) {
+      var smsAside = document.createElement('smsAside');
+      var sdsAside = document.createElement('sdsAside');
+
+      smsAside.innerHTML = '<aside>' +
+          'Since S<sub>MS</sub> < S<sub>M1</sub>, for this ' +
+          'response spectrum S<sub>MS</sub> has been set equal to ' +
+          'S<sub>M1</sub> in accordance with Section 11.4.3.' +
+          '</aside>';
+
+      sdsAside.innerHTML = '<aside>' +
+          'Since S<sub>MS</sub> < S<sub>M1</sub>, for this ' +
+          'response spectrum S<sub>MS</sub> has been set equal to ' +
+          'S<sub>M1</sub> (and hence S<sub>DS</sub> has been set equal ' +
+          'to S<sub>D1</sub>),  in accordance with Section 11.4.3.' +
+          '</aside>';
+
+      smSpectraWrapper.appendChild(smsAside);
+      sdSpectraWrapper.appendChild(sdsAside);
+    }
+
     _smSpectrum.model.set({data: result.get('smSpectrum')||[]}, {silent: true});
     _sdSpectrum.model.set({data: result.get('sdSpectrum')||[]}, {silent: true});
 
