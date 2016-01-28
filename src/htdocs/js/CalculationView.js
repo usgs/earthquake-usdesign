@@ -104,6 +104,7 @@ var CalculationView = function (params) {
    */
   _onDeleteClick = function () {
     if (_collection.get(_model.get('id')) !== null) {
+      _collection.deselect();
       _collection.remove(_model);
     }
   };

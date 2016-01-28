@@ -365,6 +365,10 @@ var NEHRP2015InputView = function (params) {
 
       _model = null;
     }
+
+    // remove previously set input values, stop unintentional model updating
+    _this.el.classList.remove('input-view-' + Calculation.MODE_OUTPUT);
+    _renderInputMode(_this.model.get('input'));
   };
 
   /**
@@ -532,9 +536,10 @@ var NEHRP2015InputView = function (params) {
     location = e.location;
 
     if (_model &&
-        location.latitude !== null && location.longitude !== null) {
-      input = _model.get('input');
+        location.latitude !== null &&
+        location.longitude !== null) {
 
+      input = _model.get('input');
       if (input) {
         input.set({
           'latitude': location.latitude,
@@ -550,6 +555,28 @@ var NEHRP2015InputView = function (params) {
         _marker = L.marker(L.latLng(location.latitude, location.longitude));
         _marker.addTo(_outputMap);
       }
+    }
+
+    // update location on input map
+    if (location && location.latitude !== null && location.longitude !== null) {
+      _locationControlInput.setLocation({
+        type: 'location',
+        location: {
+          'latitude': location.latitude,
+          'longitude': location.longitude
+        }
+      },
+      {
+        silent: true
+      });
+      // remove mask and information view (HACKY)
+      if (document.getElementById('location-view')) {
+        document.getElementById('location-view').classList.remove(
+            'location-location-control-enabled');
+      }
+    } else {
+       // reset location
+      _onCalculationAdd();
     }
   };
 
@@ -656,6 +683,22 @@ var NEHRP2015InputView = function (params) {
       _riskCategoryCollection.selectById('-1');
     } else {
       _riskCategoryCollection.selectById(model.get('risk_category'));
+    }
+
+    if (model.get('latitude') !== null && model.get('longitude') !== null) {
+      _updateLocation({
+        location: {
+          latitude: model.get('latitude'),
+          longitude: model.get('longitude')
+        }
+      });
+    } else {
+      _updateLocation({
+        location: {
+          latitude: null,
+          longitude: null
+        }
+      });
     }
 
     // keeps the map from freaking out
