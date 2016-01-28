@@ -142,7 +142,7 @@ var Nehrp2015Section_Section_11_4_3 = function (params) {
           '</li>',
           '<li>',
             'Note: Use straight-line interpolation for intermediate values ',
-            'of S<sub>s</sub>.',
+            'of S<sub>S</sub>.',
           '</li>',
           '<li>',
             'Note: Where Site Class B is selected, but site-specific velocity ',
