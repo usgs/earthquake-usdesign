@@ -75,7 +75,7 @@ var Nehrp2015Section_Section_11_4_5 = function (params) {
       note = '<aside>' +
           'Since S<sub>MS</sub> < S<sub>M1</sub>, for this response ' +
           'spectrum S<sub>MS</sub> has been set equal to S<sub>M1</sub> ' +
-          '(and hence s<sub>DS</sub> has been set equal to s<sub>D1</sub>), ' +
+          '(and hence S<sub>DS</sub> has been set equal to S<sub>D1</sub>), ' +
           'in accordance with Section 11.4.3.' +
           '</aside>';
     }

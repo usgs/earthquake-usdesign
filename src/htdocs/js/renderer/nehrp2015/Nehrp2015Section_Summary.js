@@ -140,7 +140,7 @@ var Nehrp2015Section_Summary = function (params) {
       markup.push('<aside>',
         '<sup>*</sup> Since the Site Class is ',
         siteClass,
-        ' and SS ≥ 1.0 g, see the ',
+        ' and S<sub>S</sub> ≥ 1.0 g, see the ',
         'requirements for site-specific ground motions in Section 11.4.7. ',
         'Here the exception allowing use of the F<sub>a</sub> values for ',
         'Site Class C has been invoked.',
