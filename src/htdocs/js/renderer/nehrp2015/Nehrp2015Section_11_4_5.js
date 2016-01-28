@@ -52,6 +52,7 @@ var Nehrp2015Section_Section_11_4_5 = function (params) {
 
   _this.getSection = Util.compose(_this.getSection, function (args) {
     var model,
+        note,
         region,
         result,
         section,
@@ -70,6 +71,15 @@ var Nehrp2015Section_Section_11_4_5 = function (params) {
       tSubL += ' s';
     }
 
+    if (result.get('sds') < result.get('sd1')) {
+      note = '<aside>' +
+          'Since S<sub>MS</sub> < S<sub>M1</sub>, for this response ' +
+          'spectrum S<sub>MS</sub> has been set equal to S<sub>M1</sub> ' +
+          '(and hence S<sub>DS</sub> has been set equal to S<sub>D1</sub>), ' +
+          'in accordance with Section 11.4.3.' +
+          '</aside>';
+    }
+
     section.innerHTML = [
       '<h3>Design Response Spectrum</h3>',
       '<div class="equation">',
@@ -80,7 +90,8 @@ var Nehrp2015Section_Section_11_4_5 = function (params) {
       '</div>',
       '<h4>',
         'Figure 11.4-1: Design Response Spectrum',
-      '</h4>'
+      '</h4>',
+      note
     ].join('');
 
     section.appendChild(_spectrum.el);
