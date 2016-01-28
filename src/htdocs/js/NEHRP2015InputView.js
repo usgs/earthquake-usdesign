@@ -363,7 +363,9 @@ var NEHRP2015InputView = function (params) {
         input.off('change', 'render', _this);
       }
 
+      // remove previously set input values
       _model = null;
+      _this.render();
     }
   };
 
@@ -532,7 +534,9 @@ var NEHRP2015InputView = function (params) {
     location = e.location;
 
     if (_model &&
-        location.latitude !== null && location.longitude !== null) {
+        location.latitude !== null &&
+        location.longitude !== null) {
+
       input = _model.get('input');
 
       if (input) {
@@ -543,13 +547,34 @@ var NEHRP2015InputView = function (params) {
       }
 
       // update location on output map
-      if (_marker) {
-        _marker.setLatLng(L.latLng(location.latitude, location.longitude));
-        _outputMap.panTo(L.latLng(location.latitude, location.longitude));
-      } else {
-        _marker = L.marker(L.latLng(location.latitude, location.longitude));
-        _marker.addTo(_outputMap);
+      if (_model.get('mode') === Calculation.MODE_OUTPUT) {
+        if (_marker) {
+          _marker.setLatLng(L.latLng(location.latitude, location.longitude));
+          _outputMap.panTo(L.latLng(location.latitude, location.longitude));
+        } else {
+          _marker = L.marker(L.latLng(location.latitude, location.longitude));
+          _marker.addTo(_outputMap);
+        }
       }
+    }
+
+    // update location on input map
+    if (location && location.latitude !== null && location.longitude !== null) {
+      _locationControlInput.setLocation({
+        type: 'location',
+        location: {
+          'latitude': location.latitude,
+          'longitude': location.longitude
+        }
+      },
+      {
+        silent: true
+      });
+      // remove information view
+      _locationControlInput.disable();
+    } else {
+       // reset location
+      _onCalculationAdd();
     }
   };
 
@@ -623,13 +648,13 @@ var NEHRP2015InputView = function (params) {
   _renderInputMode = function (model) {
     var design_code = null;
 
-    if (model.get('title') === null) {
+    if (!model || model.get('title') === null) {
       _titleEl.value = '';
     } else {
       _titleEl.value = model.get('title');
     }
 
-    if (model.get('design_code') === null) {
+    if (!model || model.get('design_code') === null) {
       _designCodeCollection.selectById('-1');
       // disable site_class & risk_category
       _siteClassEl.setAttribute('disabled', true);
@@ -646,16 +671,34 @@ var NEHRP2015InputView = function (params) {
       _riskCategoryEl.removeAttribute('disabled');
     }
 
-    if (model.get('site_class') === null) {
+    if (!model || model.get('site_class') === null) {
       _siteClassCollection.selectById('-1');
     } else {
       _siteClassCollection.selectById(model.get('site_class'));
     }
 
-    if (model.get('risk_category') === null) {
+    if (!model || model.get('risk_category') === null) {
       _riskCategoryCollection.selectById('-1');
     } else {
       _riskCategoryCollection.selectById(model.get('risk_category'));
+    }
+
+    if (!model || model.get('latitude') === null || model.get('longitude') === null) {
+      _updateLocation({
+        type: 'location',
+        location: {
+          latitude: null,
+          longitude: null
+        }
+      });
+    } else {
+      _updateLocation({
+        type: 'location',
+        location: {
+          latitude: model.get('latitude'),
+          longitude: model.get('longitude')
+        }
+      });
     }
 
     // keeps the map from freaking out
@@ -674,12 +717,15 @@ var NEHRP2015InputView = function (params) {
       _resetDesignCodeCollection();
     }
 
-    if (_model.get('mode') === Calculation.MODE_OUTPUT) {
-      _this.el.classList.add('input-view-' + Calculation.MODE_OUTPUT);
-      _renderOutputMode(_model.get('input'));
+    if (_model === null) {
+      _this.el.classList.remove('input-view-' + Calculation.MODE_OUTPUT);
+      _renderInputMode(null);
     } else if (_model.get('mode') === Calculation.MODE_INPUT) {
       _this.el.classList.remove('input-view-' + Calculation.MODE_OUTPUT);
       _renderInputMode(_model.get('input'));
+    } else if (_model.get('mode') === Calculation.MODE_OUTPUT) {
+      _this.el.classList.add('input-view-' + Calculation.MODE_OUTPUT);
+      _renderOutputMode(_model.get('input'));
     }
   };
 
