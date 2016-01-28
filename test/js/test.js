@@ -70,7 +70,7 @@ if (!Function.prototype.bind) {
   require('./spec/util/SiteAmplificationTest');
 
   if (window.mochaPhantomJS) {
-      window.mochaPhantomJS.run();
+    window.mochaPhantomJS.run();
   } else {
     mocha.run();
   }
