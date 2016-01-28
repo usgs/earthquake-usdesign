@@ -138,7 +138,9 @@ var Nehrp2015Section_Summary = function (params) {
 
     if (supStar !== '') {
       markup.push('<aside>',
-        '<sup>*</sup> Since the Site Class is {X} and SS ≥ 1.0 g, see the ',
+        '<sup>*</sup> Since the Site Class is ',
+        siteClass,
+        ' and SS ≥ 1.0 g, see the ',
         'requirements for site-specific ground motions in Section 11.4.7. ',
         'Here the exception allowing use of the F<sub>a</sub> values for ',
         'Site Class C has been invoked.',
@@ -147,7 +149,9 @@ var Nehrp2015Section_Summary = function (params) {
 
     if (supOne !== '') {
       markup.push('<aside>',
-        '<sup>1</sup> Since the Site Class is {X} and S<sub>1</sub> ≥ 0.2 g, ',
+        '<sup>1</sup> Since the Site Class is ',
+        siteClass,
+        ' and S<sub>1</sub> ≥ 0.2 g, ',
         'site-specific ground motions might be required. See Section 11.4.7. ',
       '</aside>');
     }
