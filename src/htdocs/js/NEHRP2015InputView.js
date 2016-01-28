@@ -719,7 +719,7 @@ var NEHRP2015InputView = function (params) {
       _this.el.classList.remove('input-view-' + Calculation.MODE_OUTPUT);
       _renderInputMode(_model.get('input'));
     } else if (_model.get('mode') === Calculation.MODE_OUTPUT) {
-      _this.el.classList.add('input-view-' + Calculation.MODE_INPUT);
+      _this.el.classList.add('input-view-' + Calculation.MODE_OUTPUT);
       _renderOutputMode(_model.get('input'));
     }
   };
