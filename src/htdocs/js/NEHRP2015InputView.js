@@ -363,12 +363,10 @@ var NEHRP2015InputView = function (params) {
         input.off('change', 'render', _this);
       }
 
+      // remove previously set input values
       _model = null;
+      _this.render();
     }
-
-    // remove previously set input values, stop unintentional model updating
-    _this.el.classList.remove('input-view-' + Calculation.MODE_OUTPUT);
-    _renderInputMode(_this.model.get('input'));
   };
 
   /**
@@ -647,13 +645,13 @@ var NEHRP2015InputView = function (params) {
   _renderInputMode = function (model) {
     var design_code = null;
 
-    if (model.get('title') === null) {
+    if (!model || model.get('title') === null) {
       _titleEl.value = '';
     } else {
       _titleEl.value = model.get('title');
     }
 
-    if (model.get('design_code') === null) {
+    if (!model || model.get('design_code') === null) {
       _designCodeCollection.selectById('-1');
       // disable site_class & risk_category
       _siteClassEl.setAttribute('disabled', true);
@@ -670,30 +668,30 @@ var NEHRP2015InputView = function (params) {
       _riskCategoryEl.removeAttribute('disabled');
     }
 
-    if (model.get('site_class') === null) {
+    if (!model || model.get('site_class') === null) {
       _siteClassCollection.selectById('-1');
     } else {
       _siteClassCollection.selectById(model.get('site_class'));
     }
 
-    if (model.get('risk_category') === null) {
+    if (!model || model.get('risk_category') === null) {
       _riskCategoryCollection.selectById('-1');
     } else {
       _riskCategoryCollection.selectById(model.get('risk_category'));
     }
 
-    if (model.get('latitude') !== null && model.get('longitude') !== null) {
+    if (!model || model.get('latitude') === null || model.get('longitude') === null) {
       _updateLocation({
         location: {
-          latitude: model.get('latitude'),
-          longitude: model.get('longitude')
+          latitude: null,
+          longitude: null
         }
       });
     } else {
       _updateLocation({
         location: {
-          latitude: null,
-          longitude: null
+          latitude: model.get('latitude'),
+          longitude: model.get('longitude')
         }
       });
     }
@@ -714,12 +712,15 @@ var NEHRP2015InputView = function (params) {
       _resetDesignCodeCollection();
     }
 
-    if (_model.get('mode') === Calculation.MODE_OUTPUT) {
-      _this.el.classList.add('input-view-' + Calculation.MODE_OUTPUT);
-      _renderOutputMode(_model.get('input'));
+    if (_model === null) {
+      _this.el.classList.remove('input-view-' + Calculation.MODE_OUTPUT);
+      _renderInputMode(null);
     } else if (_model.get('mode') === Calculation.MODE_INPUT) {
       _this.el.classList.remove('input-view-' + Calculation.MODE_OUTPUT);
       _renderInputMode(_model.get('input'));
+    } else if (_model.get('mode') === Calculation.MODE_OUTPUT) {
+      _this.el.classList.add('input-view-' + Calculation.MODE_INPUT);
+      _renderOutputMode(_model.get('input'));
     }
   };
 
