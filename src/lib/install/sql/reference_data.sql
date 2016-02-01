@@ -11,7 +11,7 @@ INSERT INTO design_code (
   name,
   display_order
 ) VALUES
-  (1, 1, '2015 NEHRP', 1);
+  (1, 1, '2015 NEHRP Provisions', 1);
 
 -- Metadata reference data
 INSERT INTO metadata (

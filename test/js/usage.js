@@ -21,7 +21,7 @@ module.exports = {
   'design_code': [
     {
       'id': 1,
-      'name': '2015 NEHRP',
+      'name': '2015 NEHRP Provisions',
       'display_order': 1,
       'hazard_basis': 1,
       'site_classes': [
