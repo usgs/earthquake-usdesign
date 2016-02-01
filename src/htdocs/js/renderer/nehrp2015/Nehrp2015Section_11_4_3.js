@@ -136,7 +136,7 @@ var Nehrp2015Section_Section_11_4_3 = function (params) {
         '</div>',
         '<ul class="footnotes no-style">',
           '<li class="sectioning">',
-            '<sup>1</sup> See the requirements for site-specific ground ',
+            '<sup>*</sup> See the requirements for site-specific ground ',
             'motions in Section 11.4.7. Here the exception allowing use of ',
             'the F<sub>a</sub> values for Site Class C has been invoked.',
           '</li>',
