@@ -170,7 +170,7 @@ var Nehrp2015Section_Section_11_4_3 = function (params) {
           '<li class="sectioning">',
             '<sup>1</sup> For Site Class D or E and S<sub>1</sub> ≥ 0.2g, ',
             'site-specific ground motions might be required. ',
-            'See Section 11.4.7 of the 2015 NEHRP Provisions.',
+            'See Section 11.4.7 of the 2015 NEHRP Provisions.',
           '</li>',
           '<li>',
             'Note: Use straight-line interpolation for intermediate values ',
