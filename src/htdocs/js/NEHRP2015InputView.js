@@ -193,7 +193,7 @@ var NEHRP2015InputView = function (params) {
       _locationControlInput.setLocation({
         'latitude': input.get('latitude'),
         'longitude': input.get('longitude'),
-        'confidence': 3
+        'confidence': location.confidence || 3
       });
       _marker = L.marker(L.latLng(input.get('latitude'),
           input.get('longitude')));
@@ -566,7 +566,7 @@ var NEHRP2015InputView = function (params) {
         location: {
           'latitude': location.latitude,
           'longitude': location.longitude,
-          'confidence': 3
+          'confidence': location.confidence || 3
         }
       },
       {
