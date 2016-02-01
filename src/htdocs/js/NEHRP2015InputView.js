@@ -194,7 +194,6 @@ var NEHRP2015InputView = function (params) {
         'latitude': input.get('latitude'),
         'longitude': input.get('longitude'),
         'confidence': 3
-
       });
       _marker = L.marker(L.latLng(input.get('latitude'),
           input.get('longitude')));
