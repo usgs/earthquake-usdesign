@@ -85,12 +85,11 @@ var Nehrp2015Section_Summary = function (params) {
     supStar = '';
     supOne = '';
 
-    if (siteClass === 'E' && _this.outputNumber(ss) >= 1.0) {
+    if (siteClass === 'E' && ss >= 1.0) {
       supStar = '<sup>*</sup>';
     }
 
-    if (siteClass === 'E' || siteClass === 'D' &&
-        _this.outputNumber(s1) >= 0.2) {
+    if ((siteClass === 'E' || siteClass === 'D') && s1 >= 0.2) {
       supOne = '<sup>1</sup>';
     }
 
