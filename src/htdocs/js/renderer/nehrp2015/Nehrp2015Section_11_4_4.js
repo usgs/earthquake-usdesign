@@ -59,12 +59,7 @@ var Nehrp2015Section_Section_11_4_4 = function (params) {
           'S<sub>D1</sub> = &#8532; S<sub>M1</sub> = &#8532; &times; ',
           _this.outputNumber(sm1), ' = ', _this.outputNumber(sd1), ' g',
         '<span>',
-      '</div>',
-
-      '<aside>',
-        'Note: S<sub>DS</sub> shall not be taken less than S<sub>D1</sub> ',
-        'except when determining Seismic Design Category.',
-      '</aside>'
+      '</div>'
     ].join('');
 
     return args;
