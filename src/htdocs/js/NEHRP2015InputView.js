@@ -566,7 +566,7 @@ var NEHRP2015InputView = function (params) {
         confidence = location.confidence ||
             _locationControlInput.getLocation().confidence;
       } catch (e) {
-        confidence = ConfidenceCalculator.NO_CONFIDENCE;
+        confidence = ConfidenceCalculator.LOW_CONFIDENCE;
       }
 
       _locationControlInput.setLocation({
