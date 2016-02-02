@@ -103,9 +103,25 @@ var CalculationView = function (params) {
    *
    */
   _onDeleteClick = function () {
+    var calculation,
+        deleted,
+        selected;
+
+    // keep track of the selected and deleted Calculation
+    selected = _collection.getSelected();
+    deleted = _model;
+
     if (_collection.get(_model.get('id')) !== null) {
-      _collection.deselect();
       _collection.remove(_model);
+    }
+
+    // add new Calculation to the collection, or select an existing Calculation
+    if (_collection.data().length === 0) {
+      calculation = Calculation();
+      _collection.add(calculation);
+      _collection.select(calculation);
+    } else if (selected === deleted) {
+      _collection.select(_collection.data()[0]);
     }
   };
 
