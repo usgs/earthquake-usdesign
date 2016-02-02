@@ -3,6 +3,11 @@ if (!isset($TEMPLATE)) {
   // Page title. Shows up as <title> in <head> and an <h1> in content.
   $TITLE = 'U.S. Seismic Design Maps';
 
+  // Cooperator Logo
+    $COOPERATORS = '<a class="cooperator" href="">
+        <img src="images/FEMA_logo.svg" alt="in cooperation with Federal Emergency Management Agency (FEMA)"/>
+        </a>';
+
   // True, flase, or actual navigation markup
   $NAVIGATION = true;
 
