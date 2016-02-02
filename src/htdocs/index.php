@@ -4,8 +4,9 @@ if (!isset($TEMPLATE)) {
   $TITLE = 'U.S. Seismic Design Maps';
 
   // Cooperator Logo
-    $COOPERATORS = '<a class="cooperator" href="">
-        <img src="images/FEMA_logo.svg" alt="in cooperation with Federal Emergency Management Agency (FEMA)"/>
+    $COOPERATORS = '<a class="cooperator" href="http://www.fema.gov/">
+        <img src="images/FEMA_logo.svg"
+        alt="in cooperation with Federal Emergency Management Agency (FEMA)"/>
         </a>';
 
   // True, flase, or actual navigation markup
