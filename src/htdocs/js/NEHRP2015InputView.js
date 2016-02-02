@@ -5,6 +5,7 @@ var Calculation = require('Calculation'),
     LookupDataFactory = require('util/LookupDataFactory'),
 
     L = require('leaflet'),
+    ConfidenceCalculator = require('locationview/ConfidenceCalculator'),
     LocationControl = require('locationview/LocationControl'),
 
     Collection = require('mvc/Collection'),
@@ -561,8 +562,12 @@ var NEHRP2015InputView = function (params) {
 
     // update location on input map
     if (location && location.latitude !== null && location.longitude !== null) {
-      confidence = location.confidence ||
-          _locationControlInput.getLocation().confidence;
+      try {
+        confidence = location.confidence ||
+            _locationControlInput.getLocation().confidence;
+      } catch (e) {
+        confidence = ConfidenceCalculator.BELOW_AVERAGE_CONFIDENCE;
+      }
 
       _locationControlInput.setLocation({
         type: 'location',
