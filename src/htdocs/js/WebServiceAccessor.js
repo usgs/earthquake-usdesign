@@ -8,7 +8,7 @@ var Calculation = require('Calculation'),
     Xhr = require('util/Xhr');
 
 var _DEFAULTS = {
-  url: 'service'
+  url: 'service/'
 };
 
 var WebServiceAccessor = function (params) {

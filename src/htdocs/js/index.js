@@ -10,7 +10,7 @@ var lookupFactory;
 
 
 lookupFactory = LookupDataFactory({
-  url: 'service'
+  url: 'service/'
 });
 
 lookupFactory.whenReady(function () {
