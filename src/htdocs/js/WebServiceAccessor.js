@@ -8,7 +8,7 @@ var Calculation = require('Calculation'),
     Xhr = require('util/Xhr');
 
 var _DEFAULTS = {
-  url: 'service/'
+  url: 'service'
 };
 
 var WebServiceAccessor = function (params) {
@@ -35,7 +35,7 @@ var WebServiceAccessor = function (params) {
    */
   _this.getUsage = function (callback) {
     Xhr.ajax({
-      url: _url,
+      url: _url + '/',
       success: function(data) {
         callback(data);
       }

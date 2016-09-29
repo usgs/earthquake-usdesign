@@ -172,7 +172,7 @@ describe('WebServiceAccessor', function () {
       webServiceAccessor.getUsage(function () {
         expect(stub.callCount).to.equal(1);
 
-        expect(stub.getCall(0).args[0].url).to.equal('service');
+        expect(stub.getCall(0).args[0].url).to.equal('service/');
         done();
       });
     });
@@ -193,12 +193,19 @@ describe('WebServiceAccessor', function () {
       var webServiceAccessor = WebServiceAccessor();
 
       webServiceAccessor.getResults(calculation, function () {
-        expect(stub.callCount).to.equal(1);
+        var err;
 
-        expect(stub.getCall(0).args[0].url).to.equal(
-          'service/1/1/1/1/3.5/tmp'
-        );
-        done();
+        try {
+          expect(stub.callCount).to.equal(1);
+
+          expect(stub.getCall(0).args[0].url).to.equal(
+            'service/1/1/1/1/3.5/tmp'
+          );
+        } catch (e) {
+          err = e;
+        } finally {
+          done(err);
+        }
       });
     });
   });
