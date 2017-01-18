@@ -164,7 +164,7 @@ var NEHRP2015InputView = function (params) {
       center: L.latLng(40.0, -100.0),
       zoom: 3
     });
-    natgeo = L.tileLayer('http://server.arcgisonline.com' +
+    natgeo = L.tileLayer('https://server.arcgisonline.com' +
         '/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}');
     _locationControlInput = new LocationControl({
       includePointControl: true,
@@ -182,7 +182,7 @@ var NEHRP2015InputView = function (params) {
       center: L.latLng(40.0, -100.0),
       zoom: 3
     });
-    natgeoOutput = L.tileLayer('http://server.arcgisonline.com' +
+    natgeoOutput = L.tileLayer('https://server.arcgisonline.com' +
         '/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}');
     _outputMap.addLayer(natgeoOutput);
 
