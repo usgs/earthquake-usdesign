@@ -10,7 +10,7 @@ var Section = require('renderer/Section'),
 var _DEFAULTS = {
   classes: ['section-11-4-1'],
   nodeType: 'section',
-  baseUrl: 'http://earthquake.usgs.gov/hazards/designmaps/pdfs',
+  baseUrl: 'https://earthquake.usgs.gov/hazards/designmaps/pdfs',
   // 1 = Alaska,
   // 2 = American Samoa,
   // 3 = Guam,

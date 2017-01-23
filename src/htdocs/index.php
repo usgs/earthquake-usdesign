@@ -4,7 +4,7 @@ if (!isset($TEMPLATE)) {
   $TITLE = 'U.S. Seismic Design Maps';
 
   // Cooperator Logo
-    $COOPERATORS = '<a class="cooperator" href="http://www.fema.gov/">
+    $COOPERATORS = '<a class="cooperator" href="https://www.fema.gov/">
         <img src="images/FEMA_logo.svg"
         alt="in cooperation with Federal Emergency Management Agency (FEMA)"/>
         </a>';

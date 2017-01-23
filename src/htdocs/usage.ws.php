@@ -18,7 +18,13 @@ include_once '../conf/config.inc.php';
 header('Content-Type: application/json'); // TODO :: Remove this when service.php sets it
 $usage = array();
 
-$usage['url'] = (($_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://') .
+$server_protocol = (
+  (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'Off') ||
+  (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) &&
+      $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')
+  ? 'https://' : 'http://');
+
+$usage['url'] = ($server_protocol .
     $_SERVER['HTTP_HOST'] . $MOUNT_PATH .
     '/ws/{design_code_id}/{site_class_id}/{risk_category_id}/' .
     '{longitude}/{latitude}/{title}';
