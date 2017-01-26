@@ -27,7 +27,7 @@ $server_protocol = (
 $usage['url'] = ($server_protocol .
     $_SERVER['HTTP_HOST'] . $MOUNT_PATH .
     '/ws/{design_code_id}/{site_class_id}/{risk_category_id}/' .
-    '{longitude}/{latitude}/{title}';
+    '{longitude}/{latitude}/{title}');
 
 try {
   $usage['hazard_basis'] = $hazardBasisFactory->getAll();
