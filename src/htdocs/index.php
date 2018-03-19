@@ -30,10 +30,10 @@ if (!isset($TEMPLATE)) {
 <p class="alert info">
   Due to insufficient resources and the recent development of similar web tools
   by third parties, this spring the USGS will be streamlining the two U.S.
-  Seismic Design Maps web applications described below. Whereas the current
-  applications each interact with users through a graphical user interface
-  (GUI), the new web services will receive the inputs (e.g. latitude and
-  longitude) in the form of a web address and return the outputs (e.g.
+  Seismic Design Maps web applications, including the one below. Whereas the
+  current applications each interact with users through a graphical user
+  interface (GUI), the new web services will receive the inputs (e.g. latitude
+  and longitude) in the form of a web address and return the outputs (e.g.
   S<sub>DS</sub> and S<sub>D1</sub>) in text form, without supplementary
   graphics. Though designed primarily to be read by the aforementioned
   third-party web GUIs, the text outputs are also human-readable. To preview
