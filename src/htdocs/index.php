@@ -40,7 +40,8 @@ if (!isset($TEMPLATE)) {
   the new web services, <a href="/ws/designmaps/">please click here</a>.
   Step-by-step instructions for using one of these web services,
   namely that for the recently published 2016 ASCE 7 Standard, <a
-  href="./step-by-step-instructions-for-webservice_v3.pdf">are posted here</a>.
+  href="/hazards/designmaps/step-by-step-instructions-for-webservice_v3.pdf">
+  are posted here</a>.
 </p>
 
 <div class="application"></div>
