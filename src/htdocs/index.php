@@ -29,7 +29,7 @@ if (!isset($TEMPLATE)) {
 
 <p class="alert info">
   Due to insufficient resources and the recent development of similar web tools
-  by third parties, this spring the USGS will be streamlining the two U.S.
+  by third parties, this summer the USGS will be streamlining the two U.S.
   Seismic Design Maps web applications, including the one below. Whereas the
   current applications each interact with users through a graphical user
   interface (GUI), the new web services will receive the inputs (e.g. latitude
